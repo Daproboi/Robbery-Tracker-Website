@@ -15,8 +15,8 @@
 
         .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
-        .card { background: #161b22; border-radius: 8px; padding: 20px; border: 1px solid #30363d; }
-        .card h3 { margin-top: 0; display: flex; justify-content: space-between; }
+        .card { background: #161b22; border-radius: 8px; padding: 20px; border: 1px solid #30363d; position: relative; }
+        .card h3 { margin-top: 0; display: flex; justify-content: space-between; font-size: 18px; }
         
         .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
         .open { background: #238636; color: white; }
@@ -28,7 +28,8 @@
         }
         .join-btn:hover { background: #2ea043; }
         
-        .stats { color: #8b949e; font-size: 14px; }
+        .stats { color: #8b949e; font-size: 14px; line-height: 1.6; }
+        .expiry { font-size: 11px; color: #f85149; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -36,58 +37,84 @@
     <h1>🚨 Live Robbery Snipers</h1>
 
     <div class="filter-bar">
-        <button class="filter-btn" onclick="filterSelection('all')">All</button>
-        <button class="filter-btn" onclick="filterSelection('Jewelry Store')">Jewelry</button>
-        <button class="filter-btn" onclick="filterSelection('Bank')">Bank</button>
-        <button class="filter-btn" onclick="filterSelection('Museum')">Museum</button>
+        <button class="filter-btn" onclick="currentFilter = 'all'; fetchRobberies();">All</button>
+        <button class="filter-btn" onclick="currentFilter = 'Jewelry Store'; fetchRobberies();">Jewelry</button>
+        <button class="filter-btn" onclick="currentFilter = 'Bank'; fetchRobberies();">Bank</button>
+        <button class="filter-btn" onclick="currentFilter = 'Museum'; fetchRobberies();">Museum</button>
     </div>
 
     <div class="container" id="card-container">
-        </div>
+        <p style="color:gray;">Waiting for bot data...</p>
+    </div>
 
     <script>
-        // Example Data (Later, your bot will send this to a database)
-        const robberies = [
-            { name: "Jewelry Store", status: "Open", players: "7/30", jobId: "123-456", type: "Jewelry Store" },
-            { name: "Museum", status: "In Robbery", players: "12/30", jobId: "789-012", type: "Museum" },
-            { name: "Rising Bank", status: "Open", players: "2/30", jobId: "345-678", type: "Bank" }
-        ];
+        const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
+        let currentFilter = 'all';
+
+        async function fetchRobberies() {
+            try {
+                const response = await fetch(FIREBASE_URL);
+                const data = await response.json();
+                
+                if (data) {
+                    // Convert Firebase object to array
+                    let robberyArray = Object.values(data);
+                    
+                    // Apply Category Filter
+                    if (currentFilter !== 'all') {
+                        robberyArray = robberyArray.filter(r => r.name.includes(currentFilter));
+                    }
+
+                    displayCards(robberyArray);
+                } else {
+                    document.getElementById('card-container').innerHTML = "<p style='color:gray;'>No active robberies in database.</p>";
+                }
+            } catch (error) {
+                console.error("Error fetching from Firebase:", error);
+            }
+        }
 
         function displayCards(data) {
             const container = document.getElementById('card-container');
-            container.innerHTML = ""; // Clear current cards
+            container.innerHTML = ""; 
+
+            const currentTime = Math.floor(Date.now() / 1000);
+            const FIVE_MINUTES = 300; // 300 seconds
 
             data.forEach(rob => {
-                const statusClass = rob.status === "Open" ? "open" : "robbing";
-                container.innerHTML += `
-                    <div class="card">
-                        <h3>${rob.name} <span class="status ${statusClass}">${rob.status}</span></h3>
-                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">Join Game</button>
-                        <div class="stats">
-                            <p>Players: ${rob.players}</p>
-                            <p>Found: Just now</p>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+                const timePassed = currentTime - rob.lastUpdated;
 
-        function filterSelection(category) {
-            if (category === 'all') {
-                displayCards(robberies);
-            } else {
-                const filtered = robberies.filter(r => r.type === category);
-                displayCards(filtered);
+                // ONLY show the card if it was updated less than 5 minutes ago
+                if (timePassed < FIVE_MINUTES) {
+                    const statusClass = rob.status === "Open" ? "open" : "robbing";
+                    const timeLeft = Math.max(0, FIVE_MINUTES - timePassed);
+
+                    container.innerHTML += `
+                        <div class="card">
+                            <h3>${rob.name} <span class="status ${statusClass}">${rob.status}</span></h3>
+                            <button class="join-btn" onclick="joinServer('${rob.jobId}')">Join Game</button>
+                            <div class="stats">
+                                <p>👥 Players: ${rob.players}</p>
+                                <p>🕒 Last Seen: ${new Date(rob.lastUpdated * 1000).toLocaleTimeString()}</p>
+                                <p class="expiry">🗑️ Auto-removing in: ${timeLeft}s</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if (container.innerHTML === "") {
+                container.innerHTML = "<p style='color:gray; text-align:center;'>No fresh robberies found. Waiting for bot...</p>";
             }
         }
 
         function joinServer(jobId) {
-            // This is the link that opens Roblox directly
             window.location.href = `roblox://placeId=244124012&gameInstanceId=${jobId}`;
         }
 
-        // Initial load
-        displayCards(robberies);
+        // Refresh every 5 seconds to keep the timers and data live
+        setInterval(fetchRobberies, 5000);
+        fetchRobberies();
     </script>
 </body>
 </html>
