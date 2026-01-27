@@ -3,34 +3,23 @@
 <head>
     <title>My Robbery Tracker</title>
     <style>
-        /* CSS: Making it look like Muffin Hook */
         body { background-color: #0b0e14; color: white; font-family: sans-serif; padding: 20px; }
         
+        /* FIXED: align-items: flex-start stops the buttons from being giant bars */
         .filter-bar { 
             display: flex; 
             gap: 8px; 
             margin-bottom: 30px; 
             flex-wrap: wrap; 
-            align-items: center; /* Prevents vertical stretching */
+            align-items: flex-start; 
         }
 
         .filter-btn { 
-            background: #1c1f26; 
-            border: 1px solid #30363d; 
-            color: white; 
-            padding: 8px 14px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px;
-            font-weight: 500;
-            height: fit-content; /* Force buttons to only be as tall as their text */
-            transition: all 0.2s ease;
+            background: #1c1f26; border: 1px solid #30363d; color: white; 
+            padding: 8px 14px; border-radius: 6px; cursor: pointer; 
+            font-size: 13px; font-weight: 500; height: fit-content; transition: all 0.2s ease;
         }
-
-        .filter-btn:hover { 
-            background: #30363d; 
-            border-color: #8b949e;
-        }
+        .filter-btn:hover { background: #30363d; border-color: #8b949e; }
 
         .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
@@ -43,11 +32,17 @@
 
         .join-btn { 
             width: 100%; background: #238636; color: white; border: none; 
-            padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 15px 0;
+            padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 15px;
         }
         .join-btn:hover { background: #2ea043; }
+
+        .copy-btn {
+            width: 100%; background: #30363d; color: white; border: 1px solid #444c56; 
+            padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; margin-top: 8px;
+        }
+        .copy-btn:hover { background: #444c56; }
         
-        .stats { color: #8b949e; font-size: 14px; line-height: 1.6; }
+        .stats { color: #8b949e; font-size: 13px; margin-top: 12px; border-top: 1px solid #30363d; padding-top: 10px; }
     </style>
 </head>
 <body>
@@ -65,7 +60,9 @@
         <button class="filter-btn" onclick="currentFilter = 'Tomb'; fetchRobberies();">Tomb</button>
         <button class="filter-btn" onclick="currentFilter = 'Mansion'; fetchRobberies();">Mansion</button>
         <button class="filter-btn" onclick="currentFilter = 'Airdrop'; fetchRobberies();">Airdrops</button>
-    </div> <div class="container" id="card-container">
+    </div> 
+    
+    <div class="container" id="card-container">
         <p style="color:gray;">Waiting for bot data...</p>
     </div>
 
@@ -77,55 +74,59 @@
             try {
                 const response = await fetch(FIREBASE_URL);
                 const data = await response.json();
-                
                 if (data) {
                     let robberyArray = Object.values(data);
-                    
                     if (currentFilter !== 'all') {
                         robberyArray = robberyArray.filter(r => r.name.includes(currentFilter));
                     }
-
                     displayCards(robberyArray);
-                } else {
-                    document.getElementById('card-container').innerHTML = "<p style='color:gray;'>No active robberies in database.</p>";
                 }
-            } catch (error) {
-                console.error("Error fetching from Firebase:", error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         function displayCards(data) {
             const container = document.getElementById('card-container');
             container.innerHTML = ""; 
-
             const currentTime = Math.floor(Date.now() / 1000);
-            const FIVE_MINUTES = 300; 
 
             data.forEach(rob => {
                 const timePassed = currentTime - rob.lastUpdated;
-
-                if (timePassed < FIVE_MINUTES) {
+                if (timePassed < 300) {
                     const statusClass = rob.status === "Open" ? "open" : "robbing";
-
                     container.innerHTML += `
                         <div class="card">
                             <h3>${rob.name} <span class="status ${statusClass}">${rob.status}</span></h3>
-                            <button class="join-btn" onclick="joinServer('${rob.jobId}')">Join Game</button>
+                            <button class="join-btn" onclick="joinServer('${rob.jobId}')">JOIN SERVER</button>
+                            <button class="copy-btn" onclick="copyId('${rob.jobId}', this)">COPY JOB ID</button>
                             <div class="stats">
-                                <p>👥 Players: ${rob.players}</p>
+                                <span>👥 Players: ${rob.players}</span>
                             </div>
                         </div>
                     `;
                 }
             });
-
-            if (container.innerHTML === "") {
-                container.innerHTML = "<p style='color:gray; text-align:center;'>No fresh robberies found for this category.</p>";
-            }
         }
 
         function joinServer(jobId) {
-            window.location.href = `roblox://placeId=244124012&gameInstanceId=${jobId}`;
+            // Using the "Secret" PlaceID from your Muffin Hook discovery
+            const jailbreakPlaceId = 606849621;
+            const secretUrl = `roblox://experiences/start?placeId=${jailbreakPlaceId}&gameInstanceId=${jobId}`;
+            
+            // Triggering the join via a hidden window to bypass browser security
+            const launchWindow = window.open(secretUrl, '_blank');
+            
+            // Auto-close the blank window after launch
+            setTimeout(() => {
+                if (launchWindow) launchWindow.close();
+            }, 500);
+        }
+
+        function copyId(id, btn) {
+            navigator.clipboard.writeText(id).then(() => {
+                const oldText = btn.innerText;
+                btn.innerText = "✅ COPIED!";
+                setTimeout(() => btn.innerText = oldText, 2000);
+            });
         }
 
         setInterval(fetchRobberies, 5000);
@@ -133,3 +134,4 @@
     </script>
 </body>
 </html>
+
