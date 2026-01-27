@@ -41,7 +41,12 @@
         <button class="filter-btn" onclick="currentFilter = 'Jewelry Store'; fetchRobberies();">Jewelry</button>
         <button class="filter-btn" onclick="currentFilter = 'Bank'; fetchRobberies();">Bank</button>
         <button class="filter-btn" onclick="currentFilter = 'Museum'; fetchRobberies();">Museum</button>
-    </div>
+        <button class="filter-btn" onclick="currentFilter = 'PowerPlant'; fetchRobberies();">PowerPlant</button>
+        <button class="filter-btn" onclick="currentFilter = 'Casino'; fetchRobberies();">Casino</button>
+        <button class="filter-btn" onclick="currentFilter = 'Cargo Train'; fetchRobberies();">Cargo Train</button>
+        <button class="filter-btn" onclick="currentFilter = 'Tomb'; fetchRobberies();">Cargo Tomb</button>
+        <button class="filter-btn" onclick="currentFilter = 'Mansion'; fetchRobberies();">Mansion</button>
+        <button class="filter-btn" onclick="currentFilter = 'Airdrops'; fetchRobberies();">Airdrops</button>
 
     <div class="container" id="card-container">
         <p style="color:gray;">Waiting for bot data...</p>
@@ -95,8 +100,6 @@
                             <button class="join-btn" onclick="joinServer('${rob.jobId}')">Join Game</button>
                             <div class="stats">
                                 <p>👥 Players: ${rob.players}</p>
-                                <p>🕒 Last Seen: ${new Date(rob.lastUpdated * 1000).toLocaleTimeString()}</p>
-                                <p class="expiry">🗑️ Auto-removing in: ${timeLeft}s</p>
                             </div>
                         </div>
                     `;
