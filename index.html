@@ -6,12 +6,31 @@
         /* CSS: Making it look like Muffin Hook */
         body { background-color: #0b0e14; color: white; font-family: sans-serif; padding: 20px; }
         
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-        .filter-btn { 
-            background: #1c1f26; border: 1px solid #30363d; color: white; 
-            padding: 8px 15px; border-radius: 5px; cursor: pointer; 
+        .filter-bar { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 30px; 
+            flex-wrap: wrap; 
+            align-items: center; /* Prevents vertical stretching */
         }
-        .filter-btn:hover { background: #30363d; }
+
+        .filter-btn { 
+            background: #1c1f26; 
+            border: 1px solid #30363d; 
+            color: white; 
+            padding: 8px 14px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 13px;
+            font-weight: 500;
+            height: fit-content; /* Force buttons to only be as tall as their text */
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover { 
+            background: #30363d; 
+            border-color: #8b949e;
+        }
 
         .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
@@ -29,7 +48,6 @@
         .join-btn:hover { background: #2ea043; }
         
         .stats { color: #8b949e; font-size: 14px; line-height: 1.6; }
-        .expiry { font-size: 11px; color: #f85149; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -44,11 +62,10 @@
         <button class="filter-btn" onclick="currentFilter = 'PowerPlant'; fetchRobberies();">PowerPlant</button>
         <button class="filter-btn" onclick="currentFilter = 'Casino'; fetchRobberies();">Casino</button>
         <button class="filter-btn" onclick="currentFilter = 'Cargo Train'; fetchRobberies();">Cargo Train</button>
-        <button class="filter-btn" onclick="currentFilter = 'Tomb'; fetchRobberies();">Cargo Tomb</button>
+        <button class="filter-btn" onclick="currentFilter = 'Tomb'; fetchRobberies();">Tomb</button>
         <button class="filter-btn" onclick="currentFilter = 'Mansion'; fetchRobberies();">Mansion</button>
-        <button class="filter-btn" onclick="currentFilter = 'Airdrops'; fetchRobberies();">Airdrops</button>
-
-    <div class="container" id="card-container">
+        <button class="filter-btn" onclick="currentFilter = 'Airdrop'; fetchRobberies();">Airdrops</button>
+    </div> <div class="container" id="card-container">
         <p style="color:gray;">Waiting for bot data...</p>
     </div>
 
@@ -62,10 +79,8 @@
                 const data = await response.json();
                 
                 if (data) {
-                    // Convert Firebase object to array
                     let robberyArray = Object.values(data);
                     
-                    // Apply Category Filter
                     if (currentFilter !== 'all') {
                         robberyArray = robberyArray.filter(r => r.name.includes(currentFilter));
                     }
@@ -84,15 +99,13 @@
             container.innerHTML = ""; 
 
             const currentTime = Math.floor(Date.now() / 1000);
-            const FIVE_MINUTES = 300; // 300 seconds
+            const FIVE_MINUTES = 300; 
 
             data.forEach(rob => {
                 const timePassed = currentTime - rob.lastUpdated;
 
-                // ONLY show the card if it was updated less than 5 minutes ago
                 if (timePassed < FIVE_MINUTES) {
                     const statusClass = rob.status === "Open" ? "open" : "robbing";
-                    const timeLeft = Math.max(0, FIVE_MINUTES - timePassed);
 
                     container.innerHTML += `
                         <div class="card">
@@ -107,7 +120,7 @@
             });
 
             if (container.innerHTML === "") {
-                container.innerHTML = "<p style='color:gray; text-align:center;'>No fresh robberies found. Waiting for bot...</p>";
+                container.innerHTML = "<p style='color:gray; text-align:center;'>No fresh robberies found for this category.</p>";
             }
         }
 
@@ -115,7 +128,6 @@
             window.location.href = `roblox://placeId=244124012&gameInstanceId=${jobId}`;
         }
 
-        // Refresh every 5 seconds to keep the timers and data live
         setInterval(fetchRobberies, 5000);
         fetchRobberies();
     </script>
