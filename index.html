@@ -131,19 +131,19 @@
                     return;
                 }
 
-                // Convert object of JobIDs into an array
-                let robberies = Object.values(data);
+                // Updated logic: Map object keys to entries to ensure jobId is captured
+                let robberies = Object.keys(data).map(key => ({
+                    ...data[key],
+                    jobId: data[key].jobId || key
+                }));
 
-                // 1. Filter out data older than 10 minutes (safety cleanup)
                 const now = Math.floor(Date.now() / 1000);
                 robberies = robberies.filter(r => (now - r.lastUpdated) < 600);
 
-                // 2. Apply Category Filter
                 if (currentFilter !== 'all') {
                     robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
                 }
 
-                // 3. Sort by newest first
                 robberies.sort((a, b) => b.lastUpdated - a.lastUpdated);
 
                 displayCards(robberies);
@@ -166,8 +166,7 @@
                 const statusClass = isStatusOpen ? "open" : "robbing";
                 const statusText = isStatusOpen ? "Open" : "Robbing";
                 
-                // Ensure player count is clean
-                const playerDisplay = typeof rob.players === "number" ? rob.players : rob.players.split('/')[0];
+                const playerDisplay = typeof rob.players === "number" ? rob.players : (rob.players ? rob.players.split('/')[0] : "?");
 
                 container.innerHTML += `
                     <div class="card">
@@ -193,10 +192,8 @@
             window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
         }
 
-        // Refresh every 3 seconds for near-instant updates
         setInterval(fetchRobberies, 3000);
         fetchRobberies();
     </script>
 </body>
 </html>
-
