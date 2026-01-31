@@ -99,11 +99,23 @@
     </div> 
     
     <div class="container" id="card-container">
-        </div>
+    </div>
 
     <script>
         const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
         let currentFilter = 'all';
+
+        // --- NEW AUTO-JOIN FEATURE ---
+        function checkAutoJoin() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            const placeId = 606849621; // Jailbreak PlaceID
+
+            if (jobId) {
+                console.log("Detecting JobId from link, launching Roblox...");
+                window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
+            }
+        }
 
         function setFilter(type, btn) {
             currentFilter = type;
@@ -131,7 +143,6 @@
                     return;
                 }
 
-                // Updated logic: Map object keys to entries to ensure jobId is captured
                 let robberies = Object.keys(data).map(key => ({
                     ...data[key],
                     jobId: data[key].jobId || key
@@ -192,6 +203,8 @@
             window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
         }
 
+        // Initialize
+        checkAutoJoin(); // Check for jobid link immediately on load
         setInterval(fetchRobberies, 3000);
         fetchRobberies();
     </script>
