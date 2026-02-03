@@ -3,28 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robbery Tracker | Multi-Server</title>
+    <title>Robbery Sniper | Live Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0b0e14;
+            --bg-dark: #0d1117;
             --card-bg: #161b22;
             --border: #30363d;
-            --text-main: #ffffff;
+            --text-main: #f0f6fc;
             --text-dim: #8b949e;
             --green: #238636;
             --orange: #d29922;
+            --blue: #1f6feb;
+            --red: #f85149;
         }
 
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            font-family: 'Inter', sans-serif; 
             padding: 20px;
             margin: 0;
+            line-height: 1.5;
         }
 
-        h1 { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
+        h1 { 
+            font-weight: 800;
+            letter-spacing: -1px;
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
+        /* --- Notification Styles --- */
+        #notification-tray {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+
+        .notif {
+            background: #21262d;
+            border-left: 4px solid var(--blue);
+            padding: 12px 16px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            animation: slideIn 0.3s ease-out;
+            font-size: 13px;
+        }
+
+        .notif.priority { border-left-color: var(--red); background: #2d1d1d; }
+        .notif.airdrop { border-left-color: var(--orange); }
+        .notif-time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); display: block; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* --- Layout & Filters --- */
         .filter-bar { 
             display: flex; 
             gap: 8px; 
@@ -34,11 +79,12 @@
 
         .filter-btn { 
             background: #1c1f26; border: 1px solid var(--border); color: var(--text-main); 
-            padding: 8px 16px; border-radius: 6px; cursor: pointer; 
-            font-size: 13px; font-weight: 600; transition: 0.2s;
+            padding: 8px 14px; border-radius: 6px; cursor: pointer; 
+            font-size: 12px; font-weight: 600; transition: 0.2s;
+            font-family: 'Inter', sans-serif;
         }
-        .filter-btn:hover { background: #30363d; border-color: #8b949e; }
-        .filter-btn.active { border-color: var(--green); background: #23863622; }
+        .filter-btn:hover { background: #30363d; }
+        .filter-btn.active { border-color: var(--blue); background: #1f6feb22; }
 
         .container { 
             display: grid; 
@@ -48,74 +94,63 @@
         
         .card { 
             background: var(--card-bg); 
-            border-radius: 10px; 
+            border-radius: 12px; 
             padding: 20px; 
             border: 1px solid var(--border); 
-            position: relative;
-            transition: transform 0.1s;
+            transition: transform 0.2s, border-color 0.2s;
         }
-        .card:hover { border-color: #444c56; }
+        .card:hover { border-color: var(--text-dim); transform: translateY(-2px); }
 
-        .card h3 { margin: 0 0 15px 0; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .card h3 { margin: 0 0 15px 0; font-size: 17px; display: flex; justify-content: space-between; align-items: center; }
         
-        .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .status { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .open { background: var(--green); color: white; }
         .robbing { background: var(--orange); color: black; }
+        .special { background: var(--red); color: white; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; }
+        }
 
         .join-btn { 
-            width: 100%; background: var(--green); color: white; border: none; 
-            padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; 
-            font-size: 14px; margin-top: 10px; transition: 0.2s;
+            width: 100%; background: var(--blue); color: white; border: none; 
+            padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; 
+            font-size: 13px; margin-top: 10px; transition: 0.2s;
+            font-family: 'Inter', sans-serif;
         }
-        .join-btn:hover { background: #2ea043; }
+        .join-btn:hover { background: #388bfd; }
 
         .stats-row { 
-            display: flex; 
-            justify-content: space-between; 
-            color: var(--text-dim); 
-            font-size: 13px; 
-            margin-top: 15px; 
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; color: var(--text-dim); 
+            font-size: 12px; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
         }
         
-        .time-ago { color: var(--text-dim); font-size: 11px; margin-bottom: 8px; display: block; }
+        .time-ago { color: var(--text-dim); font-size: 10px; margin-bottom: 8px; display: block; font-family: 'JetBrains Mono', monospace; }
     </style>
 </head>
 <body>
 
-    <h1>🚨 Live Robbery Snipers</h1>
+    <div id="notification-tray"></div>
+
+    <h1><span style="color: var(--red)">●</span> LIVE SNIPER FEED</h1>
 
     <div class="filter-bar" id="filters">
-        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-        <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
+        <button class="filter-btn active" onclick="setFilter('all', this)">All Feeds</button>
         <button class="filter-btn" onclick="setFilter('Bank', this)">Bank</button>
+        <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
         <button class="filter-btn" onclick="setFilter('Museum', this)">Museum</button>
-        <button class="filter-btn" onclick="setFilter('PowerPlant', this)">PowerPlant</button>
         <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
-        <button class="filter-btn" onclick="setFilter('Mansion', this)">Mansion</button>
-        <button class="filter-btn" onclick="setFilter('Tomb', this)">Tomb</button>
-        <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops</button>
+        <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops 📦</button>
     </div> 
     
-    <div class="container" id="card-container">
-    </div>
+    <div class="container" id="card-container"></div>
 
     <script>
         const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
+        const PLACE_ID = 606849621;
         let currentFilter = 'all';
-
-        // --- NEW AUTO-JOIN FEATURE ---
-        function checkAutoJoin() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const jobId = urlParams.get('jobid');
-            const placeId = 606849621; // Jailbreak PlaceID
-
-            if (jobId) {
-                console.log("Detecting JobId from link, launching Roblox...");
-                window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
-            }
-        }
+        let knownRobberies = new Set();
 
         function setFilter(type, btn) {
             currentFilter = type;
@@ -124,22 +159,41 @@
             fetchRobberies();
         }
 
+        function createNotification(title, message, type = 'normal') {
+            const tray = document.getElementById('notification-tray');
+            const id = 'notif-' + Date.now();
+            const div = document.createElement('div');
+            div.className = `notif ${type}`;
+            div.id = id;
+            div.innerHTML = `
+                <span class="notif-time">${new Date().toLocaleTimeString()}</span>
+                <strong>${title}</strong><br>${message}
+            `;
+            tray.appendChild(div);
+
+            // Auto-delete after 5 minutes (300,000 ms)
+            setTimeout(() => {
+                if (document.getElementById(id)) {
+                    document.getElementById(id).style.opacity = '0';
+                    setTimeout(() => div.remove(), 500);
+                }
+            }, 300000);
+        }
+
         function getTimeAgo(timestamp) {
             const seconds = Math.floor(Date.now() / 1000) - timestamp;
             if (seconds < 60) return "Just now";
-            const mins = Math.floor(seconds / 60);
-            return `${mins}m ago`;
+            return `${Math.floor(seconds / 60)}m ago`;
         }
 
         async function fetchRobberies() {
             try {
                 const response = await fetch(FIREBASE_URL);
                 const data = await response.json();
-                
                 const container = document.getElementById('card-container');
                 
                 if (!data) {
-                    container.innerHTML = "<p style='color: #8b949e;'>Waiting for bots to find robberies...</p>";
+                    container.innerHTML = "<p style='color: #8b949e;'>Scanning servers...</p>";
                     return;
                 }
 
@@ -149,49 +203,55 @@
                 }));
 
                 const now = Math.floor(Date.now() / 1000);
+                // Only show data from last 10 minutes
                 robberies = robberies.filter(r => (now - r.lastUpdated) < 600);
 
+                robberies.forEach(rob => {
+                    const robKey = `${rob.jobId}-${rob.name}-${rob.status}`;
+                    
+                    // Logic for Notifications
+                    if (!knownRobberies.has(robKey)) {
+                        if (rob.name.toLowerCase().includes("bank") && rob.isDouble) {
+                            createNotification("🚨 DOUBLE BANK", `Server ${rob.jobId.substring(0,6)} has Double Bank!`, 'priority');
+                        } else if (rob.name.toLowerCase().includes("airdrop")) {
+                            createNotification("📦 AIRDROP SPAWNED", `New airdrop detected!`, 'airdrop');
+                        } else if (rob.status === "Open") {
+                            createNotification("🔓 ROBBERY OPEN", `${rob.name} is now ready!`);
+                        }
+                        knownRobberies.add(robKey);
+                    }
+                });
+
+                // Apply Filters
                 if (currentFilter !== 'all') {
                     robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
                 }
 
                 robberies.sort((a, b) => b.lastUpdated - a.lastUpdated);
-
                 displayCards(robberies);
-            } catch (error) {
-                console.error("Firebase Error:", error);
-            }
+            } catch (e) { console.error(e); }
         }
 
         function displayCards(robberies) {
             const container = document.getElementById('card-container');
             container.innerHTML = ""; 
 
-            if (robberies.length === 0) {
-                container.innerHTML = "<p style='color: #8b949e;'>No active robberies for this category.</p>";
-                return;
-            }
-
             robberies.forEach(rob => {
-                const isStatusOpen = rob.status === "Open";
-                const statusClass = isStatusOpen ? "open" : "robbing";
-                const statusText = isStatusOpen ? "Open" : "Robbing";
+                const isDouble = rob.name.toLowerCase().includes("bank") && rob.isDouble;
+                const statusClass = isDouble ? "special" : (rob.status === "Open" ? "open" : "robbing");
+                const statusText = isDouble ? "Double Bank" : rob.status;
                 
-                const playerDisplay = typeof rob.players === "number" ? rob.players : (rob.players ? rob.players.split('/')[0] : "?");
-
                 container.innerHTML += `
                     <div class="card">
-                        <span class="time-ago">🕒 Updated ${getTimeAgo(rob.lastUpdated)}</span>
+                        <span class="time-ago">ID: ${rob.jobId.substring(0,8)} • ${getTimeAgo(rob.lastUpdated)}</span>
                         <h3>
                             ${rob.name} 
                             <span class="status ${statusClass}">${statusText}</span>
                         </h3>
-                        
-                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">JOIN SERVER</button>
-                        
+                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">SNIPE SERVER</button>
                         <div class="stats-row">
-                            <span>Players:</span>
-                            <span><b>${playerDisplay} / 30</b></span>
+                            <span>CAPACITY</span>
+                            <span><b>${rob.players || "?"} / 30</b></span>
                         </div>
                     </div>
                 `;
@@ -199,12 +259,10 @@
         }
 
         function joinServer(jobId) {
-            const placeId = 606849621;
-            window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
+            window.location.href = `roblox://experiences/start?placeId=${PLACE_ID}&gameInstanceId=${jobId}`;
         }
 
         // Initialize
-        checkAutoJoin(); // Check for jobid link immediately on load
         setInterval(fetchRobberies, 3000);
         fetchRobberies();
     </script>
