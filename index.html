@@ -55,8 +55,8 @@
             to { transform: translateX(0); }
         }
 
-        .notif-alert { border-left-color: var(--red); }
-        .notif-drop { border-left-color: var(--orange); }
+        .notif-alert { border-left-color: var(--red); background: #f8514910; }
+        .notif-drop { border-left-color: var(--orange); background: #d2992210; }
 
         /* --- UI Elements --- */
         h1 { 
@@ -123,7 +123,13 @@
 
         .open { background: #23863630; color: #44cf6c; border: 1px solid #238636; }
         .robbing { background: #d2992230; color: #e3b341; border: 1px solid #d29922; }
-        .double { background: #f8514930; color: #ff7b72; border: 1px solid #f85149; }
+        .double { background: #f8514930; color: #ff7b72; border: 1px solid #f85149; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
 
         .join-btn { 
             width: 100%; 
@@ -207,6 +213,7 @@
 
         function getTimeAgo(timestamp) {
             const seconds = Math.floor(Date.now() / 1000) - timestamp;
+            if (seconds < 0) return "Just now"; // Handle slight clock desync
             if (seconds < 60) return "Just now";
             return `${Math.floor(seconds / 60)}m ago`;
         }
@@ -224,18 +231,20 @@
                     id: key
                 }));
 
-                // Logic for Notifications & Double Bank
+                // Logic for Notifications & State Monitoring
                 robberies.forEach(rob => {
                     const oldState = lastKnownData[rob.id];
                     
-                    // Trigger if status changes to Open or if it's a new entry
-                    if (!oldState || (oldState.status !== rob.status && rob.status === "Open")) {
-                        if (rob.name.toLowerCase().includes("airdrop")) {
-                            pushNotify("📦 AIRDROP", "A new airdrop has landed!", "notif-drop");
-                        } else if (rob.isDouble) {
-                            pushNotify("🔥 DOUBLE BANK", "Double Bank detected! Join now!", "notif-alert");
-                        } else {
-                            pushNotify("🔓 " + rob.name.toUpperCase(), "Robbery is now OPEN", "");
+                    // Trigger if status changes or new entry
+                    if (!oldState || oldState.status !== rob.status) {
+                        if (rob.status === "Open") {
+                            if (rob.name.toLowerCase().includes("airdrop")) {
+                                pushNotify("📦 AIRDROP", "A new airdrop has landed!", "notif-drop");
+                            } else if (rob.isDouble) {
+                                pushNotify("🔥 DOUBLE BANK", "Double Bank detected! Join now!", "notif-alert");
+                            } else {
+                                pushNotify("🔓 " + rob.name.toUpperCase(), "Robbery is now OPEN", "");
+                            }
                         }
                     }
                     lastKnownData[rob.id] = rob;
@@ -250,7 +259,7 @@
                 // Display
                 container.innerHTML = "";
                 robberies.forEach(rob => {
-                    const isDouble = rob.isDouble;
+                    const isDouble = rob.isDouble && rob.name.toLowerCase().includes("bank");
                     const statusClass = isDouble ? "double" : rob.status.toLowerCase();
                     const statusText = isDouble ? "Double Bank" : rob.status;
 
@@ -269,13 +278,14 @@
                         </div>
                     `;
                 });
-            } catch (error) { console.log("Fetch Error"); }
+            } catch (error) { console.log("Fetch Error:", error); }
         }
 
         function joinServer(jobId) {
             window.location.href = `roblox://experiences/start?placeId=606849621&gameInstanceId=${jobId}`;
         }
 
+        // Check for updates every 3 seconds
         setInterval(fetchRobberies, 3000);
         fetchRobberies();
     </script>
