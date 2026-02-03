@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robbery Tracker | Multi-Server</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0b0e14;
@@ -15,211 +14,199 @@
             --green: #238636;
             --orange: #d29922;
             --red: #f85149;
-            --blue: #1f6feb;
         }
 
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            padding: 20px; 
-            margin: 0; 
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            padding: 20px;
+            margin: 0;
         }
 
-        h1 { font-weight: 900; font-size: 24px; letter-spacing: -0.5px; }
+        h1 { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
 
-        /* --- Compact Notifications --- */
-        #notif-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            pointer-events: none;
-        }
-
-        .notification {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--blue);
-            padding: 10px 15px;
-            border-radius: 6px;
-            width: 250px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            animation: slideIn 0.3s ease;
-            font-size: 12px;
-            font-weight: 700;
-            pointer-events: auto;
-            transition: opacity 0.5s;
-        }
-
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
-
-        /* --- Smaller, Bolder Cards --- */
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 15px; 
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 8px; 
-            padding: 16px; 
-            border: 1px solid var(--border); 
-            transition: transform 0.1s;
-        }
-
-        .card h3 { 
-            margin: 8px 0; 
-            font-size: 16px; 
-            font-weight: 900; 
+        .filter-bar { 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            text-transform: uppercase;
+            gap: 8px; 
+            margin-bottom: 30px; 
+            flex-wrap: wrap; 
         }
-
-        /* --- Status Colors --- */
-        .status { 
-            padding: 3px 8px; 
-            border-radius: 4px; 
-            font-size: 10px; 
-            font-weight: 900; 
-        }
-        .open { background: var(--green); color: #fff; }
-        .in-robbery { background: var(--orange); color: #000; } /* Yellow/Orange background */
-        .double { background: var(--red); color: #fff; }
-        .progress { background: var(--blue); color: #fff; }
 
         .filter-btn { 
-            background: #21262d; border: 1px solid var(--border); color: var(--text-main); 
-            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 12px;
+            background: #1c1f26; border: 1px solid var(--border); color: var(--text-main); 
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; 
+            font-size: 13px; font-weight: 600; transition: 0.2s;
         }
-        .filter-btn.active { background: #fff; color: #000; border-color: #fff; }
+        .filter-btn:hover { background: #30363d; border-color: #8b949e; }
+        .filter-btn.active { border-color: var(--green); background: #23863622; }
+
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+        
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 10px; 
+            padding: 20px; 
+            border: 1px solid var(--border); 
+            position: relative;
+            transition: transform 0.1s;
+        }
+        .card:hover { border-color: #444c56; }
+
+        .card h3 { margin: 0 0 15px 0; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .open { background: var(--green); color: white; }
+        .robbing { background: var(--orange); color: black; }
+        .in-robbery { background: var(--orange); color: black; }
+        .double-bank { background: var(--red); color: white; }
+
+        .bank-status-text { font-size: 11px; color: var(--orange); font-weight: 700; margin-bottom: 10px; display: block; }
 
         .join-btn { 
-            width: 100%; background: #fff; color: #000; border: none; padding: 10px; 
-            border-radius: 6px; font-weight: 900; cursor: pointer; margin: 10px 0;
-            font-size: 12px; text-transform: uppercase;
+            width: 100%; background: var(--green); color: white; border: none; 
+            padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; 
+            font-size: 14px; margin-top: 10px; transition: 0.2s;
         }
+        .join-btn:hover { background: #2ea043; }
 
-        .stats-row { font-size: 11px; font-weight: 700; color: var(--text-dim); display: flex; justify-content: space-between; }
-        .bank-details { font-size: 10px; font-weight: 800; color: var(--orange); margin-bottom: 5px; }
+        .stats-row { 
+            display: flex; 
+            justify-content: space-between; 
+            color: var(--text-dim); 
+            font-size: 13px; 
+            margin-top: 15px; 
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .time-ago { color: var(--text-dim); font-size: 11px; margin-bottom: 8px; display: block; }
     </style>
 </head>
 <body>
 
-    <div id="notif-container"></div>
-    <h1>ROBBERY SNIPER</h1>
+    <h1>🚨 Live Robbery Snipers</h1>
 
-    <div class="filter-bar" id="filters" style="margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="filter-btn active" data-type="all">ALL</button>
-        <button class="filter-btn" data-type="Jewelry">JEWELRY</button>
-        <button class="filter-btn" data-type="Bank">BANK</button>
-        <button class="filter-btn" data-type="Museum">MUSEUM</button>
-        <button class="filter-btn" data-type="Airdrop">AIRDROPS</button>
+    <div class="filter-bar" id="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
+        <button class="filter-btn" onclick="setFilter('Bank', this)">Bank</button>
+        <button class="filter-btn" onclick="setFilter('Museum', this)">Museum</button>
+        <button class="filter-btn" onclick="setFilter('PowerPlant', this)">PowerPlant</button>
+        <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
+        <button class="filter-btn" onclick="setFilter('Mansion', this)">Mansion</button>
+        <button class="filter-btn" onclick="setFilter('Tomb', this)">Tomb</button>
+        <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops</button>
     </div> 
-
+    
     <div class="container" id="card-container"></div>
 
     <script>
         const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
         let currentFilter = 'all';
-        let lastKnownData = {};
 
-        // Filtering
-        document.getElementById('filters').addEventListener('click', (e) => {
-            if (e.target.classList.contains('filter-btn')) {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.getAttribute('data-type');
-                renderData(lastKnownData);
+        function checkAutoJoin() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            const placeId = 606849621; 
+            if (jobId) {
+                window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
             }
-        });
+        }
 
-        function pushNotify(title, text, styleClass = "") {
-            const container = document.getElementById('notif-container');
-            const notif = document.createElement('div');
-            notif.className = `notification ${styleClass}`;
-            notif.innerHTML = `<div>${title}</div><div style="font-weight:400; font-size:10px;">${text}</div>`;
-            container.prepend(notif);
-            
-            // Strictly delete after 5 minutes (300,000ms)
-            setTimeout(() => { 
-                notif.style.opacity = '0'; 
-                setTimeout(() => notif.remove(), 500); 
-            }, 300000); 
+        function setFilter(type, btn) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            fetchRobberies();
+        }
+
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor(Date.now() / 1000) - timestamp;
+            if (seconds < 60) return "Just now";
+            return `${Math.floor(seconds / 60)}m ago`;
         }
 
         async function fetchRobberies() {
             try {
                 const response = await fetch(FIREBASE_URL);
                 const data = await response.json();
-                if (!data) return;
+                const container = document.getElementById('card-container');
+                if (!data) {
+                    container.innerHTML = "<p style='color: #8b949e;'>Waiting for bots...</p>";
+                    return;
+                }
 
-                Object.keys(data).forEach(id => {
-                    const rob = data[id];
-                    const old = lastKnownData[id];
-                    if ((!old || old.status !== rob.status) && rob.status === "Open") {
-                        pushNotify(rob.name.toUpperCase(), "NOW OPEN");
-                    }
-                });
+                let robberies = Object.keys(data).map(key => ({
+                    ...data[key],
+                    jobId: data[key].jobId || key
+                }));
 
-                lastKnownData = data;
-                renderData(data);
-            } catch (e) { console.error("Sync Error"); }
+                const now = Math.floor(Date.now() / 1000);
+                robberies = robberies.filter(r => (now - r.lastUpdated) < 600);
+
+                if (currentFilter !== 'all') {
+                    robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
+                }
+
+                robberies.sort((a, b) => b.lastUpdated - a.lastUpdated);
+                displayCards(robberies);
+            } catch (error) { console.error(error); }
         }
 
-        function renderData(data) {
+        function displayCards(robberies) {
             const container = document.getElementById('card-container');
-            container.innerHTML = "";
-            
-            Object.keys(data).forEach(key => {
-                const rob = data[key];
-                if (currentFilter !== 'all' && !rob.name.toLowerCase().includes(currentFilter.toLowerCase())) return;
+            container.innerHTML = ""; 
 
-                // Handle Status Formatting
-                let statusLabel = rob.status;
-                let statusClass = rob.status.toLowerCase().replace(" ", "-");
-                
-                if (rob.status === "Robbing" || rob.status === "In Progress") {
-                    statusLabel = "IN ROBBERY";
-                    statusClass = "in-robbery";
-                }
+            robberies.forEach(rob => {
+                let statusClass = rob.status === "Open" ? "open" : "robbing";
+                let statusText = rob.status === "Open" ? "Open" : "IN ROBBERY";
+                let bankHtml = "";
 
+                // Double Bank Logic
                 if (rob.isDouble) {
-                    statusLabel = "DOUBLE BANK";
-                    statusClass = "double";
+                    statusClass = "double-bank";
+                    statusText = "DOUBLE BANK";
+                    bankHtml = `<span class="bank-status-text">M: ${rob.bank1Status} | S: ${rob.bank2Status}</span>`;
                 }
 
-                // Airdrop Time Logic
-                if (rob.name.toLowerCase().includes("airdrop") && rob.timeLeft) {
-                    statusLabel = `IN PROGRESS (${rob.timeLeft}s)`;
-                    statusClass = "progress";
+                // Airdrop Logic (Countdown & Status)
+                if (rob.name.toLowerCase().includes("airdrop")) {
+                    const state = rob.airdropState || rob.status;
+                    const time = rob.timeLeft ? ` (${rob.timeLeft}s)` : "";
+                    statusText = (state + time).toUpperCase();
+                    statusClass = (state === "In Progress") ? "in-robbery" : statusClass;
                 }
+
+                const playerDisplay = typeof rob.players === "number" ? rob.players : (rob.players ? rob.players.split('/')[0] : "?");
 
                 container.innerHTML += `
                     <div class="card">
-                        <div class="stats-row"><span>UPDATED</span><span>JUST NOW</span></div>
+                        <span class="time-ago">🕒 Updated ${getTimeAgo(rob.lastUpdated)}</span>
                         <h3>
                             ${rob.name} 
-                            <span class="status ${statusClass}">${statusLabel}</span>
+                            <span class="status ${statusClass}">${statusText}</span>
                         </h3>
-                        ${rob.isDouble ? `<div class="bank-details">M: ${rob.bank1Status} | S: ${rob.bank2Status}</div>` : ""}
-                        <button class="join-btn" onclick="window.location.href='roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}'">JOIN SERVER</button>
+                        ${bankHtml}
+                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">JOIN SERVER</button>
                         <div class="stats-row">
-                            <span>POPULATION</span>
-                            <span style="color:#fff">${rob.players || 0}/30</span>
+                            <span>Players:</span>
+                            <span><b>${playerDisplay} / 30</b></span>
                         </div>
                     </div>
                 `;
             });
         }
 
+        function joinServer(jobId) {
+            window.location.href = `roblox://experiences/start?placeId=606849621&gameInstanceId=${jobId}`;
+        }
+
+        checkAutoJoin();
         setInterval(fetchRobberies, 3000);
         fetchRobberies();
     </script>
