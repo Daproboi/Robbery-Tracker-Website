@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robbery Tracker | Multi-Server</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --bg-dark: #0b0e14;
@@ -14,6 +15,7 @@
             --green: #238636;
             --orange: #d29922;
             --red: #f85149;
+            --blue: #58a6ff;
         }
 
         body { 
@@ -55,24 +57,43 @@
             position: relative;
             transition: transform 0.1s;
         }
-        .card:hover { border-color: #444c56; }
+        .card:hover { border-color: #444c56; transform: translateY(-2px); }
 
         .card h3 { margin: 0 0 15px 0; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
         
         .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
         .open { background: var(--green); color: white; }
         .robbing { background: var(--orange); color: black; }
-        .in-robbery { background: var(--orange); color: black; }
+        .in-progress { background: var(--blue); color: white; }
         .double-bank { background: var(--red); color: white; }
 
-        .bank-status-text { font-size: 11px; color: var(--orange); font-weight: 700; margin-bottom: 10px; display: block; }
+        .info-text { font-size: 11px; font-weight: 700; margin-bottom: 10px; display: block; }
 
+        /* JOIN BUTTON STYLES */
         .join-btn { 
-            width: 100%; background: var(--green); color: white; border: none; 
-            padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; 
-            font-size: 14px; margin-top: 10px; transition: 0.2s;
+            width: 100%; 
+            background: var(--green); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 14px; 
+            margin-top: 10px; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between icon and text */
         }
         .join-btn:hover { background: #2ea043; }
+        
+        .redirect-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor; /* Inherits the white color from the button */
+        }
 
         .stats-row { 
             display: flex; 
@@ -95,6 +116,7 @@
         <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
         <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
         <button class="filter-btn" onclick="setFilter('Bank', this)">Bank</button>
+        <button class="filter-btn" onclick="setFilter('Bank Truck', this)">Bank Truck</button>
         <button class="filter-btn" onclick="setFilter('Museum', this)">Museum</button>
         <button class="filter-btn" onclick="setFilter('PowerPlant', this)">PowerPlant</button>
         <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
@@ -136,26 +158,37 @@
                 const response = await fetch(FIREBASE_URL);
                 const data = await response.json();
                 const container = document.getElementById('card-container');
+                
                 if (!data) {
                     container.innerHTML = "<p style='color: #8b949e;'>Waiting for bots...</p>";
                     return;
                 }
 
-                let robberies = Object.keys(data).map(key => ({
-                    ...data[key],
-                    jobId: data[key].jobId || key
-                }));
-
                 const now = Math.floor(Date.now() / 1000);
-                robberies = robberies.filter(r => (now - r.lastUpdated) < 600);
+                let robberies = [];
+
+                Object.keys(data).forEach(key => {
+                    const rob = data[key];
+                    if (rob && rob.lastUpdated && (now - rob.lastUpdated) < 300) {
+                        robberies.push({
+                            ...rob,
+                            uniqueId: key,
+                            jobId: rob.jobId || key.split('_')[0]
+                        });
+                    }
+                });
 
                 if (currentFilter !== 'all') {
-                    robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
+                    if (currentFilter === 'Bank') {
+                        robberies = robberies.filter(r => r.name === "Bank");
+                    } else {
+                        robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
+                    }
                 }
 
                 robberies.sort((a, b) => b.lastUpdated - a.lastUpdated);
                 displayCards(robberies);
-            } catch (error) { console.error(error); }
+            } catch (error) { console.error("Error fetching:", error); }
         }
 
         function displayCards(robberies) {
@@ -165,24 +198,36 @@
             robberies.forEach(rob => {
                 let statusClass = rob.status === "Open" ? "open" : "robbing";
                 let statusText = rob.status === "Open" ? "Open" : "IN ROBBERY";
-                let bankHtml = "";
+                let extraInfoHtml = "";
 
-                // Double Bank Logic
+                if (rob.region && rob.region !== "") {
+                    extraInfoHtml += `<span class="info-text" style="color: #ff9d00">Location: ${rob.region}</span>`;
+                }
+
                 if (rob.isDouble) {
                     statusClass = "double-bank";
                     statusText = "DOUBLE BANK";
-                    bankHtml = `<span class="bank-status-text">M: ${rob.bank1Status} | S: ${rob.bank2Status}</span>`;
+                    if (rob.bank1Status && rob.bank2Status) {
+                        extraInfoHtml += `<span class="info-text" style="color: var(--orange)">Rising: ${rob.bank1Status} | Crater: ${rob.bank2Status}</span>`;
+                    }
                 }
 
-                // Airdrop Logic (Countdown & Status)
                 if (rob.name.toLowerCase().includes("airdrop")) {
-                    const state = rob.airdropState || rob.status;
-                    const time = rob.timeLeft ? ` (${rob.timeLeft}s)` : "";
-                    statusText = (state + time).toUpperCase();
-                    statusClass = (state === "In Progress") ? "in-robbery" : statusClass;
+                    const state = rob.dropStatus || rob.status || "Unopened";
+                    statusText = state.toUpperCase();
+                    
+                    if (state === "In Progress") {
+                        statusClass = "in-progress";
+                        const timeLeft = rob.timerText || "0 seconds";
+                        extraInfoHtml += `<span class="info-text" style="color: var(--blue)">Time Remaining: ${timeLeft}</span>`;
+                    } else {
+                        statusClass = "open";
+                        extraInfoHtml += `<span class="info-text" style="color: var(--green)">Status: Ready to open</span>`;
+                    }
                 }
 
-                const playerDisplay = typeof rob.players === "number" ? rob.players : (rob.players ? rob.players.split('/')[0] : "?");
+                // ICON SVG STRING
+                const redirectIcon = `<svg class="redirect-icon" viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>`;
 
                 container.innerHTML += `
                     <div class="card">
@@ -191,11 +236,13 @@
                             ${rob.name} 
                             <span class="status ${statusClass}">${statusText}</span>
                         </h3>
-                        ${bankHtml}
-                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">JOIN SERVER</button>
+                        ${extraInfoHtml}
+                        <button class="join-btn" onclick="joinServer('${rob.jobId}')">
+                            ${redirectIcon} JOIN GAME
+                        </button>
                         <div class="stats-row">
                             <span>Players:</span>
-                            <span><b>${playerDisplay} / 30</b></span>
+                            <span><b>${rob.players || "?"} / 30</b></span>
                         </div>
                     </div>
                 `;
@@ -203,7 +250,8 @@
         }
 
         function joinServer(jobId) {
-            window.location.href = `roblox://experiences/start?placeId=606849621&gameInstanceId=${jobId}`;
+            const cleanJobId = jobId.split('_')[0];
+            window.location.href = `roblox://experiences/start?placeId=606849621&gameInstanceId=${cleanJobId}`;
         }
 
         checkAutoJoin();
