@@ -69,7 +69,6 @@
 
         .info-text { font-size: 11px; font-weight: 700; margin-bottom: 10px; display: block; }
 
-        /* JOIN BUTTON STYLES */
         .join-btn { 
             width: 100%; 
             background: var(--green); 
@@ -85,14 +84,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px; /* Space between icon and text */
+            gap: 8px;
         }
         .join-btn:hover { background: #2ea043; }
         
         .redirect-icon {
             width: 16px;
             height: 16px;
-            fill: currentColor; /* Inherits the white color from the button */
+            fill: currentColor;
         }
 
         .stats-row { 
@@ -122,6 +121,7 @@
         <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
         <button class="filter-btn" onclick="setFilter('Mansion', this)">Mansion</button>
         <button class="filter-btn" onclick="setFilter('Tomb', this)">Tomb</button>
+        <button class="filter-btn" onclick="setFilter('Cargo Train', this)">Cargo Train</button>
         <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops</button>
     </div> 
     
@@ -226,7 +226,6 @@
                     }
                 }
 
-                // ICON SVG STRING
                 const redirectIcon = `<svg class="redirect-icon" viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" /></svg>`;
 
                 container.innerHTML += `
