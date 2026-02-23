@@ -113,12 +113,9 @@
                         </div>
                     </div>`;
             });
-            renderPagination(totalPages);
-        }
-
-        function renderPagination(totalPages) {
+            function renderPagination(totalPages) {
             const container = document.getElementById('pagination');
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clears the bar so it doesn't duplicate
             if (totalPages <= 1) return;
 
             // 1. BACK BUTTON
@@ -129,9 +126,44 @@
             backBtn.onclick = () => { currentPage--; render(); window.scrollTo(0,0); };
             container.appendChild(backBtn);
 
-            // 2. PAGE NUMBERS (Limit to 4)
+            // 2. CALCULATE RANGE (Shows only 4 numbers)
             let start = Math.max(1, currentPage - 1);
             let end = Math.min(totalPages, start + 3);
             
-            // Adjust start if we are near the end
-            if (end === totalPages) start = Math.max(1, end
+            // Adjust start if we are near the very end of the list
+            if (end === totalPages) start = Math.max(1, end - 3);
+
+            // 3. RENDER THE 4 NUMBERS
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => { currentPage = i; render(); window.scrollTo(0,0); };
+                container.appendChild(btn);
+            }
+
+            // 4. ELLIPSIS & LAST PAGE
+            if (end < totalPages) {
+                // Only show dots if there's an actual gap between the numbers
+                if (end < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.className = 'dots';
+                    container.appendChild(dots);
+                }
+
+                const lastBtn = document.createElement('button');
+                lastBtn.innerText = totalPages;
+                lastBtn.className = 'page-btn';
+                lastBtn.onclick = () => { currentPage = totalPages; render(); window.scrollTo(0,0); };
+                container.appendChild(lastBtn);
+            }
+
+            // 5. NEXT BUTTON
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = 'Next';
+            nextBtn.className = 'page-btn nav-text';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; render(); window.scrollTo(0,0); };
+            container.appendChild(nextBtn);
+        }
