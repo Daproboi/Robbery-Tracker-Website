@@ -16,13 +16,12 @@
         .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
         .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 6px; transition: 0.2s; }
         .nav-link:hover { color: var(--accent); }
-        .nav-active { color: var(--accent); background: #21262d; }
+        .nav-active { color: var(--accent); background: #21262d; border: 1px solid var(--border); }
 
         .container { max-width: 1200px; margin: auto; padding: 20px; }
         
         /* Search & Filters */
         #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; outline: none; }
-        #searchInput:focus { border-color: var(--accent); }
         
         .filter-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; justify-content: center; }
         .filter-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem; }
@@ -30,28 +29,25 @@
 
         /* Grid */
         .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; min-height: 400px; }
-        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; border: 1px solid var(--border); }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; }
         .item-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-        
         .item-header { background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-weight: bold; }
         .category-tag { font-size: 0.65rem; background: #30363d; color: var(--text-main); padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
-        
         .item-body { padding: 15px; }
         .item-img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 6px; margin-bottom: 15px; display: block; }
-        
         .price-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
         .price-label { color: var(--text-dim); font-size: 0.85rem; font-weight: bold; }
         .price-val { font-weight: bold; color: var(--green); }
         .duped-val { color: var(--red); }
 
-        /* Advanced Pagination Styles */
-        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 40px 0; flex-wrap: wrap; }
-        .page-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; min-width: 40px; }
+        /* Pagination Redesign */
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 5px; margin: 50px 0; flex-wrap: nowrap; }
+        .page-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; min-width: 38px; font-size: 0.9rem; }
         .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
         .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .page-dots { color: var(--text-dim); padding: 0 5px; font-weight: bold; }
-        .nav-text-btn { padding: 8px 18px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        .page-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+        .nav-text { padding: 8px 15px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        .dots { color: var(--text-dim); padding: 0 5px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -64,41 +60,28 @@
 
     <div class="container">
         <input type="text" id="searchInput" placeholder="Search items..." oninput="resetAndRender()">
-        
-        <div id="filterGroup" class="filter-group">
-            <button class="filter-btn active" onclick="filterCat('All', this)">ALL ITEMS</button>
-        </div>
-
+        <div id="filterGroup" class="filter-group"><button class="filter-btn active" onclick="filterCat('All', this)">ALL</button></div>
         <div id="valueGrid" class="value-grid"></div>
-
         <div id="pagination" class="pagination"></div>
     </div>
 
     <script src="Values.js"></script>
-
     <script>
         let currentCat = 'All';
         let currentPage = 1;
         const itemsPerPage = 12;
 
         function filterCat(cat, btn) {
-            currentCat = cat;
-            currentPage = 1;
+            currentCat = cat; currentPage = 1;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             render();
         }
 
-        function resetAndRender() {
-            currentPage = 1;
-            render();
-        }
+        function resetAndRender() { currentPage = 1; render(); }
 
         function render() {
             const grid = document.getElementById('valueGrid');
-            const paginationEl = document.getElementById('pagination');
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            
             if (typeof db === 'undefined') return;
 
             let allFiltered = [];
@@ -108,13 +91,12 @@
                 }
             });
 
+            const query = document.getElementById('searchInput').value.toLowerCase();
             allFiltered = allFiltered.filter(i => i.name.toLowerCase().includes(query));
             allFiltered.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
 
-            const totalItems = allFiltered.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const pageItems = allFiltered.slice(startIndex, startIndex + itemsPerPage);
+            const totalPages = Math.ceil(allFiltered.length / itemsPerPage);
+            const pageItems = allFiltered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
             grid.innerHTML = '';
             pageItems.forEach(item => {
@@ -131,7 +113,6 @@
                         </div>
                     </div>`;
             });
-
             renderPagination(totalPages);
         }
 
@@ -140,69 +121,17 @@
             container.innerHTML = '';
             if (totalPages <= 1) return;
 
-            // Back Button
+            // 1. BACK BUTTON
             const backBtn = document.createElement('button');
-            backBtn.innerHTML = '← Back';
-            backBtn.className = 'page-btn nav-text-btn';
+            backBtn.innerText = 'Back';
+            backBtn.className = 'page-btn nav-text';
             backBtn.disabled = currentPage === 1;
             backBtn.onclick = () => { currentPage--; render(); window.scrollTo(0,0); };
             container.appendChild(backBtn);
 
-            // Logic to show limited numbers
-            let startPage = Math.max(1, currentPage - 1);
-            let endPage = Math.min(totalPages, startPage + 3);
-
-            // Adjust if at the very end
-            if (endPage === totalPages) {
-                startPage = Math.max(1, endPage - 3);
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                const btn = document.createElement('button');
-                btn.innerText = i;
-                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                btn.onclick = () => { currentPage = i; render(); window.scrollTo(0,0); };
-                container.appendChild(btn);
-            }
-
-            // Ellipsis and Last Page
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    const dots = document.createElement('span');
-                    dots.innerText = '...';
-                    dots.className = 'page-dots';
-                    container.appendChild(dots);
-                }
-                const lastBtn = document.createElement('button');
-                lastBtn.innerText = totalPages;
-                lastBtn.className = 'page-btn';
-                lastBtn.onclick = () => { currentPage = totalPages; render(); window.scrollTo(0,0); };
-                container.appendChild(lastBtn);
-            }
-
-            // Next Button
-            const nextBtn = document.createElement('button');
-            nextBtn.innerHTML = 'Next →';
-            nextBtn.className = 'page-btn nav-text-btn';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; render(); window.scrollTo(0,0); };
-            container.appendChild(nextBtn);
-        }
-
-        function init() {
-            if (typeof db !== 'undefined') {
-                const group = document.getElementById('filterGroup');
-                Object.keys(db).forEach(cat => {
-                    const btn = document.createElement('button');
-                    btn.className = 'filter-btn';
-                    btn.innerText = cat.toUpperCase();
-                    btn.onclick = (e) => filterCat(cat, e.target);
-                    group.appendChild(btn);
-                });
-                render();
-            } else { setTimeout(init, 100); }
-        }
-        window.onload = init;
-    </script>
-</body>
-</html>
+            // 2. PAGE NUMBERS (Limit to 4)
+            let start = Math.max(1, currentPage - 1);
+            let end = Math.min(totalPages, start + 3);
+            
+            // Adjust start if we are near the end
+            if (end === totalPages) start = Math.max(1, end
