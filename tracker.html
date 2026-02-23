@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Robbery Tracker</title>
+    <style>
+        :root {
+            --bg: #0d1117; --panel: #161b22; --border: #30363d; --text-main: #c9d1d9;
+            --text-dim: #8b949e; --accent: #58a6ff; --green: #3fb950;
+        }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
+        
+        /* Shared Navigation Bar */
+        .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; font-size: 0.9rem; padding: 8px 16px; border-radius: 6px; transition: 0.2s; border: 1px solid transparent; }
+        .nav-link:hover { border-color: var(--accent); color: var(--accent); }
+        .nav-active { color: var(--accent); border-color: var(--border); background: #21262d; }
+
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        
+        .tracker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .server-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+        .status-open { color: var(--green); font-weight: bold; }
+        .join-btn { display: block; width: 100%; background: #21262d; border: 1px solid var(--border); color: var(--accent); padding: 8px; border-radius: 4px; margin-top: 15px; text-decoration: none; font-size: 0.8rem; font-weight: bold; }
+        .join-btn:hover { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-link">HOME</a>
+        <a href="tracker.html" class="nav-link nav-active">ROBBERY TRACKER</a>
+        <a href="values.html" class="nav-link">ITEM VALUES</a>
+    </nav>
+
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Live Robbery Status</h2>
+        <div id="tracker" class="tracker-grid">
+            <p style="color:grey">Connecting to database...</p>
+        </div>
+    </div>
+
+<script>
+    // PASTE YOUR FIREBASE URL BETWEEN THE QUOTES BELOW
+    const FIREBASE_URL = "https://YOUR-PROJECT-ID.firebaseio.com"; 
+
+    async function updateTracker() {
+        try {
+            const res = await fetch(`${FIREBASE_URL}/robberies.json`);
+            const data = await res.json();
+            const container = document.getElementById('tracker');
+            
+            if(!data) {
+                container.innerHTML = '<p style="color:grey">No active servers found.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            Object.values(data).forEach(server => {
+                const isOpen = server.status === "Open";
+                container.innerHTML += `
+                    <div class="server-card">
+                        <div style="font-weight:bold; margin-bottom: 5px;">${server.name}</div>
+                        <div class="${isOpen ? 'status-open' : ''}">
+                            ${isOpen ? '● ' : ''}${server.status}
+                        </div>
+                        ${isOpen ? `<a href="roblox://placeId=606849621&gameInstanceId=${server.jobId}" class="join-btn">JOIN</a>` : ''}
+                    </div>`;
+            });
+        } catch(e) {
+            console.error("Fetch error:", e);
+        }
+    }
+
+    setInterval(updateTracker, 5000); 
+    updateTracker();
+</script>
+
+</body>
+</html>
