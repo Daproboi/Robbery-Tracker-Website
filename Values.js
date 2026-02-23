@@ -573,6 +573,7 @@ const tireStyleData = [
 
 
 
+
 const db = {
     "Vehicle": vehicleData,
     "Weapon Skin": weaponSkinData,
@@ -586,3 +587,6 @@ const db = {
     "Tire Stickers": tireStickerData,
     "Tire Styles": tireStyleData
 };
+
+
+console.log("Database loaded successfully with " + Object.keys(db).length + " categories.");
