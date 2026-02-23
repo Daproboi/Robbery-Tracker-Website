@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robbery Tracker | Multi-Server</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0b0e14;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --text-main: #ffffff;
+            --text-dim: #8b949e;
+            --green: #238636;
+            --orange: #d29922;
+            --red: #f85149;
+            --blue: #58a6ff;
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* Updated Header Layout */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        h1 { border-bottom: none; margin: 0; padding: 0; }
+
+        .filter-bar { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 30px; 
+            flex-wrap: wrap; 
+        }
+
+        .filter-btn { 
+            background: #1c1f26; border: 1px solid var(--border); color: var(--text-main); 
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; 
+            font-size: 13px; font-weight: 600; transition: 0.2s;
+            text-decoration: none; /* Added for link version */
+        }
+        .filter-btn:hover { background: #30363d; border-color: #8b949e; }
+        .filter-btn.active { border-color: var(--green); background: #23863622; }
+        
+        /* Values Button Specific Style */
+        .values-btn {
+            border-color: var(--blue);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+        
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 10px; 
+            padding: 20px; 
+            border: 1px solid var(--border); 
+            position: relative;
+            transition: transform 0.1s;
+        }
+        .card:hover { border-color: #444c56; transform: translateY(-2px); }
+
+        .card h3 { margin: 0 0 15px 0; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .open { background: var(--green); color: white; }
+        .robbing { background: var(--orange); color: black; }
+        .in-progress { background: var(--blue); color: white; }
+        .double-bank { background: var(--red); color: white; }
+
+        .info-text { font-size: 11px; font-weight: 700; margin-bottom: 10px; display: block; }
+
+        .join-btn { 
+            width: 100%; 
+            background: var(--green); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 14px; 
+            margin-top: 10px; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .join-btn:hover { background: #2ea043; }
+        
+        .redirect-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .stats-row { 
+            display: flex; 
+            justify-content: space-between; 
+            color: var(--text-dim); 
+            font-size: 13px; 
+            margin-top: 15px; 
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .time-ago { color: var(--text-dim); font-size: 11px; margin-bottom: 8px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1>🚨 Live Robbery Snipers</h1>
+        <a href="values.html" class="filter-btn values-btn">
+            <i class="fas fa-gem"></i> Values
+        </a>
+    </div>
+
+    <div class="filter-bar" id="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
+        <button class="filter-btn" onclick="setFilter('Bank', this)">Bank</button>
+        <button class="filter-btn" onclick="setFilter('Bank Truck', this)">Bank Truck</button>
+        <button class="filter-btn" onclick="setFilter('Museum', this)">Museum</button>
+        <button class="filter-btn" onclick="setFilter('PowerPlant', this)">PowerPlant</button>
+        <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
+        <button class="filter-btn" onclick="setFilter('Mansion', this)">Mansion</button>
+        <button class="filter-btn" onclick="setFilter('Tomb', this)">Tomb</button>
+        <button class="filter-btn" onclick="setFilter('Cargo Train', this)">Cargo Train</button>
+        <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops</button>
+    </div> 
+    
+    <div class="container" id="card-container"></div>
+
+    <script>
+        const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
+        let currentFilter = 'all';
+
+        function checkAutoJoin() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            const placeId =
