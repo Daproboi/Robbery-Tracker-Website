@@ -26,14 +26,14 @@
         .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
         .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
-        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; border: 1px solid var(--border); }
-        .item-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-3px); border: 1px solid var(--accent); }
         
         .item-header { background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-weight: bold; }
         .category-tag { font-size: 0.65rem; background: #30363d; color: var(--text-main); padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
         
         .item-body { padding: 15px; }
-        .item-img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 6px; margin-bottom: 15px; display: block; border: 1px solid #000; }
+        .item-img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 6px; margin-bottom: 15px; display: block; }
         
         .price-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
         .price-label { color: var(--text-dim); font-size: 0.85rem; font-weight: bold; }
@@ -50,9 +50,9 @@
     </nav>
 
     <div class="container">
-        <input type="text" id="searchInput" placeholder="Search items..." oninput="render()">
+        <input type="text" id="searchInput" placeholder="Search for items (e.g. Javelin, HyperShift)..." oninput="render()">
         <div id="filterGroup" class="filter-group">
-            <button class="filter-btn active" onclick="filterCat('All', this)">ALL ITEMS</button>
+            <button class="filter-btn active" id="btn-All" onclick="filterCat('All', this)">ALL ITEMS</button>
         </div>
         <div id="valueGrid" class="value-grid"></div>
     </div>
@@ -61,30 +61,6 @@
 
     <script>
         let currentCat = 'All';
-
-        // THE BRIDGE: This creates the 'db' object from your Values.js variables
-        const getDB = () => {
-            try {
-                return {
-                    "Vehicles": vehicleData,
-                    "Skins": weaponSkinData,
-                    "Hyperchromes": hyperchromeData,
-                    "Body Colors": bodyColorData,
-                    "Drifts": driftData,
-                    "Furniture": furnitureData,
-                    "Horns": hornData,
-                    "Rims": rimData,
-                    "Spoilers": spoilerData,
-                    "Tire Stickers": tireStickerData,
-                    "Tire Styles": tireStyleData
-                };
-            } catch (e) {
-                console.error("Data variables not found in Values.js");
-                return {};
-            }
-        };
-
-        const db = getDB();
 
         function filterCat(cat, btn) {
             currentCat = cat;
@@ -96,3 +72,68 @@
         function render() {
             const grid = document.getElementById('valueGrid');
             const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            // Safety check: if db isn't loaded from Values.js yet, stop.
+            if (typeof db === 'undefined') {
+                grid.innerHTML = '<p style="text-align:center;">Loading data...</p>';
+                return;
+            }
+
+            grid.innerHTML = '';
+            let allItems = [];
+
+            // 1. Collect all items from the db object in Values.js
+            Object.keys(db).forEach(category => {
+                if (currentCat === 'All' || currentCat === category) {
+                    db[category].forEach(item => {
+                        allItems.push({ ...item, categoryName: category });
+                    });
+                }
+            });
+
+            // 2. Filter by search query
+            const filtered = allItems.filter(item => 
+                item.name.toLowerCase().includes(query)
+            );
+
+            // 3. Sort: Highest Cash Value to Lowest
+            filtered.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
+
+            // 4. Generate the HTML
+            filtered.forEach(item => {
+                const cash = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
+                const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
+                const img = item.image ? item.image : 'images/placeholder.png';
+
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-header">
+                            <span>${item.name}</span>
+                            <span class="category-tag">${item.categoryName}</span>
+                        </div>
+                        <div class="item-body">
+                            <img src="${img}" class="item-img" alt="${item.name}" onerror="this.src='images/placeholder.png';">
+                            <div class="price-row"><span class="price-label">Clean</span><span class="price-val">${cash}</span></div>
+                            <div class="price-row"><span class="price-label">Duped</span><span class="price-val duped-val">${duped}</span></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Initialize buttons and grid when page loads
+        window.addEventListener('load', () => {
+            if (typeof db !== 'undefined') {
+                const group = document.getElementById('filterGroup');
+                Object.keys(db).forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.innerText = cat.toUpperCase();
+                    btn.onclick = (e) => filterCat(cat, e.target);
+                    group.appendChild(btn);
+                });
+            }
+            render();
+        });
+    </script>
+</body>
+</html>
