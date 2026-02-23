@@ -11,31 +11,19 @@
             --accent: #58a6ff; --green: #3fb950; --red: #f85149;
         }
         body { font-family: sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
-
-        /* Navbar */
         .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
         .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 6px; border: 1px solid transparent; }
         .nav-active { color: var(--accent); border-color: var(--border); background: #21262d; }
-
         .container { max-width: 1200px; margin: auto; padding: 20px; }
-        
-        /* Search and Filters */
         #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; }
         .filter-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
         .filter-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
         .filter-btn.active { background: var(--accent); color: white; }
-
-        /* Cards */
         .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: 0.2s; }
-        .item-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
         .item-header { background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-weight: bold; }
         .category-tag { font-size: 0.7rem; background: var(--accent); color: white; padding: 2px 8px; border-radius: 10px; }
         .item-body { padding: 15px; }
-        
-        /* Image Styling */
-        .item-img { width: 100%; height: 150px; border-radius: 8px; margin-bottom: 10px; object-fit: contain; background: #000; display: block; }
-        
         .price-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
         .price-label { color: var(--text-dim); font-size: 0.9rem; }
         .price-val { font-weight: bold; color: var(--green); }
@@ -43,7 +31,6 @@
     </style>
 </head>
 <body>
-
     <nav class="nav-top">
         <a href="index.html" class="nav-link">HOME</a>
         <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
@@ -71,15 +58,10 @@
         }
 
         function render() {
+            if (typeof db === 'undefined') return;
             const query = document.getElementById('searchInput').value.toLowerCase();
             const grid = document.getElementById('valueGrid');
             grid.innerHTML = '';
-
-            // This builds the list using the 'db' variable from your Values.js
-            if (typeof db === 'undefined') {
-                grid.innerHTML = '<p style="color:red; text-align:center;">Error: Values.js not found or "db" variable is missing.</p>';
-                return;
-            }
 
             Object.keys(db).forEach(category => {
                 if (currentCat !== 'All' && currentCat !== category) return;
@@ -94,11 +76,7 @@
                                 <span class="category-tag">${category}</span>
                             </div>
                             <div class="item-body">
-                                <img src="${item.image || 'images/placeholder.png'}" 
-                                     alt="${item.name}" 
-                                     class="item-img"
-                                     onerror="this.src='images/placeholder.png'">
-                                
+                                <img src="${item.image || 'images/placeholder.png'}" alt="${item.name}" style="width:100%; border-radius:8px; margin-bottom:10px; height:150px; object-fit:contain; background:#000;">
                                 <div class="price-row">
                                     <span class="price-label">Clean Value</span>
                                     <span class="price-val">$${(item.cash_value || 0).toLocaleString()}</span>
@@ -113,20 +91,17 @@
             });
         }
 
-        // Wait for script to load before initializing buttons
-        window.onload = () => {
-            const group = document.getElementById('filterGroup');
-            if (typeof db !== 'undefined') {
-                Object.keys(db).forEach(cat => {
-                    const btn = document.createElement('button');
-                    btn.className = 'filter-btn';
-                    btn.innerText = cat;
-                    btn.onclick = (e) => filterCat(cat, e.target);
-                    group.appendChild(btn);
-                });
-                render();
-            }
-        };
+        const group = document.getElementById('filterGroup');
+        if (typeof db !== 'undefined') {
+            Object.keys(db).forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.innerText = cat;
+                btn.onclick = (e) => filterCat(cat, e.target);
+                group.appendChild(btn);
+            });
+            render();
+        }
     </script>
 </body>
 </html>
