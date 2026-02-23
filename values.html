@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Item Values</title>
+    <style>
+        :root {
+            --bg: #0d1117; --panel: #161b22; --border: #30363d; 
+            --text-main: #c9d1d9; --text-dim: #8b949e; 
+            --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
+
+        /* Navbar */
+        .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 6px; border: 1px solid transparent; }
+        .nav-active { color: var(--accent); border-color: var(--border); background: #21262d; }
+
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        
+        /* Search and Filters */
+        #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; }
+        .filter-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .filter-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+        .filter-btn.active { background: var(--accent); color: white; }
+
+        /* Cards */
+        .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .item-header { background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-weight: bold; }
+        .category-tag { font-size: 0.7rem; background: var(--accent); color: white; padding: 2px 8px; border-radius: 10px; }
+        .item-body { padding: 15px; }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .price-label { color: var(--text-dim); font-size: 0.9rem; }
+        .price-val { font-weight: bold; color: var(--green); }
+        .duped-val { color: var(--red); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-link">HOME</a>
+        <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
+        <a href="values.html" class="nav-link nav-active">ITEM VALUES</a>
+    </nav>
+
+    <div class="container">
+        <input type="text" id="searchInput" placeholder="Search for items..." oninput="render()">
+        <div id="filterGroup" class="filter-group">
+            <button class="filter-btn active" onclick="filterCat('All', this)">All</button>
+        </div>
+        <div id="valueGrid" class="value-grid"></div>
+    </div>
+
+    <script src="Values.js"></script>
+
+    <script>
+        let currentCat = 'All';
+
+        function filterCat(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
+
+        function render() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const grid = document.getElementById('valueGrid');
+            grid.innerHTML = '';
+
+            Object.keys(db).forEach(category => {
+                if (currentCat !== 'All' && currentCat !== category) return;
+
+                db[category].forEach(item => {
+                    if (!item.name.toLowerCase().includes(query)) return;
+
+                    grid.innerHTML += `
+                        <div class="item-card">
+                            <div class="item-header">
+                                <span>${item.name}</span>
+                                <span class="category-tag">${category}</span>
+                            </div>
+                            <div class="item-body">
+                                <div class="price-row">
+                                    <span class="price-label">Clean Value</span>
+                                    <span class="price-val">$${(item.cash_value || 0).toLocaleString()}</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="price-label">Duped Value</span>
+                                    <span class="price-val duped-val">$${(item.duped_value || 0).toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+            });
+        }
+
+        // Initialize buttons
+        const group = document.getElementById('filterGroup');
+        Object.keys(db).forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.innerText = cat;
+            btn.onclick = (e) => filterCat(cat, e.target);
+            group.appendChild(btn);
+        });
+
+        render();
+    </script>
+</body>
+</html>
