@@ -6,40 +6,167 @@
     <title>Jailbreak Hub | Home</title>
     <style>
         :root {
-            --bg: #0d1117; --panel: #161b22; --border: #30363d; --text-main: #c9d1d9;
-            --accent: #58a6ff; --green: #3fb950;
+            --bg: #0d1117;
+            --panel: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --green: #3fb950;
         }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-        
-        .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; }
-        .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; font-size: 0.9rem; padding: 8px 16px; border-radius: 6px; transition: 0.2s; border: 1px solid transparent; }
-        .nav-link:hover { border-color: var(--accent); color: var(--accent); }
 
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
-        .hero p { color: var(--8b949e); margin-bottom: 30px; font-size: 1.2rem; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-        .btn-container { display: flex; gap: 20px; }
-        .main-btn { padding: 20px 40px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s; border: 1px solid var(--border); width: 200px; }
-        .main-btn:hover { transform: translateY(-5px); }
-        .btn-tracker { background: var(--accent); color: white; border: none; }
-        .btn-values { background: var(--panel); color: var(--accent); border: 1px solid var(--accent); }
+        /* Top Navigation Bar */
+        .nav-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .nav-active {
+            color: var(--accent);
+            background: #21262d;
+            border-color: var(--border);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #58a6ff, #3fb950);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin: 20px 0 40px 0;
+        }
+
+        /* Main Action Buttons */
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .main-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            padding: 30px 20px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .btn-desc {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        /* Highlight the Tracker specifically */
+        .tracker-btn {
+            border-left: 4px solid var(--green);
+        }
+
+        /* Highlight the Values specifically */
+        .values-btn {
+            border-left: 4px solid var(--accent);
+        }
+
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
-        <a href="index.html" class="nav-link" style="color:var(--accent)">HOME</a>
+        <a href="index.html" class="nav-link nav-active">HOME</a>
         <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
         <a href="values.html" class="nav-link">ITEM VALUES</a>
     </nav>
 
     <div class="hero">
         <h1>Jailbreak Hub</h1>
-        <p>The ultimate destination for professional traders and grinders.</p>
-        
+        <p>Your all-in-one suite for live tracking and market values.</p>
+
         <div class="btn-container">
-            <a href="tracker.html" class="main-btn btn-tracker">Robbery Tracker</a>
-            <a href="values.html" class="main-btn btn-values">Item Values</a>
+            <a href="tracker.html" class="main-btn tracker-btn">
+                <span class="btn-icon">🕵️‍♂️</span>
+                <span class="btn-title">Robbery Tracker</span>
+                <span class="btn-desc">Check live server statuses for open robberies.</span>
+            </a>
+
+            <a href="values.html" class="main-btn values-btn">
+                <span class="btn-icon">💎</span>
+                <span class="btn-title">Item Values</span>
+                <span class="btn-desc">Browse current trade values for all items.</span>
+            </a>
         </div>
     </div>
 
