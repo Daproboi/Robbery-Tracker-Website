@@ -1,1 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Home</title>
+    <style>
+        :root {
+            --bg: #0d1117; --panel: #161b22; --border: #30363d; --text-main: #c9d1d9;
+            --accent: #58a6ff; --green: #3fb950;
+        }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+        
+        .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; font-size: 0.9rem; padding: 8px 16px; border-radius: 6px; transition: 0.2s; border: 1px solid transparent; }
+        .nav-link:hover { border-color: var(--accent); color: var(--accent); }
 
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
+        .hero p { color: var(--8b949e); margin-bottom: 30px; font-size: 1.2rem; }
+
+        .btn-container { display: flex; gap: 20px; }
+        .main-btn { padding: 20px 40px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s; border: 1px solid var(--border); width: 200px; }
+        .main-btn:hover { transform: translateY(-5px); }
+        .btn-tracker { background: var(--accent); color: white; border: none; }
+        .btn-values { background: var(--panel); color: var(--accent); border: 1px solid var(--accent); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-link" style="color:var(--accent)">HOME</a>
+        <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
+        <a href="values.html" class="nav-link">ITEM VALUES</a>
+    </nav>
+
+    <div class="hero">
+        <h1>Jailbreak Hub</h1>
+        <p>The ultimate destination for professional traders and grinders.</p>
+        
+        <div class="btn-container">
+            <a href="tracker.html" class="main-btn btn-tracker">Robbery Tracker</a>
+            <a href="values.html" class="main-btn btn-values">Item Values</a>
+        </div>
+    </div>
+
+</body>
+</html>
