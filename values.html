@@ -77,24 +77,24 @@
                     if (!item.name.toLowerCase().includes(query)) return;
 
                    grid.innerHTML += `
-                        <div class="item-card">
-                            <div class="item-header">
-                                <span>${item.name}</span>
-                                <span class="category-tag">${category}</span>
-                            </div>
-                            <div class="item-body">
-                                <img src="${item.image || 'images/placeholder.png'}" alt="${item.name}" style="width:100%; border-radius:8px; margin-bottom:10px;">
-                                
-                                <div class="price-row">
-                                    <span class="price-label">Clean Value</span>
-                                    <span class="price-val">$${(item.cash_value || 0).toLocaleString()}</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="price-label">Duped Value</span>
-                                    <span class="price-val duped-val">$${(item.duped_value || 0).toLocaleString()}</span>
-                                </div>
-                            </div>
-                        </div>`;
+    <div class="item-card">
+        <div class="item-header">
+            <span>${item.name}</span>
+            <span class="category-tag">${category}</span>
+        </div>
+        <div class="item-body">
+            <img src="${item.image || 'images/placeholder.png'}" alt="${item.name}" style="width:100%; border-radius:8px; margin-bottom:10px; height:150px; object-fit:contain; background:#000;">
+            
+            <div class="price-row">
+                <span class="price-label">Clean Value</span>
+                <span class="price-val">$${(item.cash_value || 0).toLocaleString()}</span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">Duped Value</span>
+                <span class="price-val duped-val">$${(item.duped_value || 0).toLocaleString()}</span>
+            </div>
+        </div>
+    </div>`;
                 });
             });
         }
