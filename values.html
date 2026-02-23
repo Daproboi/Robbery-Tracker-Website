@@ -104,3 +104,83 @@
                 const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
                 const img = item.image ? item.image : 'images/placeholder.png';
                 grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-header"><span>${item.name}</span><span class="category-tag">${item.categoryName}</span></div>
+                        <div class="item-body">
+                            <img src="${img}" class="item-img" onerror="this.src='images/placeholder.png';">
+                            <div class="price-row"><span class="price-label">Clean</span><span class="price-val">${cash}</span></div>
+                            <div class="price-row"><span class="price-label">Duped</span><span class="price-val duped-val">${duped}</span></div>
+                        </div>
+                    </div>`;
+            });
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            container.innerHTML = ''; 
+            if (totalPages <= 1) return;
+
+            // 1. BACK BUTTON
+            const backBtn = document.createElement('button');
+            backBtn.innerText = 'Back';
+            backBtn.className = 'page-btn nav-text';
+            backBtn.disabled = currentPage === 1;
+            backBtn.onclick = () => { currentPage--; render(); window.scrollTo(0,0); };
+            container.appendChild(backBtn);
+
+            // 2. CALCULATE RANGE
+            let start = Math.max(1, currentPage - 1);
+            let end = Math.min(totalPages, start + 3);
+            if (end === totalPages) start = Math.max(1, end - 3);
+
+            // 3. RENDER NUMBERS
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => { currentPage = i; render(); window.scrollTo(0,0); };
+                container.appendChild(btn);
+            }
+
+            // 4. ELLIPSIS & LAST PAGE
+            if (end < totalPages) {
+                if (end < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.className = 'dots';
+                    container.appendChild(dots);
+                }
+                const lastBtn = document.createElement('button');
+                lastBtn.innerText = totalPages;
+                lastBtn.className = 'page-btn';
+                lastBtn.onclick = () => { currentPage = totalPages; render(); window.scrollTo(0,0); };
+                container.appendChild(lastBtn);
+            }
+
+            // 5. NEXT BUTTON
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = 'Next';
+            nextBtn.className = 'page-btn nav-text';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; render(); window.scrollTo(0,0); };
+            container.appendChild(nextBtn);
+        }
+
+        function init() {
+            if (typeof db !== 'undefined') {
+                const group = document.getElementById('filterGroup');
+                Object.keys(db).forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.innerText = cat;
+                    btn.onclick = (e) => filterCat(cat, e.target);
+                    group.appendChild(btn);
+                });
+                render();
+            } else { setTimeout(init, 100); }
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>
