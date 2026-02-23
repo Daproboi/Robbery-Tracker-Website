@@ -199,61 +199,6 @@ const hyperchromeData = [
   { "name": "HyperYellow Level 1", "cash_value": null, "duped_value": null }
 ];
 
-const bodyColorData = [
-  { "name": "Vantablack", "cash_value": 30000000, "duped_value": 30000000 },
-  { "name": "Gold", "cash_value": 1250000, "duped_value": 1250000 },
-  { "name": "Radiant Ice", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Fall Chrome", "cash_value": 750000, "duped_value": 750000 },
-  { "name": "Radiant Orange", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "Darkest Purple", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Green", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Pink", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Polar Blue", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Purple", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Red", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Sun", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant Yellow", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Radiant White", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "Deep Purple", "cash_value": 12000, "duped_value": 12000 },
-  { "name": "Hot Orange", "cash_value": 10000, "duped_value": 10000 },
-  { "name": "Super Lime", "cash_value": 10000, "duped_value": 10000 },
-  { "name": "Darkest Blue", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Darkest Brown", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Darkest Green", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Darkest Marine", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Darkest Red", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Hottest Pink", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Maroon", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Military Green", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Navy Blue", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Mud", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Black", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Blue", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Cyan", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Forest Green", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Green", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Grey", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Matte", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "White", "cash_value": 1000, "duped_value": 1000 },
-  { "name": "Orange", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Blue", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Brown", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Gray", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Green", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Orange", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Pink", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Violet", "cash_value": null, "duped_value": null },
-  { "name": "Pastel Yellow", "cash_value": null, "duped_value": null },
-  { "name": "Pink", "cash_value": null, "duped_value": null },
-  { "name": "Purple", "cash_value": null, "duped_value": null },
-  { "name": "Real Green", "cash_value": null, "duped_value": null },
-  { "name": "Red", "cash_value": null, "duped_value": null },
-  { "name": "Sakura Pink", "cash_value": null, "duped_value": null },
-  { "name": "Sand", "cash_value": null, "duped_value": null },
-  { "name": "Yellow", "cash_value": null, "duped_value": null },
-  { "name": "VIP Chrome", "cash_value": null, "duped_value": null }
-];
-
 const driftData = [
   { "name": "Blue Fire", "cash_value": 23000000, "duped_value": 23000000 },
   { "name": "Gradient Pixel", "cash_value": 9000000, "duped_value": 9000000 },
@@ -484,7 +429,6 @@ const rimData = [
   { "name": "Z-Rim", "cash_value": 250000, "duped_value": 250000 }
 ];
 
-JavaScript
 const spoilerData = [
   { "name": "Dual Rockets", "cash_value": 20000000, "duped_value": 20000000 },
   { "name": "Blue Star", "cash_value": 3500000, "duped_value": 3500000 },
