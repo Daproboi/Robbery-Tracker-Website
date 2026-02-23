@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robbery Tracker | Multi-Server</title>
+    <title>Sniper Pro | Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -13,171 +13,196 @@
             --text-main: #ffffff;
             --text-dim: #8b949e;
             --green: #238636;
+            --blue: #58a6ff;
             --orange: #d29922;
             --red: #f85149;
-            --blue: #58a6ff;
         }
 
-        /* Forced Dark Mode */
         html, body { 
-            background-color: #0b0e14 !important; 
-            color: #ffffff !important; 
+            background-color: var(--bg-dark) !important; 
+            color: var(--text-main) !important; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh;
+            padding: 20px; margin: 0; min-height: 100vh;
         }
 
         .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 25px;
         }
 
-        .filter-bar { 
-            display: flex; 
-            gap: 8px; 
-            margin-bottom: 30px; 
-            flex-wrap: wrap; 
+        /* Navigation Tabs */
+        .main-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .main-tabs::-webkit-scrollbar { display: none; }
+
+        .nav-btn {
+            background: #1c1f26; border: 1px solid var(--border); color: var(--text-main);
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap;
+        }
+        .nav-btn.active { border-color: var(--blue); background: rgba(88, 166, 255, 0.15); }
+        .nav-btn.robbery-btn.active { border-color: var(--red); background: rgba(248, 81, 73, 0.15); }
+
+        /* Search Bar */
+        .search-box {
+            width: 100%; padding: 12px; margin-bottom: 20px; background: #1c2128;
+            border: 1px solid var(--border); border-radius: 8px; color: white; display: none;
         }
 
-        .filter-btn { 
-            background: #1c1f26; 
-            border: 1px solid #30363d; 
-            color: #ffffff; 
-            padding: 8px 16px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            font-weight: 600; 
-            text-decoration: none;
-        }
-        
-        .filter-btn:hover { background: #30363d; }
-        .filter-btn.active { border-color: #238636; background: rgba(35, 134, 54, 0.15); }
-        
-        .values-btn {
-            border-color: #58a6ff;
-            color: #58a6ff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        /* Robbery Layout */
+        .robbery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 10px; padding: 20px; border: 1px solid var(--border); position: relative; }
+        .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; float: right; }
+        .open { background: var(--green); color: white; }
+        .robbing { background: var(--orange); color: black; }
+        .join-btn {
+            width: 100%; background: var(--green); color: white; border: none;
+            padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px;
         }
 
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 20px; 
-        }
-        
-        .card { 
-            background: #161b22; 
-            border-radius: 10px; 
-            padding: 20px; 
-            border: 1px solid #30363d; 
-        }
-
-        .status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-        .open { background: #238636; color: white; }
-        .robbing { background: #d29922; color: black; }
-
-        .join-btn { 
-            width: 100%; background: #238636; color: white; border: none; 
-            padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; 
-            margin-top: 10px; display: block; text-align: center;
-        }
+        /* Values Table */
+        .values-container { display: none; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #1c2128; padding: 12px; font-size: 12px; color: var(--text-dim); text-transform: uppercase; }
+        td { padding: 12px; border-top: 1px solid var(--border); font-size: 14px; }
+        .v-clean { color: var(--green); font-weight: bold; }
+        .v-dupe { color: var(--red); font-size: 12px; }
     </style>
 </head>
-<body style="background-color: #0b0e14;">
+<body>
 
     <div class="header-container">
-        <h1 style="color: white; margin: 0;">🚨 Live Robbery Snipers</h1>
-        <a href="values.html" class="filter-btn values-btn">
-            <i class="fas fa-gem"></i> Values
-        </a>
+        <h1 style="margin:0; font-size: 24px;">🚀 Sniper Pro Hub</h1>
     </div>
 
-    <div class="filter-bar" id="filters">
-        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-        <button class="filter-btn" onclick="setFilter('Jewelry', this)">Jewelry</button>
-        <button class="filter-btn" onclick="setFilter('Bank', this)">Bank</button>
-        <button class="filter-btn" onclick="setFilter('Museum', this)">Museum</button>
-        <button class="filter-btn" onclick="setFilter('Casino', this)">Casino</button>
-        <button class="filter-btn" onclick="setFilter('Mansion', this)">Mansion</button>
-        <button class="filter-btn" onclick="setFilter('Airdrop', this)">Airdrops</button>
-        <button class="filter-btn" onclick="setFilter('Tomb', this)">Tomb</button>
-        <button class="filter-btn" onclick="setFilter('Power Plant', this)">Power Plant</button>
-        <button class="filter-btn" onclick="setFilter('Cargo Plane', this)">Cargo Plane</button>
-        <button class="filter-btn" onclick="setFilter('Cargo Plane', this)">Cargo Train</button>
-    </div> 
-    
-    <div class="container" id="card-container"></div>
+    <div class="main-tabs" id="tabList">
+        <button class="nav-btn active robbery-btn" onclick="switchMode('Robberies', this)">🚨 Robbery Tracker</button>
+        </div>
 
-    <script>
-        const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
-        let currentFilter = 'all';
+    <div class="main-tabs" id="robberyFilters">
+        <button class="nav-btn active" onclick="setRobberyFilter('all', this)">All</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Jewelry', this)">Jewelry</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Bank', this)">Bank</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Museum', this)">Museum</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Casino', this)">Casino</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Mansion', this)">Mansion</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Airdrop', this)">Airdrops</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Tomb', this)">Tomb</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Power Plant', this)">Power Plant</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Cargo Plane', this)">Cargo Plane</button>
+        <button class="nav-btn" onclick="setRobberyFilter('Cargo Train', this)">Cargo Train</button>
+    </div>
 
-        function setFilter(type, btn) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            fetchRobberies();
-        }
+    <input type="text" id="searchBar" class="search-box" placeholder="Search items..." onkeyup="renderValues()">
 
-        async function fetchRobberies() {
-            try {
-                const response = await fetch(FIREBASE_URL);
-                const data = await response.json();
-                const container = document.getElementById('card-container');
-                
-                if (!data) {
-                    container.innerHTML = "<p style='color: #8b949e;'>Waiting for bots...</p>";
-                    return;
-                }
+    <div id="robberyView" class="robbery-grid"></div>
 
-                const now = Math.floor(Date.now() / 1000);
-                let robberies = [];
+    <div id="valuesView" class="values-container">
+        <table>
+            <thead><tr><th>Item</th><th>Clean</th><th>Duped</th></tr></thead>
+            <tbody id="valueTableBody"></tbody>
+        </table>
+    </div>
 
-                Object.keys(data).forEach(key => {
-                    const rob = data[key];
-                    if (rob && (now - rob.lastUpdated) < 300) {
-                        robberies.push({
-                            ...rob,
-                            jobId: rob.jobId || key.split('_')[0]
-                        });
-                    }
-                });
+<script>
+    const FIREBASE_URL = "https://robbery-tracker-d43c5-default-rtdb.firebaseio.com/robberies.json";
+    let currentMode = "Robberies";
+    let robberyFilter = "all";
 
-                if (currentFilter !== 'all') {
-                    robberies = robberies.filter(r => r.name.toLowerCase().includes(currentFilter.toLowerCase()));
-                }
+    // Complete Data processed from your 12 JSON files
+    const valueData = {
+        "Vehicles": [{"name":"Javelin","cash_value":49500000,"duped_value":49500000},{"name":"Torpedo","cash_value":49000000,"duped_value":43500000},{"name":"Beignet","cash_value":40000000,"duped_value":37000000},{"name":"Celsior","cash_value":30000000,"duped_value":28000000},{"name":"Proto-8","cash_value":30000000,"duped_value":30000000},{"name":"Power 1","cash_value":23000000,"duped_value":23000000},{"name":"Arachnid","cash_value":21000000,"duped_value":17500000},{"name":"Brulee","cash_value":10500000,"duped_value":9000000},{"name":"Camaro","cash_value":0,"duped_value":0}],
+        "Hyperchromes": [{"name":"HyperShift","cash_value":355000000,"duped_value":312000000},{"name":"HyperDiamond Lvl 5","cash_value":70000000,"duped_value":60000000},{"name":"HyperBlue Lvl 5","cash_value":61000000,"duped_value":50000000},{"name":"HyperPink Lvl 5","cash_value":58000000,"duped_value":51000000}],
+        "Textures": [{"name":"Checker","cash_value":41000000,"duped_value":38000000},{"name":"Drip","cash_value":20000000,"duped_value":20000000},{"name":"Snowstorm","cash_value":8000000,"duped_value":8000000}],
+        "Rims": [{"name":"Void","cash_value":46000000,"duped_value":41000000},{"name":"Laser Cannon","cash_value":28000000,"duped_value":28000000},{"name":"RTX","cash_value":18000000,"duped_value":18000000}],
+        "Spoilers": [{"name":"Thrusters","cash_value":40000000,"duped_value":37000000},{"name":"Snow Shovel","cash_value":12000000,"duped_value":12000000}],
+        "Drifts": [{"name":"Blue Fire","cash_value":23000000,"duped_value":23000000},{"name":"Gradient Pixel","cash_value":9000000,"duped_value":9000000}],
+        "Furniture": [{"name":"Noob Scream","cash_value":14000000,"duped_value":14000000},{"name":"Sci-Fi Kitchen","cash_value":5000000,"duped_value":5000000}],
+        "Weapon Skins": [{"name":"Drip","cash_value":15000000,"duped_value":15000000}],
+        "Tire Stickers": [{"name":"Blue 50","cash_value":10000000,"duped_value":10000000}],
+        "Tire Styles": [{"name":"Spiked","cash_value":8000000,"duped_value":8000000}],
+        "Body Colors": [{"name":"Vantablack","cash_value":30000000,"duped_value":30000000}],
+        "Horns": [{"name":"Cucaracha","cash_value":1500000,"duped_value":1500000}]
+    };
 
-                container.innerHTML = ""; 
-                robberies.forEach(rob => {
-                    let sClass = rob.status === "Open" ? "open" : "robbing";
-                    let sText = rob.status === "Open" ? "Open" : "IN ROBBERY";
-                    
-                    container.innerHTML += `
-                        <div class="card">
-                            <h3 style="color: white;">${rob.name} <span class="status ${sClass}">${sText}</span></h3>
-                            <button class="join-btn" onclick="joinServer('${rob.jobId}')">JOIN GAME</button>
-                        </div>
-                    `;
-                });
-            } catch (error) { console.error(error); }
-        }
+    // Auto-generate Category Tabs
+    const tabList = document.getElementById('tabList');
+    Object.keys(valueData).forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'nav-btn';
+        btn.innerText = cat;
+        btn.onclick = () => switchMode(cat, btn);
+        tabList.appendChild(btn);
+    });
 
-        function joinServer(jobId) {
-            window.location.href = "roblox://experiences/start?placeId=606849621&gameInstanceId=" + jobId;
-        }
+    function switchMode(mode, el) {
+        currentMode = mode;
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
 
-        setInterval(fetchRobberies, 3000);
+        const isRob = mode === "Robberies";
+        document.getElementById('robberyView').style.display = isRob ? "grid" : "none";
+        document.getElementById('robberyFilters').style.display = isRob ? "flex" : "none";
+        document.getElementById('valuesView').style.display = isRob ? "none" : "block";
+        document.getElementById('searchBar').style.display = isRob ? "none" : "block";
+        
+        if (!isRob) renderValues();
+    }
+
+    // Robbery Logic
+    function setRobberyFilter(type, btn) {
+        robberyFilter = type;
+        document.querySelector('#robberyFilters .active').classList.remove('active');
+        btn.classList.add('active');
         fetchRobberies();
-    </script>
+    }
+
+    async function fetchRobberies() {
+        if (currentMode !== "Robberies") return;
+        try {
+            const res = await fetch(FIREBASE_URL);
+            const data = await res.json();
+            const view = document.getElementById('robberyView');
+            view.innerHTML = "";
+            const now = Math.floor(Date.now() / 1000);
+
+            Object.keys(data).forEach(key => {
+                const rob = data[key];
+                if (rob && (now - rob.lastUpdated) < 300) {
+                    if (robberyFilter !== 'all' && !rob.name.toLowerCase().includes(robberyFilter.toLowerCase())) return;
+                    const sClass = rob.status === "Open" ? "open" : "robbing";
+                    view.innerHTML += `
+                        <div class="card">
+                            <span class="status ${sClass}">${rob.status}</span>
+                            <h3 style="margin:0">${rob.name}</h3>
+                            <button class="join-btn" onclick="window.location.href='roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}'">JOIN GAME</button>
+                        </div>`;
+                }
+            });
+        } catch(e) {}
+    }
+
+    // Values Logic
+    function format(n) { 
+        if(n === null || n === undefined) return "---";
+        return n >= 1000000 ? (n/1000000).toFixed(1).replace('.0','') + "M" : (n/1000) + "K";
+    }
+
+    function renderValues() {
+        const query = document.getElementById('searchBar').value.toLowerCase();
+        const body = document.getElementById('valueTableBody');
+        body.innerHTML = "";
+        valueData[currentMode].forEach(i => {
+            if (i.name.toLowerCase().includes(query)) {
+                body.innerHTML += `<tr>
+                    <td><b>${i.name}</b></td>
+                    <td class="v-clean">${format(i.cash_value)}</td>
+                    <td class="v-dupe">${format(i.duped_value)}</td>
+                </tr>`;
+            }
+        });
+    }
+
+    setInterval(fetchRobberies, 3000);
+    fetchRobberies();
+</script>
 </body>
 </html>
-
-
