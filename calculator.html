@@ -1,135 +1,164 @@
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Trade Calculator</title>
+    <title>Jailbreak Hub | Value Calculator</title>
     <style>
         :root {
-            --bg: #0a0c10; --panel: #0d1117; --card: #161b22; 
-            --border: #30363d; --text-main: #f0f6fc; --text-dim: #8b949e; 
-            --accent: #58a6ff; --green: #3fb950; --red: #f85149;
+            --bg: #0d1117;
+            --panel: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --accent: #58a6ff;
+            --green: #238636;
+            --red: #da3633;
+            --card-hover: #21262d;
         }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
 
-        /* Navbar */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; 
+        }
+
+        /* Navbar Dropdown Fix */
         .nav-top { position: fixed; top: 0; width: 100%; height: 60px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 10px; z-index: 1000; align-items: center; }
+        .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
         .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; padding: 8px 16px; font-size: 0.9rem; }
-        .nav-active { color: var(--accent); background: #21262d; border-radius: 8px; }
+        .nav-link:hover { color: var(--text-main); }
+        .dropdown-content { display: none; position: absolute; top: 55px; left: 0; background: var(--panel); min-width: 180px; border: 1px solid var(--border); border-radius: 6px; }
+        .nav-item:hover .dropdown-content { display: block; }
+        .dropdown-content a { color: var(--text-dim); padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; }
+        .dropdown-content a:hover { background: var(--card-hover); color: var(--accent); }
 
-        .container { max-width: 1000px; margin: auto; padding: 20px; }
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .side-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; min-height: 500px; }
+        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
         
-        .side-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .total-box { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+        /* Header Section */
+        .page-title { text-align: center; margin-bottom: 40px; }
+        .page-title h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
+        .page-title p { color: var(--text-dim); }
 
-        /* --- THE FIXED ITEM CARD --- */
-        .trade-item-card { 
-            background: var(--card) !important; 
-            border: 1px solid var(--border) !important; 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
-            padding: 15px;
-            display: block; /* Force block layout */
+        /* Calculator Columns */
+        .calculator-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        
+        .side-title { 
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding-bottom: 10px; border-bottom: 2px solid var(--border); margin-bottom: 20px;
         }
+        .side-title h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--text-dim); }
+        .total-display { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
 
-        .item-top-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 12px;
+        /* Input / Search */
+        .search-container { position: relative; margin-bottom: 20px; }
+        .search-input { 
+            width: 100%; padding: 12px 15px; background: var(--panel); 
+            border: 1px solid var(--border); border-radius: 6px; color: white;
+            font-size: 1rem; transition: 0.2s;
         }
-
-        .item-image-box {
-            width: 60px;
-            height: 60px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 1px solid var(--border);
+        .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1); }
+        
+        .results-box { 
+            position: absolute; width: 100%; top: 50px; background: var(--panel); 
+            border: 1px solid var(--border); border-radius: 6px; z-index: 10; display: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
-
-        .item-image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .result-row { 
+            padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center;
         }
+        .result-row:hover { background: var(--card-hover); color: var(--accent); }
 
-        .item-info-text {
-            flex-grow: 1;
+        /* --- THE LOG LIST (Changelog Style) --- */
+        .item-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+        
+        .item-row { 
+            background: var(--bg); display: flex; align-items: center; 
+            padding: 15px; transition: 0.2s; gap: 15px;
         }
+        .item-row:hover { background: var(--panel); }
 
-        .item-name-label { font-weight: bold; font-size: 1.1rem; display: block; }
-        .item-value-label { color: var(--green); font-weight: 700; }
+        .item-img { width: 45px; height: 45px; border-radius: 4px; object-fit: contain; background: #000; border: 1px solid var(--border); }
+        
+        .item-details { flex-grow: 1; }
+        .item-name { font-weight: 600; display: block; font-size: 0.95rem; }
+        .item-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+        
+        .price-tag { color: var(--accent); font-weight: 700; font-family: monospace; font-size: 0.9rem; }
+        
+        .actions-row { display: flex; align-items: center; gap: 15px; }
 
-        /* THE BUTTON ROW - Guaranteed separation */
-        .item-bottom-actions {
-            display: flex !important;
-            justify-content: space-between !important; 
-            align-items: center !important;
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
-            margin-top: 5px;
+        .dupe-btn { 
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 800;
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border);
+            color: var(--text-dim); transition: 0.2s;
         }
+        .dupe-active { background: var(--red); color: white; border-color: var(--red); }
+        
+        .remove-icon { color: var(--text-dim); cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
+        .remove-icon:hover { color: var(--red); }
 
-        .dupe-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--text-dim);
+        /* Verdict Footer */
+        .verdict-section { 
+            margin-top: 50px; padding: 40px; background: var(--panel); 
+            border: 1px solid var(--border); border-radius: 12px; text-align: center;
         }
+        .verdict-title { font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
+        .verdict-sub { font-size: 1.1rem; color: var(--text-dim); margin-top: 10px; }
+        .disclaimer { font-size: 0.7rem; color: #444; margin-top: 30px; }
 
-        .btn-remove {
-            background: #3d1b1e;
-            color: #ff7b72;
-            border: 1px solid #6e2e33;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-remove:hover { background: var(--red); color: white; }
-
-        /* Search area */
-        .search-box { width: 100%; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 10px; }
-        .results-dropdown { background: var(--card); border: 1px solid var(--border); position: absolute; width: 300px; z-index: 100; border-radius: 8px; display: none; }
-        .res-row { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .res-row:hover { background: var(--accent); color: black; }
-
-        .verdict-box { margin-top: 30px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 30px; text-align: center; }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
-        <a href="index.html" class="nav-link">HOME</a>
-        <a href="tracker.html" class="nav-link">TRACKER</a>
-        <a href="values.html" class="nav-link nav-active">CALCULATOR</a>
+        <div class="nav-item"><a href="index.html" class="nav-link">HOME</a></div>
+        <div class="nav-item">
+            <a href="values.html" class="nav-link">VALUES</a>
+            <div class="dropdown-content">
+                <a href="values.html">ITEM VALUES</a>
+                <a href="calculator.html">VALUE CALCULATOR</a>
+            </div>
+        </div>
     </nav>
 
     <div class="container">
-        <h1>Trade Calculator</h1>
-        <div class="calc-grid">
-            <div class="side-panel">
-                <div class="side-header"><span>YOU</span> <span id="total-l" class="total-box">$0</span></div>
-                <input type="text" class="search-box" placeholder="Search..." oninput="search(this, 'l')">
-                <div id="drop-l" class="results-dropdown"></div>
-                <div id="list-l"></div>
+        <div class="page-title">
+            <h1>Trade Logs</h1>
+            <p>Calculate and verify market fairness based on live community data.</p>
+        </div>
+
+        <div class="calculator-wrapper">
+            <div class="side-container">
+                <div class="side-title">
+                    <h2>YOUR SIDE</h2>
+                    <span class="total-display" id="total-l">$0</span>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search items..." oninput="search(this, 'l')">
+                    <div id="drop-l" class="results-box"></div>
+                </div>
+                <div id="list-l" class="item-list"></div>
             </div>
-            <div class="side-panel">
-                <div class="side-header"><span>THEM</span> <span id="total-r" class="total-box">$0</span></div>
-                <input type="text" class="search-box" placeholder="Search..." oninput="search(this, 'r')">
-                <div id="drop-r" class="results-dropdown"></div>
-                <div id="list-r"></div>
+
+            <div class="side-container">
+                <div class="side-title">
+                    <h2>THEIR SIDE</h2>
+                    <span class="total-display" id="total-r">$0</span>
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search items..." oninput="search(this, 'r')">
+                    <div id="drop-r" class="results-box"></div>
+                </div>
+                <div id="list-r" class="item-list"></div>
             </div>
         </div>
 
-        <div class="verdict-box" id="v-box">
-            <h2 id="v-title">ADD ITEMS</h2>
-            <p id="v-sub">Compare values to see if the trade is fair.</p>
+        <div class="verdict-section" id="v-card">
+            <h2 class="verdict-title" id="v-text">---</h2>
+            <p class="verdict-sub" id="v-sub">Add items to generate trade log analysis.</p>
+            <p class="disclaimer">NOT AFFILIATED WITH ROBLOX OR BADIMO. VALUES ARE SUBJECTIVE ESTIMATES. WE ARE NOT LIABLE FOR TRADE LOSSES.</p>
         </div>
     </div>
 
@@ -147,7 +176,10 @@
             for (let cat in db) {
                 db[cat].forEach(item => {
                     if (item.name.toLowerCase().includes(val)) {
-                        html += `<div class="res-row" onclick="add('${item.name.replace(/'/g, "\\'")}', '${side}')">${item.name}</div>`;
+                        html += `<div class="result-row" onclick="add('${item.name.replace(/'/g, "\\'")}', '${side}')">
+                                    <span>${item.name}</span>
+                                    <span class="price-tag">$${(item.cash_value).toLocaleString()}</span>
+                                 </div>`;
                     }
                 });
             }
@@ -165,8 +197,8 @@
                 if (side === 'l') sideL.push(item); else sideR.push(item);
                 render();
             }
-            document.querySelectorAll('.results-dropdown').forEach(d => d.style.display = 'none');
-            document.querySelectorAll('.search-box').forEach(i => i.value = '');
+            document.querySelectorAll('.results-box').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.search-input').forEach(i => i.value = '');
         }
 
         function remove(uid, side) {
@@ -194,25 +226,22 @@
             container.innerHTML = items.map(i => {
                 const val = i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
                 total += val;
-                // Check if your Values.js uses 'image' or 'img'
-                const imgSource = i.image || i.img || ''; 
+                const img = i.image || i.img || '';
 
                 return `
-                <div class="trade-item-card">
-                    <div class="item-top-section">
-                        <div class="item-image-box">
-                            <img src="${imgSource}" onerror="this.src='https://via.placeholder.com/60/161b22/8b949e?text=?'">
-                        </div>
-                        <div class="item-info-text">
-                            <span class="item-name-label">${i.name}</span>
-                            <span class="item-value-label">$${val.toLocaleString()}</span>
+                <div class="item-row">
+                    <img src="${img}" class="item-img" onerror="this.src='https://via.placeholder.com/45/161b22/8b949e?text=?'">
+                    <div class="item-details">
+                        <span class="item-name">${i.name}</span>
+                        <div class="item-meta">
+                            <span class="price-tag">$${val.toLocaleString()}</span>
                         </div>
                     </div>
-                    <div class="item-bottom-actions">
-                        <label class="dupe-wrapper">
-                            <input type="checkbox" ${i.isDuped ? 'checked' : ''} onchange="toggle(${i.uid}, '${side}')"> Duped?
-                        </label>
-                        <button class="btn-remove" onclick="remove(${i.uid}, '${side}')">REMOVE</button>
+                    <div class="actions-row">
+                        <div class="dupe-btn ${i.isDuped ? 'dupe-active' : ''}" onclick="toggle(${i.uid}, '${side}')">
+                            ${i.isDuped ? 'DUPED' : 'CLEAN'}
+                        </div>
+                        <span class="remove-icon" onclick="remove(${i.uid}, '${side}')">×</span>
                     </div>
                 </div>`;
             }).join('');
@@ -223,21 +252,16 @@
             const getPrice = i => i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
             const tL = sideL.reduce((a, b) => a + getPrice(b), 0);
             const tR = sideR.reduce((a, b) => a + getPrice(b), 0);
-            const title = document.getElementById('v-title');
+            const title = document.getElementById('v-text');
             const sub = document.getElementById('v-sub');
 
             if (tL === 0 && tR === 0) return;
             const diff = tR - tL;
-            if (diff > 0) {
-                title.innerText = "WIN"; title.style.color = "var(--green)";
-                sub.innerText = `You gain $${diff.toLocaleString()}`;
-            } else if (diff < 0) {
-                title.innerText = "LOSS"; title.style.color = "var(--red)";
-                sub.innerText = `You lose $${Math.abs(diff).toLocaleString()}`;
-            } else {
-                title.innerText = "FAIR"; title.style.color = "var(--accent)";
-                sub.innerText = "Equal value trade.";
-            }
+            const win = diff >= 0;
+
+            title.innerText = win ? "PROFIT" : "LOSS";
+            title.style.color = win ? "var(--green)" : "var(--red)";
+            sub.innerText = `${win ? 'Gaining' : 'Losing'} $${Math.abs(diff).toLocaleString()} in market value.`;
         }
     </script>
 </body>
