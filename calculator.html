@@ -10,261 +10,233 @@
             --border: #30363d; --text-main: #f0f6fc; --text-dim: #8b949e; 
             --accent: #58a6ff; --green: #3fb950; --red: #f85149;
         }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
 
+        /* Navbar */
         .nav-top { position: fixed; top: 0; width: 100%; height: 60px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 10px; z-index: 1000; align-items: center; }
-        .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
-        .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
-        .nav-item:hover .nav-link { color: var(--text-main); background: #21262d; }
-        
-        .dropdown-content { display: none; position: absolute; top: 55px; left: 0; background: var(--panel); min-width: 180px; border: 1px solid var(--border); border-radius: 8px; z-index: 1100; }
-        .nav-item:hover .dropdown-content { display: block; }
-        .dropdown-content a { color: var(--text-dim); padding: 12px 16px; text-decoration: none; display: block; font-size: 0.85rem; }
+        .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; padding: 8px 16px; font-size: 0.9rem; }
+        .nav-active { color: var(--accent); background: #21262d; border-radius: 8px; }
 
-        .container { max-width: 1100px; margin: auto; padding: 20px; }
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .container { max-width: 1000px; margin: auto; padding: 20px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .side-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; min-height: 500px; }
         
-        .side-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .total-box { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .side-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .total-box { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
 
-        /* --- FIXED ITEM CARD --- */
-        .added-item { 
-            background: var(--card); 
-            border: 1px solid var(--border); 
-            border-radius: 10px; 
-            margin-bottom: 12px; 
-            padding: 12px;
-            display: flex;
-            flex-direction: column; /* Stacked for safety */
-            gap: 10px;
+        /* --- THE FIXED ITEM CARD --- */
+        .trade-item-card { 
+            background: var(--card) !important; 
+            border: 1px solid var(--border) !important; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            padding: 15px;
+            display: block; /* Force block layout */
         }
 
-        .item-main-row {
+        .item-top-section {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            margin-bottom: 12px;
         }
 
-        .calc-img { 
-            width: 60px; 
-            height: 60px; 
-            background: #000; 
-            border-radius: 8px; 
-            object-fit: contain; 
-            border: 1px solid var(--border);
+        .item-image-box {
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
             flex-shrink: 0;
+            border: 1px solid var(--border);
         }
 
-        .item-info {
+        .item-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .item-info-text {
             flex-grow: 1;
         }
 
-        .item-name { font-weight: 700; font-size: 1rem; display: block; margin-bottom: 2px; }
-        .item-price { color: var(--green); font-weight: 800; font-size: 0.95rem; }
+        .item-name-label { font-weight: bold; font-size: 1.1rem; display: block; }
+        .item-value-label { color: var(--green); font-weight: 700; }
 
-        /* Actions Row (Bottom of card) */
-        .item-actions {
-            display: flex;
-            justify-content: space-between; /* Pushes toggle left, remove button right */
-            align-items: center;
-            padding-top: 10px;
-            border-top: 1px solid #21262d;
+        /* THE BUTTON ROW - Guaranteed separation */
+        .item-bottom-actions {
+            display: flex !important;
+            justify-content: space-between !important; 
+            align-items: center !important;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            margin-top: 5px;
         }
 
-        .dupe-label { 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            font-size: 0.8rem; 
-            color: var(--text-dim); 
+        .dupe-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .btn-remove {
+            background: #3d1b1e;
+            color: #ff7b72;
+            border: 1px solid #6e2e33;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
             cursor: pointer;
         }
-
-        .remove-btn { 
-            background: #2a1215; 
-            color: #ff7b72; 
-            border: 1px solid #442326; 
-            padding: 5px 12px; 
-            border-radius: 6px; 
-            font-size: 0.75rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-        }
-        .remove-btn:hover { background: var(--red); color: white; }
+        .btn-remove:hover { background: var(--red); color: white; }
 
         /* Search area */
-        .add-area { position: relative; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: white; }
-        .search-results { position: absolute; width: 100%; background: var(--card); border: 1px solid var(--border); z-index: 10; max-height: 250px; overflow-y: auto; display: none; border-radius: 8px; margin-top: 5px;}
-        .search-item { padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .search-box { width: 100%; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 10px; }
+        .results-dropdown { background: var(--card); border: 1px solid var(--border); position: absolute; width: 300px; z-index: 100; border-radius: 8px; display: none; }
+        .res-row { padding: 10px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .res-row:hover { background: var(--accent); color: black; }
 
-        /* Verdict bar */
-        .verdict-card { margin-top: 30px; background: var(--card); border: 2px solid var(--border); border-radius: 15px; padding: 25px; text-align: center; }
+        .verdict-box { margin-top: 30px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 30px; text-align: center; }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
-        <div class="nav-item"><a href="index.html" class="nav-link">HOME</a></div>
-        <div class="nav-item"><a href="tracker.html" class="nav-link">ROBBERY TRACKER</a></div>
-        <div class="nav-item">
-            <a href="values.html" class="nav-link">VALUES</a>
-            <div class="dropdown-content">
-                <a href="values.html">ITEM VALUES</a>
-                <a href="calculator.html">VALUE CALCULATOR</a>
-            </div>
-        </div>
+        <a href="index.html" class="nav-link">HOME</a>
+        <a href="tracker.html" class="nav-link">TRACKER</a>
+        <a href="values.html" class="nav-link nav-active">CALCULATOR</a>
     </nav>
 
     <div class="container">
         <h1>Trade Calculator</h1>
         <div class="calc-grid">
             <div class="side-panel">
-                <div class="side-header"><span>YOUR OFFER</span><span id="total-left" class="total-box">$0</span></div>
-                <div class="add-area">
-                    <input type="text" placeholder="Type item name..." oninput="doSearch(this, 'left')">
-                    <div id="res-left" class="search-results"></div>
-                </div>
-                <div id="list-left"></div>
+                <div class="side-header"><span>YOU</span> <span id="total-l" class="total-box">$0</span></div>
+                <input type="text" class="search-box" placeholder="Search..." oninput="search(this, 'l')">
+                <div id="drop-l" class="results-dropdown"></div>
+                <div id="list-l"></div>
             </div>
             <div class="side-panel">
-                <div class="side-header"><span>THEIR OFFER</span><span id="total-right" class="total-box">$0</span></div>
-                <div class="add-area">
-                    <input type="text" placeholder="Type item name..." oninput="doSearch(this, 'right')">
-                    <div id="res-right" class="search-results"></div>
-                </div>
-                <div id="list-right"></div>
+                <div class="side-header"><span>THEM</span> <span id="total-r" class="total-box">$0</span></div>
+                <input type="text" class="search-box" placeholder="Search..." oninput="search(this, 'r')">
+                <div id="drop-r" class="results-dropdown"></div>
+                <div id="list-r"></div>
             </div>
         </div>
 
-        <div class="verdict-card" id="v-card">
-            <h2 id="v-text">ADD ITEMS</h2>
-            <p id="v-detail">Compare values to see if the trade is fair.</p>
+        <div class="verdict-box" id="v-box">
+            <h2 id="v-title">ADD ITEMS</h2>
+            <p id="v-sub">Compare values to see if the trade is fair.</p>
         </div>
     </div>
 
     <script src="Values.js"></script>
     <script>
-        let myOffer = [];
-        let theirOffer = [];
+        let sideL = [];
+        let sideR = [];
 
-        function doSearch(input, side) {
-            const query = input.value.toLowerCase();
-            const resDiv = document.getElementById(`res-${side}`);
-            if (query.length < 1) { resDiv.style.display = 'none'; return; }
-
-            let matches = [];
+        function search(el, side) {
+            const val = el.value.toLowerCase();
+            const drop = document.getElementById(`drop-${side}`);
+            if (val.length < 1) { drop.style.display = 'none'; return; }
+            
+            let html = '';
             for (let cat in db) {
                 db[cat].forEach(item => {
-                    if (item.name.toLowerCase().includes(query)) matches.push({...item});
+                    if (item.name.toLowerCase().includes(val)) {
+                        html += `<div class="res-row" onclick="add('${item.name.replace(/'/g, "\\'")}', '${side}')">${item.name}</div>`;
+                    }
                 });
             }
-
-            resDiv.innerHTML = matches.slice(0, 6).map(item => `
-                <div class="search-item" onclick="addItem('${item.name.replace(/'/g, "\\'")}', '${side}')">
-                    <span>${item.name}</span>
-                    <span style="color:var(--green)">$${(item.cash_value || 0).toLocaleString()}</span>
-                </div>
-            `).join('');
-            resDiv.style.display = 'block';
+            drop.innerHTML = html;
+            drop.style.display = 'block';
         }
 
-        function addItem(name, side) {
-            let itemData = null;
+        function add(name, side) {
+            let item = null;
             for (let cat in db) {
                 let found = db[cat].find(i => i.name === name);
-                if (found) { itemData = JSON.parse(JSON.stringify(found)); break; }
+                if (found) { item = {...found, uid: Math.random(), isDuped: false}; break; }
             }
-
-            if (itemData) {
-                itemData.isDuped = false;
-                itemData.uid = Date.now() + Math.random();
-                if (side === 'left') myOffer.push(itemData);
-                else theirOffer.push(itemData);
+            if (item) {
+                if (side === 'l') sideL.push(item); else sideR.push(item);
+                render();
             }
-            render();
-            document.querySelectorAll('.search-results').forEach(r => r.style.display = 'none');
-            document.querySelectorAll('input').forEach(i => i.value = '');
+            document.querySelectorAll('.results-dropdown').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.search-box').forEach(i => i.value = '');
         }
 
-        function removeItem(uid, side) {
-            if (side === 'left') myOffer = myOffer.filter(i => i.uid !== uid);
-            else theirOffer = theirOffer.filter(i => i.uid !== uid);
+        function remove(uid, side) {
+            if (side === 'l') sideL = sideL.filter(i => i.uid !== uid);
+            else sideR = sideR.filter(i => i.uid !== uid);
             render();
         }
 
-        function toggleDupe(uid, side) {
-            const arr = (side === 'left') ? myOffer : theirOffer;
-            const item = arr.find(i => i.uid === uid);
+        function toggle(uid, side) {
+            const list = side === 'l' ? sideL : sideR;
+            const item = list.find(i => i.uid === uid);
             if (item) item.isDuped = !item.isDuped;
             render();
         }
 
         function render() {
-            renderSide('left', myOffer);
-            renderSide('right', theirOffer);
-            updateVerdict();
+            updateSide('l', sideL);
+            updateSide('r', sideR);
+            calc();
         }
 
-        function renderSide(side, items) {
+        function updateSide(side, items) {
             const container = document.getElementById(`list-${side}`);
-            const totalDisplay = document.getElementById(`total-${side}`);
             let total = 0;
-
-            container.innerHTML = items.map(item => {
-                const price = item.isDuped ? (item.duped_value || item.cash_value) : item.cash_value;
-                total += price;
-                // Important: Uses 'image' property from your database
-                const imgSrc = item.image ? item.image : ''; 
+            container.innerHTML = items.map(i => {
+                const val = i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
+                total += val;
+                // Check if your Values.js uses 'image' or 'img'
+                const imgSource = i.image || i.img || ''; 
 
                 return `
-                    <div class="added-item">
-                        <div class="item-main-row">
-                            <img src="${imgSrc}" class="calc-img" onerror="this.src='https://via.placeholder.com/60/161b22/8b949e?text=?';">
-                            <div class="item-info">
-                                <span class="item-name">${item.name}</span>
-                                <span class="item-price">$${price.toLocaleString()}</span>
-                            </div>
+                <div class="trade-item-card">
+                    <div class="item-top-section">
+                        <div class="item-image-box">
+                            <img src="${imgSource}" onerror="this.src='https://via.placeholder.com/60/161b22/8b949e?text=?'">
                         </div>
-                        <div class="item-actions">
-                            <label class="dupe-label">
-                                <input type="checkbox" ${item.isDuped ? 'checked' : ''} onchange="toggleDupe(${item.uid}, '${side}')"> 
-                                Duped?
-                            </label>
-                            <button class="remove-btn" onclick="removeItem(${item.uid}, '${side}')">REMOVE</button>
+                        <div class="item-info-text">
+                            <span class="item-name-label">${i.name}</span>
+                            <span class="item-value-label">$${val.toLocaleString()}</span>
                         </div>
                     </div>
-                `;
+                    <div class="item-bottom-actions">
+                        <label class="dupe-wrapper">
+                            <input type="checkbox" ${i.isDuped ? 'checked' : ''} onchange="toggle(${i.uid}, '${side}')"> Duped?
+                        </label>
+                        <button class="btn-remove" onclick="remove(${i.uid}, '${side}')">REMOVE</button>
+                    </div>
+                </div>`;
             }).join('');
-            totalDisplay.innerText = `$${total.toLocaleString()}`;
+            document.getElementById(`total-${side}`).innerText = `$${total.toLocaleString()}`;
         }
 
-        function updateVerdict() {
-            const getVal = (i) => i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
-            const myT = myOffer.reduce((s, i) => s + getVal(i), 0);
-            const thT = theirOffer.reduce((s, i) => s + getVal(i), 0);
-            
-            const vText = document.getElementById('v-text');
-            const vDetail = document.getElementById('v-detail');
-            const vCard = document.getElementById('v-card');
+        function calc() {
+            const getPrice = i => i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
+            const tL = sideL.reduce((a, b) => a + getPrice(b), 0);
+            const tR = sideR.reduce((a, b) => a + getPrice(b), 0);
+            const title = document.getElementById('v-title');
+            const sub = document.getElementById('v-sub');
 
-            if (myT === 0 && thT === 0) {
-                vText.innerText = "ADD ITEMS";
-                vCard.style.borderColor = "var(--border)";
-                return;
-            }
-
-            const diff = thT - myT;
+            if (tL === 0 && tR === 0) return;
+            const diff = tR - tL;
             if (diff > 0) {
-                vText.innerText = "WIN"; vText.style.color = "var(--green)";
-                vDetail.innerText = `You gain $${diff.toLocaleString()}`;
+                title.innerText = "WIN"; title.style.color = "var(--green)";
+                sub.innerText = `You gain $${diff.toLocaleString()}`;
             } else if (diff < 0) {
-                vText.innerText = "LOSS"; vText.style.color = "var(--red)";
-                vDetail.innerText = `You lose $${Math.abs(diff).toLocaleString()}`;
+                title.innerText = "LOSS"; title.style.color = "var(--red)";
+                sub.innerText = `You lose $${Math.abs(diff).toLocaleString()}`;
             } else {
-                vText.innerText = "FAIR"; vText.style.color = "var(--accent)";
-                vDetail.innerText = "Values are equal";
+                title.innerText = "FAIR"; title.style.color = "var(--accent)";
+                sub.innerText = "Equal value trade.";
             }
         }
     </script>
