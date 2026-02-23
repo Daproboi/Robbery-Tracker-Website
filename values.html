@@ -80,55 +80,55 @@
         }
 
         function render() {
-            const grid = document.getElementById('valueGrid');
-            
-            if (typeof db === 'undefined') {
-                grid.innerHTML = `<div class="error-msg">
-                    <strong>Missing Data:</strong> Could not find the "db" variable in <code>Values.js</code>.
-                </div>`;
-                return;
-            }
+    const grid = document.getElementById('valueGrid');
+    if (typeof db === 'undefined') return;
 
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            grid.innerHTML = '';
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    grid.innerHTML = '';
+    
+    let itemsToDisplay = [];
 
-            // Loop through every category in your 'db' object (Vehicles, Rims, Horns, etc)
-            Object.keys(db).forEach(category => {
-                if (currentCat !== 'All' && currentCat !== category) return;
+    // 1. Collect items based on the selected category
+    Object.keys(db).forEach(category => {
+        if (currentCat === 'All' || currentCat === category) {
+            db[category].forEach(item => {
+                // Add the category name to the item so we can show it on the card
+                itemsToDisplay.push({ ...item, categoryName: category });
+            });
+        }
+    });
 
-                db[category].forEach(item => {
-                    // Search filter
-                    if (!item.name.toLowerCase().includes(query)) return;
+    // 2. Filter by search query
+    itemsToDisplay = itemsToDisplay.filter(item => 
+        item.name.toLowerCase().includes(query)
+    );
 
-                    // Format numbers with commas (e.g. 1000000 -> $1,000,000)
-                    const formatPrice = (val) => val ? `$${val.toLocaleString()}` : "N/A";
-                    
-                    // Fallback to placeholder if image link is missing or broken
-                    const imgUrl = item.image ? item.image : 'images/placeholder.png';
+    // 3. Sort from Most Expensive to Lowest (Handle nulls as 0)
+    itemsToDisplay.sort((a, b) => {
+        const valA = a.cash_value || 0;
+        const valB = b.cash_value || 0;
+        return valB - valA;
+    });
 
-                    grid.innerHTML += `
-                        <div class="item-card">
-                            <div class="item-header">
-                                <span>${item.name}</span>
-                                <span class="category-tag">${category}</span>
-                            </div>
-                            <div class="item-body">
-                                <img src="${imgUrl}" 
-                                     class="item-img" 
-                                     alt="${item.name}"
-                                     onerror="this.onerror=null; this.src='images/placeholder.png';">
-                                
-                                <div class="price-row">
-                                    <span class="price-label">Clean Value</span>
-                                    <span class="price-val">${formatPrice(item.cash_value)}</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="price-label">Duped Value</span>
-                                    <span class="price-val duped-val">${formatPrice(item.duped_value)}</span>
-                                </div>
-                            </div>
-                        </div>`;
-                });
+    // 4. Render the sorted list
+    itemsToDisplay.forEach(item => {
+        const cash = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
+        const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
+        const img = item.image ? item.image : 'images/placeholder.png';
+
+        grid.innerHTML += `
+            <div class="item-card">
+                <div class="item-header">
+                    <span>${item.name}</span>
+                    <span class="category-tag">${item.categoryName}</span>
+                </div>
+                <div class="item-body">
+                    <img src="${img}" class="item-img" alt="${item.name}" onerror="this.src='images/placeholder.png';">
+                    <div class="price-row"><span class="price-label">Clean</span><span class="price-val">${cash}</span></div>
+                    <div class="price-row"><span class="price-label">Duped</span><span class="price-val duped-val">${duped}</span></div>
+                </div>
+            </div>`;
+      });
             });
         }
 
