@@ -62,4 +62,215 @@
         #searchInput { flex: 1; padding: 14px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: white; font-size: 1rem; outline: none; }
         #searchInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2); }
         
-        .filter-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom:
+        .filter-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
+        .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-weight: 600; font-size: 0.85rem; transition: 0.2s; }
+        .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .item-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; position: relative; transition: transform 0.2s, border-color 0.2s; }
+        .item-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        
+        .item-info-header { padding: 15px; display: flex; flex-direction: column; gap: 4px; }
+        .item-name { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
+        .item-cat { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .item-img-container { background: #000; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 10px; }
+        .item-img { max-width: 90%; max-height: 90%; object-fit: contain; }
+
+        .item-details { padding: 15px; background: #1c2128; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px solid var(--border); }
+        .detail-box { display: flex; flex-direction: column; gap: 2px; }
+        .detail-label { font-size: 0.65rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; }
+        .detail-val { font-size: 0.9rem; font-weight: 700; }
+        .val-cash { color: var(--green); }
+        .val-duped { color: var(--red); }
+        .val-demand { color: var(--purple); }
+        .val-trend { color: var(--orange); }
+
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 60px 0; flex-wrap: nowrap; }
+        .page-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-main); padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; min-width: 42px; transition: 0.2s; }
+        .page-btn:hover:not(:disabled) { background: #21262d; border-color: var(--accent); }
+        .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .dots { color: var(--text-dim); padding: 0 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <div class="nav-item">
+            <a href="index.html" class="nav-link">HOME</a>
+        </div>
+        <div class="nav-item">
+            <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
+        </div>
+        
+        <div class="nav-item">
+            <a href="values.html" class="nav-link nav-active">
+                VALUES 
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4L5 7L8 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <div class="dropdown-content">
+                <a href="values.html">ITEM VALUES</a>
+                <a href="calculator.html">VALUE CALCULATOR</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-banner">
+            <h1>Roblox Jailbreak Value List</h1>
+            <p>Welcome to the community value list. Stay updated with the most accurate values for all tradeable items.</p>
+            <div class="hero-btns">
+                <a href="#" class="hero-btn">Dupe Finder</a>
+                <a href="#" class="hero-btn secondary">Hyperchrome Pity Calculator</a>
+            </div>
+        </div>
+
+        <div class="search-row">
+            <input type="text" id="searchInput" placeholder="Search for items..." oninput="resetAndRender()">
+        </div>
+        
+        <div id="filterGroup" class="filter-container">
+            <button class="filter-btn active" onclick="filterCat('All', this)">ALL ITEMS</button>
+        </div>
+
+        <div id="valueGrid" class="value-grid"></div>
+        <div id="pagination" class="pagination"></div>
+    </div>
+
+    <script src="Values.js"></script>
+    <script>
+        let currentCat = 'All';
+        let currentPage = 1;
+        const itemsPerPage = 12;
+
+        function filterCat(cat, btn) {
+            currentCat = cat; currentPage = 1;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
+
+        function resetAndRender() { currentPage = 1; render(); }
+
+        function render() {
+            const grid = document.getElementById('valueGrid');
+            if (typeof db === 'undefined') return;
+
+            let allFiltered = [];
+            Object.keys(db).forEach(cat => {
+                if (currentCat === 'All' || currentCat === cat) {
+                    db[cat].forEach(item => { allFiltered.push({ ...item, categoryName: cat }); });
+                }
+            });
+
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            allFiltered = allFiltered.filter(i => i.name.toLowerCase().includes(query));
+            allFiltered.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
+
+            const totalPages = Math.ceil(allFiltered.length / itemsPerPage);
+            const pageItems = allFiltered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+            grid.innerHTML = '';
+            pageItems.forEach(item => {
+                const cash = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
+                const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
+                const demand = item.demand || "Medium";
+                const trend = item.trend || "Stable";
+                const img = item.image ? item.image : 'images/placeholder.png';
+                
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-info-header">
+                            <span class="item-cat">${item.categoryName}</span>
+                            <span class="item-name">${item.name}</span>
+                        </div>
+                        <div class="item-img-container">
+                            <img src="${img}" class="item-img" onerror="this.src='images/placeholder.png';">
+                        </div>
+                        <div class="item-details">
+                            <div class="detail-box">
+                                <span class="detail-label">Cash Value</span>
+                                <span class="detail-val val-cash">${cash}</span>
+                            </div>
+                            <div class="detail-box">
+                                <span class="detail-label">Duped Value</span>
+                                <span class="detail-val val-duped">${duped}</span>
+                            </div>
+                            <div class="detail-box">
+                                <span class="detail-label">Demand</span>
+                                <span class="detail-val val-demand">${demand}</span>
+                            </div>
+                            <div class="detail-box">
+                                <span class="detail-label">Trend</span>
+                                <span class="detail-val val-trend">${trend}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            container.innerHTML = ''; 
+            if (totalPages <= 1) return;
+
+            const backBtn = document.createElement('button');
+            backBtn.innerText = 'Back';
+            backBtn.className = 'page-btn';
+            backBtn.disabled = currentPage === 1;
+            backBtn.onclick = () => { currentPage--; render(); window.scrollTo(0,0); };
+            container.appendChild(backBtn);
+
+            let start = Math.max(1, currentPage - 1);
+            let end = Math.min(totalPages, start + 3);
+            if (end === totalPages) start = Math.max(1, end - 3);
+
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => { currentPage = i; render(); window.scrollTo(0,0); };
+                container.appendChild(btn);
+            }
+
+            if (end < totalPages) {
+                if (end < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.className = 'dots';
+                    container.appendChild(dots);
+                }
+                const lastBtn = document.createElement('button');
+                lastBtn.innerText = totalPages;
+                lastBtn.className = 'page-btn';
+                lastBtn.onclick = () => { currentPage = totalPages; render(); window.scrollTo(0,0); };
+                container.appendChild(lastBtn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = 'Next';
+            nextBtn.className = 'page-btn';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; render(); window.scrollTo(0,0); };
+            container.appendChild(nextBtn);
+        }
+
+        function init() {
+            if (typeof db !== 'undefined') {
+                const group = document.getElementById('filterGroup');
+                Object.keys(db).forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.innerText = cat.toUpperCase();
+                    btn.onclick = (e) => filterCat(cat, e.target);
+                    group.appendChild(btn);
+                });
+                render();
+            } else { setTimeout(init, 100); }
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>
