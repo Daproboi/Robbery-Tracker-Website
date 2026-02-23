@@ -2,7 +2,6 @@ JavaScript
 
 
 const vehicleData = [
-  [
   {
     "name": "Javelin",
     "cash_value": 49500000,
