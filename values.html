@@ -21,31 +21,31 @@
         .container { max-width: 1200px; margin: auto; padding: 20px; }
         
         /* Search and Filters */
-        #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; }
-        .filter-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
-        .filter-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: bold; }
-        .filter-btn:hover { background: #30363d; }
+        #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; outline: none; }
+        #searchInput:focus { border-color: var(--accent); }
+        
+        .filter-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; justify-content: center; }
+        .filter-btn { background: #21262d; border: 1px solid var(--border); color: var(--text-main); padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: bold; font-size: 0.85rem; }
+        .filter-btn:hover { background: #30363d; border-color: var(--text-dim); }
         .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Cards */
-        .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+        /* Grid and Cards */
+        .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.2s, border-color 0.2s; border: 1px solid var(--border); }
         .item-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        
         .item-header { background: #1c2128; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); font-weight: bold; }
-        .category-tag { font-size: 0.7rem; background: var(--accent); color: white; padding: 3px 8px; border-radius: 12px; }
+        .category-tag { font-size: 0.65rem; background: #30363d; color: var(--text-main); padding: 3px 8px; border-radius: 12px; text-transform: uppercase; border: 1px solid var(--border); }
+        
         .item-body { padding: 15px; }
+        .item-img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 6px; margin-bottom: 15px; display: block; border: 1px solid #000; }
         
-        /* Image Styling */
-        .item-img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 8px; margin-bottom: 15px; display: block; border: 1px solid #000; }
-        
-        /* Pricing */
-        .price-row { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
-        .price-label { color: var(--text-dim); font-size: 0.9rem; font-weight: bold; }
-        .price-val { font-weight: bold; font-size: 1.05rem; color: var(--green); }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center; }
+        .price-label { color: var(--text-dim); font-size: 0.85rem; font-weight: bold; }
+        .price-val { font-weight: bold; font-size: 1rem; color: var(--green); }
         .duped-val { color: var(--red); }
         
-        /* Error Message */
-        .error-msg { text-align: center; color: var(--red); font-size: 1.2rem; margin-top: 50px; background: #2d1114; padding: 20px; border-radius: 8px; border: 1px solid var(--red); }
+        .error-msg { text-align: center; color: var(--red); padding: 40px; border: 1px solid var(--red); background: #2d1114; border-radius: 8px; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
@@ -57,10 +57,12 @@
     </nav>
 
     <div class="container">
-        <input type="text" id="searchInput" placeholder="Search for items..." oninput="render()">
+        <input type="text" id="searchInput" placeholder="Search for items (e.g. Javelin, Hyper, Spinner)..." oninput="render()">
+        
         <div id="filterGroup" class="filter-group">
-            <button class="filter-btn active" onclick="filterCat('All', this)">All</button>
-        </div>
+            <button class="filter-btn active" onclick="filterCat('All', this)">ALL ITEMS</button>
+            </div>
+
         <div id="valueGrid" class="value-grid">
             </div>
     </div>
@@ -80,11 +82,9 @@
         function render() {
             const grid = document.getElementById('valueGrid');
             
-            // Safety Net 1: Check if Values.js actually loaded
             if (typeof db === 'undefined') {
                 grid.innerHTML = `<div class="error-msg">
-                    <strong>Error:</strong> Could not load data.<br>
-                    Make sure your data file is named exactly <code>Values.js</code> on GitHub and contains the <code>db</code> variable.
+                    <strong>Missing Data:</strong> Could not find the "db" variable in <code>Values.js</code>.
                 </div>`;
                 return;
             }
@@ -92,20 +92,19 @@
             const query = document.getElementById('searchInput').value.toLowerCase();
             grid.innerHTML = '';
 
+            // Loop through every category in your 'db' object (Vehicles, Rims, Horns, etc)
             Object.keys(db).forEach(category => {
                 if (currentCat !== 'All' && currentCat !== category) return;
 
                 db[category].forEach(item => {
+                    // Search filter
                     if (!item.name.toLowerCase().includes(query)) return;
 
-                    // Safety Net 2: Handle missing or null values gracefully
-                    const cleanValue = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
-                    const dupedValue = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
+                    // Format numbers with commas (e.g. 1000000 -> $1,000,000)
+                    const formatPrice = (val) => val ? `$${val.toLocaleString()}` : "N/A";
                     
-                    // Safety Net 3: Fallback image logic
-                    // If item.image doesn't exist, use placeholder.
-                    // The onerror attribute ensures that if a file like 'javelin.png' is misspelled on GitHub, it switches to the placeholder instead of a broken ? mark.
-                    const imagePath = item.image ? item.image : 'images/placeholder.png';
+                    // Fallback to placeholder if image link is missing or broken
+                    const imgUrl = item.image ? item.image : 'images/placeholder.png';
 
                     grid.innerHTML += `
                         <div class="item-card">
@@ -114,18 +113,18 @@
                                 <span class="category-tag">${category}</span>
                             </div>
                             <div class="item-body">
-                                <img src="${imagePath}" 
+                                <img src="${imgUrl}" 
                                      class="item-img" 
                                      alt="${item.name}"
                                      onerror="this.onerror=null; this.src='images/placeholder.png';">
                                 
                                 <div class="price-row">
                                     <span class="price-label">Clean Value</span>
-                                    <span class="price-val">${cleanValue}</span>
+                                    <span class="price-val">${formatPrice(item.cash_value)}</span>
                                 </div>
                                 <div class="price-row">
                                     <span class="price-label">Duped Value</span>
-                                    <span class="price-val duped-val">${dupedValue}</span>
+                                    <span class="price-val duped-val">${formatPrice(item.duped_value)}</span>
                                 </div>
                             </div>
                         </div>`;
@@ -133,21 +132,19 @@
             });
         }
 
-        // Wait for the page to fully load before trying to build the buttons
+        // Run this when the page loads
         window.addEventListener('DOMContentLoaded', () => {
-            const group = document.getElementById('filterGroup');
-            
             if (typeof db !== 'undefined') {
-                // Build category buttons automatically from the db variable
+                const group = document.getElementById('filterGroup');
+                // Automatically create buttons for EVERY category in your Values.js
                 Object.keys(db).forEach(cat => {
                     const btn = document.createElement('button');
                     btn.className = 'filter-btn';
-                    btn.innerText = cat;
+                    btn.innerText = cat.toUpperCase();
                     btn.onclick = (e) => filterCat(cat, e.target);
                     group.appendChild(btn);
                 });
             }
-            // Draw the grid
             render();
         });
     </script>
