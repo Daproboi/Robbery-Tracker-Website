@@ -4129,7 +4129,6 @@ const db = {
     "Horns": hornData,
     "Rims": rimData,
     "Spoilers": spoilerData,
-    "Textures": textureData,
     "Tires": tireData,
-    "Tire Style": tireStyleData 
+    "Tire Style": tireStyleData
 };
