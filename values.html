@@ -12,7 +12,6 @@
         }
         body { font-family: sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; }
 
-        /* Navbar */
         .nav-top { position: fixed; top: 0; width: 100%; background: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 0; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
         .nav-link { color: var(--text-main); text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 6px; border: 1px solid transparent; transition: 0.2s; }
         .nav-link:hover { color: var(--accent); }
@@ -20,7 +19,6 @@
 
         .container { max-width: 1200px; margin: auto; padding: 20px; }
         
-        /* Search and Filters */
         #searchInput { width: 100%; padding: 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; outline: none; }
         #searchInput:focus { border-color: var(--accent); }
         
@@ -29,7 +27,6 @@
         .filter-btn:hover { background: #30363d; border-color: var(--text-dim); }
         .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
-        /* Grid and Cards */
         .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
         .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: transform 0.2s, border-color 0.2s; border: 1px solid var(--border); }
         .item-card:hover { transform: translateY(-3px); border-color: var(--accent); }
@@ -44,8 +41,6 @@
         .price-label { color: var(--text-dim); font-size: 0.85rem; font-weight: bold; }
         .price-val { font-weight: bold; font-size: 1rem; color: var(--green); }
         .duped-val { color: var(--red); }
-        
-        .error-msg { text-align: center; color: var(--red); padding: 40px; border: 1px solid var(--red); background: #2d1114; border-radius: 8px; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
@@ -57,14 +52,13 @@
     </nav>
 
     <div class="container">
-        <input type="text" id="searchInput" placeholder="Search for items (e.g. Javelin, Hyper, Spinner)..." oninput="render()">
+        <input type="text" id="searchInput" placeholder="Search for items..." oninput="render()">
         
         <div id="filterGroup" class="filter-group">
             <button class="filter-btn active" onclick="filterCat('All', this)">ALL ITEMS</button>
-            </div>
+        </div>
 
-        <div id="valueGrid" class="value-grid">
-            </div>
+        <div id="valueGrid" class="value-grid"></div>
     </div>
 
     <script src="Values.js"></script>
@@ -80,63 +74,59 @@
         }
 
         function render() {
-    const grid = document.getElementById('valueGrid');
-    if (typeof db === 'undefined') return;
+            const grid = document.getElementById('valueGrid');
+            if (typeof db === 'undefined') return;
 
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    grid.innerHTML = '';
-    
-    let itemsToDisplay = [];
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            grid.innerHTML = '';
+            
+            let itemsToDisplay = [];
 
-    // 1. Collect items based on the selected category
-    Object.keys(db).forEach(category => {
-        if (currentCat === 'All' || currentCat === category) {
-            db[category].forEach(item => {
-                // Add the category name to the item so we can show it on the card
-                itemsToDisplay.push({ ...item, categoryName: category });
+            // 1. Gather items based on category
+            Object.keys(db).forEach(category => {
+                if (currentCat === 'All' || currentCat === category) {
+                    db[category].forEach(item => {
+                        itemsToDisplay.push({ ...item, categoryName: category });
+                    });
+                }
+            });
+
+            // 2. Filter by search
+            itemsToDisplay = itemsToDisplay.filter(item => 
+                item.name.toLowerCase().includes(query)
+            );
+
+            // 3. Sort High to Low (All items combined)
+            itemsToDisplay.sort((a, b) => {
+                const valA = a.cash_value || 0;
+                const valB = b.cash_value || 0;
+                return valB - valA;
+            });
+
+            // 4. Render
+            itemsToDisplay.forEach(item => {
+                const cash = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
+                const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
+                const img = item.image ? item.image : 'images/placeholder.png';
+
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-header">
+                            <span>${item.name}</span>
+                            <span class="category-tag">${item.categoryName}</span>
+                        </div>
+                        <div class="item-body">
+                            <img src="${img}" class="item-img" alt="${item.name}" onerror="this.src='images/placeholder.png';">
+                            <div class="price-row"><span class="price-label">Clean</span><span class="price-val">${cash}</span></div>
+                            <div class="price-row"><span class="price-label">Duped</span><span class="price-val duped-val">${duped}</span></div>
+                        </div>
+                    </div>`;
             });
         }
-    });
 
-    // 2. Filter by search query
-    itemsToDisplay = itemsToDisplay.filter(item => 
-        item.name.toLowerCase().includes(query)
-    );
-
-    // 3. Sort from Most Expensive to Lowest (Handle nulls as 0)
-    itemsToDisplay.sort((a, b) => {
-        const valA = a.cash_value || 0;
-        const valB = b.cash_value || 0;
-        return valB - valA;
-    });
-
-    // 4. Render the sorted list
-    itemsToDisplay.forEach(item => {
-        const cash = item.cash_value ? `$${item.cash_value.toLocaleString()}` : "N/A";
-        const duped = item.duped_value ? `$${item.duped_value.toLocaleString()}` : "N/A";
-        const img = item.image ? item.image : 'images/placeholder.png';
-
-        grid.innerHTML += `
-            <div class="item-card">
-                <div class="item-header">
-                    <span>${item.name}</span>
-                    <span class="category-tag">${item.categoryName}</span>
-                </div>
-                <div class="item-body">
-                    <img src="${img}" class="item-img" alt="${item.name}" onerror="this.src='images/placeholder.png';">
-                    <div class="price-row"><span class="price-label">Clean</span><span class="price-val">${cash}</span></div>
-                    <div class="price-row"><span class="price-label">Duped</span><span class="price-val duped-val">${duped}</span></div>
-                </div>
-            </div>`;
-      });
-            });
-        }
-
-        // Run this when the page loads
         window.addEventListener('DOMContentLoaded', () => {
             if (typeof db !== 'undefined') {
                 const group = document.getElementById('filterGroup');
-                // Automatically create buttons for EVERY category in your Values.js
                 Object.keys(db).forEach(cat => {
                     const btn = document.createElement('button');
                     btn.className = 'filter-btn';
