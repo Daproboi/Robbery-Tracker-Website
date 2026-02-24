@@ -1,3 +1,9 @@
+If the glow effect is laggy, it’s usually because the browser is struggling to recalculate the blur filter every time the mouse moves. To fix the lag and make it feel more like Jailbreak, we can replace it with a "Falling Cash" or "Robbery Lasers" effect.
+
+Since Jailbreak is all about the heist, I’ve redesigned the home page with a Matrix-style falling green cash effect in the background. It uses a canvas element, which is much faster and won't lag. I've also added a "Safe Cracking" animation to the hero text.
+
+High-Performance Jailbreak Home Page (index.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,51 +18,43 @@
             --card: #11141a;
             --border: rgba(255, 255, 255, 0.08);
             --accent: #0070f3;
+            --jailbreak-green: #00ff88;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
         }
 
-        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
             margin: 0; padding-top: 70px;
-            overflow-x: hidden;
-            min-height: 100vh;
+            overflow-x: hidden; min-height: 100vh;
         }
 
-        /* --- ANIMATED MOUSE GLOW --- */
-        #cursor-glow {
+        /* --- FALLING CASH CANVAS --- */
+        #cashCanvas {
             position: fixed; top: 0; left: 0;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(0, 112, 243, 0.15) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none;
-            transform: translate(-50%, -50%); z-index: 0;
-            filter: blur(80px);
+            width: 100%; height: 100%;
+            z-index: -1; opacity: 0.15; /* Subtle enough not to distract */
+            pointer-events: none;
         }
 
         /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(3, 5, 8, 0.8); backdrop-filter: blur(20px);
+            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border); display: flex;
             align-items: center; justify-content: space-between;
             padding: 0 40px; z-index: 5000;
         }
 
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
-        .nav-logo span { color: var(--accent); animation: logoPulse 3s infinite; }
-
-        @keyframes logoPulse {
-            0%, 100% { text-shadow: 0 0 10px rgba(0,112,243,0); }
-            50% { text-shadow: 0 0 20px rgba(0,112,243,0.5); }
-        }
+        .nav-logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
+        .nav-link:hover { color: #fff; }
 
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
@@ -70,62 +68,62 @@
 
         /* --- HERO SECTION --- */
         .hero {
-            position: relative; padding: 120px 20px 60px;
+            position: relative; padding: 100px 20px 40px;
             text-align: center; z-index: 1;
         }
-        .hero h1 { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin: 0; }
-        .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 20px auto; }
+        
+        /* Safe Cracking Text Animation */
+        .hero h1 { 
+            font-size: 4.5rem; font-weight: 800; letter-spacing: -3px; margin: 0;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        /* --- FEATURE CARDS --- */
+        .hero p { color: var(--text-dim); font-size: 1.1rem; max-width: 600px; margin: 20px auto; }
+
+        /* --- FEATURE GRID --- */
         .grid {
             max-width: 1200px; margin: 40px auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px; padding: 0 20px 100px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; padding: 0 20px 100px;
         }
 
         .feature-card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 32px; padding: 40px; text-decoration: none;
+            background: rgba(17, 20, 26, 0.8); border: 1px solid var(--border);
+            border-radius: 28px; padding: 35px; text-decoration: none;
             color: inherit; position: relative; overflow: hidden;
             display: flex; flex-direction: column; align-items: center; text-align: center;
         }
 
         .feature-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            transform: translateY(-10px);
+            border-color: var(--jailbreak-green);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
         }
 
-        /* Animated Shine Streak */
-        .feature-card::before {
-            content: ''; position: absolute; top: -50%; left: -60%;
-            width: 20%; height: 200%; background: rgba(255,255,255,0.05);
-            transform: rotate(30deg); transition: 0.6s;
-        }
-        .feature-card:hover::before { left: 120%; }
-
-        .icon-circle {
-            width: 80px; height: 80px; background: rgba(0,112,243,0.1);
-            border-radius: 24px; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; margin-bottom: 25px; color: var(--accent);
+        .icon-box {
+            font-size: 2.5rem; margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
         }
 
-        .feature-card h3 { font-size: 1.5rem; margin: 0 0 10px 0; }
-        .feature-card p { color: var(--text-dim); font-size: 0.9rem; margin: 0; line-height: 1.6; }
+        .feature-card h3 { font-size: 1.4rem; margin: 0 0 10px 0; }
+        .feature-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
 
-        footer { padding: 60px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); font-size: 0.8rem; }
+        footer { padding: 40px; text-align: center; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <div id="cursor-glow"></div>
+    <canvas id="cashCanvas"></canvas>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link" style="color: #fff;">Home</a>
             <a href="pity.html" class="nav-link">Pity Calc</a>
-            <div class="nav-item">
+            <div class="nav-item" style="position: relative; height: 70px; display: flex; align-items: center;">
                 <a class="nav-link">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
@@ -138,45 +136,76 @@
     </nav>
 
     <section class="hero">
-        <h1>Trade Smarter.</h1>
-        <p>The most accurate market values and robbery data for the ultimate Jailbreak experience.</p>
+        <h1>Secure the Bag</h1>
+        <p>The premium toolkit for the ultimate Jailbreak trader and pro-robber.</p>
     </section>
 
     <div class="grid">
         <a href="values.html" class="feature-card">
-            <div class="icon-circle">📊</div>
-            <h3>Market Values</h3>
-            <p>Explore the database with live trends, demand, and duped value estimates.</p>
+            <div class="icon-box">💰</div>
+            <h3>Value Database</h3>
+            <p>Real-time market values for every vehicle and limited item in the game.</p>
         </a>
 
         <a href="calculator.html" class="feature-card">
-            <div class="icon-circle">⚖️</div>
-            <h3>Trade Calculator</h3>
-            <p>Calculate trade fairness instantly using current community values.</p>
+            <div class="icon-box">⚡</div>
+            <h3>Trade Calc</h3>
+            <p>Ensure you never lose a trade. Compare items with high-precision data.</p>
         </a>
 
         <a href="pity.html" class="feature-card">
-            <div class="icon-circle">💎</div>
-            <h3>Pity Calc</h3>
-            <p>Track your Hyperchrome progress and estimate your next drop.</p>
+            <div class="icon-box">🏎️</div>
+            <h3>Pity Tracker</h3>
+            <p>Log your robberies and predict when your next Hyperchrome will drop.</p>
         </a>
 
         <a href="tracker.html" class="feature-card">
-            <div class="icon-circle">🚨</div>
-            <h3>Live Tracker</h3>
-            <p>Check the status of game robberies and vault payouts in real-time.</p>
+            <div class="icon-box">🏢</div>
+            <h3>Vault Monitor</h3>
+            <p>Keep an eye on the Bank, Jewelry, and Museum status in real-time.</p>
         </a>
     </div>
 
     <footer>
-        &copy; 2026 Jailbreak Hub. Built for the community.
+        &copy; 2026 Jailbreak Hub. This site is for educational trading purposes.
     </footer>
 
     <script>
-        const glow = document.getElementById('cursor-glow');
-        window.addEventListener('mousemove', (e) => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
+        const canvas = document.getElementById('cashCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const cashChars = ['$', '💵', '💰', '💸'];
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            // Dark trail effect
+            ctx.fillStyle = 'rgba(3, 5, 8, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff88'; // Jailbreak Green
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = cashChars[Math.floor(Math.random() * cashChars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>
