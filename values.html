@@ -144,7 +144,7 @@
 
     <header class="header-content">
         <h1>Market Values</h1>
-        <p>Live trading values, trends, and dupe-adjusted statistics.</p>
+        <p>Live trading values sorted from highest to lowest market impact.</p>
     </header>
 
     <div class="header-content">
@@ -193,46 +193,58 @@
             const grid = document.getElementById('itemsGrid');
             const search = document.getElementById('searchInput').value.toLowerCase();
             let html = '';
-
+            
+            // 1. COLLECT ALL ITEMS INTO A SINGLE ARRAY
+            let allVisibleItems = [];
             for (let cat in db) {
                 if (currentCategory !== 'all' && cat !== currentCategory) continue;
-
+                
                 db[cat].forEach(item => {
-                    if (!item.name.toLowerCase().includes(search)) return;
-
-                    const trendClass = getTrendClass(item.trend);
-                    const cleanVal = item.cash_value ? `$${item.cash_value.toLocaleString()}` : 'N/A';
-                    const cleanDupe = item.duped_value ? `$${item.duped_value.toLocaleString()}` : 'Same';
-
-                    html += `
-                        <div class="item-card">
-                            <div class="card-top">
-                                <img src="${item.image || ''}" class="item-img" onerror="this.src='https://via.placeholder.com/80/000/333?text=?'">
-                                <div class="item-info">
-                                    <span style="font-size: 0.6rem; color: var(--accent); font-weight: 800; text-transform: uppercase;">${cat}</span>
-                                    <h3 style="margin:0; font-size: 1.1rem;">${item.name}</h3>
-                                </div>
-                                <div class="trend-badge ${trendClass}">${item.trend || 'Stable'}</div>
-                            </div>
-                            <div class="card-stats">
-                                <div class="stat-box">
-                                    <span class="stat-label">Market Value</span>
-                                    <span class="stat-value" style="color: var(--green)">${cleanVal}</span>
-                                </div>
-                                <div class="stat-box">
-                                    <span class="stat-label">Demand</span>
-                                    <span class="stat-value">${item.demand || 'Normal'}</span>
-                                </div>
-                                <div class="stat-box full-width-stat">
-                                    <span class="stat-label">Dupe-Adjusted Value</span>
-                                    <span class="stat-value" style="color: var(--orange)">${cleanDupe}</span>
-                                </div>
-                            </div>
-                            <a href="calculator.html" class="card-action">Add to Calculator</a>
-                        </div>
-                    `;
+                    if (item.name.toLowerCase().includes(search)) {
+                        // Attach category to the item so we can still display it
+                        allVisibleItems.push({...item, category: cat});
+                    }
                 });
             }
+
+            // 2. SORT THE ARRAY (HIGHEST TO LOWEST CASH VALUE)
+            allVisibleItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
+
+            // 3. GENERATE HTML
+            allVisibleItems.forEach(item => {
+                const trendClass = getTrendClass(item.trend);
+                const cleanVal = item.cash_value ? `$${item.cash_value.toLocaleString()}` : 'N/A';
+                const cleanDupe = item.duped_value ? `$${item.duped_value.toLocaleString()}` : 'Same';
+
+                html += `
+                    <div class="item-card">
+                        <div class="card-top">
+                            <img src="${item.image || ''}" class="item-img" onerror="this.src='https://via.placeholder.com/80/000/333?text=?'">
+                            <div class="item-info">
+                                <span style="font-size: 0.6rem; color: var(--accent); font-weight: 800; text-transform: uppercase;">${item.category}</span>
+                                <h3 style="margin:0; font-size: 1.1rem;">${item.name}</h3>
+                            </div>
+                            <div class="trend-badge ${trendClass}">${item.trend || 'Stable'}</div>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Market Value</span>
+                                <span class="stat-value" style="color: var(--green)">${cleanVal}</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Demand</span>
+                                <span class="stat-value">${item.demand || 'Normal'}</span>
+                            </div>
+                            <div class="stat-box full-width-stat">
+                                <span class="stat-label">Dupe-Adjusted Value</span>
+                                <span class="stat-value" style="color: var(--orange)">${cleanDupe}</span>
+                            </div>
+                        </div>
+                        <a href="calculator.html" class="card-action">Add to Calculator</a>
+                    </div>
+                `;
+            });
+
             grid.innerHTML = html;
         }
 
