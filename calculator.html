@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,10 +29,10 @@ HTML
             background-attachment: fixed;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- FIXED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(3, 5, 8, 0.8); backdrop-filter: blur(20px);
+            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
             align-items: center; justify-content: space-between;
             padding: 0 60px; z-index: 4000;
@@ -46,7 +45,7 @@ HTML
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
         .nav-link { 
             text-decoration: none; color: var(--text-dim); font-size: 0.85rem; 
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
         }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
@@ -87,7 +86,7 @@ HTML
             border: 1px solid var(--border); color: #fff; cursor: pointer;
             font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
         }
-        .swap-btn:hover { border-color: var(--accent); transform: rotate(180deg) scale(1.1); box-shadow: 0 0 15px var(--accent-glow); }
+        .swap-btn:hover { border-color: var(--accent); transform: rotate(180deg) scale(1.1); }
 
         /* --- LOGS --- */
         .logs-container { max-width: 1400px; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 0 60px; }
@@ -100,55 +99,48 @@ HTML
         .log-img { width: 45px; height: 45px; border-radius: 10px; background: #000; }
         .log-info { flex: 1; font-weight: 700; font-size: 0.9rem; }
         .log-price { font-family: 'JetBrains Mono'; color: var(--green); font-size: 0.8rem; }
-        .log-remove { cursor: pointer; opacity: 0.4; font-size: 1.5rem; padding-right: 5px; }
+        .log-remove { cursor: pointer; opacity: 0.4; font-size: 1.5rem; }
         .log-remove:hover { color: var(--red); opacity: 1; }
 
-        /* --- DISCOVERY & FILTERS --- */
-        .discovery-section { max-width: 1400px; margin: 80px auto; padding: 0 60px; }
+        /* --- DISCOVERY --- */
+        .discovery-section { max-width: 1400px; margin: 40px auto 100px auto; padding: 0 60px; }
         
         .search-hub {
             background: var(--surface); border: 1px solid var(--border);
             padding: 30px; border-radius: 28px; margin-bottom: 50px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
         
         .search-input {
             width: 100%; background: #000; border: 1px solid var(--border);
             padding: 20px 25px; border-radius: 16px; color: #fff; font-size: 1.1rem; margin-bottom: 25px;
         }
-        .search-input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px var(--accent-glow); }
 
-        .filter-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
         .pill {
             padding: 12px 22px; border-radius: 12px; background: var(--card);
             border: 1px solid var(--border); color: var(--text-dim);
             font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer;
         }
-        .pill:hover { border-color: #fff; color: #fff; }
-        .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 5px 15px var(--accent-glow); }
+        .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-        /* --- ITEM GRID --- */
+        /* --- GRID --- */
         .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
         .card {
             background: var(--card); border: 1px solid var(--border); border-radius: 24px;
             padding: 25px; display: flex; flex-direction: column; gap: 20px;
         }
-        .card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
         .card-header { display: flex; gap: 20px; align-items: center; }
-        .card-img { width: 90px; height: 90px; background: #000; border-radius: 16px; object-fit: contain; border: 1px solid var(--border); }
-        .card-title h3 { margin: 0; font-size: 1.2rem; font-weight: 800; }
+        .card-img { width: 80px; height: 80px; background: #000; border-radius: 16px; object-fit: contain; }
         
         .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 16px; }
-        .stat { display: flex; flex-direction: column; gap: 2px; }
-        .stat label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
-        .stat span { font-size: 0.9rem; font-family: 'JetBrains Mono'; font-weight: 700; }
+        .stat label { display: block; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
+        .stat span { font-size: 0.9rem; font-family: 'JetBrains Mono'; }
 
         .btn-group { display: flex; gap: 12px; }
-        .btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; }
+        .btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
         .btn-o { background: var(--green); color: #000; }
         .btn-r { background: #fff; color: #000; }
-        .btn:hover { transform: scale(1.03); filter: brightness(1.1); }
     </style>
 </head>
 <body>
@@ -160,15 +152,15 @@ HTML
             <a href="robbery.html" class="nav-link">Robbery</a>
             <a href="sniper.html" class="nav-link">Sniper</a>
             <div class="nav-item">
-                <a href="#" class="nav-link" style="color: #fff">Values ▼</a>
+                <a href="#" class="nav-link" style="color:#fff">Values ▼</a>
                 <div class="dropdown">
-                    <a href="calculator.html" class="drop-link">Value Calculator <span>→</span></a>
-                    <a href="market.html" class="drop-link">Market Trends <span>→</span></a>
-                    <a href="demand.html" class="drop-link">Demand List <span>→</span></a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="market.html" class="drop-link">Market Trends</a>
+                    <a href="demand.html" class="drop-link">Demand List</a>
                 </div>
             </div>
         </div>
-        <div style="width: 100px;"></div>
+        <div style="width: 40px;"></div>
     </nav>
 
     <div class="hud-wrapper">
@@ -192,21 +184,17 @@ HTML
 
     <div class="discovery-section">
         <div class="search-hub">
-            <input type="text" id="main-search" class="search-input" placeholder="Search for vehicles, rims, or furniture..." oninput="refreshDiscovery()">
-            
+            <input type="text" id="main-search" class="search-input" placeholder="Search for items..." oninput="refreshDiscovery()">
             <div class="filter-row">
                 <div class="pill active" data-type="cat" data-value="all" onclick="updateFilter(this)">All Items</div>
                 <div class="pill" data-type="cat" data-value="Vehicles" onclick="updateFilter(this)">Vehicles</div>
                 <div class="pill" data-type="cat" data-value="Rims" onclick="updateFilter(this)">Rims</div>
                 <div class="pill" data-type="cat" data-value="Furniture" onclick="updateFilter(this)">Furniture</div>
-                
-                <div style="flex: 1;"></div>
-
-                <div class="pill active" data-type="sort" data-value="desc" onclick="updateFilter(this)">Price High</div>
-                <div class="pill" data-type="sort" data-value="asc" onclick="updateFilter(this)">Price Low</div>
+                <div style="flex:1"></div>
+                <div class="pill active" data-type="sort" data-value="desc" onclick="updateFilter(this)">High Value</div>
+                <div class="pill" data-type="sort" data-value="asc" onclick="updateFilter(this)">Low Value</div>
             </div>
         </div>
-
         <div class="item-grid" id="main-grid"></div>
     </div>
 
@@ -217,18 +205,14 @@ HTML
         let activeCat = 'all';
         let activeSort = 'desc';
 
-        // Fix: Unified Filter Handler
         function updateFilter(el) {
             const type = el.getAttribute('data-type');
-            const val = el.getAttribute('data-value');
-
-            // Deactivate others in the same group
             document.querySelectorAll(`.pill[data-type="${type}"]`).forEach(p => p.classList.remove('active'));
             el.classList.add('active');
-
-            if (type === 'cat') activeCat = val;
-            if (type === 'sort') activeSort = val;
-
+            
+            if (type === 'cat') activeCat = el.getAttribute('data-value');
+            if (type === 'sort') activeSort = el.getAttribute('data-value');
+            
             refreshDiscovery();
         }
 
@@ -237,26 +221,27 @@ HTML
             const query = document.getElementById('main-search').value.toLowerCase();
             let pool = [];
 
-            // 1. Build Pool
-            for (let cat in db) {
-                if (activeCat !== 'all' && cat !== activeCat) continue;
-                db[cat].forEach(i => pool.push({...i, category: cat}));
+            // 1. Build list
+            for (let category in db) {
+                if (activeCat !== 'all' && category !== activeCat) continue;
+                db[category].forEach(item => {
+                    if (item.name.toLowerCase().includes(query)) {
+                        pool.push({...item, category});
+                    }
+                });
             }
 
-            // 2. Filter by Search
-            pool = pool.filter(i => i.name.toLowerCase().includes(query));
-
-            // 3. Sort
+            // 2. Sort
             if (activeSort === 'desc') pool.sort((a,b) => b.cash_value - a.cash_value);
             else pool.sort((a,b) => a.cash_value - b.cash_value);
 
-            // 4. Render
-            grid.innerHTML = pool.map(i => `
+            // 3. Render
+            grid.innerHTML = pool.length > 0 ? pool.map(i => `
                 <div class="card">
                     <div class="card-header">
-                        <img src="${i.image}" class="card-img" onerror="this.src='https://via.placeholder.com/90/000/333?text=?'">
+                        <img src="${i.image}" class="card-img" onerror="this.src='https://via.placeholder.com/80/000/333?text=?'">
                         <div class="card-title">
-                            <div style="font-size:0.65rem; color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:1px;">${i.category}</div>
+                            <label style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${i.category}</label>
                             <h3>${i.name}</h3>
                         </div>
                     </div>
@@ -269,7 +254,7 @@ HTML
                         <button class="btn btn-r" onclick="addItem('${i.name.replace(/'/g, "\\'")}', 'request')">Request</button>
                     </div>
                 </div>
-            `).join('');
+            `).join('') : '<div style="grid-column: 1/-1; text-align: center; color: var(--text-dim); padding: 40px;">No items found matching your filter.</div>';
         }
 
         function addItem(name, side) {
@@ -295,6 +280,8 @@ HTML
         }
 
         function updateUI() {
+            const total = list => list.reduce((a, b) => a + b.cash_value, 0);
+            
             const render = (list, id, side) => {
                 document.getElementById(id).innerHTML = list.map(i => `
                     <div class="log-entry">
@@ -304,14 +291,14 @@ HTML
                     </div>
                 `).join('');
             };
+
             render(offerList, 'list-offering', 'offer');
             render(requestList, 'list-requesting', 'request');
-            
-            const total = list => list.reduce((a, b) => a + b.cash_value, 0);
             document.getElementById('val-offering').innerText = `$${total(offerList).toLocaleString()}`;
             document.getElementById('val-requesting').innerText = `$${total(requestList).toLocaleString()}`;
         }
 
+        // Initialize grid on load
         window.onload = refreshDiscovery;
     </script>
 </body>
