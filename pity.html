@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | HyperChrome Pity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030508;
+            --surface: #0a0c10;
+            --card: #11141a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #0070f3;
+            --accent-glow: rgba(0, 112, 243, 0.3);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --gold: #ffb700;
+        }
+
+        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); color: var(--text-main); 
+            margin: 0; padding-top: 90px;
+            background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 5000;
+        }
+
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
+
+        .dropdown {
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 200px; padding: 10px;
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
+        .drop-link:hover { background: var(--card); color: var(--accent); }
+
+        /* --- CALCULATOR UI --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px 100px; }
+        
+        .calc-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 24px; padding: 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        }
+
+        .input-section h2 { font-size: 1.5rem; margin-bottom: 20px; color: var(--gold); }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+        
+        select, input {
+            width: 100%; background: #000; border: 1px solid var(--border);
+            padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem;
+            outline: none;
+        }
+        select:focus, input:focus { border-color: var(--accent); }
+
+        .result-section {
+            background: rgba(0,0,0,0.3); border-radius: 20px; padding: 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; border: 1px solid var(--border);
+        }
+
+        .pity-percent { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
+        .robbery-count { font-weight: 700; color: #fff; background: var(--card); padding: 10px 20px; border-radius: 10px; margin-top: 15px; }
+
+        /* --- TABLE UI --- */
+        .table-wrap { margin-top: 50px; overflow-x: auto; background: var(--card); border-radius: 20px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: #000; color: var(--text-dim); text-align: left; padding: 15px; font-size: 0.7rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-family: 'JetBrains Mono'; }
+        .color-cell { font-family: 'Plus Jakarta Sans'; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="tracker.html" class="nav-link">Robbery Sniper</a>
+            <div class="nav-item">
+                <a class="nav-link" style="color:#fff">Trading Tools ▼</a>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="pity.html" class="drop-link">Pity Calculator</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 10px;">HyperChrome Pity</h1>
+        <p style="color: var(--text-dim); margin-bottom: 40px;">Calculate your progress toward a guaranteed HyperChrome drop.</p>
+
+        <div class="calc-card">
+            <div class="input-section">
+                <h2>Level Calculator</h2>
+                <div class="form-group">
+                    <label>Target Level</label>
+                    <select id="levelSelect" onchange="calculatePity()">
+                        <option value="1">Level 1 (Guarantee: 100 Robberies)</option>
+                        <option value="2">Level 2 (Guarantee: 200 Robberies)</option>
+                        <option value="3">Level 3 (Guarantee: 400 Robberies)</option>
+                        <option value="4">Level 4 (Guarantee: 600 Robberies)</option>
+                        <option value="5">Level 5 (Guarantee: 1000 Robberies)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Robberies Completed (Since last drop)</label>
+                    <input type="number" id="robberyInput" placeholder="Enter amount..." oninput="calculatePity()">
+                </div>
+            </div>
+
+            <div class="result-section">
+                <label>Estimated Pity Progress</label>
+                <div class="pity-percent" id="pityDisplay">0%</div>
+                <div class="robbery-count" id="remainingDisplay">100 Robberies Left</div>
+            </div>
+        </div>
+
+        <h2 style="margin-top: 60px;">Market Values (by Level)</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Color</th>
+                        <th>Level 1</th>
+                        <th>Level 2</th>
+                        <th>Level 3</th>
+                        <th>Level 4</th>
+                        <th>Level 5</th>
+                    </tr>
+                </thead>
+                <tbody id="pityTable">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const chromeData = [
+            { color: "Yellow", l1: "600k", l2: "2.0m", l3: "6.0m", l4: "32.5m", l5: "75m", c: "#ffff00" },
+            { color: "Orange", l1: "900k", l2: "2.1m", l3: "10m", l4: "37.5m", l5: "100m", c: "#ff6600" },
+            { color: "Purple", l1: "1.0m", l2: "2.5m", l3: "12.5m", l4: "38m", l5: "130m", c: "#a020f0" },
+            { color: "Pink", l1: "1.2m", l2: "2.7m", l3: "15m", l4: "38m", l5: "130m", c: "#ff69b4" },
+            { color: "Diamond", l1: "1.3m", l2: "3.0m", l3: "15m", l4: "38m", l5: "147.5m", c: "#b9f2ff" },
+            { color: "Blue", l1: "1.4m", l2: "3.0m", l3: "22.5m", l4: "40m", l5: "217m", c: "#0000ff" },
+            { color: "Green", l1: "1.6m", l2: "4.2m", l3: "30m", l4: "100m", l5: "225m", c: "#00ff00" },
+            { color: "Red", l1: "1.6m", l2: "4.5m", l3: "35m", l4: "115m", l5: "260m", c: "#ff0000" }
+        ];
+
+        function loadTable() {
+            const tbody = document.getElementById('pityTable');
+            chromeData.forEach(d => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="color-cell" style="color:${d.c}">${d.color}</td>
+                        <td>${d.l1}</td>
+                        <td>${d.l2}</td>
+                        <td>${d.l3}</td>
+                        <td>${d.l4}</td>
+                        <td>${d.l5}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function calculatePity() {
+            const level = parseInt(document.getElementById('levelSelect').value);
+            const robbed = parseInt(document.getElementById('robberyInput').value) || 0;
+            
+            // Standard Jailbreak Pity Thresholds (Approximate)
+            const thresholds = { 1: 100, 2: 200, 3: 400, 4: 600, 5: 1000 };
+            const max = thresholds[level];
+            
+            let percent = (robbed / max) * 100;
+            if (percent > 100) percent = 100;
+            
+            document.getElementById('pityDisplay').innerText = Math.floor(percent) + "%";
+            
+            let remaining = max - robbed;
+            if (remaining < 0) remaining = 0;
+            document.getElementById('remainingDisplay').innerText = remaining + " Robberies Left";
+        }
+
+        window.onload = loadTable;
+    </script>
+</body>
+</html>
