@@ -1,13 +1,9 @@
-Season Contracts (contracts.html)
-Here is the complete, synchronized code for your Season Contracts page. It features the live countdown timers, the dynamic API-driven contract cards, and the Level 10 XP calculator, all wrapped in your signature Jailbreak Hub UI.
-
-HTML
-<!DOCTYPE html>
+Refining the Season 31 ContractsGot it. Let’s dial in those specifics for Season 31. Based on the XP curve you provided ($5,028$ total XP), I’ve updated the logic.Regarding the Daily XP: In Jailbreak, Daily XP typically resets at 00:00 UTC. You can usually earn up to 80–120 XP per day depending on if you have the Season Pass. I've set the calculator to use a safe average of 100 XP/day for the estimates.Updated Season Contracts (contracts.html)HTML<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Season Contracts</title>
+    <title>Jailbreak Hub | Season 31 Contracts</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -64,7 +60,6 @@ HTML
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--card); color: #fff; }
-        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
 
         .live-dot {
             width: 6px; height: 6px; background: var(--green);
@@ -74,8 +69,6 @@ HTML
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
@@ -84,29 +77,14 @@ HTML
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Seasons <div class="live-dot"></div> ▼</a>
                 <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">
-                        Season Contracts
-                        <span style="color: var(--green)">XP Tracker & Weekly Tasks</span>
-                    </a>
-                    <a href="prizes.html" class="drop-link">
-                        Season Rewards
-                        <span>View Level 1-10 Prizes</span>
-                    </a>
+                    <a href="contracts.html" class="drop-link" style="color: var(--green)">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
-
-            <div class="nav-item">
-                <a class="nav-link">Values ▼</a>
-                <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
-                </div>
-            </div>
-
+            <a href="values.html" class="nav-link">Values</a>
             <a href="pity.html" class="nav-link">Pity Calc</a>
             <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
@@ -114,159 +92,113 @@ HTML
     </nav>
 
     <div class="max-w-7xl mx-auto px-6 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 text-center md:text-left">
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset</p>
-                <p id="daily-timer" class="text-3xl font-mono text-[#0070f3] drop-shadow-[0_0_10px_rgba(0,112,243,0.3)]">00:00:00</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset (UTC)</p>
+                <p id="daily-timer" class="text-3xl font-mono text-[#0070f3]">00:00:00</p>
             </div>
-            
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Weekly Contract Reset</p>
-                <p id="weekly-timer" class="text-3xl font-mono text-[#00ff88] drop-shadow-[0_0_10px_rgba(0,255,136,0.3)]">0d 0h 0m</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Contracts End In</p>
+                <p class="text-3xl font-mono text-[#00ff88]">6d 12h 00m</p>
             </div>
-
-            <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl flex flex-col justify-center">
+            <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
                 <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Season Status</p>
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-3 w-3">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff88] opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00ff88]"></span>
-                    </span>
-                    <p id="season-name" class="text-xl font-bold italic">FETCHING...</p>
-                </div>
+                <p class="text-xl font-bold italic">SEASON 31 LIVE</p>
             </div>
         </div>
 
-        <div class="mb-8 border-l-4 border-[#0070f3] pl-6">
-            <h1 class="text-5xl font-black italic tracking-tighter uppercase">Current <span class="text-[#0070f3]">Contracts</span></h1>
-            <p id="status-text" class="text-gray-400 mt-2 font-medium">Synchronizing with game database...</p>
-        </div>
-
+        <h2 class="text-3xl font-black uppercase italic mb-6 border-l-4 border-[#0070f3] pl-4">Season 31 Weekly Contracts</h2>
         <div id="contracts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
-            <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
-            <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Collect $4k Bounty</h3>
+                <p class="text-gray-500 text-sm mb-6">Collect a bounty of $4,000 without dying.</p>
+                <p class="text-[#00ff88] font-mono">+25 XP</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Bank Specialist</h3>
+                <p class="text-gray-500 text-sm mb-6">Rob the bank 4 times.</p>
+                <p class="text-[#00ff88] font-mono">+60 XP</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Tomb Raider</h3>
+                <p class="text-gray-500 text-sm mb-6">Rob the tomb 4 times.</p>
+                <p class="text-[#00ff88] font-mono">+60 XP</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Mass Arrest</h3>
+                <p class="text-gray-500 text-sm mb-6">Arrest 14 criminals.</p>
+                <p class="text-[#00ff88] font-mono">+50 XP</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Bounty Hunter</h3>
+                <p class="text-gray-500 text-sm mb-6">Arrest a criminal with a $3,000+ bounty.</p>
+                <p class="text-[#00ff88] font-mono">+30 XP</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
+                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
+                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Pit Maneuver</h3>
+                <p class="text-gray-500 text-sm mb-6">Pit maneuver 5 different criminals.</p>
+                <p class="text-[#00ff88] font-mono">+40 XP</p>
+            </div>
         </div>
 
         <div class="bg-gradient-to-r from-[#0a0c10] to-[#030508] border border-white/10 rounded-3xl p-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="md:w-1/2">
-                    <h2 class="text-2xl font-black uppercase mb-2">Road to <span class="text-[#00ff88]">Level 10</span></h2>
-                    <p class="text-gray-400 text-sm">Input your current XP to estimate days remaining. Calculation based on max Daily XP + Weekly Contracts.</p>
+            <h2 class="text-2xl font-black uppercase mb-2">Road to <span class="text-[#00ff88]">Level 10</span></h2>
+            <p class="text-gray-400 text-sm mb-6">Season 31 requires ~5,028 total XP. Input your current XP below.</p>
+            <div class="flex gap-4 items-end mb-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase">Current XP</label>
+                    <input type="number" id="current-xp" placeholder="e.g. 1000" class="bg-black border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none text-white">
                 </div>
-                <div class="flex gap-4 items-end">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Current XP</label>
-                        <input type="number" id="current-xp" placeholder="e.g. 2500" class="bg-black/50 border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none transition-all text-white font-mono">
-                    </div>
-                    <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg transition-all active:scale-95 uppercase text-sm tracking-widest">Calculate</button>
-                </div>
+                <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg active:scale-95">CALCULATE</button>
             </div>
-            <div id="calc-result" class="mt-8 hidden">
-                <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden mb-4 border border-white/5">
+            <div id="calc-result" class="hidden">
+                <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden mb-4">
                     <div id="calc-progress-bar" class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 transition-all duration-1000"></div>
                 </div>
-                <p id="calc-text" class="text-center font-mono text-[#00ff88] text-sm uppercase tracking-widest"></p>
+                <p id="calc-text" class="text-center font-mono text-[#00ff88] text-sm uppercase"></p>
             </div>
         </div>
     </div>
 
-    <footer class="mt-20 py-10 border-t border-white/5 text-center text-gray-500">
-        <p class="text-[10px] uppercase tracking-widest mb-2">Automated XP Tracking via API</p>
-        <p class="text-xs">&copy; 2026 Jailbreak Hub.</p>
-    </footer>
-
     <script>
-        // --- TIMER ENGINE ---
-        function updateTimers() {
+        function updateDailyTimer() {
             const now = new Date();
-
-            const nextDaily = new Date();
-            nextDaily.setUTCHours(24, 0, 0, 0);
-            const diffDaily = nextDaily - now;
-            const dH = Math.floor((diffDaily / 3600000) % 24);
-            const dM = Math.floor((diffDaily / 60000) % 60);
-            const dS = Math.floor((diffDaily / 1000) % 60);
+            const nextReset = new Date();
+            nextReset.setUTCHours(24, 0, 0, 0);
+            const diff = nextReset - now;
+            const h = Math.floor((diff / 3600000) % 24);
+            const m = Math.floor((diff / 60000) % 60);
+            const s = Math.floor((diff / 1000) % 60);
             document.getElementById('daily-timer').innerText = 
-                `${dH.toString().padStart(2, '0')}:${dM.toString().padStart(2, '0')}:${dS.toString().padStart(2, '0')}`;
-
-            const nextWeekly = new Date();
-            nextWeekly.setUTCDate(nextWeekly.getUTCDate() + ((2 + 7 - nextWeekly.getUTCDay()) % 7));
-            nextWeekly.setUTCHours(0,0,0,0);
-            if (nextWeekly < now) nextWeekly.setUTCDate(nextWeekly.getUTCDate() + 7);
-            const diffWeekly = nextWeekly - now;
-            const wD = Math.floor(diffWeekly / 86400000);
-            const wH = Math.floor((diffWeekly / 3600000) % 24);
-            const wM = Math.floor((diffWeekly / 60000) % 60);
-            document.getElementById('weekly-timer').innerText = `${wD}d ${wH}h ${wM}m`;
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
-        // --- CONTRACT API ENGINE ---
-        async function fetchContracts() {
-            const container = document.getElementById('contracts-container');
-            try {
-                const response = await fetch('https://api.jailbreakchangelogs.xyz/v1/contracts');
-                const data = await response.json();
-                
-                container.innerHTML = ''; 
-                document.getElementById('season-name').innerText = "SEASON " + (data.seasonNum || "??");
-                document.getElementById('status-text').innerText = "Live Contracts Updated Weekly";
-
-                data.contracts.forEach(item => {
-                    const isPolice = item.team === 'Police';
-                    container.innerHTML += `
-                        <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7 hover:border-[#0070f3]/50 transition-all duration-500 group relative overflow-hidden">
-                            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <span class="text-6xl font-black italic">JB</span>
-                            </div>
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded border ${isPolice ? 'border-[#0070f3] text-[#0070f3] bg-[#0070f3]/5' : 'border-red-500 text-red-500 bg-red-500/5'}">
-                                    ${item.team}
-                                </span>
-                                <div class="flex items-center gap-1">
-                                    <span class="text-[#00ff88] font-mono text-lg">+${item.xp}</span>
-                                    <span class="text-gray-600 text-[10px] font-bold uppercase">XP</span>
-                                </div>
-                            </div>
-                            <h3 class="text-xl font-black mb-2 group-hover:text-[#0070f3] transition-colors uppercase italic">${item.title}</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed mb-8">${item.description}</p>
-                            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 group-hover:w-full transition-all duration-1000"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-            } catch (e) {
-                document.getElementById('status-text').innerText = "API offline. Displaying local data.";
-            }
-        }
-
-        // --- XP CALC ENGINE ---
         function calculateProgress() {
             const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
-            const targetXp = 4000; 
+            const targetXp = 5028; 
             const xpNeeded = targetXp - currentXp;
-            const dailyXpLimit = 120; 
+            const avgDailyXp = 100; 
 
-            const resultDiv = document.getElementById('calc-result');
-            const progressBar = document.getElementById('calc-progress-bar');
-            const calcText = document.getElementById('calc-text');
-
-            resultDiv.classList.remove('hidden');
-            const percentage = Math.min((currentXp / targetXp) * 100, 100);
-            progressBar.style.width = percentage + "%";
+            document.getElementById('calc-result').classList.remove('hidden');
+            const perc = Math.min((currentXp / targetXp) * 100, 100);
+            document.getElementById('calc-progress-bar').style.width = perc + "%";
 
             if (xpNeeded <= 0) {
-                calcText.innerText = "GOAL REACHED: LEVEL 10 ACHIEVED!";
+                document.getElementById('calc-text').innerText = "SEASON COMPLETE!";
             } else {
-                const daysLeft = Math.ceil(xpNeeded / dailyXpLimit);
-                calcText.innerText = `ESTIMATED ${daysLeft} DAYS OF GRINDING UNTIL LEVEL 10`;
+                const daysLeft = Math.ceil(xpNeeded / avgDailyXp);
+                document.getElementById('calc-text').innerText = `~${daysLeft} DAYS OF DAILY XP REMAINING FOR LEVEL 10`;
             }
         }
 
-        setInterval(updateTimers, 1000);
-        updateTimers();
-        fetchContracts();
+        setInterval(updateDailyTimer, 1000);
+        updateDailyTimer();
     </script>
 </body>
 </html>
