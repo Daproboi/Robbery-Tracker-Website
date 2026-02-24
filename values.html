@@ -1,9 +1,15 @@
+To ensure your site is perfectly synchronized, I have updated the Values script with the new HyperChrome Pity link in the navigation and included the high-to-low sorting logic we discussed earlier.
+
+This is the full-length (approx. 250+ lines) production script for values.html.
+
+1. Market Values (values.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Value List</title>
+    <title>Jailbreak Hub | Market Value List</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -51,18 +57,19 @@
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 200px; padding: 10px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transition: 0.3s ease;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
+        .drop-link { display: flex; align-items: center; gap: 10px; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
         .drop-link:hover { background: var(--card); color: var(--accent); }
 
-        /* --- CONTENT --- */
+        /* --- CONTENT HEADER --- */
         .header-content { max-width: 1200px; margin: 0 auto 40px; padding: 0 20px; }
         .header-content h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -1.5px; }
+        .header-content p { color: var(--text-dim); }
         
+        /* --- SEARCH & FILTERS --- */
         .control-panel { 
             max-width: 1200px; margin: 0 auto 40px; padding: 30px; 
             background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
@@ -79,49 +86,55 @@
         .filter-pill { 
             padding: 10px 20px; border-radius: 12px; background: var(--card); 
             border: 1px solid var(--border); color: var(--text-dim); 
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer;
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer;
         }
         .filter-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* --- GRID --- */
+        /* --- ITEMS GRID --- */
         .items-container { 
             max-width: 1200px; margin: 0 auto; padding: 0 20px 100px;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px;
         }
 
         .item-card { 
             background: var(--card); border: 1px solid var(--border); 
-            border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px;
-            position: relative;
+            border-radius: 22px; padding: 25px; display: flex; flex-direction: column; gap: 15px;
+            position: relative; overflow: hidden;
         }
-        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #161a22; }
 
-        .card-top { display: flex; gap: 15px; align-items: center; position: relative; }
-        .item-img { width: 75px; height: 75px; background: #000; border-radius: 15px; object-fit: contain; border: 1px solid var(--border); }
+        .card-top { display: flex; gap: 18px; align-items: center; position: relative; }
+        .item-img { 
+            width: 80px; height: 80px; background: #000; border-radius: 18px; 
+            object-fit: contain; border: 1px solid var(--border); 
+        }
         
         .trend-badge {
             position: absolute; top: 0; right: 0;
-            padding: 4px 8px; border-radius: 6px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
         }
         .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border: 1px solid var(--green); }
         .trend-falling { background: rgba(255, 51, 51, 0.1); color: var(--red); border: 1px solid var(--red); }
         .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border: 1px solid var(--border); }
 
         .card-stats { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 14px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
+            background: rgba(0,0,0,0.3); padding: 18px; border-radius: 16px;
         }
-        .stat-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; display: block;}
-        .stat-value { font-family: 'JetBrains Mono'; font-size: 0.85rem; font-weight: 700; }
+        .stat-box { display: flex; flex-direction: column; }
+        .stat-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+        .stat-value { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 700; }
 
-        .full-width-stat { grid-column: span 2; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 5px; }
+        .full-width { grid-column: span 2; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 5px; }
 
         .card-action {
-            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border);
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border);
             background: rgba(255,255,255,0.03); color: #fff; text-decoration: none;
-            text-align: center; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            text-align: center; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
         }
         .card-action:hover { background: var(--accent); border-color: var(--accent); }
+
+        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -134,8 +147,9 @@
             <div class="nav-item">
                 <a class="nav-link" style="color:#fff">Trading Tools ▼</a>
                 <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="values.html" class="drop-link">📊 Value List</a>
+                    <a href="calculator.html" class="drop-link">⚖️ Value Calculator</a>
+                    <a href="pity.html" class="drop-link">💎 Pity Calculator</a>
                 </div>
             </div>
         </div>
@@ -143,33 +157,38 @@
     </nav>
 
     <header class="header-content">
-        <h1>Market Values</h1>
-        <p>Live trading values sorted from highest to lowest market impact.</p>
+        <h1>Market Database</h1>
+        <p>Real-time values sorted from highest to lowest market impact.</p>
     </header>
 
     <div class="header-content">
         <div class="control-panel">
-            <input type="text" id="searchInput" class="search-bar" placeholder="Search items (e.g. Javelin, Void)..." oninput="renderItems()">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search for vehicles, skins, or items..." oninput="renderItems()">
             <div class="filter-group" id="filterGroup">
-                <div class="filter-pill active" data-filter="all" onclick="setCategory('all', this)">All Items</div>
+                <div class="filter-pill active" onclick="setCategory('all', this)">All Items</div>
             </div>
         </div>
 
         <div id="itemsGrid" class="items-container"></div>
     </div>
 
+    <footer>
+        &copy; 2026 Jailbreak Hub. Data updated daily.
+    </footer>
+
     <script src="Values.js"></script>
 
     <script>
         let currentCategory = 'all';
 
+        // Initialize category buttons dynamically from database
         function initFilters() {
             const group = document.getElementById('filterGroup');
             for (let cat in db) {
                 const pill = document.createElement('div');
                 pill.className = 'filter-pill';
                 pill.innerText = cat;
-                pill.onclick = (e) => setCategory(cat, pill);
+                pill.onclick = () => setCategory(cat, pill);
                 group.appendChild(pill);
             }
         }
@@ -194,58 +213,57 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             let html = '';
             
-            // 1. COLLECT ALL ITEMS INTO A SINGLE ARRAY
-            let allVisibleItems = [];
+            // 1. GATHER ALL RELEVANT ITEMS
+            let itemList = [];
             for (let cat in db) {
                 if (currentCategory !== 'all' && cat !== currentCategory) continue;
                 
                 db[cat].forEach(item => {
                     if (item.name.toLowerCase().includes(search)) {
-                        // Attach category to the item so we can still display it
-                        allVisibleItems.push({...item, category: cat});
+                        itemList.push({...item, category: cat});
                     }
                 });
             }
 
-            // 2. SORT THE ARRAY (HIGHEST TO LOWEST CASH VALUE)
-            allVisibleItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
+            // 2. SORT HIGHEST TO LOWEST (BASED ON CASH VALUE)
+            itemList.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
 
             // 3. GENERATE HTML
-            allVisibleItems.forEach(item => {
+            itemList.forEach(item => {
                 const trendClass = getTrendClass(item.trend);
-                const cleanVal = item.cash_value ? `$${item.cash_value.toLocaleString()}` : 'N/A';
-                const cleanDupe = item.duped_value ? `$${item.duped_value.toLocaleString()}` : 'Same';
+                const displayValue = item.cash_value ? `$${item.cash_value.toLocaleString()}` : 'N/A';
+                const dupeValue = item.duped_value ? `$${item.duped_value.toLocaleString()}` : 'No Change';
 
                 html += `
                     <div class="item-card">
                         <div class="card-top">
-                            <img src="${item.image || ''}" class="item-img" onerror="this.src='https://via.placeholder.com/80/000/333?text=?'">
+                            <img src="${item.image || ''}" class="item-img" onerror="this.src='https://via.placeholder.com/100/000/333?text=?'">
                             <div class="item-info">
                                 <span style="font-size: 0.6rem; color: var(--accent); font-weight: 800; text-transform: uppercase;">${item.category}</span>
-                                <h3 style="margin:0; font-size: 1.1rem;">${item.name}</h3>
+                                <h3 style="margin:0; font-size: 1.2rem;">${item.name}</h3>
                             </div>
                             <div class="trend-badge ${trendClass}">${item.trend || 'Stable'}</div>
                         </div>
                         <div class="card-stats">
                             <div class="stat-box">
                                 <span class="stat-label">Market Value</span>
-                                <span class="stat-value" style="color: var(--green)">${cleanVal}</span>
+                                <span class="stat-value" style="color: var(--green)">${displayValue}</span>
                             </div>
                             <div class="stat-box">
                                 <span class="stat-label">Demand</span>
                                 <span class="stat-value">${item.demand || 'Normal'}</span>
                             </div>
-                            <div class="stat-box full-width-stat">
+                            <div class="stat-box full-width">
                                 <span class="stat-label">Dupe-Adjusted Value</span>
-                                <span class="stat-value" style="color: var(--orange)">${cleanDupe}</span>
+                                <span class="stat-value" style="color: var(--orange)">${dupeValue}</span>
                             </div>
                         </div>
-                        <a href="calculator.html" class="card-action">Add to Calculator</a>
+                        <a href="calculator.html" class="card-action">Add to Calculation</a>
                     </div>
                 `;
             });
 
-            grid.innerHTML = html;
+            grid.innerHTML = html || '<p style="text-align:center; grid-column:1/-1; color:var(--text-dim);">No items found matching your search.</p>';
         }
 
         window.onload = () => {
