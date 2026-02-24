@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Value List</title>
+    <title>Jailbreak Hub | Market Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,8 @@
             --border: rgba(255, 255, 255, 0.08);
             --accent: #0070f3;
             --green: #00ff88;
+            --red: #ff4444;
+            --orange: #ffa500;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
         }
@@ -52,65 +54,84 @@
         .drop-link:hover { background: var(--card); color: var(--accent); }
 
         /* --- CONTENT --- */
-        .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
         
         .search-section {
             background: var(--surface); border: 1px solid var(--border);
-            padding: 35px; border-radius: 28px; margin-bottom: 40px;
+            padding: 30px; border-radius: 24px; margin-bottom: 40px;
         }
         .search-bar {
             width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 22px; border-radius: 16px; color: #fff; font-size: 1.2rem;
-            outline: none; margin-bottom: 25px;
+            padding: 20px; border-radius: 14px; color: #fff; font-size: 1.1rem;
+            outline: none; margin-bottom: 20px;
         }
 
-        .filter-row { display: flex; flex-wrap: wrap; gap: 12px; }
+        .filter-row { display: flex; flex-wrap: wrap; gap: 10px; }
         .f-btn {
-            padding: 12px 24px; border-radius: 12px; background: var(--card);
+            padding: 10px 20px; border-radius: 10px; background: var(--card);
             border: 1px solid var(--border); color: var(--text-dim);
-            font-size: 0.8rem; font-weight: 800; text-transform: uppercase; cursor: pointer;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; cursor: pointer;
         }
         .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* --- BIGGER ITEM GRID --- */
+        /* --- GRID CONFIG --- */
         .items-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 30px; padding-bottom: 50px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px; padding-bottom: 50px;
         }
+
         .item-card {
             background: var(--card); border: 1px solid var(--border);
-            border-radius: 28px; padding: 30px; display: flex; flex-direction: column; gap: 20px;
+            border-radius: 24px; display: flex; flex-direction: column; overflow: hidden;
         }
-        .item-card:hover { border-color: var(--accent); transform: translateY(-8px); }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
 
-        .card-top { display: flex; align-items: center; gap: 20px; }
-        .img-box { width: 100px; height: 100px; background: #000; border-radius: 18px; border: 1px solid var(--border); object-fit: contain; }
-        
-        .item-info h3 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
+        .img-container {
+            width: 100%; height: 240px; background: #000;
+            display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid var(--border); position: relative;
+        }
+        .img-large { width: 80%; height: 80%; object-fit: contain; }
 
-        .val-row {
+        .trend-badge {
+            position: absolute; top: 15px; right: 15px;
+            padding: 5px 12px; border-radius: 6px; font-size: 0.65rem;
+            font-weight: 900; text-transform: uppercase; border: 1px solid;
+        }
+        .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: var(--green); }
+        .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: var(--red); }
+        .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border-color: var(--border); }
+
+        .card-content { padding: 25px; }
+        .item-cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .card-content h3 { margin: 0 0 20px 0; font-size: 1.4rem; font-weight: 800; }
+
+        .data-list { display: flex; flex-direction: column; gap: 10px; }
+        .data-item {
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.4); padding: 20px; border-radius: 18px;
+            padding: 12px 15px; background: rgba(0,0,0,0.2); border-radius: 12px;
         }
-        .v-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
-        .v-amt { font-family: 'JetBrains Mono'; font-size: 1.3rem; font-weight: 700; color: var(--green); }
+        .d-label { font-size: 0.65rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 1rem; }
+        
+        .val-clean { color: var(--green); }
+        .val-duped { color: var(--orange); }
 
         /* --- PAGINATION --- */
         .pagination {
             display: flex; justify-content: center; align-items: center;
-            gap: 20px; margin-top: 40px; padding-bottom: 100px;
+            gap: 20px; margin-top: 20px; padding-bottom: 100px;
         }
         .page-btn {
             background: var(--surface); border: 1px solid var(--border);
             color: #fff; padding: 12px 25px; border-radius: 12px;
-            font-weight: 700; cursor: pointer; font-size: 0.9rem;
+            font-weight: 700; cursor: pointer;
         }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .page-btn:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
-        .page-num { font-weight: 800; color: var(--text-dim); }
+        .page-info { font-weight: 800; color: var(--text-dim); font-size: 0.9rem; }
 
-        footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
-        .disclaimer { font-size: 0.7rem; color: #444; margin-bottom: 10px; text-transform: uppercase; }
+        footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -135,7 +156,7 @@
     <div class="container">
         <h1>Market Database</h1>
         <div class="search-section">
-            <input type="text" id="search" class="search-bar" placeholder="Search for items or cars..." oninput="resetAndRender()">
+            <input type="text" id="search" class="search-bar" placeholder="Search items..." oninput="resetAndRender()">
             <div class="filter-row" id="filters">
                 <div class="f-btn active" onclick="setCat('all', this)">All Items</div>
             </div>
@@ -145,28 +166,24 @@
 
         <div class="pagination">
             <button class="page-btn" id="prevBtn" onclick="changePage(-1)">Previous</button>
-            <span class="page-num" id="pageDisplay">Page 1</span>
+            <span class="page-info" id="pageDisplay">Page 1 of 1</span>
             <button class="page-btn" id="nextBtn" onclick="changePage(1)">Next</button>
         </div>
     </div>
 
     <footer>
-        <div class="disclaimer">Values are estimates. We are not responsible for trade losses.</div>
-        &copy; 2026 Jailbreak Hub.
+        &copy; 2026 Jailbreak Hub. Trading carries risk; values are community estimates.
     </footer>
 
     <script src="Values.js"></script>
     <script>
         let currentCategory = 'all';
         let currentPage = 1;
-        const itemsPerPage = 12;
+        const itemsPerPage = 15; // Set to 15 items per page
         let filteredItems = [];
 
         function init() {
-            if (typeof db === 'undefined') {
-                document.getElementById('grid').innerHTML = "<p style='color:red; text-align:center;'>Error: Values.js not found.</p>";
-                return;
-            }
+            if (typeof db === 'undefined') return;
             const fContainer = document.getElementById('filters');
             for (let category in db) {
                 const btn = document.createElement('div');
@@ -193,7 +210,6 @@
         function updateData() {
             const query = document.getElementById('search').value.toLowerCase();
             filteredItems = [];
-
             for (let category in db) {
                 if (currentCategory !== 'all' && category !== currentCategory) continue;
                 db[category].forEach(item => {
@@ -202,8 +218,6 @@
                     }
                 });
             }
-
-            // Sort High to Low
             filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
@@ -213,28 +227,43 @@
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
-            grid.innerHTML = paginatedItems.map(i => `
+            grid.innerHTML = paginatedItems.map(i => {
+                const trendClass = `trend-${(i.trend || 'stable').toLowerCase()}`;
+                const dupedVal = i.duped_value || Math.floor((i.cash_value || 0) * 0.75);
+
+                return `
                 <div class="item-card">
-                    <div class="card-top">
-                        <img src="${i.image}" class="img-box" onerror="this.src='https://via.placeholder.com/100/000/333?text=?'">
-                        <div class="item-info">
-                            <span style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${i.cat}</span>
-                            <h3>${i.name}</h3>
+                    <div class="img-container">
+                        <div class="trend-badge ${trendClass}">${i.trend || 'Stable'}</div>
+                        <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
+                    </div>
+                    <div class="card-content">
+                        <span class="item-cat">${i.cat}</span>
+                        <h3>${i.name}</h3>
+                        <div class="data-list">
+                            <div class="data-item">
+                                <span class="d-label">Clean Value</span>
+                                <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="d-label">Duped Value</span>
+                                <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="d-label">Demand</span>
+                                <span class="d-val">${i.demand || 'Normal'}</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="val-row">
-                        <span class="v-label">Estimated Value</span>
-                        <span class="v-amt">$${(i.cash_value || 0).toLocaleString()}</span>
-                    </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
 
-            // Update Pagination UI
-            document.getElementById('pageDisplay').innerText = `Page ${currentPage} of ${Math.ceil(filteredItems.length / itemsPerPage) || 1}`;
+            const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
+            document.getElementById('pageDisplay').innerText = `Page ${currentPage} of ${totalPages}`;
             document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage >= Math.ceil(filteredItems.length / itemsPerPage);
+            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
             
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if(paginatedItems.length > 0) window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function changePage(step) {
