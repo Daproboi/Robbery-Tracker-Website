@@ -1,79 +1,154 @@
-<div class="bg-[#030508] min-h-screen text-white p-8 font-sans">
+<div class="bg-[#030508] min-h-screen text-white p-6 md:p-12 font-sans selection:bg-[#0070f3]">
     
-    <div class="max-w-6xl mx-auto mb-12 flex justify-between items-end">
-        <div>
-            <h1 class="text-4xl font-extrabold tracking-tight mb-2 uppercase">
-                Weekly <span class="text-[#0070f3]">Contracts</span>
-            </h1>
-            <p id="status-text" class="text-gray-400">Syncing with Jailbreak servers...</p>
+    <div class="max-w-7xl mx-auto mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-[#0a0c10] border border-white/5 p-5 rounded-2xl">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset</p>
+            <p id="daily-timer" class="text-3xl font-mono text-[#0070f3] drop-shadow-[0_0_10px_rgba(0,112,243,0.3)]">00:00:00</p>
         </div>
-        <div id="last-updated" class="text-xs font-mono text-gray-600 uppercase"></div>
+        
+        <div class="bg-[#0a0c10] border border-white/5 p-5 rounded-2xl">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Weekly Contract Reset</p>
+            <p id="weekly-timer" class="text-3xl font-mono text-[#00ff88] drop-shadow-[0_0_10px_rgba(0,255,136,0.3)]">0d 0h 0m</p>
+        </div>
+
+        <div class="bg-[#0a0c10] border border-white/5 p-5 rounded-2xl flex flex-col justify-center">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Season Status</p>
+            <div class="flex items-center gap-2">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff88] opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00ff88]"></span>
+                </span>
+                <p id="season-name" class="text-xl font-bold italic">LIVE</p>
+            </div>
+        </div>
     </div>
 
-    <div id="contracts-container" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="animate-pulse bg-white/5 h-64 rounded-2xl"></div>
-        <div class="animate-pulse bg-white/5 h-64 rounded-2xl"></div>
-        <div class="animate-pulse bg-white/5 h-64 rounded-2xl"></div>
+    <div class="max-w-7xl mx-auto mb-8 border-l-4 border-[#0070f3] pl-6">
+        <h1 class="text-5xl font-black italic tracking-tighter uppercase">Current <span class="text-[#0070f3]">Contracts</span></h1>
+        <p id="status-text" class="text-gray-400 mt-2 font-medium">Synchronizing with game database...</p>
+    </div>
+
+    <div id="contracts-container" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
+        <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
+        <div class="animate-pulse bg-white/5 h-56 rounded-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto bg-gradient-to-r from-[#0a0c10] to-[#030508] border border-white/10 rounded-3xl p-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="md:w-1/2">
+                <h2 class="text-2xl font-black uppercase mb-2">Road to <span class="text-[#00ff88]">Level 10</span></h2>
+                <p class="text-gray-400 text-sm">Input your current XP to see how many days of grinding are left. (Estimates include Daily XP + Weekly Contracts).</p>
+            </div>
+            <div class="flex gap-4 items-end">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Current XP</label>
+                    <input type="number" id="current-xp" placeholder="e.g. 2400" class="bg-black/50 border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none transition-all">
+                </div>
+                <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg transition-all active:scale-95">CALCULATE</button>
+            </div>
+        </div>
+        <div id="calc-result" class="mt-8 hidden">
+            <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden mb-4">
+                <div id="calc-progress-bar" class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 transition-all duration-1000"></div>
+            </div>
+            <p id="calc-text" class="text-center font-mono text-[#00ff88] text-sm uppercase"></p>
+        </div>
     </div>
 </div>
 
 <script>
+    // --- TIMER ENGINE ---
+    function updateTimers() {
+        const now = new Date();
+
+        // Daily Reset (UTC Midnight)
+        const nextDaily = new Date();
+        nextDaily.setUTCHours(24, 0, 0, 0);
+        const diffDaily = nextDaily - now;
+        const dH = Math.floor((diffDaily / 3600000) % 24);
+        const dM = Math.floor((diffDaily / 60000) % 60);
+        const dS = Math.floor((diffDaily / 1000) % 60);
+        document.getElementById('daily-timer').innerText = 
+            `${dH.toString().padStart(2, '0')}:${dM.toString().padStart(2, '0')}:${dS.toString().padStart(2, '0')}`;
+
+        // Weekly Reset (Tuesdays 00:00 UTC)
+        const nextWeekly = new Date();
+        nextWeekly.setUTCDate(nextWeekly.getUTCDate() + ((2 + 7 - nextWeekly.getUTCDay()) % 7));
+        nextWeekly.setUTCHours(0,0,0,0);
+        if (nextWeekly < now) nextWeekly.setUTCDate(nextWeekly.getUTCDate() + 7);
+        const diffWeekly = nextWeekly - now;
+        const wD = Math.floor(diffWeekly / 86400000);
+        const wH = Math.floor((diffWeekly / 3600000) % 24);
+        const wM = Math.floor((diffWeekly / 60000) % 60);
+        document.getElementById('weekly-timer').innerText = `${wD}d ${wH}h ${wM}m`;
+    }
+
+    // --- DATA ENGINE ---
     async function fetchContracts() {
         const container = document.getElementById('contracts-container');
-        const statusText = document.getElementById('status-text');
-        const updateTime = document.getElementById('last-updated');
-
         try {
-            // Using a proxy/api to get the data from the changelogs source
-            // Note: In a real production environment, you'd use your own backend or the JBCL API endpoint
-            const response = await fetch('https://api.jailbreakchangelogs.xyz/v1/contracts'); 
+            const response = await fetch('https://api.jailbreakchangelogs.xyz/v1/contracts');
             const data = await response.json();
+            
+            container.innerHTML = ''; 
+            document.getElementById('season-name').innerText = "SEASON " + (data.seasonNum || "??");
+            document.getElementById('status-text').innerText = "Live Contracts Updated Weekly";
 
-            // Clear the skeletons
-            container.innerHTML = '';
-            statusText.innerText = "Current Season: " + (data.seasonName || "Live");
-            updateTime.innerText = "Data Freshness: Secure";
-
-            data.contracts.forEach(contract => {
-                const card = document.createElement('div');
-                card.className = "bg-[#0a0c10] border border-white/5 rounded-2xl p-6 hover:border-[#00ff88]/50 transition-all duration-300 group";
-                
-                // Determine color based on team
-                const teamColor = contract.team === 'Police' ? '#0070f3' : '#ff3e3e';
-                const teamBg = contract.team === 'Police' ? 'rgba(0,112,243,0.1)' : 'rgba(255,62,62,0.1)';
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest" 
-                              style="background: ${teamBg}; color: ${teamColor}">
-                            ${contract.team}
-                        </span>
-                        <span class="text-[#00ff88] font-mono font-bold">+${contract.xp} XP</span>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-[#00ff88] transition-colors">${contract.title}</h3>
-                    <p class="text-gray-400 text-sm mb-6">${contract.description}</p>
-                    
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
-                            <span class="text-gray-500">Requirement</span>
-                            <span>0 / ${contract.requirement}</span>
+            data.contracts.forEach(item => {
+                const isPolice = item.team === 'Police';
+                container.innerHTML += `
+                    <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7 hover:border-[#0070f3]/50 transition-all duration-500 group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <span class="text-6xl font-black italic">JB</span>
                         </div>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded border ${isPolice ? 'border-[#0070f3] text-[#0070f3] bg-[#0070f3]/5' : 'border-red-500 text-red-500 bg-red-500/5'}">
+                                ${item.team}
+                            </span>
+                            <div class="flex items-center gap-1">
+                                <span class="text-[#00ff88] font-mono text-lg">+${item.xp}</span>
+                                <span class="text-gray-600 text-[10px] font-bold uppercase">XP</span>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-black mb-2 group-hover:text-[#0070f3] transition-colors uppercase italic">${item.title}</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-8">${item.description}</p>
                         <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-[#00ff88] h-full w-0 group-hover:w-full transition-all duration-700 shadow-[0_0_10px_#00ff88]"></div>
+                            <div class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 group-hover:w-full transition-all duration-1000 shadow-[0_0_15px_rgba(0,112,243,0.5)]"></div>
                         </div>
                     </div>
                 `;
-                container.appendChild(card);
             });
-
-        } catch (error) {
-            console.error("Failed to load contracts:", error);
-            statusText.innerHTML = "<span class='text-red-500'>Connection Interrupted.</span> Retrying...";
-            // Fallback to local data if API fails
+        } catch (e) {
+            document.getElementById('status-text').innerText = "Data temporary unavailable. Using local cache.";
         }
     }
 
-    // Run on load
+    // --- CALCULATOR ENGINE ---
+    function calculateProgress() {
+        const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
+        const targetXp = 4000; // Level 10 is usually around 4000 XP
+        const xpNeeded = targetXp - currentXp;
+        const dailyXpLimit = 120; // Average per day
+        const weeklyContractTotal = 150; // Average weekly total
+
+        const resultDiv = document.getElementById('calc-result');
+        const progressBar = document.getElementById('calc-progress-bar');
+        const calcText = document.getElementById('calc-text');
+
+        resultDiv.classList.remove('hidden');
+        const percentage = Math.min((currentXp / targetXp) * 100, 100);
+        progressBar.style.width = percentage + "%";
+
+        if (xpNeeded <= 0) {
+            calcText.innerText = "GOAL REACHED: LEVEL 10 ACHIEVED!";
+        } else {
+            const daysLeft = Math.ceil(xpNeeded / dailyXpLimit);
+            calcText.innerText = `ESTIMATED ${daysLeft} DAYS OF GRINDING UNTIL LEVEL 10`;
+        }
+    }
+
+    setInterval(updateTimers, 1000);
+    updateTimers();
     fetchContracts();
 </script>
