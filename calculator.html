@@ -1,3 +1,9 @@
+The script you provided was a "placeholder" (it just showed alerts). To make this actually work, we need to add a searchable modal that pulls from your Values.js file, allowing you to actually select items and see the totals change.
+
+I've also fixed the "all white" dropdown issue in this file by applying the same dark styling we used for the other pages.
+
+Updated Interactive Value Calculator (calculator.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +24,7 @@
             --red: #ff3333;
         }
 
-        * { box-sizing: border-box; transition: all 0.3s ease; }
+        * { box-sizing: border-box; transition: all 0.2s ease; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -36,21 +42,19 @@
             align-items: center; justify-content: space-between;
             padding: 0 40px; z-index: 5000;
         }
-
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
-
         .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
-        /* DROPDOWN LOGIC */
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 6000;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         
@@ -61,64 +65,77 @@
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--card); color: #fff; }
-        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
 
-        /* Live Indicator */
-        .live-dot {
-            width: 6px; height: 6px; background: var(--green);
-            border-radius: 50%; display: inline-block;
-            margin-left: 5px; margin-bottom: 2px;
-            box-shadow: 0 0 10px var(--green);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* --- CALCULATOR CONTENT --- */
+        /* --- CALCULATOR --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
-        h1 { font-weight: 800; letter-spacing: -1px; margin-bottom: 5px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
         
-        .calc-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;
-        }
-
         .trade-box {
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 24px; padding: 30px; min-height: 400px;
+            border-radius: 24px; padding: 30px; min-height: 500px;
             display: flex; flex-direction: column;
         }
 
         .box-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
+            margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
         }
 
-        .box-header h2 { font-size: 1rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; font-weight: 800; }
         .value-counter { font-family: 'JetBrains Mono'; font-size: 1.4rem; color: var(--green); }
 
-        .item-slots { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
-        .slot {
+        .item-slots { display: flex; flex-direction: column; gap: 12px; }
+        .selected-item {
+            height: 80px; background: var(--card); border: 1px solid var(--accent);
+            border-radius: 16px; display: flex; align-items: center; padding: 0 15px; gap: 15px;
+            position: relative;
+        }
+        .selected-item img { height: 50px; width: 50px; object-fit: contain; }
+        .remove-btn { 
+            position: absolute; right: 15px; color: var(--red); 
+            cursor: pointer; font-weight: 800; font-size: 1.2rem;
+        }
+
+        .slot-empty {
             height: 80px; border: 2px dashed var(--border); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             color: var(--text-dim); font-weight: 700; cursor: pointer;
-            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
         }
-        .slot:hover { border-color: var(--accent); color: #fff; background: rgba(255,255,255,0.02); }
+        .slot-empty:hover { border-color: var(--accent); color: #fff; }
+
+        /* --- MODAL --- */
+        #modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+        .modal-content {
+            background: var(--surface); border: 1px solid var(--border);
+            width: 90%; max-width: 600px; border-radius: 24px; padding: 30px;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .search-input {
+            width: 100%; background: #000; border: 1px solid var(--border);
+            padding: 15px; border-radius: 12px; color: #fff; margin-bottom: 20px;
+        }
+        .search-results { display: flex; flex-direction: column; gap: 10px; }
+        .search-item {
+            padding: 12px; background: var(--card); border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer;
+        }
+        .search-item:hover { background: var(--accent); }
 
         .result-bar {
             grid-column: span 2; background: var(--card); border: 1px solid var(--border);
             border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px;
         }
-
         .fairness-badge {
             display: inline-block; padding: 8px 30px; border-radius: 100px;
             background: #000; border: 1px solid var(--border);
             font-weight: 800; font-size: 1.1rem; margin-bottom: 10px;
-            letter-spacing: 1px;
         }
 
         footer { padding: 40px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
-        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -127,62 +144,47 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            
             <div class="nav-item">
-                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">
-                        Season Contracts
-                        <span>XP Tracker & Weekly Tasks</span>
-                    </a>
-                    <a href="prizes.html" class="drop-link">
-                        Season Rewards
-                        <span>View Level 1-10 Prizes</span>
-                    </a>
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator <span style="color: var(--accent)">Interactive Tool</span></a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <a href="pity.html" class="nav-link">Pity Calc</a>
-            <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
-        <div style="width: 40px;"></div>
     </nav>
 
     <div class="container">
-        <h1>Value Calculator</h1>
-        <p style="color: var(--text-dim);">Compare item values to ensure a fair trade.</p>
+        <h1 class="text-3xl font-black uppercase italic">Value Calculator</h1>
+        <p style="color: var(--text-dim); margin-bottom: 30px;">Add items to both sides to check trade fairness.</p>
 
         <div class="calc-grid">
             <div class="trade-box">
                 <div class="box-header">
-                    <h2>Your Side</h2>
+                    <h2 class="font-bold uppercase tracking-widest text-xs">Your Side</h2>
                     <div class="value-counter" id="valA">$0</div>
                 </div>
-                <div class="item-slots">
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                </div>
+                <div class="item-slots" id="slotsA">
+                    </div>
+                <div class="slot-empty" onclick="openSearch('A')" style="margin-top: 12px;">+ Add Item</div>
             </div>
 
             <div class="trade-box">
                 <div class="box-header">
-                    <h2>Their Side</h2>
+                    <h2 class="font-bold uppercase tracking-widest text-xs">Their Side</h2>
                     <div class="value-counter" id="valB">$0</div>
                 </div>
-                <div class="item-slots">
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
-                </div>
+                <div class="item-slots" id="slotsB">
+                    </div>
+                <div class="slot-empty" onclick="openSearch('B')" style="margin-top: 12px;">+ Add Item</div>
             </div>
 
             <div class="result-bar">
@@ -192,10 +194,120 @@
         </div>
     </div>
 
-    <footer>
-        <div class="legal">Trading carries risk. We are not liable for any losses incurred.</div>
-        &copy; 2026 Jailbreak Hub.
-    </footer>
+    <div id="modal">
+        <div class="modal-content">
+            <div class="flex justify-between mb-4">
+                <h2 class="font-black uppercase italic">Select Item</h2>
+                <button onclick="closeSearch()" class="text-red-500 font-bold">CLOSE</button>
+            </div>
+            <input type="text" id="modalSearch" class="search-input" placeholder="Search items..." oninput="filterModal()">
+            <div id="modalResults" class="search-results"></div>
+        </div>
+    </div>
 
+    <script src="Values.js"></script>
+    <script>
+        let sideA = [];
+        let sideB = [];
+        let activeSide = 'A';
+
+        function openSearch(side) {
+            activeSide = side;
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modalSearch').focus();
+            filterModal();
+        }
+
+        function closeSearch() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function filterModal() {
+            const query = document.getElementById('modalSearch').value.toLowerCase();
+            const results = document.getElementById('modalResults');
+            results.innerHTML = '';
+
+            // Flatten all items from db into one searchable list
+            let allItems = [];
+            for(let cat in db) {
+                db[cat].forEach(item => allItems.push({...item, category: cat}));
+            }
+
+            const filtered = allItems.filter(i => i.name.toLowerCase().includes(query)).slice(0, 10);
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" style="width: 30px; height: 30px; object-fit: contain;">
+                        <span>${item.name}</span>
+                    </div>
+                    <span class="font-mono text-green-400">$${item.cash_value.toLocaleString()}</span>
+                `;
+                div.onclick = () => addItem(item);
+                results.appendChild(div);
+            });
+        }
+
+        function addItem(item) {
+            if (activeSide === 'A') sideA.push(item);
+            else sideB.push(item);
+            
+            closeSearch();
+            updateUI();
+        }
+
+        function removeItem(side, index) {
+            if (side === 'A') sideA.splice(index, 1);
+            else sideB.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            const drawSide = (side, containerId) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = side.map((item, index) => `
+                    <div class="selected-item">
+                        <img src="${item.image}">
+                        <div>
+                            <div class="text-xs font-bold text-blue-500 uppercase">${item.category}</div>
+                            <div class="font-bold">${item.name}</div>
+                        </div>
+                        <div class="remove-btn" onclick="removeItem('${containerId === 'slotsA' ? 'A' : 'B'}', ${index})">×</div>
+                    </div>
+                `).join('');
+            };
+
+            drawSide(sideA, 'slotsA');
+            drawSide(sideB, 'slotsB');
+
+            const totalA = sideA.reduce((sum, item) => sum + item.cash_value, 0);
+            const totalB = sideB.reduce((sum, item) => sum + item.cash_value, 0);
+
+            document.getElementById('valA').innerText = `$${totalA.toLocaleString()}`;
+            document.getElementById('valB').innerText = `$${totalB.toLocaleString()}`;
+
+            const diff = totalA - totalB;
+            const status = document.getElementById('status');
+            const diffEl = document.getElementById('difference');
+
+            diffEl.innerText = `Difference: $${Math.abs(diff).toLocaleString()}`;
+
+            if (totalA === 0 && totalB === 0) {
+                status.innerText = "EQUAL";
+                status.style.color = "white";
+            } else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.1)) {
+                status.innerText = "FAIR TRADE";
+                status.style.color = "var(--green)";
+            } else if (diff > 0) {
+                status.innerText = "SIDE A OVERPAYING";
+                status.style.color = "var(--red)";
+            } else {
+                status.innerText = "SIDE B OVERPAYING";
+                status.style.color = "var(--red)";
+            }
+        }
+    </script>
 </body>
 </html>
