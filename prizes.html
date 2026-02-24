@@ -10,101 +10,99 @@
             --bg: #030508;
             --surface: #0a0c10;
             --card: #11141a;
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.08);
             --accent: #0070f3;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
-            --green-glow: rgba(0, 255, 136, 0.15);
+            --green: #00ff88;
             --gold: #ffac33;
         }
 
+        * { box-sizing: border-box; transition: all 0.2s ease; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 100px;
+            margin: 0; padding-top: 90px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+            min-height: 100vh;
         }
 
-        /* --- UNIFIED NAV --- */
+        /* --- NAVIGATION (Centered & Fixed) --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
+            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
             align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 9000;
+            padding: 0 40px; z-index: 5000;
         }
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 5px; }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
-        .nav-item:hover .nav-link { color: #fff; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
+        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
-        /* --- CHANGELOG STYLE CONTENT --- */
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .dropdown {
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 220px; padding: 10px;
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
+        .drop-link:hover { background: var(--card); color: #fff; }
+
+        /* --- CHANGELOG LAYOUT --- */
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
         .season-header {
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             border-left: 4px solid var(--accent);
-            padding-left: 25px;
+            padding-left: 30px;
         }
-        .season-header h1 { font-size: 2.5rem; font-weight: 800; margin: 0; }
-        .season-tag { 
-            display: inline-block; background: var(--accent); color: white; 
-            padding: 4px 12px; border-radius: 6px; font-size: 0.7rem; 
-            font-weight: 800; text-transform: uppercase; margin-top: 10px;
-        }
+        .season-header h1 { font-size: 2.8rem; font-weight: 900; margin: 0; font-style: italic; text-transform: uppercase; }
+        .season-tag { display: inline-block; background: var(--accent); color: white; padding: 4px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
 
-        /* The Vertical Timeline */
-        .reward-timeline { position: relative; padding-left: 40px; }
-        .reward-timeline::before {
-            content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+        .timeline { position: relative; padding-left: 50px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 18px; top: 0; bottom: 0;
             width: 2px; background: var(--border);
         }
 
-        .reward-node {
-            position: relative; margin-bottom: 40px;
-        }
-
-        /* Level Indicator Dot */
+        .reward-node { position: relative; margin-bottom: 50px; }
         .reward-node::after {
-            content: ''; position: absolute; left: -32px; top: 12px;
-            width: 14px; height: 14px; background: var(--surface);
-            border: 3px solid var(--accent); border-radius: 50%; z-index: 2;
+            content: ''; position: absolute; left: -41px; top: 12px;
+            width: 18px; height: 18px; background: var(--bg);
+            border: 4px solid var(--accent); border-radius: 50%; z-index: 2;
         }
 
         .reward-card {
             background: var(--card); border: 1px solid var(--border);
-            border-radius: 16px; padding: 20px; display: flex; gap: 20px;
-            transition: transform 0.2s, border-color 0.2s;
+            border-radius: 20px; padding: 24px; display: flex; gap: 25px;
+            align-items: center;
         }
-        .reward-card:hover { border-color: rgba(255,255,255,0.2); transform: translateX(5px); }
+        .reward-card:hover { border-color: var(--accent); transform: translateX(8px); }
 
         .reward-img {
-            width: 120px; height: 120px; background: #000;
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            width: 140px; height: 140px; background: #000;
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; border: 1px solid var(--border);
         }
         .reward-img img { width: 85%; height: 85%; object-fit: contain; }
 
-        .reward-info { flex-grow: 1; }
-        .lvl-badge { 
-            font-family: 'JetBrains Mono'; color: var(--accent); 
-            font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; 
-        }
-        .reward-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+        .lvl-tag { font-family: 'JetBrains Mono'; color: var(--accent); font-size: 0.9rem; font-weight: 800; margin-bottom: 5px; }
+        .reward-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
         
-        /* Badges like the real changelog */
         .badge {
-            display: inline-block; padding: 4px 10px; border-radius: 5px;
-            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            display: inline-block; padding: 5px 12px; border-radius: 6px;
+            font-size: 0.65rem; font-weight: 900; text-transform: uppercase;
             letter-spacing: 0.5px; margin-right: 8px;
         }
-        .badge-free { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
+        .badge-free { background: rgba(0, 255, 136, 0.1); color: var(--green); border: 1px solid rgba(0, 255, 136, 0.2); }
         .badge-pass { background: rgba(255, 172, 51, 0.1); color: var(--gold); border: 1px solid rgba(255, 172, 51, 0.2); }
-        .badge-limited { background: rgba(0, 112, 243, 0.1); color: var(--accent); border: 1px solid rgba(0, 112, 243, 0.2); }
+        .badge-type { background: rgba(255, 255, 255, 0.05); color: var(--text-dim); border: 1px solid var(--border); }
 
-        .reward-desc { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; margin-top: 10px; }
+        .reward-desc { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin-top: 12px; }
 
     </style>
 </head>
@@ -114,11 +112,25 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            
             <div class="nav-item">
-                <span class="nav-link" style="color:#fff">Seasons ▼</span>
+                <a class="nav-link" style="color: #fff;">Seasons ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                </div>
             </div>
-            <div class="nav-item"><a href="values.html" class="nav-link">Values</a></div>
+
+            <div class="nav-item">
+                <a class="nav-link">Values ▼</a>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+
             <div class="nav-item"><a href="tracker.html" class="nav-link">Robbery Tracker</a></div>
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
         </div>
     </nav>
 
@@ -126,51 +138,77 @@
         <div class="season-header">
             <span class="season-tag">Current Season</span>
             <h1>Season 24: Snow Rally</h1>
-            <p style="color: var(--text-dim); font-weight: 600;">Explore the high-octane winter rewards for the latest season update.</p>
+            <p style="color: var(--text-dim);">The winter update rewards timeline. Reach Level 10 to claim the grand prize.</p>
         </div>
 
-        <div class="reward-timeline">
+        <div class="timeline">
             
             <div class="reward-node">
                 <div class="reward-card">
-                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/7/7b/JBX-0031.png" alt="JBX-0031"></div>
-                    <div class="reward-info">
-                        <div class="lvl-badge">LEVEL 10</div>
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/7/7b/JBX-0031.png"></div>
+                    <div>
+                        <div class="lvl-tag">LEVEL 10</div>
                         <div class="reward-name">JBX-0031</div>
                         <span class="badge badge-free">Free</span>
-                        <span class="badge badge-limited">Vehicle</span>
-                        <div class="reward-desc">A futuristic, high-speed rally machine featuring triple thrusters and a unique hatch door.</div>
+                        <span class="badge badge-type">Vehicle</span>
+                        <div class="reward-desc">The ultimate rally machine. Built for speed and winter durability with a unique triple-engine layout.</div>
                     </div>
                 </div>
             </div>
 
             <div class="reward-node">
                 <div class="reward-card">
-                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/6/6d/StingerScythe.png" alt="Stinger Scythe"></div>
-                    <div class="reward-info">
-                        <div class="lvl-badge">LEVEL 9</div>
-                        <div class="reward-name">Stinger Scythe Wings</div>
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/6/6d/StingerScythe.png"></div>
+                    <div>
+                        <div class="lvl-tag">LEVEL 8</div>
+                        <div class="reward-name">Scythe Spoiler</div>
                         <span class="badge badge-pass">Season Pass</span>
-                        <span class="badge badge-limited">Spoiler</span>
-                        <div class="reward-desc">Sharp, aggressive wings designed for cutting through the winter air.</div>
+                        <span class="badge badge-type">Spoiler</span>
+                        <div class="reward-desc">Sharp, aggressive aerodynamics designed to cut through the mountain winds.</div>
                     </div>
                 </div>
             </div>
 
             <div class="reward-node">
                 <div class="reward-card">
-                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/4/4c/DigitalRGB.png" alt="Digital RGB"></div>
-                    <div class="reward-info">
-                        <div class="lvl-badge">LEVEL 8</div>
-                        <div class="reward-name">Digital RGB Skin</div>
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/4/4c/DigitalRGB.png"></div>
+                    <div>
+                        <div class="lvl-tag">LEVEL 6</div>
+                        <div class="reward-name">Digital RGB</div>
                         <span class="badge badge-free">Free</span>
-                        <span class="badge badge-limited">Texture</span>
-                        <div class="reward-desc">An animated, shifting digital grid that brings a high-tech vibe to any car.</div>
+                        <span class="badge badge-type">Texture</span>
+                        <div class="reward-desc">An animated vehicle skin with shifting LED patterns and high-tech glow.</div>
                     </div>
                 </div>
             </div>
 
+            <div class="reward-node">
+                <div class="reward-card">
+                    <div class="reward-img"><img src="https://via.placeholder.com/140/000/333?text=Rims"></div>
+                    <div>
+                        <div class="lvl-tag">LEVEL 4</div>
+                        <div class="reward-name">Frostbite Rims</div>
+                        <span class="badge badge-pass">Season Pass</span>
+                        <span class="badge badge-type">Rims</span>
+                        <div class="reward-desc">Custom rims with a sharp, ice-fracture pattern.</div>
+                    </div>
+                </div>
             </div>
+
+            <div class="reward-node">
+                <div class="reward-card">
+                    <div class="reward-img"><img src="https://via.placeholder.com/140/000/333?text=Furniture"></div>
+                    <div>
+                        <div class="lvl-tag">LEVEL 2</div>
+                        <div class="reward-name">Winter Fireplace</div>
+                        <span class="badge badge-free">Free</span>
+                        <span class="badge badge-type">Furniture</span>
+                        <div class="reward-desc">A cozy addition to your apartment to survive the winter nights.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </body>
