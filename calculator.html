@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jailbreak Hub | Value Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -10,7 +10,7 @@
             --bg: #030508;
             --surface: #0a0c10;
             --card: #11141a;
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.12);
             --accent: #0070f3;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
@@ -18,265 +18,266 @@
             --red: #ff3333;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 90px;
+            margin: 0; padding-top: 80px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
-        .nav-top {
-            position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 5000;
-        }
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
-        .nav-logo span { color: var(--accent); }
-
-        /* --- STICKY STATUS BAR --- */
-        .status-header {
-            position: sticky; top: 70px; z-index: 4000;
-            background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border); padding: 20px 0;
+        /* --- STICKY MOBILE-FIRST HEADER --- */
+        .status-bar {
+            position: fixed; top: 0; width: 100%; z-index: 5000;
+            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border);
+            padding: 15px 20px;
         }
 
-        .status-container {
-            max-width: 1200px; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+        .status-flex {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; gap: 15px;
         }
 
-        .fairness-badge {
-            padding: 12px 35px; border-radius: 12px;
-            background: #000; border: 1px solid var(--border);
-            font-weight: 900; font-size: 1.4rem; letter-spacing: 1px;
+        .badge {
+            background: #000; border: 2px solid var(--border);
+            padding: 12px 20px; border-radius: 12px;
+            text-align: center; flex-grow: 1;
         }
 
-        .controls { display: flex; gap: 10px; }
-        .btn {
-            padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border);
-            background: var(--card); color: white; cursor: pointer; font-weight: 700;
-            font-size: 0.75rem; text-transform: uppercase;
+        .badge-text { font-weight: 900; font-size: 1.2rem; display: block; letter-spacing: 1px; }
+        .diff-text { font-family: 'JetBrains Mono'; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; }
+
+        .action-btns { display: flex; gap: 10px; }
+        .icon-btn {
+            background: var(--card); border: 1px solid var(--border);
+            color: white; padding: 12px; border-radius: 12px; cursor: pointer;
+            font-weight: 800; font-size: 0.8rem; text-transform: uppercase;
         }
-        .btn:hover { background: var(--accent); border-color: var(--accent); }
-        .btn-red:hover { background: var(--red); border-color: var(--red); }
 
         /* --- MAIN LAYOUT --- */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        
-        .side-section { margin-bottom: 60px; }
+        .wrapper { max-width: 1400px; margin: 20px auto; padding: 0 15px 100px; }
+
         .side-title {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 25px; border-bottom: 2px solid var(--border); padding-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: var(--surface); border-radius: 20px 20px 0 0;
+            border: 1px solid var(--border); border-bottom: none; margin-top: 20px;
         }
-        .side-title h2 { margin: 0; font-size: 2rem; font-weight: 900; font-style: italic; text-transform: uppercase; }
-        .side-total { font-family: 'JetBrains Mono'; font-size: 2rem; color: var(--green); font-weight: 800; }
+        .side-name { font-weight: 900; text-transform: uppercase; font-style: italic; font-size: 1.5rem; }
+        .side-total { font-family: 'JetBrains Mono'; color: var(--green); font-size: 1.5rem; font-weight: 800; }
 
-        /* --- ITEM GRID --- */
-        .item-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-            gap: 25px; 
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 15px; background: rgba(255,255,255,0.02);
+            padding: 20px; border: 1px solid var(--border); border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
         }
 
-        .item-card {
+        /* Responsive grid for larger screens */
+        @media (min-width: 768px) {
+            .item-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+        }
+
+        /* --- ITEM CARDS (LIST STYLE) --- */
+        .card {
             background: var(--card); border: 1px solid var(--border);
-            border-radius: 20px; overflow: hidden; position: relative;
-            animation: fadeIn 0.3s ease;
+            border-radius: 18px; overflow: hidden; position: relative;
+            transition: transform 0.2s;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .img-wrap {
-            width: 100%; height: 180px; background: #000;
+        .img-box {
+            width: 100%; height: 160px; background: #000;
             display: flex; align-items: center; justify-content: center;
         }
-        .img-wrap img { width: 80%; height: 80%; object-fit: contain; }
+        .img-box img { width: 85%; height: 85%; object-fit: contain; }
 
-        .card-info { padding: 20px; border-top: 1px solid var(--border); }
-        .card-info .cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
-        .card-info h3 { margin: 5px 0 15px 0; font-size: 1.1rem; font-weight: 800; }
+        .card-meta { padding: 15px; }
+        .card-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; }
+        .card-name { font-weight: 800; font-size: 1rem; margin: 4px 0 12px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .stat-row {
-            display: flex; justify-content: space-between; 
-            padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px;
+        .val-pill {
+            background: rgba(0,0,0,0.4); padding: 8px; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .stat-label { font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
-        .stat-value { font-family: 'JetBrains Mono'; color: var(--green); font-weight: 700; }
+        .val-pill span { font-family: 'JetBrains Mono'; color: var(--green); font-size: 0.9rem; }
 
-        .remove-x {
-            position: absolute; top: 10px; right: 10px;
+        .remove-tap {
+            position: absolute; top: 8px; right: 8px;
             background: var(--red); color: white; border: none;
-            width: 28px; height: 28px; border-radius: 8px;
-            cursor: pointer; font-weight: 900; font-size: 1.2rem;
+            width: 32px; height: 32px; border-radius: 10px;
+            font-weight: 900; cursor: pointer; z-index: 5;
         }
 
-        .add-card {
-            border: 2px dashed var(--border); border-radius: 20px;
-            height: 300px; display: flex; flex-direction: column;
+        .add-btn-large {
+            border: 3px dashed var(--border); border-radius: 18px;
+            height: 240px; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             color: var(--text-dim); font-weight: 800; cursor: pointer;
-            gap: 15px; font-size: 0.8rem; text-transform: uppercase;
+            text-transform: uppercase; font-size: 0.9rem; gap: 10px;
         }
-        .add-card:hover { border-color: var(--accent); color: white; background: rgba(0, 112, 243, 0.05); }
+        .add-btn-large:active { background: var(--accent); color: white; border-color: white; }
 
-        /* --- SEARCH MODAL --- */
-        #modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            display: none; align-items: center; justify-content: center; z-index: 9999;
-            backdrop-filter: blur(15px);
+        /* --- FULL SCREEN SEARCH --- */
+        #searchOverlay {
+            position: fixed; inset: 0; background: var(--bg);
+            z-index: 9999; display: none; flex-direction: column;
+            padding: 20px;
         }
-        .modal-body {
-            background: var(--surface); border: 1px solid var(--border);
-            width: 95%; max-width: 600px; border-radius: 30px; padding: 35px;
-            max-height: 80vh; display: flex; flex-direction: column;
-        }
-        .search-bar {
-            width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 18px; border-radius: 15px; color: #fff; margin-bottom: 15px; font-size: 1rem;
-        }
-        .filter-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
-        .tag { 
-            padding: 6px 15px; border-radius: 100px; background: var(--card); 
-            font-size: 0.65rem; font-weight: 800; cursor: pointer; white-space: nowrap; border: 1px solid var(--border);
-        }
-        .tag.active { background: var(--accent); border-color: var(--accent); }
 
-        .result-list { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .result-item {
-            padding: 15px; background: var(--card); border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        .search-top { display: flex; gap: 15px; margin-bottom: 20px; }
+        .big-search {
+            flex-grow: 1; background: var(--surface); border: 2px solid var(--border);
+            border-radius: 15px; padding: 18px; color: white; font-size: 1.1rem;
+            outline: none;
         }
-        .result-item:hover { background: var(--accent); }
+        .big-search:focus { border-color: var(--accent); }
+
+        .close-overlay {
+            background: var(--red); color: white; border: none;
+            padding: 0 25px; border-radius: 15px; font-weight: 900; cursor: pointer;
+        }
+
+        .filter-scroll {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px;
+            margin-bottom: 15px; scrollbar-width: none;
+        }
+        .filter-chip {
+            padding: 10px 25px; border-radius: 50px; background: var(--card);
+            border: 1px solid var(--border); white-space: nowrap; font-weight: 800;
+            font-size: 0.8rem; cursor: pointer;
+        }
+        .filter-chip.active { background: var(--accent); border-color: var(--accent); }
+
+        .results-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px; overflow-y: auto; flex-grow: 1; padding-bottom: 40px;
+        }
+        @media (min-width: 768px) {
+            .results-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+        }
+
+        .result-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 15px; padding: 15px; text-align: center;
+            cursor: pointer;
+        }
+        .result-card:active { transform: scale(0.95); background: var(--accent); }
+        .result-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="nav-top">
-        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-    </nav>
-
-    <div class="status-header">
-        <div class="status-container">
-            <div>
-                <div class="fairness-badge" id="status">EQUAL</div>
-                <div id="difference" style="color: var(--text-dim); font-size: 0.8rem; font-weight: 700; margin-top: 5px;">DIFFERENCE: $0</div>
+    <div class="status-bar">
+        <div class="status-flex">
+            <div class="badge">
+                <span class="badge-text" id="status">EQUAL</span>
+                <span class="diff-text" id="difference">DIFF: $0</span>
             </div>
-            <div class="controls">
-                <button class="btn" onclick="swapSides()">Swap Sides</button>
-                <button class="btn btn-red" onclick="clearAll()">Clear All</button>
+            <div class="action-btns">
+                <button class="icon-btn" onclick="swapSides()">Swap</button>
+                <button class="icon-btn" style="color:var(--red)" onclick="clearAll()">Clear</button>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <section class="side-section">
-            <div class="side-title">
-                <h2>Your Side</h2>
-                <div class="side-total" id="valA">$0</div>
+    <div class="wrapper">
+        <div class="side-title">
+            <span class="side-name">Your Side</span>
+            <span class="side-total" id="valA">$0</span>
+        </div>
+        <div class="item-grid" id="gridA">
+            <div class="add-btn-large" onclick="openPicker('A')">
+                <span style="font-size: 3rem;">+</span>
+                Add Item
             </div>
-            <div class="item-grid" id="gridA">
-                <div class="add-card" onclick="openSearch('A')">
-                    <span style="font-size: 3rem;">+</span>
-                    Add Item
-                </div>
-            </div>
-        </section>
+        </div>
 
-        <section class="side-section">
-            <div class="side-title">
-                <h2>Their Side</h2>
-                <div class="side-total" id="valB">$0</div>
+        <div class="side-title">
+            <span class="side-name">Their Side</span>
+            <span class="side-total" id="valB">$0</span>
+        </div>
+        <div class="item-grid" id="gridB">
+            <div class="add-btn-large" onclick="openPicker('B')">
+                <span style="font-size: 3rem;">+</span>
+                Add Item
             </div>
-            <div class="item-grid" id="gridB">
-                <div class="add-card" onclick="openSearch('B')">
-                    <span style="font-size: 3rem;">+</span>
-                    Add Item
-                </div>
-            </div>
-        </section>
+        </div>
     </div>
 
-    <div id="modal">
-        <div class="modal-body">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <h3 style="margin:0; font-weight:900; text-transform:uppercase;">Select Item</h3>
-                <button onclick="closeSearch()" style="background:none; border:none; color:var(--red); font-weight:900; cursor:pointer;">CLOSE</button>
-            </div>
-            <input type="text" id="mSearch" class="search-bar" placeholder="Search item name..." oninput="filterResults()">
-            <div class="filter-tags" id="tags">
-                <div class="tag active" onclick="setFilter('All', this)">All</div>
-                <div class="tag" onclick="setFilter('Vehicles', this)">Vehicles</div>
-                <div class="tag" onclick="setFilter('Textures', this)">Textures</div>
-                <div class="tag" onclick="setFilter('Colors', this)">Colors</div>
-                <div class="tag" onclick="setFilter('Rims', this)">Rims</div>
-                <div class="tag" onclick="setFilter('Spoilers', this)">Spoilers</div>
-            </div>
-            <div id="mResults" class="result-list"></div>
+    <div id="searchOverlay">
+        <div class="search-top">
+            <input type="text" id="mainSearch" class="big-search" placeholder="Search item name..." oninput="renderPicker()">
+            <button class="close-overlay" onclick="closePicker()">X</button>
         </div>
+
+        <div class="filter-scroll" id="filters">
+            <div class="filter-chip active" onclick="setFilter('All', this)">All Items</div>
+            <div class="filter-chip" onclick="setFilter('Vehicles', this)">Vehicles</div>
+            <div class="filter-chip" onclick="setFilter('Textures', this)">Textures</div>
+            <div class="filter-chip" onclick="setFilter('Colors', this)">Colors</div>
+            <div class="filter-chip" onclick="setFilter('Rims', this)">Rims</div>
+            <div class="filter-chip" onclick="setFilter('Spoilers', this)">Spoilers</div>
+        </div>
+
+        <div class="results-grid" id="pickerResults"></div>
     </div>
 
     <script src="Values.js"></script>
     <script>
         let sideA = [];
         let sideB = [];
-        let activeSide = 'A';
-        let currentFilter = 'All';
+        let currentSide = 'A';
+        let activeFilter = 'All';
 
-        function openSearch(side) {
-            activeSide = side;
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('mSearch').focus();
-            filterResults();
+        function openPicker(side) {
+            currentSide = side;
+            document.getElementById('searchOverlay').style.display = 'flex';
+            document.getElementById('mainSearch').value = '';
+            renderPicker();
         }
 
-        function closeSearch() { document.getElementById('modal').style.display = 'none'; }
+        function closePicker() { document.getElementById('searchOverlay').style.display = 'none'; }
 
         function setFilter(cat, el) {
-            currentFilter = cat;
-            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            activeFilter = cat;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            filterResults();
+            renderPicker();
         }
 
-        function filterResults() {
-            const query = document.getElementById('mSearch').value.toLowerCase();
-            const list = document.getElementById('mResults');
-            list.innerHTML = '';
+        function renderPicker() {
+            const query = document.getElementById('mainSearch').value.toLowerCase();
+            const container = document.getElementById('pickerResults');
+            container.innerHTML = '';
 
-            let all = [];
+            let list = [];
             for(let cat in db) {
                 db[cat].forEach(item => {
-                    if (currentFilter === 'All' || cat === currentFilter) {
-                        all.push({...item, cat});
+                    if (activeFilter === 'All' || cat === activeFilter) {
+                        list.push({...item, cat});
                     }
                 });
             }
 
-            all.filter(i => i.name.toLowerCase().includes(query)).slice(0, 20).forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'result-item';
-                row.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <img src="${item.image}" style="width:40px; height:40px; object-fit:contain;">
-                        <div>
-                            <div style="font-size:0.6rem; color:var(--accent); font-weight:800;">${item.cat}</div>
-                            <div style="font-weight:800;">${item.name}</div>
-                        </div>
-                    </div>
-                    <div style="font-family:'JetBrains Mono'; color:var(--green);">$${item.cash_value.toLocaleString()}</div>
+            list.filter(i => i.name.toLowerCase().includes(query)).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'result-card';
+                div.innerHTML = `
+                    <img src="${item.image}">
+                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">${item.cat}</div>
+                    <div style="font-weight:800; font-size:0.8rem; margin:5px 0;">${item.name}</div>
+                    <div style="font-family:'JetBrains Mono'; color:var(--green); font-size:0.8rem;">$${item.cash_value.toLocaleString()}</div>
                 `;
-                row.onclick = () => {
-                    if (activeSide === 'A') sideA.push(item);
+                div.onclick = () => {
+                    if (currentSide === 'A') sideA.push(item);
                     else sideB.push(item);
-                    closeSearch();
+                    closePicker();
                     updateUI();
                 };
-                list.appendChild(row);
+                container.appendChild(div);
             });
         }
 
@@ -287,52 +288,44 @@
         }
 
         function clearAll() { sideA = []; sideB = []; updateUI(); }
-
-        function swapSides() {
-            const temp = [...sideA];
-            sideA = [...sideB];
-            sideB = temp;
-            updateUI();
-        }
+        function swapSides() { [sideA, sideB] = [sideB, sideA]; updateUI(); }
 
         function updateUI() {
-            const render = (items, gridId, sideKey) => {
+            const draw = (items, gridId, side) => {
                 const grid = document.getElementById(gridId);
                 let html = items.map((item, i) => `
-                    <div class="item-card">
-                        <button class="remove-x" onclick="removeItem('${sideKey}', ${i})">×</button>
-                        <div class="img-wrap"><img src="${item.image}"></div>
-                        <div class="card-info">
-                            <span class="cat">${item.cat}</span>
-                            <h3>${item.name}</h3>
-                            <div class="stat-row">
-                                <span class="stat-label">Value</span>
-                                <span class="stat-value">$${item.cash_value.toLocaleString()}</span>
+                    <div class="card">
+                        <button class="remove-tap" onclick="removeItem('${side}', ${i})">×</button>
+                        <div class="img-box"><img src="${item.image}"></div>
+                        <div class="card-meta">
+                            <span class="card-cat">${item.cat}</span>
+                            <div class="card-name">${item.name}</div>
+                            <div class="val-pill">
+                                <span style="font-size:0.5rem; font-weight:800; color:var(--text-dim)">VALUE</span>
+                                <span>$${item.cash_value.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
                 `).join('');
-                html += `<div class="add-card" onclick="openSearch('${sideKey}')"><span style="font-size: 3rem;">+</span>Add Item</div>`;
+                html += `<div class="add-btn-large" onclick="openPicker('${side}')"><span style="font-size: 3rem;">+</span>Add Item</div>`;
                 grid.innerHTML = html;
             };
 
-            render(sideA, 'gridA', 'A');
-            render(sideB, 'gridB', 'B');
+            draw(sideA, 'gridA', 'A');
+            draw(sideB, 'gridB', 'B');
 
             const totalA = sideA.reduce((s, i) => s + i.cash_value, 0);
             const totalB = sideB.reduce((s, i) => s + i.cash_value, 0);
-
             document.getElementById('valA').innerText = `$${totalA.toLocaleString()}`;
             document.getElementById('valB').innerText = `$${totalB.toLocaleString()}`;
 
             const diff = totalA - totalB;
             const status = document.getElementById('status');
-            document.getElementById('difference').innerText = `DIFFERENCE: $${Math.abs(diff).toLocaleString()}`;
+            document.getElementById('difference').innerText = `DIFF: $${Math.abs(diff).toLocaleString()}`;
 
             if (totalA === 0 && totalB === 0) { status.innerText = "EQUAL"; status.style.color = "white"; }
-            else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.1)) { status.innerText = "FAIR TRADE"; status.style.color = "var(--green)"; }
-            else if (diff > 0) { status.innerText = "SIDE A OVERPAYING"; status.style.color = "var(--red)"; }
-            else { status.innerText = "SIDE B OVERPAYING"; status.style.color = "var(--red)"; }
+            else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.12)) { status.innerText = "FAIR TRADE"; status.style.color = "var(--green)"; }
+            else { status.innerText = diff > 0 ? "A OVERPAYING" : "B OVERPAYING"; status.style.color = "var(--red)"; }
         }
     </script>
 </body>
