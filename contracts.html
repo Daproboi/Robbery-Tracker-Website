@@ -1,3 +1,7 @@
+Season Contracts (contracts.html)
+Here is the complete, synchronized code for your Season Contracts page. It features the live countdown timers, the dynamic API-driven contract cards, and the Level 10 XP calculator, all wrapped in your signature Jailbreak Hub UI.
+
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +66,6 @@
         .drop-link:hover { background: var(--card); color: #fff; }
         .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
 
-        /* Live Indicator */
         .live-dot {
             width: 6px; height: 6px; background: var(--green);
             border-radius: 50%; display: inline-block;
@@ -72,7 +75,6 @@
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        /* Fix for Tailwind conflicts */
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
@@ -130,7 +132,7 @@
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff88] opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00ff88]"></span>
                     </span>
-                    <p id="season-name" class="text-xl font-bold italic">LOADING...</p>
+                    <p id="season-name" class="text-xl font-bold italic">FETCHING...</p>
                 </div>
             </div>
         </div>
@@ -150,14 +152,14 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                 <div class="md:w-1/2">
                     <h2 class="text-2xl font-black uppercase mb-2">Road to <span class="text-[#00ff88]">Level 10</span></h2>
-                    <p class="text-gray-400 text-sm">Input your current XP to see how many days of grinding are left. Estimates include average Daily XP + Weekly Contracts.</p>
+                    <p class="text-gray-400 text-sm">Input your current XP to estimate days remaining. Calculation based on max Daily XP + Weekly Contracts.</p>
                 </div>
                 <div class="flex gap-4 items-end">
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Current XP</label>
-                        <input type="number" id="current-xp" placeholder="e.g. 2400" class="bg-black/50 border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none transition-all text-white">
+                        <input type="number" id="current-xp" placeholder="e.g. 2500" class="bg-black/50 border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none transition-all text-white font-mono">
                     </div>
-                    <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg transition-all active:scale-95">CALCULATE</button>
+                    <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg transition-all active:scale-95 uppercase text-sm tracking-widest">Calculate</button>
                 </div>
             </div>
             <div id="calc-result" class="mt-8 hidden">
@@ -170,8 +172,8 @@
     </div>
 
     <footer class="mt-20 py-10 border-t border-white/5 text-center text-gray-500">
-        <p class="text-[10px] uppercase tracking-widest mb-2">Estimates provided by Jailbreak Hub Engine</p>
-        <p class="text-xs">&copy; 2026 Jailbreak Hub. All rights reserved.</p>
+        <p class="text-[10px] uppercase tracking-widest mb-2">Automated XP Tracking via API</p>
+        <p class="text-xs">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
     <script>
@@ -199,7 +201,7 @@
             document.getElementById('weekly-timer').innerText = `${wD}d ${wH}h ${wM}m`;
         }
 
-        // --- DATA ENGINE ---
+        // --- CONTRACT API ENGINE ---
         async function fetchContracts() {
             const container = document.getElementById('contracts-container');
             try {
@@ -229,17 +231,17 @@
                             <h3 class="text-xl font-black mb-2 group-hover:text-[#0070f3] transition-colors uppercase italic">${item.title}</h3>
                             <p class="text-gray-500 text-sm leading-relaxed mb-8">${item.description}</p>
                             <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 group-hover:w-full transition-all duration-1000 shadow-[0_0_15px_rgba(0,112,243,0.5)]"></div>
+                                <div class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 group-hover:w-full transition-all duration-1000"></div>
                             </div>
                         </div>
                     `;
                 });
             } catch (e) {
-                document.getElementById('status-text').innerText = "Data temporary unavailable. Using local cache.";
+                document.getElementById('status-text').innerText = "API offline. Displaying local data.";
             }
         }
 
-        // --- CALCULATOR ENGINE ---
+        // --- XP CALC ENGINE ---
         function calculateProgress() {
             const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
             const targetXp = 4000; 
