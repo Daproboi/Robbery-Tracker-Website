@@ -1,9 +1,15 @@
+To keep your site fully synchronized, I have updated the Value Calculator with the classic layout, your specific button order, and the hover dropdown for the Values section.
+
+The Hyperchrome Pity link is now a primary button called Pity Calc, and the calculator itself remains focused on vehicle and item trades.
+
+Updated Value Calculator (calculator.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Trade Calculator</title>
+    <title>Jailbreak Hub | Value Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,19 +18,18 @@
             --card: #11141a;
             --border: rgba(255, 255, 255, 0.08);
             --accent: #0070f3;
-            --accent-glow: rgba(0, 112, 243, 0.3);
-            --green: #00ff88;
-            --red: #ff3333;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
+            --green: #00ff88;
+            --red: #ff3333;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 100px;
+            margin: 0; padding-top: 90px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
@@ -41,79 +46,64 @@
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
 
-        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 10px;
+            border-radius: 12px; min-width: 200px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: flex; align-items: center; gap: 10px; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
+        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
         .drop-link:hover { background: var(--card); color: var(--accent); }
 
-        /* --- CALCULATOR TOP BAR --- */
-        .calc-header {
-            max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+        /* --- CALCULATOR CONTENT --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
+        
+        .calc-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;
         }
 
-        .pity-alert {
-            background: linear-gradient(90deg, rgba(0, 112, 243, 0.1), transparent);
-            border: 1px solid var(--border); border-left: 4px solid var(--accent);
-            padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
-            text-decoration: none; color: #fff; width: 100%;
-        }
-        .pity-alert:hover { border-color: var(--accent); background: rgba(0, 112, 243, 0.15); }
-        .pity-tag { background: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
-
-        /* --- CALCULATOR LAYOUT --- */
-        .calc-container { 
-            max-width: 1200px; margin: auto; padding: 0 20px 100px; 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-
-        .trade-side {
+        .trade-box {
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 24px; padding: 30px; min-height: 500px;
+            border-radius: 24px; padding: 30px; min-height: 400px;
             display: flex; flex-direction: column;
         }
 
-        .side-header {
+        .box-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
+            margin-bottom: 20px; border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
         }
 
-        .side-header h2 { margin: 0; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .total-value { font-family: 'JetBrains Mono'; font-size: 1.4rem; font-weight: 700; color: var(--green); }
+        .box-header h2 { font-size: 1rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .value-counter { font-family: 'JetBrains Mono'; font-size: 1.4rem; color: var(--green); }
 
-        .item-list { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
-
-        .empty-slot {
-            height: 90px; border: 2px dashed var(--border); border-radius: 16px;
+        .item-slots { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
+        .slot {
+            height: 80px; border: 2px dashed var(--border); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            color: var(--text-dim); font-weight: 700; font-size: 0.75rem;
-            cursor: pointer;
+            color: var(--text-dim); font-weight: 700; cursor: pointer;
         }
-        .empty-slot:hover { border-color: var(--accent); color: #fff; background: rgba(255,255,255,0.02); }
+        .slot:hover { border-color: var(--accent); color: #fff; background: rgba(255,255,255,0.02); }
 
-        .results-bar {
-            grid-column: span 2; background: var(--surface); border: 1px solid var(--border);
-            border-radius: 20px; padding: 30px; text-align: center;
-            margin-top: 20px;
+        .result-bar {
+            grid-column: span 2; background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px;
         }
 
-        .status-badge {
-            display: inline-block; padding: 10px 30px; border-radius: 100px;
-            font-weight: 800; font-size: 1.2rem; text-transform: uppercase;
-            background: var(--card); border: 1px solid var(--border); margin-bottom: 15px;
+        .fairness-badge {
+            display: inline-block; padding: 8px 25px; border-radius: 100px;
+            background: #000; border: 1px solid var(--border);
+            font-weight: 800; font-size: 1.1rem; margin-bottom: 10px;
         }
 
-        footer { text-align: center; padding: 40px; color: #444; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        footer { padding: 40px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
+        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -122,67 +112,57 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            <a href="tracker.html" class="nav-link">Robbery Sniper</a>
+            <a href="pity.html" class="nav-link">Pity Calc</a>
             <div class="nav-item">
-                <a class="nav-link" style="color:#fff">Trading Tools ▼</a>
+                <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
-                    <a href="values.html" class="drop-link">📊 Value List</a>
-                    <a href="calculator.html" class="drop-link">⚖️ Value Calculator</a>
-                    <a href="pity.html" class="drop-link">💎 Pity Calculator</a>
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
+            <a href="tracker.html" class="nav-link">Robbery Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
 
-    <div class="calc-header">
-        <a href="pity.html" class="pity-alert">
-            <span class="pity-tag">New Tool</span>
-            <div>
-                <strong style="display: block; font-size: 0.9rem;">HyperChrome Pity Calculator</strong>
-                <span style="font-size: 0.75rem; color: var(--text-dim);">Trading a Chrome? Check its level-adjusted value here.</span>
-            </div>
-            <span style="margin-left: auto; color: var(--accent);">Open Tool →</span>
-        </a>
-    </div>
+    <div class="container">
+        <h1>Value Calculator</h1>
+        <p style="color: var(--text-dim);">Compare item values to ensure a fair trade.</p>
 
-    <div class="calc-container">
-        <div class="trade-side">
-            <div class="side-header">
-                <h2>Your Offer (Side A)</h2>
-                <div class="total-value" id="valA">$0</div>
+        <div class="calc-grid">
+            <div class="trade-box">
+                <div class="box-header">
+                    <h2>Your Side</h2>
+                    <div class="value-counter" id="valA">$0</div>
+                </div>
+                <div class="item-slots">
+                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                </div>
             </div>
-            <div class="item-list" id="listA">
-                <div class="empty-slot" onclick="openPicker('A')">ADD ITEM FROM DATABASE</div>
-            </div>
-        </div>
 
-        <div class="trade-side">
-            <div class="side-header">
-                <h2>Their Offer (Side B)</h2>
-                <div class="total-value" id="valB">$0</div>
+            <div class="trade-box">
+                <div class="box-header">
+                    <h2>Their Side</h2>
+                    <div class="value-counter" id="valB">$0</div>
+                </div>
+                <div class="item-slots">
+                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                </div>
             </div>
-            <div class="item-list" id="listB">
-                <div class="empty-slot" onclick="openPicker('B')">ADD ITEM FROM DATABASE</div>
-            </div>
-        </div>
 
-        <div class="results-bar">
-            <div class="status-badge" id="tradeStatus">PENDING</div>
-            <p id="tradeDiff" style="color: var(--text-dim); margin: 0;">Add items to calculate trade fairness.</p>
+            <div class="result-bar">
+                <div class="fairness-badge" id="status">EQUAL</div>
+                <div style="font-size: 0.9rem; color: var(--text-dim);" id="difference">Difference: $0</div>
+            </div>
         </div>
     </div>
 
     <footer>
-        Disclaimer: Trading values are estimates. We are not liable for any in-game losses.
+        <div class="legal">Trading carries risk. We are not liable for any losses incurred.</div>
+        &copy; 2026 Jailbreak Hub.
     </footer>
 
-    <script src="Values.js"></script>
-    <script>
-        // Placeholder logic for adding items
-        function openPicker(side) {
-            alert("This would open your item selector for side " + side + ". Ensure Values.js is loaded!");
-        }
-    </script>
 </body>
 </html>
