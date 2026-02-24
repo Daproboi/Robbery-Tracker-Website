@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Season 31 Contracts</title>
+    <title>Jailbreak Hub | Season 31 Progression</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -18,8 +18,6 @@
             --green: #00ff88;
         }
 
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
@@ -28,7 +26,7 @@
             min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
+        /* Nav Styles */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -41,34 +39,18 @@
         .nav-logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-link:hover { color: #fff; }
 
-        .dropdown {
-            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 10px;
-            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
-        .drop-link { 
-            display: flex; flex-direction: column; padding: 12px; 
-            color: var(--text-dim); text-decoration: none; 
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
-            margin-bottom: 4px;
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
         }
-        .drop-link:hover { background: var(--card); color: #fff; }
-
-        .live-dot {
-            width: 6px; height: 6px; background: var(--green);
-            border-radius: 50%; display: inline-block;
-            margin-left: 5px; margin-bottom: 2px;
-            box-shadow: 0 0 10px var(--green);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -77,96 +59,150 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            <div class="nav-item">
-                <a class="nav-link" style="color: #fff;">Seasons <div class="live-dot"></div> ▼</a>
-                <div class="dropdown">
-                    <a href="contracts.html" class="drop-link" style="color: var(--green)">Season Contracts</a>
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
-                </div>
-            </div>
+            <a href="contracts.html" class="nav-link" style="color: #fff;">Contracts</a>
             <a href="values.html" class="nav-link">Values</a>
             <a href="pity.html" class="nav-link">Pity Calc</a>
-            <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
 
     <div class="max-w-7xl mx-auto px-6 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 text-center md:text-left">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset (UTC)</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset</p>
                 <p id="daily-timer" class="text-3xl font-mono text-[#0070f3]">00:00:00</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Contracts End In</p>
-                <p class="text-3xl font-mono text-[#00ff88]">6d 12h 00m</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Contract Deadline</p>
+                <p class="text-3xl font-mono text-[#00ff88]">6d 12h 0m</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Season Status</p>
-                <p class="text-xl font-bold italic">SEASON 31 LIVE</p>
+            <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl flex items-center gap-3">
+                <div class="h-3 w-3 rounded-full bg-[#00ff88] animate-pulse"></div>
+                <p class="text-xl font-bold italic uppercase tracking-tighter">Season 31 Progression</p>
             </div>
         </div>
 
-        <h2 class="text-3xl font-black uppercase italic mb-6 border-l-4 border-[#0070f3] pl-4">Season 31 Weekly Contracts</h2>
-        <div id="contracts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Collect $4k Bounty</h3>
-                <p class="text-gray-500 text-sm mb-6">Collect a bounty of $4,000 without dying.</p>
+        <div class="bg-gradient-to-br from-[#0a0c10] to-[#030508] border border-white/10 rounded-3xl p-8 mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+                <div>
+                    <h2 class="text-3xl font-black uppercase italic tracking-tighter">Level <span class="text-[#0070f3]">Calculator</span></h2>
+                    <p class="text-gray-400 text-sm">Select your current level to see remaining requirements for Season 31.</p>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Current Level</label>
+                        <select id="level-select" onchange="calculateProgress()" class="bg-white/5 border border-white/20 rounded-xl p-3 w-44 text-white font-bold focus:border-[#0070f3] outline-none">
+                            <option value="1">Level 1</option>
+                            <option value="2">Level 2</option>
+                            <option value="3">Level 3</option>
+                            <option value="4">Level 4</option>
+                            <option value="5">Level 5</option>
+                            <option value="6">Level 6</option>
+                            <option value="7">Level 7</option>
+                            <option value="8">Level 8</option>
+                            <option value="9">Level 9</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Current XP</label>
+                        <input type="number" id="current-xp" oninput="calculateProgress()" placeholder="0" class="bg-white/5 border border-white/20 rounded-xl p-3 w-32 text-white font-mono focus:border-[#0070f3] outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                    <p id="next-level-text" class="text-sm font-bold uppercase text-gray-400">Next Unlock: Level 2</p>
+                    <p id="xp-ratio" class="font-mono text-[#00ff88]">0 / 160 XP</p>
+                </div>
+                <div class="w-full bg-white/5 h-6 rounded-full overflow-hidden border border-white/10 p-1">
+                    <div id="progress-bar" class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 rounded-full transition-all duration-500"></div>
+                </div>
+                <div class="pt-6 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white/5 p-4 rounded-xl">
+                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Remaining to Max</p>
+                        <p id="total-left" class="text-xl font-bold text-white font-mono">3,325 XP</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl">
+                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Time Estimate</p>
+                        <p id="grind-estimate" class="text-xl font-bold text-[#00ff88] font-mono">~34 Days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-black uppercase italic mb-6 border-l-4 border-[#0070f3] pl-4">Season 31 Weekly Tasks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
+                <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
+                <h3 class="text-lg font-bold mt-2">$4,000 Bounty</h3>
+                <p class="text-gray-500 text-sm mb-4">Collect without dying.</p>
                 <p class="text-[#00ff88] font-mono">+25 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Bank Specialist</h3>
-                <p class="text-gray-500 text-sm mb-6">Rob the bank 4 times.</p>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
+                <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
+                <h3 class="text-lg font-bold mt-2">Rob Bank (4x)</h3>
+                <p class="text-gray-500 text-sm mb-4">Complete successful robberies.</p>
                 <p class="text-[#00ff88] font-mono">+60 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20">Criminal</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Tomb Raider</h3>
-                <p class="text-gray-500 text-sm mb-6">Rob the tomb 4 times.</p>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
+                <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
+                <h3 class="text-lg font-bold mt-2">Rob Tomb (4x)</h3>
+                <p class="text-gray-500 text-sm mb-4">Navigate the obstacles.</p>
                 <p class="text-[#00ff88] font-mono">+60 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Mass Arrest</h3>
-                <p class="text-gray-500 text-sm mb-6">Arrest 14 criminals.</p>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
+                <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
+                <h3 class="text-lg font-bold mt-2">Arrest 14 Criminals</h3>
+                <p class="text-gray-500 text-sm mb-4">Clear the server.</p>
                 <p class="text-[#00ff88] font-mono">+50 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Bounty Hunter</h3>
-                <p class="text-gray-500 text-sm mb-6">Arrest a criminal with a $3,000+ bounty.</p>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
+                <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
+                <h3 class="text-lg font-bold mt-2">Targeted Arrest</h3>
+                <p class="text-gray-500 text-sm mb-4">Arrest a $3,000+ bounty.</p>
                 <p class="text-[#00ff88] font-mono">+30 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-7">
-                <span class="text-[10px] font-black uppercase px-2 py-1 rounded bg-[#0070f3]/10 text-[#0070f3] border border-[#0070f3]/20">Police</span>
-                <h3 class="text-xl font-black mt-4 mb-2 uppercase italic">Pit Maneuver</h3>
-                <p class="text-gray-500 text-sm mb-6">Pit maneuver 5 different criminals.</p>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
+                <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
+                <h3 class="text-lg font-bold mt-2">Pit Maneuver (5x)</h3>
+                <p class="text-gray-500 text-sm mb-4">Against 5 different players.</p>
                 <p class="text-[#00ff88] font-mono">+40 XP</p>
-            </div>
-        </div>
-
-        <div class="bg-gradient-to-r from-[#0a0c10] to-[#030508] border border-white/10 rounded-3xl p-8">
-            <h2 class="text-2xl font-black uppercase mb-2">Road to <span class="text-[#00ff88]">Level 10</span></h2>
-            <p class="text-gray-400 text-sm mb-6">Season 31 requires ~5,028 total XP. Input your current XP below.</p>
-            <div class="flex gap-4 items-end mb-8">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-gray-500 uppercase">Current XP</label>
-                    <input type="number" id="current-xp" placeholder="e.g. 1000" class="bg-black border border-white/20 rounded-lg p-3 w-32 focus:border-[#0070f3] outline-none text-white">
-                </div>
-                <button onclick="calculateProgress()" class="bg-[#0070f3] hover:bg-[#005cc5] text-white font-bold px-6 py-3 rounded-lg active:scale-95">CALCULATE</button>
-            </div>
-            <div id="calc-result" class="hidden">
-                <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden mb-4">
-                    <div id="calc-progress-bar" class="bg-gradient-to-r from-[#0070f3] to-[#00ff88] h-full w-0 transition-all duration-1000"></div>
-                </div>
-                <p id="calc-text" class="text-center font-mono text-[#00ff88] text-sm uppercase"></p>
             </div>
         </div>
     </div>
 
     <script>
+        // Updated Season 31 XP Data
+        const seasonXP = {
+            1: 160, 2: 192, 3: 230, 4: 276, 5: 332, 
+            6: 398, 7: 477, 8: 573, 9: 687
+        };
+
+        function calculateProgress() {
+            const level = parseInt(document.getElementById('level-select').value);
+            const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
+            const targetXpForLevel = seasonXP[level];
+            
+            document.getElementById('next-level-text').innerText = `Next Unlock: Level ${level + 1}`;
+            document.getElementById('xp-ratio').innerText = `${currentXp} / ${targetXpForLevel} XP`;
+            
+            const percentage = Math.min((currentXp / targetXpForLevel) * 100, 100);
+            document.getElementById('progress-bar').style.width = percentage + "%";
+
+            // Calculate total remaining to Level 10
+            let totalRemaining = targetXpForLevel - currentXp;
+            for (let i = level + 1; i <= 9; i++) {
+                totalRemaining += seasonXP[i];
+            }
+
+            const dailyAvg = 100; // Average daily earnings
+            const daysLeft = Math.ceil(totalRemaining / dailyAvg);
+
+            document.getElementById('total-left').innerText = `${totalRemaining.toLocaleString()} XP`;
+            document.getElementById('grind-estimate').innerText = `~${daysLeft} Days (at 100 XP/Day)`;
+        }
+
         function updateDailyTimer() {
             const now = new Date();
             const nextReset = new Date();
@@ -179,26 +215,9 @@
                 `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
 
-        function calculateProgress() {
-            const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
-            const targetXp = 5028; 
-            const xpNeeded = targetXp - currentXp;
-            const avgDailyXp = 100; 
-
-            document.getElementById('calc-result').classList.remove('hidden');
-            const perc = Math.min((currentXp / targetXp) * 100, 100);
-            document.getElementById('calc-progress-bar').style.width = perc + "%";
-
-            if (xpNeeded <= 0) {
-                document.getElementById('calc-text').innerText = "SEASON COMPLETE!";
-            } else {
-                const daysLeft = Math.ceil(xpNeeded / avgDailyXp);
-                document.getElementById('calc-text').innerText = `~${daysLeft} DAYS OF DAILY XP REMAINING FOR LEVEL 10`;
-            }
-        }
-
         setInterval(updateDailyTimer, 1000);
         updateDailyTimer();
+        calculateProgress();
     </script>
 </body>
 </html>
