@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,15 +50,15 @@
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 180px; padding: 10px;
+            border-radius: 12px; min-width: 200px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             transition: 0.3s ease;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 10px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
+        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
         .drop-link:hover { background: var(--card); color: var(--accent); }
 
-        /* --- STICKY HUD & ANALYSIS --- */
+        /* --- STICKY HUD --- */
         .hud-wrapper {
             position: sticky; top: 70px; z-index: 4000;
             padding: 20px 40px; background: rgba(3, 5, 8, 0.6);
@@ -80,7 +81,7 @@
         }
         .swap-btn:hover { border-color: var(--accent); transform: rotate(180deg) scale(1.1); }
 
-        /* --- TRADE ANALYSIS BAR --- */
+        /* --- ANALYSIS BAR --- */
         .analysis-bar {
             max-width: 1200px; margin: 15px auto 0;
             background: rgba(255,255,255,0.03); border-radius: 12px;
@@ -91,12 +92,10 @@
 
         /* --- LOGS --- */
         .logs-container { max-width: 1200px; margin: 30px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
-        .log-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 150px; position: relative; }
+        .log-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 120px; position: relative; }
         .log-box::before { content: attr(data-label); position: absolute; top: -10px; left: 20px; background: var(--bg); padding: 0 10px; font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
         
-        .log-entry { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; animation: slideIn 0.2s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
+        .log-entry { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; }
         .log-img { width: 40px; height: 40px; border-radius: 8px; background: #000; object-fit: contain; }
         .log-info { flex: 1; font-weight: 700; font-size: 0.85rem; }
         .log-remove { cursor: pointer; opacity: 0.4; font-size: 1.5rem; line-height: 1; }
@@ -104,35 +103,26 @@
 
         /* --- FILTERS & DISCOVERY --- */
         .discovery-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .search-hub { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; margin-bottom: 30px; position: relative; overflow: hidden; }
-        .search-hub::after { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); }
-        
+        .search-hub { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; margin-bottom: 30px; }
         .search-input { width: 100%; background: #000; border: 1px solid var(--border); padding: 16px 20px; border-radius: 12px; color: #fff; font-size: 1rem; margin-bottom: 20px; }
-        .search-input:focus { outline: none; border-color: var(--accent); }
         
-        .filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
         .pill { padding: 10px 18px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); color: var(--text-dim); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 12px var(--accent-glow); }
 
         /* --- ITEM GRID --- */
         .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; position: relative; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .card:hover { border-color: var(--accent); transform: translateY(-4px); }
-        
         .card-header { display: flex; gap: 15px; align-items: center; }
         .card-img-main { width: 70px; height: 70px; background: #000; border-radius: 12px; object-fit: contain; border: 1px solid var(--border); }
-        
         .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; }
         .stat-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 2px; }
         .stat-val { font-family: 'JetBrains Mono'; font-size: 0.85rem; font-weight: 700; }
-
         .btn-group { display: flex; gap: 10px; }
         .btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
         .btn-o { background: var(--green); color: #000; }
         .btn-r { background: #fff; color: #000; }
-
-        /* --- FOOTER TRENDS --- */
-        .trends-ticker { background: var(--surface); border-top: 1px solid var(--border); padding: 15px; text-align: center; font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -146,7 +136,8 @@
             <div class="nav-item">
                 <a class="nav-link" style="color:#fff">Values ▼</a>
                 <div class="dropdown">
-                    <a href="calculator.html" class="drop-link">Calculator</a>
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
                     <a href="market.html" class="drop-link">Market Trends</a>
                 </div>
             </div>
@@ -190,12 +181,7 @@
                 <div class="pill" data-type="sort" data-value="asc" onclick="updateFilter(this)">Low Value</div>
             </div>
         </div>
-
         <div class="item-grid" id="main-grid"></div>
-    </div>
-
-    <div class="trends-ticker">
-        🔥 Trending Now: Beam Hybrid (+2.5%) • Celsior (Stable) • Torpedo (High Demand)
     </div>
 
     <script src="Values.js"></script>
@@ -288,32 +274,18 @@
             const v1 = totalVal(offerList);
             const v2 = totalVal(requestList);
             const diff = v2 - v1;
-
             render(offerList, 'list-offering', 'offer');
             render(requestList, 'list-requesting', 'request');
-            
             document.getElementById('val-offering').innerText = `$${v1.toLocaleString()}`;
             document.getElementById('val-requesting').innerText = `$${v2.toLocaleString()}`;
             
-            // Analysis Logic
             const diffEl = document.getElementById('trade-diff');
             const statusEl = document.getElementById('trade-status');
-            
             diffEl.innerText = `Difference: ${diff >= 0 ? '+' : '-'}$${Math.abs(diff).toLocaleString()}`;
-            
-            if (v1 === 0 && v2 === 0) {
-                statusEl.innerText = "Balance: Neutral";
-                statusEl.style.color = "var(--text-dim)";
-            } else if (diff > 0) {
-                statusEl.innerText = "Result: Massive Win";
-                statusEl.style.color = "var(--green)";
-            } else if (diff < 0) {
-                statusEl.innerText = "Result: Potential Loss";
-                statusEl.style.color = "var(--red)";
-            } else {
-                statusEl.innerText = "Result: Fair Trade";
-                statusEl.style.color = "var(--accent)";
-            }
+            if (v1 === 0 && v2 === 0) { statusEl.innerText = "Balance: Neutral"; statusEl.style.color = "var(--text-dim)"; }
+            else if (diff > 0) { statusEl.innerText = "Result: Massive Win"; statusEl.style.color = "var(--green)"; }
+            else if (diff < 0) { statusEl.innerText = "Result: Potential Loss"; statusEl.style.color = "var(--red)"; }
+            else { statusEl.innerText = "Result: Fair Trade"; statusEl.style.color = "var(--accent)"; }
         }
         window.onload = refreshDiscovery;
     </script>
