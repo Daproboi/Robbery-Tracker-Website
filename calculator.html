@@ -45,18 +45,37 @@
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
+        /* DROPDOWN LOGIC */
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 200px; padding: 10px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
-        .drop-link:hover { background: var(--card); color: var(--accent); }
+        
+        .drop-link { 
+            display: flex; flex-direction: column; padding: 12px; 
+            color: var(--text-dim); text-decoration: none; 
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
+            margin-bottom: 4px;
+        }
+        .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+
+        /* Live Indicator */
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- CALCULATOR CONTENT --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
+        h1 { font-weight: 800; letter-spacing: -1px; margin-bottom: 5px; }
         
         .calc-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;
@@ -74,7 +93,7 @@
             padding-bottom: 15px;
         }
 
-        .box-header h2 { font-size: 1rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .box-header h2 { font-size: 1rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; font-weight: 800; }
         .value-counter { font-family: 'JetBrains Mono'; font-size: 1.4rem; color: var(--green); }
 
         .item-slots { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
@@ -82,6 +101,7 @@
             height: 80px; border: 2px dashed var(--border); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             color: var(--text-dim); font-weight: 700; cursor: pointer;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
         }
         .slot:hover { border-color: var(--accent); color: #fff; background: rgba(255,255,255,0.02); }
 
@@ -91,9 +111,10 @@
         }
 
         .fairness-badge {
-            display: inline-block; padding: 8px 25px; border-radius: 100px;
+            display: inline-block; padding: 8px 30px; border-radius: 100px;
             background: #000; border: 1px solid var(--border);
             font-weight: 800; font-size: 1.1rem; margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
         footer { padding: 40px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
@@ -106,15 +127,31 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            <a href="pity.html" class="nav-link">Pity Calc</a>
+            
+            <div class="nav-item">
+                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">
+                        Season Contracts
+                        <span>XP Tracker & Weekly Tasks</span>
+                    </a>
+                    <a href="prizes.html" class="drop-link">
+                        Season Rewards
+                        <span>View Level 1-10 Prizes</span>
+                    </a>
+                </div>
+            </div>
+
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator <span style="color: var(--accent)">Interactive Tool</span></a>
                 </div>
             </div>
-            <a href="tracker.html" class="nav-link">Robbery Tracker</a>
+
+            <a href="pity.html" class="nav-link">Pity Calc</a>
+            <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
@@ -130,8 +167,9 @@
                     <div class="value-counter" id="valA">$0</div>
                 </div>
                 <div class="item-slots">
-                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
                 </div>
             </div>
 
@@ -141,8 +179,9 @@
                     <div class="value-counter" id="valB">$0</div>
                 </div>
                 <div class="item-slots">
-                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
-                    <div class="slot" onclick="alert('Item Selector Coming Soon')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
+                    <div class="slot" onclick="alert('Item Selector coming in next update!')">+ Add Item</div>
                 </div>
             </div>
 
