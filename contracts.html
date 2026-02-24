@@ -1,9 +1,10 @@
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Value Calculator</title>
+    <title>Jailbreak Hub | Season Contracts</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,108 +16,98 @@
             --text-main: #ffffff;
             --text-dim: #94a3b8;
             --green: #00ff88;
-            --red: #ff3333;
+            --xp-color: #bb86fc;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; transition: all 0.2s ease; }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
             margin: 0; padding-top: 100px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+            min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION (Matches Calculator) --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
             align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 5000;
+            padding: 0 40px; z-index: 9000;
         }
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        .nav-item:hover .nav-link { color: #fff; }
 
-        /* --- MAIN UI --- */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .dropdown {
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 200px; padding: 8px;
+            opacity: 0; pointer-events: none; box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link { display: block; padding: 12px 16px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; font-weight: 600; border-radius: 8px; }
+        .drop-link:hover { background: var(--card); color: #fff; }
 
-        .result-panel {
+        /* --- CONTRACTS CONTENT --- */
+        .container { max-width: 1600px; margin: 0 auto; padding: 0 20px; }
+
+        .header-box {
             background: var(--surface); border: 2px solid var(--border);
-            border-radius: 24px; padding: 25px; margin-bottom: 40px;
+            border-radius: 24px; padding: 40px; margin-bottom: 40px;
             display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 85px; z-index: 4000;
-        }
-        .status-big { font-weight: 900; font-size: 2rem; text-transform: uppercase; font-style: italic; }
-
-        .item-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 25px; margin-bottom: 50px;
         }
 
-        .item-card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 24px; position: relative; overflow: hidden;
-        }
-        .img-container { width: 100%; height: 220px; background: #000; display: flex; align-items: center; justify-content: center; }
-        .img-container img { width: 85%; height: 85%; object-fit: contain; }
-        .card-details { padding: 20px; }
-        .card-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 5px; }
-        .val-num { font-family: 'JetBrains Mono'; color: var(--green); font-weight: 800; font-size: 1.2rem; }
+        .season-title { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; font-style: italic; margin: 0; }
+        .season-title span { color: var(--xp-color); }
 
-        .remove-btn {
-            position: absolute; top: 12px; right: 12px; background: var(--red); color: white;
-            border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-weight: 900; font-size: 1.2rem; z-index: 10;
-        }
-
-        .add-box {
-            border: 3px dashed var(--border); border-radius: 24px; height: 350px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--text-dim); font-weight: 800; gap: 10px; font-size: 1.2rem;
-        }
-        .add-box:hover { border-color: var(--accent); color: white; background: rgba(0, 112, 243, 0.05); }
-
-        /* --- MEGA PICKER OVERLAY --- */
-        #pickerOverlay {
-            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
-            display: none; flex-direction: column; padding: 40px;
-        }
-
-        .picker-header { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
-        .search-giant { 
-            flex-grow: 1; background: var(--surface); border: 3px solid var(--border); 
-            border-radius: 20px; padding: 25px; color: white; font-size: 1.8rem; font-weight: 700;
-        }
-        .search-giant:focus { border-color: var(--accent); outline: none; }
-
-        .filter-bar { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .mega-select { 
-            background: var(--card); color: white; border: 2px solid var(--border); 
-            padding: 15px 25px; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer;
-        }
-
-        .picker-results {
+        /* --- 5 PER LINE GRID --- */
+        .contract-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* MASSIVE CARDS */
-            gap: 30px; overflow-y: auto; padding-bottom: 100px;
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 20px; margin-bottom: 50px;
         }
 
-        .mega-picker-card {
-            background: var(--card); border: 2px solid var(--border); border-radius: 25px;
-            padding: 25px; text-align: center; cursor: pointer; transition: transform 0.1s;
+        .contract-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 25px; position: relative;
+            cursor: pointer; display: flex; flex-direction: column; gap: 15px;
         }
-        .mega-picker-card:hover { border-color: var(--accent); background: var(--surface); transform: scale(1.02); }
-        .mega-picker-card img { width: 180px; height: 180px; object-fit: contain; margin-bottom: 20px; }
-        .mega-picker-card .p-name { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; }
-        .mega-picker-card .p-val { font-family: 'JetBrains Mono'; color: var(--green); font-size: 1.3rem; font-weight: 800; }
-        .mega-picker-card .p-cat { color: var(--accent); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
 
-        .close-btn {
-            background: var(--red); color: white; border: none; padding: 0 40px; 
-            border-radius: 20px; font-weight: 900; font-size: 1.5rem; cursor: pointer;
+        .contract-card:hover { border-color: var(--xp-color); transform: translateY(-5px); }
+        
+        .contract-card.completed { border-color: var(--green); background: rgba(0, 255, 136, 0.05); }
+
+        .type-tag { 
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase; 
+            padding: 4px 10px; border-radius: 6px; width: fit-content;
         }
+        .tag-crim { background: #ff4444; color: white; }
+        .tag-cop { background: #4444ff; color: white; }
+
+        .contract-desc { font-size: 1.1rem; font-weight: 700; line-height: 1.3; margin: 0; height: 60px; overflow: hidden; }
+
+        .xp-reward { 
+            font-family: 'JetBrains Mono'; color: var(--xp-color); 
+            font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 5px;
+        }
+
+        .check-circle {
+            position: absolute; top: 15px; right: 15px;
+            width: 24px; height: 24px; border: 2px solid var(--border);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .completed .check-circle { background: var(--green); border-color: var(--green); }
+        .completed .check-circle::after { content: '✓'; color: black; font-weight: 900; font-size: 14px; }
+
+        /* Progress Bar */
+        .progress-container { width: 100%; background: #000; height: 12px; border-radius: 6px; margin-top: 10px; overflow: hidden; }
+        .progress-fill { background: var(--xp-color); height: 100%; width: 65%; box-shadow: 0 0 15px var(--xp-color); }
 
     </style>
 </head>
@@ -125,158 +116,79 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="values.html" class="nav-link">Values</a>
-            <a href="calculator.html" class="nav-link" style="color:white">Calculator</a>
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            <div class="nav-item">
+                <span class="nav-link" style="color:#fff">Seasons ▼</span>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Values ▼</span>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Robbery Tracker</a></div>
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="result-panel">
+        <div class="header-box">
             <div>
-                <div class="status-big" id="status">EQUAL</div>
-                <div id="difference" style="color:var(--text-dim); font-weight:700; font-size: 1.1rem;">Difference: $0</div>
+                <h1 class="season-title">Season <span>Contracts</span></h1>
+                <p style="color: var(--text-dim); font-weight: 600; margin-top: 10px;">Click a contract to mark it as finished.</p>
             </div>
-            <div style="display:flex; gap:12px;">
-                <button class="mega-select" onclick="swapSides()">Swap</button>
-                <button class="mega-select" style="color:var(--red)" onclick="clearAll()">Clear</button>
+            <div style="text-align: right; min-width: 300px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 800; font-size: 0.9rem;">
+                    <span>LEVEL 9 PROGRESS</span>
+                    <span style="color: var(--xp-color);">650 / 1000 XP</span>
+                </div>
+                <div class="progress-container"><div class="progress-fill"></div></div>
             </div>
         </div>
 
-        <h2 style="font-style:italic; font-weight:900; border-bottom: 2px solid var(--border); padding-bottom:10px;">YOUR SIDE <span id="valA" style="float:right; color:var(--green); font-family:'JetBrains Mono';">$0</span></h2>
-        <div class="item-grid" id="gridA">
-            <div class="add-box" onclick="openPicker('A')"><h1>+</h1>ADD ITEM</div>
-        </div>
+        <div class="contract-grid">
+            <div class="contract-card" onclick="this.classList.toggle('completed')">
+                <div class="check-circle"></div>
+                <div class="type-tag tag-crim">CRIMINAL</div>
+                <p class="contract-desc">Rob the Museum without dying</p>
+                <div class="xp-reward">+45 XP</div>
+            </div>
 
-        <h2 style="font-style:italic; font-weight:900; border-bottom: 2px solid var(--border); padding-bottom:10px;">THEIR SIDE <span id="valB" style="float:right; color:var(--green); font-family:'JetBrains Mono';">$0</span></h2>
-        <div class="item-grid" id="gridB">
-            <div class="add-box" onclick="openPicker('B')"><h1>+</h1>ADD ITEM</div>
-        </div>
+            <div class="contract-card" onclick="this.classList.toggle('completed')">
+                <div class="check-circle"></div>
+                <div class="type-tag tag-cop">POLICE</div>
+                <p class="contract-desc">Arrest 3 players with bounties</p>
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <div class="contract-card" onclick="this.classList.toggle('completed')">
+                <div class="check-circle"></div>
+                <div class="type-tag tag-crim">CRIMINAL</div>
+                <p class="contract-desc">Deliver the nuke briefcase</p>
+                <div class="xp-reward">+60 XP</div>
+            </div>
+
+            <div class="contract-card" onclick="this.classList.toggle('completed')">
+                <div class="check-circle"></div>
+                <div class="type-tag tag-crim">CRIMINAL</div>
+                <p class="contract-desc">Rob the Bank successfully</p>
+                <div class="xp-reward">+25 XP</div>
+            </div>
+
+            <div class="contract-card" onclick="this.classList.toggle('completed')">
+                <div class="check-circle"></div>
+                <div class="type-tag tag-cop">POLICE</div>
+                <p class="contract-desc">Pit-maneuver a criminal vehicle</p>
+                <div class="xp-reward">+20 XP</div>
+            </div>
+
+            </div>
     </div>
 
-    <div id="pickerOverlay">
-        <div class="picker-header">
-            <div style="display:flex; gap:20px;">
-                <input type="text" id="pSearch" class="search-giant" placeholder="Type to search all items..." oninput="renderPicker()">
-                <button class="close-btn" onclick="closePicker()">CLOSE</button>
-            </div>
-            <div class="filter-bar">
-                <select id="sortType" class="mega-select" onchange="renderPicker()">
-                    <option value="val_desc">Value: High to Low</option>
-                    <option value="val_asc">Value: Low to High</option>
-                    <option value="alpha_asc">Name: A-Z</option>
-                </select>
-                <select id="catFilter" class="mega-select" onchange="renderPicker()">
-                    <option value="All">All Categories</option>
-                </select>
-            </div>
-        </div>
-        <div class="picker-results" id="pResults"></div>
-    </div>
-
-    <script src="Values.js"></script>
-    <script>
-        let sideA = [];
-        let sideB = [];
-        let activeSide = 'A';
-
-        function init() {
-            const catMenu = document.getElementById('catFilter');
-            for(let cat in db) {
-                const opt = document.createElement('option');
-                opt.value = cat; opt.innerText = cat;
-                catMenu.appendChild(opt);
-            }
-        }
-        init();
-
-        function openPicker(side) {
-            activeSide = side;
-            document.getElementById('pickerOverlay').style.display = 'flex';
-            renderPicker();
-        }
-
-        function closePicker() { document.getElementById('pickerOverlay').style.display = 'none'; }
-
-        function renderPicker() {
-            const query = document.getElementById('pSearch').value.toLowerCase();
-            const sort = document.getElementById('sortType').value;
-            const catF = document.getElementById('catFilter').value;
-            const res = document.getElementById('pResults');
-            res.innerHTML = '';
-
-            let list = [];
-            for(let cat in db) {
-                db[cat].forEach(item => {
-                    if(catF === 'All' || cat === catF) list.push({...item, cat});
-                });
-            }
-
-            if(sort === 'val_desc') list.sort((a,b) => b.cash_value - a.cash_value);
-            else if(sort === 'val_asc') list.sort((a,b) => a.cash_value - b.cash_value);
-            else list.sort((a,b) => a.name.localeCompare(b.name));
-
-            list.filter(i => i.name.toLowerCase().includes(query)).forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'mega-picker-card';
-                div.innerHTML = `
-                    <div class="p-cat">${item.cat}</div>
-                    <img src="${item.image}">
-                    <div class="p-name">${item.name}</div>
-                    <div class="p-val">$${item.cash_value.toLocaleString()}</div>
-                `;
-                div.onclick = () => {
-                    if (activeSide === 'A') sideA.push(item);
-                    else sideB.push(item);
-                    closePicker();
-                    updateUI();
-                };
-                res.appendChild(div);
-            });
-        }
-
-        function removeItem(side, index) {
-            if (side === 'A') sideA.splice(index, 1);
-            else sideB.splice(index, 1);
-            updateUI();
-        }
-
-        function clearAll() { sideA = []; sideB = []; updateUI(); }
-        function swapSides() { [sideA, sideB] = [sideB, sideA]; updateUI(); }
-
-        function updateUI() {
-            const draw = (items, gridId, side) => {
-                const grid = document.getElementById(gridId);
-                let html = items.map((item, i) => `
-                    <div class="item-card">
-                        <button class="remove-btn" onclick="removeItem('${side}', ${i})">×</button>
-                        <div class="img-container"><img src="${item.image}"></div>
-                        <div class="card-details">
-                            <div class="card-name">${item.name}</div>
-                            <div class="val-num">$${item.cash_value.toLocaleString()}</div>
-                        </div>
-                    </div>
-                `).join('');
-                html += `<div class="add-box" onclick="openPicker('${side}')"><h1>+</h1>ADD ITEM</div>`;
-                grid.innerHTML = html;
-            };
-
-            draw(sideA, 'gridA', 'A');
-            draw(sideB, 'gridB', 'B');
-
-            const totalA = sideA.reduce((s, i) => s + i.cash_value, 0);
-            const totalB = sideB.reduce((s, i) => s + i.cash_value, 0);
-            document.getElementById('valA').innerText = `$${totalA.toLocaleString()}`;
-            document.getElementById('valB').innerText = `$${totalB.toLocaleString()}`;
-
-            const diff = totalA - totalB;
-            const status = document.getElementById('status');
-            document.getElementById('difference').innerText = `Difference: $${Math.abs(diff).toLocaleString()}`;
-
-            if (totalA === 0 && totalB === 0) { status.innerText = "EQUAL"; status.style.color = "white"; }
-            else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.12)) { status.innerText = "FAIR TRADE"; status.style.color = "var(--green)"; }
-            else { status.innerText = diff > 0 ? "A OVERPAYING" : "B OVERPAYING"; status.style.color = "var(--red)"; }
-        }
-    </script>
 </body>
 </html>
