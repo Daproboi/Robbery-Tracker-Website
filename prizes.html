@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Season Rewards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030508;
+            --surface: #0a0c10;
+            --card: #11141a;
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #0070f3;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --gold: #ffac33;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); color: var(--text-main); 
+            margin: 0; padding-top: 100px;
+            background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+        }
+
+        /* --- UNIFIED NAV --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 9000;
+        }
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 5px; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        .nav-item:hover .nav-link { color: #fff; }
+
+        /* --- CHANGELOG STYLE CONTENT --- */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        .season-header {
+            margin-bottom: 50px;
+            border-left: 4px solid var(--accent);
+            padding-left: 25px;
+        }
+        .season-header h1 { font-size: 2.5rem; font-weight: 800; margin: 0; }
+        .season-tag { 
+            display: inline-block; background: var(--accent); color: white; 
+            padding: 4px 12px; border-radius: 6px; font-size: 0.7rem; 
+            font-weight: 800; text-transform: uppercase; margin-top: 10px;
+        }
+
+        /* The Vertical Timeline */
+        .reward-timeline { position: relative; padding-left: 40px; }
+        .reward-timeline::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+            width: 2px; background: var(--border);
+        }
+
+        .reward-node {
+            position: relative; margin-bottom: 40px;
+        }
+
+        /* Level Indicator Dot */
+        .reward-node::after {
+            content: ''; position: absolute; left: -32px; top: 12px;
+            width: 14px; height: 14px; background: var(--surface);
+            border: 3px solid var(--accent); border-radius: 50%; z-index: 2;
+        }
+
+        .reward-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 20px; display: flex; gap: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .reward-card:hover { border-color: rgba(255,255,255,0.2); transform: translateX(5px); }
+
+        .reward-img {
+            width: 120px; height: 120px; background: #000;
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; border: 1px solid var(--border);
+        }
+        .reward-img img { width: 85%; height: 85%; object-fit: contain; }
+
+        .reward-info { flex-grow: 1; }
+        .lvl-badge { 
+            font-family: 'JetBrains Mono'; color: var(--accent); 
+            font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; 
+        }
+        .reward-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+        
+        /* Badges like the real changelog */
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 5px;
+            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-right: 8px;
+        }
+        .badge-free { background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); }
+        .badge-pass { background: rgba(255, 172, 51, 0.1); color: var(--gold); border: 1px solid rgba(255, 172, 51, 0.2); }
+        .badge-limited { background: rgba(0, 112, 243, 0.1); color: var(--accent); border: 1px solid rgba(0, 112, 243, 0.2); }
+
+        .reward-desc { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; margin-top: 10px; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            <div class="nav-item">
+                <span class="nav-link" style="color:#fff">Seasons ▼</span>
+            </div>
+            <div class="nav-item"><a href="values.html" class="nav-link">Values</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Robbery Tracker</a></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="season-header">
+            <span class="season-tag">Current Season</span>
+            <h1>Season 24: Snow Rally</h1>
+            <p style="color: var(--text-dim); font-weight: 600;">Explore the high-octane winter rewards for the latest season update.</p>
+        </div>
+
+        <div class="reward-timeline">
+            
+            <div class="reward-node">
+                <div class="reward-card">
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/7/7b/JBX-0031.png" alt="JBX-0031"></div>
+                    <div class="reward-info">
+                        <div class="lvl-badge">LEVEL 10</div>
+                        <div class="reward-name">JBX-0031</div>
+                        <span class="badge badge-free">Free</span>
+                        <span class="badge badge-limited">Vehicle</span>
+                        <div class="reward-desc">A futuristic, high-speed rally machine featuring triple thrusters and a unique hatch door.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reward-node">
+                <div class="reward-card">
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/6/6d/StingerScythe.png" alt="Stinger Scythe"></div>
+                    <div class="reward-info">
+                        <div class="lvl-badge">LEVEL 9</div>
+                        <div class="reward-name">Stinger Scythe Wings</div>
+                        <span class="badge badge-pass">Season Pass</span>
+                        <span class="badge badge-limited">Spoiler</span>
+                        <div class="reward-desc">Sharp, aggressive wings designed for cutting through the winter air.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reward-node">
+                <div class="reward-card">
+                    <div class="reward-img"><img src="https://static.wikia.nocookie.net/roblox-jailbreak/images/4/4c/DigitalRGB.png" alt="Digital RGB"></div>
+                    <div class="reward-info">
+                        <div class="lvl-badge">LEVEL 8</div>
+                        <div class="reward-name">Digital RGB Skin</div>
+                        <span class="badge badge-free">Free</span>
+                        <span class="badge badge-limited">Texture</span>
+                        <div class="reward-desc">An animated, shifting digital grid that brings a high-tech vibe to any car.</div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+    </div>
+
+</body>
+</html>
