@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,262 +6,297 @@ HTML
     <title>Jailbreak Hub | Value Calculator</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --panel: #161b22;
-            --border: #30363d;
-            --text-main: #c9d1d9;
-            --text-dim: #8b949e;
-            --accent: #58a6ff;
-            --green: #238636;
-            --red: #da3633;
-            --card-hover: #21262d;
+            --bg: #0d1117; --panel: #161b22; --border: #30363d;
+            --text-main: #c9d1d9; --text-dim: #8b949e; --accent: #58a6ff;
+            --green: #238636; --red: #da3633; --orange: #d29922;
         }
 
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background: var(--bg); color: var(--text-main); margin: 0; padding-top: 80px; 
-        }
-
-        /* Navbar Dropdown Fix */
-        .nav-top { position: fixed; top: 0; width: 100%; height: 60px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 10px; z-index: 1000; align-items: center; }
-        .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
-        .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; padding: 8px 16px; font-size: 0.9rem; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-top: 70px; }
+        
+        /* Navbar Fixes */
+        .nav-top { position: fixed; top: 0; width: 100%; height: 60px; background: var(--panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; z-index: 1000; justify-content: space-between; box-sizing: border-box; }
+        .nav-left { font-weight: 800; color: var(--accent); font-size: 1.2rem; }
+        .nav-center { display: flex; gap: 20px; position: absolute; left: 50%; transform: translateX(-50%); }
+        .nav-item { position: relative; }
+        .nav-link { color: var(--text-dim); text-decoration: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
         .nav-link:hover { color: var(--text-main); }
-        .dropdown-content { display: none; position: absolute; top: 55px; left: 0; background: var(--panel); min-width: 180px; border: 1px solid var(--border); border-radius: 6px; }
-        .nav-item:hover .dropdown-content { display: block; }
-        .dropdown-content a { color: var(--text-dim); padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; }
-        .dropdown-content a:hover { background: var(--card-hover); color: var(--accent); }
+        .dropdown { display: none; position: absolute; top: 100%; left: 0; background: var(--panel); border: 1px solid var(--border); min-width: 160px; border-radius: 6px; }
+        .nav-item:hover .dropdown { display: block; }
+        .dropdown a { display: block; padding: 10px; color: var(--text-dim); text-decoration: none; font-size: 0.8rem; }
+        .dropdown a:hover { background: #21262d; color: var(--accent); }
 
-        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
-        
-        /* Header Section */
-        .page-title { text-align: center; margin-bottom: 40px; }
-        .page-title h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
-        .page-title p { color: var(--text-dim); }
+        .container { max-width: 1300px; margin: auto; padding: 20px; }
 
-        /* Calculator Columns */
-        .calculator-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        
-        .side-title { 
-            display: flex; justify-content: space-between; align-items: flex-end;
-            padding-bottom: 10px; border-bottom: 2px solid var(--border); margin-bottom: 20px;
-        }
-        .side-title h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; color: var(--text-dim); }
-        .total-display { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        /* Trade Logs Section */
+        .trade-header { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .action-btn { background: var(--panel); border: 1px solid var(--border); color: white; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .action-btn:hover { border-color: var(--accent); }
 
-        /* Input / Search */
-        .search-container { position: relative; margin-bottom: 20px; }
-        .search-input { 
-            width: 100%; padding: 12px 15px; background: var(--panel); 
-            border: 1px solid var(--border); border-radius: 6px; color: white;
-            font-size: 1rem; transition: 0.2s;
-        }
-        .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1); }
-        
-        .results-box { 
-            position: absolute; width: 100%; top: 50px; background: var(--panel); 
-            border: 1px solid var(--border); border-radius: 6px; z-index: 10; display: none;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-        .result-row { 
-            padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .result-row:hover { background: var(--card-hover); color: var(--accent); }
+        .calculator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .log-column { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+        .log-title { border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .log-title h2 { margin: 0; font-size: 1rem; color: var(--text-dim); text-transform: uppercase; }
 
-        /* --- THE LOG LIST (Changelog Style) --- */
-        .item-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-        
-        .item-row { 
-            background: var(--bg); display: flex; align-items: center; 
-            padding: 15px; transition: 0.2s; gap: 15px;
-        }
-        .item-row:hover { background: var(--panel); }
+        /* Stats Bar */
+        .stats-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 0.75rem; color: var(--text-dim); }
+        .stat-val { color: var(--text-main); font-weight: bold; display: block; }
 
-        .item-img { width: 45px; height: 45px; border-radius: 4px; object-fit: contain; background: #000; border: 1px solid var(--border); }
-        
-        .item-details { flex-grow: 1; }
-        .item-name { font-weight: 600; display: block; font-size: 0.95rem; }
-        .item-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-        
-        .price-tag { color: var(--accent); font-weight: 700; font-family: monospace; font-size: 0.9rem; }
-        
-        .actions-row { display: flex; align-items: center; gap: 15px; }
+        /* Discovery / Browser Section */
+        .discovery-section { margin-top: 60px; border-top: 1px solid var(--border); padding-top: 40px; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 15px; background: var(--panel); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 0.75rem; color: var(--text-dim); font-weight: bold; }
+        select, input[type="text"] { background: var(--bg); border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; }
 
-        .dupe-btn { 
-            font-size: 0.7rem; text-transform: uppercase; font-weight: 800;
-            padding: 4px 8px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border);
-            color: var(--text-dim); transition: 0.2s;
-        }
-        .dupe-active { background: var(--red); color: white; border-color: var(--red); }
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .item-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 15px; transition: 0.2s; position: relative; }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-3px); }
         
-        .remove-icon { color: var(--text-dim); cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
-        .remove-icon:hover { color: var(--red); }
+        .badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; padding: 3px 6px; border-radius: 4px; font-weight: 800; }
+        .limited { background: var(--orange); color: black; }
+        .seasonal { background: var(--accent); color: white; }
 
-        /* Verdict Footer */
-        .verdict-section { 
-            margin-top: 50px; padding: 40px; background: var(--panel); 
-            border: 1px solid var(--border); border-radius: 12px; text-align: center;
-        }
-        .verdict-title { font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
-        .verdict-sub { font-size: 1.1rem; color: var(--text-dim); margin-top: 10px; }
-        .disclaimer { font-size: 0.7rem; color: #444; margin-top: 30px; }
+        .card-img { width: 100%; height: 140px; object-fit: contain; background: #000; border-radius: 8px; margin-bottom: 10px; }
+        .card-info h3 { margin: 0 0 10px 0; font-size: 1.1rem; }
+        .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; margin-bottom: 15px; }
+        .stat-line { display: flex; justify-content: space-between; border-bottom: 1px solid #21262d; padding: 2px 0; }
+        
+        .card-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .add-offer { background: var(--green); border: none; color: white; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .add-request { background: var(--accent); border: none; color: white; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+        /* Added Items in Logs */
+        .log-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+        .log-item img { width: 40px; height: 40px; object-fit: contain; }
+        .log-item-info { flex: 1; font-size: 0.85rem; }
+        .remove-log { color: var(--red); cursor: pointer; font-weight: bold; }
 
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
-        <div class="nav-item"><a href="index.html" class="nav-link">HOME</a></div>
-        <div class="nav-item">
-            <a href="values.html" class="nav-link">VALUES</a>
-            <div class="dropdown-content">
-                <a href="values.html">ITEM VALUES</a>
-                <a href="calculator.html">VALUE CALCULATOR</a>
+        <div class="nav-left">Jailbreak Hub</div>
+        <div class="nav-center">
+            <a href="index.html" class="nav-link">HOME</a>
+            <a href="tracker.html" class="nav-link">ROBBERY TRACKER</a>
+            <div class="nav-item">
+                <a href="#" class="nav-link">VALUES ▾</a>
+                <div class="dropdown">
+                    <a href="values.html">Value List</a>
+                    <a href="calculator.html">Value Calculator</a>
+                </div>
             </div>
         </div>
-    </nav>
+        <div></div> </nav>
 
     <div class="container">
-        <div class="page-title">
-            <h1>Trade Logs</h1>
-            <p>Calculate and verify market fairness based on live community data.</p>
-        </div>
-
-        <div class="calculator-wrapper">
-            <div class="side-container">
-                <div class="side-title">
-                    <h2>YOUR SIDE</h2>
-                    <span class="total-display" id="total-l">$0</span>
-                </div>
-                <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search items..." oninput="search(this, 'l')">
-                    <div id="drop-l" class="results-box"></div>
-                </div>
-                <div id="list-l" class="item-list"></div>
+        
+        <section>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h1 style="margin: 0;">Value Calculator</h1>
+                <p style="color: var(--text-dim);">Analyze your trade profitability.</p>
             </div>
 
-            <div class="side-container">
-                <div class="side-title">
-                    <h2>THEIR SIDE</h2>
-                    <span class="total-display" id="total-r">$0</span>
-                </div>
-                <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Search items..." oninput="search(this, 'r')">
-                    <div id="drop-r" class="results-box"></div>
-                </div>
-                <div id="list-r" class="item-list"></div>
+            <div class="trade-header">
+                <button class="action-btn" onclick="swapSides()">⇄ Swap Sides</button>
+                <button class="action-btn" onclick="clearAll()" style="color: var(--red);">× Clear All</button>
             </div>
-        </div>
 
-        <div class="verdict-section" id="v-card">
-            <h2 class="verdict-title" id="v-text">---</h2>
-            <p class="verdict-sub" id="v-sub">Add items to generate trade log analysis.</p>
-            <p class="disclaimer">NOT AFFILIATED WITH ROBLOX OR BADIMO. VALUES ARE SUBJECTIVE ESTIMATES. WE ARE NOT LIABLE FOR TRADE LOSSES.</p>
-        </div>
+            <div class="calculator-grid">
+                <div class="log-column">
+                    <div class="log-title">
+                        <h2>Your Offering</h2>
+                        <span class="total-display" id="total-offering">$0</span>
+                    </div>
+                    <div class="stats-bar">
+                        <div>Items: <span id="count-offering" class="stat-val">0</span></div>
+                        <div>Clean: <span id="clean-offering" class="stat-val">$0</span></div>
+                        <div>Duped: <span id="dupe-offering" class="stat-val">$0</span></div>
+                    </div>
+                    <div id="list-offering"></div>
+                </div>
+
+                <div class="log-column">
+                    <div class="log-title">
+                        <h2>Their Requesting</h2>
+                        <span class="total-display" id="total-requesting">$0</span>
+                    </div>
+                    <div class="stats-bar">
+                        <div>Items: <span id="count-requesting" class="stat-val">0</span></div>
+                        <div>Clean: <span id="clean-requesting" class="stat-val">$0</span></div>
+                        <div>Duped: <span id="dupe-requesting" class="stat-val">$0</span></div>
+                    </div>
+                    <div id="list-requesting"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="discovery-section">
+            <h2>Item Discovery</h2>
+            
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" id="search-input" placeholder="Item name..." oninput="updateDiscovery()">
+                </div>
+                <div class="filter-group">
+                    <label>Values</label>
+                    <select id="sort-value" onchange="updateDiscovery()">
+                        <option value="random">Random</option>
+                        <option value="cash-high">Cash: High to Low</option>
+                        <option value="cash-low">Cash: Low to High</option>
+                        <option value="dupe-high">Dupe Value: High to Low</option>
+                        <option value="dupe-low">Dupe Value: Low to High</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Alphabetical</label>
+                    <select id="sort-alpha" onchange="updateDiscovery()">
+                        <option value="none">-</option>
+                        <option value="a-z">Name: A-Z</option>
+                        <option value="z-a">Name: Z-A</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="filter-cat" onchange="updateDiscovery()">
+                        <option value="all">All Items</option>
+                        <option value="Vehicles">Vehicles</option>
+                        <option value="Rims">Rims</option>
+                        <option value="Colors">Colors/Textures</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="item-grid" id="discovery-grid"></div>
+        </section>
+
     </div>
 
     <script src="Values.js"></script>
     <script>
-        let sideL = [];
-        let sideR = [];
+        let offering = [];
+        let requesting = [];
 
-        function search(el, side) {
-            const val = el.value.toLowerCase();
-            const drop = document.getElementById(`drop-${side}`);
-            if (val.length < 1) { drop.style.display = 'none'; return; }
-            
-            let html = '';
+        function updateDiscovery() {
+            const grid = document.getElementById('discovery-grid');
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const valSort = document.getElementById('sort-value').value;
+            const alphaSort = document.getElementById('sort-alpha').value;
+            const catFilter = document.getElementById('filter-cat').value;
+
+            let items = [];
             for (let cat in db) {
-                db[cat].forEach(item => {
-                    if (item.name.toLowerCase().includes(val)) {
-                        html += `<div class="result-row" onclick="add('${item.name.replace(/'/g, "\\'")}', '${side}')">
-                                    <span>${item.name}</span>
-                                    <span class="price-tag">$${(item.cash_value).toLocaleString()}</span>
-                                 </div>`;
-                    }
-                });
+                if (catFilter !== 'all' && cat !== catFilter) continue;
+                db[cat].forEach(i => items.push({...i, category: cat}));
             }
-            drop.innerHTML = html;
-            drop.style.display = 'block';
+
+            // Filtering
+            items = items.filter(i => i.name.toLowerCase().includes(search));
+
+            // Sorting
+            if (valSort === 'cash-high') items.sort((a,b) => b.cash_value - a.cash_value);
+            if (valSort === 'cash-low') items.sort((a,b) => a.cash_value - b.cash_value);
+            if (valSort === 'dupe-high') items.sort((a,b) => (b.duped_value || 0) - (a.duped_value || 0));
+            if (valSort === 'dupe-low') items.sort((a,b) => (a.duped_value || 0) - (b.duped_value || 0));
+            if (alphaSort === 'a-z') items.sort((a,b) => a.name.localeCompare(b.name));
+            if (alphaSort === 'z-a') items.sort((a,b) => b.name.localeCompare(a.name));
+            if (valSort === 'random') items.sort(() => Math.random() - 0.5);
+
+            grid.innerHTML = items.map(i => `
+                <div class="item-card">
+                    ${i.limited ? '<span class="badge limited">LIMITED</span>' : ''}
+                    ${i.seasonal ? '<span class="badge seasonal">SEASONAL</span>' : ''}
+                    <img src="${i.image}" class="card-img" onerror="this.src='https://via.placeholder.com/140/161b22/8b949e?text=?'">
+                    <div class="card-info">
+                        <h3>${i.name}</h3>
+                        <div class="card-stats">
+                            <div class="stat-line"><span>Value:</span> <span style="color:var(--green)">$${i.cash_value.toLocaleString()}</span></div>
+                            <div class="stat-line"><span>Dupe:</span> <span>$${(i.duped_value || 0).toLocaleString()}</span></div>
+                            <div class="stat-line"><span>Demand:</span> <span>${i.demand || 'N/A'}</span></div>
+                            <div class="stat-line"><span>Trend:</span> <span>${i.trend || 'Stable'}</span></div>
+                            <div class="stat-line"><span>Category:</span> <span>${i.category}</span></div>
+                        </div>
+                        <div class="card-btns">
+                            <button class="add-offer" onclick="addItem('${i.name}', 'offering')">OFFER</button>
+                            <button class="add-request" onclick="addItem('${i.name}', 'requesting')">REQUEST</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function add(name, side) {
+        function addItem(name, side) {
             let item = null;
             for (let cat in db) {
                 let found = db[cat].find(i => i.name === name);
                 if (found) { item = {...found, uid: Math.random(), isDuped: false}; break; }
             }
-            if (item) {
-                if (side === 'l') sideL.push(item); else sideR.push(item);
-                render();
-            }
-            document.querySelectorAll('.results-box').forEach(d => d.style.display = 'none');
-            document.querySelectorAll('.search-input').forEach(i => i.value = '');
+            if (side === 'offering') offering.push(item);
+            else requesting.push(item);
+            renderLogs();
         }
 
-        function remove(uid, side) {
-            if (side === 'l') sideL = sideL.filter(i => i.uid !== uid);
-            else sideR = sideR.filter(i => i.uid !== uid);
-            render();
-        }
-
-        function toggle(uid, side) {
-            const list = side === 'l' ? sideL : sideR;
+        function toggleDupe(uid, side) {
+            const list = (side === 'offering') ? offering : requesting;
             const item = list.find(i => i.uid === uid);
             if (item) item.isDuped = !item.isDuped;
-            render();
+            renderLogs();
         }
 
-        function render() {
-            updateSide('l', sideL);
-            updateSide('r', sideR);
-            calc();
+        function removeItem(uid, side) {
+            if (side === 'offering') offering = offering.filter(i => i.uid !== uid);
+            else requesting = requesting.filter(i => i.uid !== uid);
+            renderLogs();
         }
 
-        function updateSide(side, items) {
-            const container = document.getElementById(`list-${side}`);
-            let total = 0;
-            container.innerHTML = items.map(i => {
+        function swapSides() {
+            [offering, requesting] = [requesting, offering];
+            renderLogs();
+        }
+
+        function clearAll() {
+            offering = []; requesting = [];
+            renderLogs();
+        }
+
+        function renderLogs() {
+            updateColumn('offering', offering);
+            updateColumn('requesting', requesting);
+        }
+
+        function updateColumn(side, items) {
+            const list = document.getElementById(`list-${side}`);
+            let total = 0, cleanTotal = 0, dupeTotal = 0;
+
+            list.innerHTML = items.map(i => {
                 const val = i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
                 total += val;
-                const img = i.image || i.img || '';
+                if (i.isDuped) dupeTotal += val; else cleanTotal += val;
 
                 return `
-                <div class="item-row">
-                    <img src="${img}" class="item-img" onerror="this.src='https://via.placeholder.com/45/161b22/8b949e?text=?'">
-                    <div class="item-details">
-                        <span class="item-name">${i.name}</span>
-                        <div class="item-meta">
-                            <span class="price-tag">$${val.toLocaleString()}</span>
-                        </div>
+                <div class="log-item">
+                    <img src="${i.image}" onerror="this.src='https://via.placeholder.com/40/161b22/8b949e?text=?'">
+                    <div class="log-item-info">
+                        <strong>${i.name}</strong><br>
+                        <span style="color:var(--green)">$${val.toLocaleString()}</span>
+                        <label style="margin-left:10px; font-size:10px; cursor:pointer">
+                            <input type="checkbox" ${i.isDuped ? 'checked' : ''} onchange="toggleDupe(${i.uid}, '${side}')"> Dupe
+                        </label>
                     </div>
-                    <div class="actions-row">
-                        <div class="dupe-btn ${i.isDuped ? 'dupe-active' : ''}" onclick="toggle(${i.uid}, '${side}')">
-                            ${i.isDuped ? 'DUPED' : 'CLEAN'}
-                        </div>
-                        <span class="remove-icon" onclick="remove(${i.uid}, '${side}')">×</span>
-                    </div>
+                    <span class="remove-log" onclick="removeItem(${i.uid}, '${side}')">×</span>
                 </div>`;
             }).join('');
+
             document.getElementById(`total-${side}`).innerText = `$${total.toLocaleString()}`;
+            document.getElementById(`count-${side}`).innerText = items.length;
+            document.getElementById(`clean-${side}`).innerText = `$${cleanTotal.toLocaleString()}`;
+            document.getElementById(`dupe-${side}`).innerText = `$${dupeTotal.toLocaleString()}`;
         }
 
-        function calc() {
-            const getPrice = i => i.isDuped ? (i.duped_value || i.cash_value) : i.cash_value;
-            const tL = sideL.reduce((a, b) => a + getPrice(b), 0);
-            const tR = sideR.reduce((a, b) => a + getPrice(b), 0);
-            const title = document.getElementById('v-text');
-            const sub = document.getElementById('v-sub');
-
-            if (tL === 0 && tR === 0) return;
-            const diff = tR - tL;
-            const win = diff >= 0;
-
-            title.innerText = win ? "PROFIT" : "LOSS";
-            title.style.color = win ? "var(--green)" : "var(--red)";
-            sub.innerText = `${win ? 'Gaining' : 'Losing'} $${Math.abs(diff).toLocaleString()} in market value.`;
-        }
+        // Initialize Discovery
+        window.onload = updateDiscovery;
     </script>
 </body>
 </html>
