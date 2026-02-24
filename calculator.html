@@ -14,6 +14,7 @@
             --accent: #0070f3;
             --accent-glow: rgba(0, 112, 243, 0.3);
             --green: #00ff88;
+            --red: #ff3333;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
         }
@@ -48,16 +49,31 @@
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 200px; padding: 10px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
+        .drop-link { display: flex; align-items: center; gap: 10px; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
         .drop-link:hover { background: var(--card); color: var(--accent); }
+
+        /* --- CALCULATOR TOP BAR --- */
+        .calc-header {
+            max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .pity-alert {
+            background: linear-gradient(90deg, rgba(0, 112, 243, 0.1), transparent);
+            border: 1px solid var(--border); border-left: 4px solid var(--accent);
+            padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
+            text-decoration: none; color: #fff; width: 100%;
+        }
+        .pity-alert:hover { border-color: var(--accent); background: rgba(0, 112, 243, 0.15); }
+        .pity-tag { background: var(--accent); font-size: 0.6rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
 
         /* --- CALCULATOR LAYOUT --- */
         .calc-container { 
-            max-width: 1200px; margin: auto; padding: 20px; 
+            max-width: 1200px; margin: auto; padding: 0 20px 100px; 
             display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
         }
 
@@ -72,23 +88,19 @@
             margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
         }
 
-        .side-header h2 { margin: 0; font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-
-        .total-value {
-            font-family: 'JetBrains Mono'; font-size: 1.4rem; font-weight: 700; color: var(--green);
-        }
+        .side-header h2 { margin: 0; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .total-value { font-family: 'JetBrains Mono'; font-size: 1.4rem; font-weight: 700; color: var(--green); }
 
         .item-list { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
 
         .empty-slot {
-            height: 100px; border: 2px dashed var(--border); border-radius: 16px;
+            height: 90px; border: 2px dashed var(--border); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            color: var(--text-dim); font-weight: 700; font-size: 0.8rem;
+            color: var(--text-dim); font-weight: 700; font-size: 0.75rem;
             cursor: pointer;
         }
         .empty-slot:hover { border-color: var(--accent); color: #fff; background: rgba(255,255,255,0.02); }
 
-        /* Results Footer */
         .results-bar {
             grid-column: span 2; background: var(--surface); border: 1px solid var(--border);
             border-radius: 20px; padding: 30px; text-align: center;
@@ -100,6 +112,8 @@
             font-weight: 800; font-size: 1.2rem; text-transform: uppercase;
             background: var(--card); border: 1px solid var(--border); margin-bottom: 15px;
         }
+
+        footer { text-align: center; padding: 40px; color: #444; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -112,41 +126,63 @@
             <div class="nav-item">
                 <a class="nav-link" style="color:#fff">Trading Tools ▼</a>
                 <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="values.html" class="drop-link">📊 Value List</a>
+                    <a href="calculator.html" class="drop-link">⚖️ Value Calculator</a>
+                    <a href="pity.html" class="drop-link">💎 Pity Calculator</a>
                 </div>
             </div>
         </div>
         <div style="width: 40px;"></div>
     </nav>
 
+    <div class="calc-header">
+        <a href="pity.html" class="pity-alert">
+            <span class="pity-tag">New Tool</span>
+            <div>
+                <strong style="display: block; font-size: 0.9rem;">HyperChrome Pity Calculator</strong>
+                <span style="font-size: 0.75rem; color: var(--text-dim);">Trading a Chrome? Check its level-adjusted value here.</span>
+            </div>
+            <span style="margin-left: auto; color: var(--accent);">Open Tool →</span>
+        </a>
+    </div>
+
     <div class="calc-container">
         <div class="trade-side">
             <div class="side-header">
-                <h2>Your Offer</h2>
+                <h2>Your Offer (Side A)</h2>
                 <div class="total-value" id="valA">$0</div>
             </div>
             <div class="item-list" id="listA">
-                <div class="empty-slot">CLICK TO ADD ITEM</div>
+                <div class="empty-slot" onclick="openPicker('A')">ADD ITEM FROM DATABASE</div>
             </div>
         </div>
 
         <div class="trade-side">
             <div class="side-header">
-                <h2>Their Offer</h2>
+                <h2>Their Offer (Side B)</h2>
                 <div class="total-value" id="valB">$0</div>
             </div>
             <div class="item-list" id="listB">
-                <div class="empty-slot">CLICK TO ADD ITEM</div>
+                <div class="empty-slot" onclick="openPicker('B')">ADD ITEM FROM DATABASE</div>
             </div>
         </div>
 
         <div class="results-bar">
-            <div class="status-badge" id="tradeStatus">EQUAL</div>
-            <p id="tradeDiff" style="color: var(--text-dim); margin: 0;">Trade difference: $0</p>
+            <div class="status-badge" id="tradeStatus">PENDING</div>
+            <p id="tradeDiff" style="color: var(--text-dim); margin: 0;">Add items to calculate trade fairness.</p>
         </div>
     </div>
 
+    <footer>
+        Disclaimer: Trading values are estimates. We are not liable for any in-game losses.
+    </footer>
+
     <script src="Values.js"></script>
+    <script>
+        // Placeholder logic for adding items
+        function openPicker(side) {
+            alert("This would open your item selector for side " + side + ". Ensure Values.js is loaded!");
+        }
+    </script>
 </body>
 </html>
