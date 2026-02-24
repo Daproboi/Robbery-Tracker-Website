@@ -1,9 +1,3 @@
-The script you sent is for the Value List (Market Database), not the Value Calculator. This explains why you can't "add" items to a total—this page is just meant for browsing.
-
-The reason your vehicles and filters vanished is likely because the init() function is running before Values.js has fully loaded, or there is a small conflict in how the categories are being generated. I have fixed the script to ensure it waits for your database properly and correctly generates those filter buttons.
-
-Fixed Market Database (values.html)
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
