@@ -1,3 +1,7 @@
+I've updated the calculator to match the Market Database (Value List) style perfectly. Instead of the simple dashed slots, the added items will now look exactly like the cards on your list page, complete with the image containers and data rows.
+
+Updated Value Calculator (Market Database Style)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,50 +55,76 @@
             z-index: 6000;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
-        .drop-link { 
-            display: flex; flex-direction: column; padding: 12px; 
-            color: var(--text-dim); text-decoration: none; 
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
-            margin-bottom: 4px;
-        }
+        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
 
-        /* --- CALCULATOR --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
+        /* --- CALCULATOR LAYOUT --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 100px; }
         
-        .trade-box {
+        .result-bar {
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 24px; padding: 30px; min-height: 500px;
-            display: flex; flex-direction: column;
+            border-radius: 24px; padding: 30px; text-align: center; margin-bottom: 30px;
+            position: sticky; top: 90px; z-index: 4000; backdrop-filter: blur(10px);
         }
+
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        
+        .trade-box { display: flex; flex-direction: column; gap: 20px; }
 
         .box-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 20px 25px; border-radius: 20px;
         }
 
-        .value-counter { font-family: 'JetBrains Mono'; font-size: 1.4rem; color: var(--green); }
+        .value-counter { font-family: 'JetBrains Mono'; font-size: 1.8rem; color: var(--green); font-weight: 800; }
 
-        .item-slots { display: flex; flex-direction: column; gap: 12px; }
-        .selected-item {
-            height: 80px; background: var(--card); border: 1px solid var(--accent);
-            border-radius: 16px; display: flex; align-items: center; padding: 0 15px; gap: 15px;
-            position: relative;
+        /* --- MATCHING ITEM CARDS --- */
+        .item-slots { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
         }
-        .selected-item img { height: 50px; width: 50px; object-fit: contain; }
-        .remove-btn { 
-            position: absolute; right: 15px; color: var(--red); 
-            cursor: pointer; font-weight: 800; font-size: 1.2rem;
+
+        .item-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; overflow: hidden; position: relative;
+            display: flex; flex-direction: column;
+        }
+
+        .img-container {
+            width: 100%; height: 160px; background: #000;
+            display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .img-small { width: 70%; height: 70%; object-fit: contain; }
+
+        .card-content { padding: 15px; }
+        .item-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .card-content h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 800; }
+
+        .data-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 5px;
+        }
+        .d-label { font-size: 0.55rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; color: var(--green); }
+
+        .remove-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--red); color: white; border: none;
+            width: 24px; height: 24px; border-radius: 6px;
+            cursor: pointer; font-weight: 900; z-index: 10;
         }
 
         .slot-empty {
-            height: 80px; border: 2px dashed var(--border); border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-dim); font-weight: 700; cursor: pointer;
+            border: 2px dashed var(--border); border-radius: 20px;
+            height: 150px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: var(--text-dim); font-weight: 800; cursor: pointer;
+            text-transform: uppercase; font-size: 0.7rem; gap: 10px;
         }
-        .slot-empty:hover { border-color: var(--accent); color: #fff; }
+        .slot-empty:hover { border-color: var(--accent); background: rgba(255,255,255,0.02); color: #fff; }
 
         /* --- MODAL --- */
         #modal {
@@ -104,32 +134,25 @@
         }
         .modal-content {
             background: var(--surface); border: 1px solid var(--border);
-            width: 90%; max-width: 600px; border-radius: 24px; padding: 30px;
-            max-height: 80vh; overflow-y: auto;
+            width: 90%; max-width: 500px; border-radius: 24px; padding: 25px;
+            max-height: 70vh; display: flex; flex-direction: column;
         }
         .search-input {
             width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 15px; border-radius: 12px; color: #fff; margin-bottom: 20px;
+            padding: 15px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;
         }
-        .search-results { display: flex; flex-direction: column; gap: 10px; }
+        .search-results { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .search-item {
-            padding: 12px; background: var(--card); border-radius: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer;
+            padding: 10px; background: var(--card); border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
         .search-item:hover { background: var(--accent); }
 
-        .result-bar {
-            grid-column: span 2; background: var(--card); border: 1px solid var(--border);
-            border-radius: 20px; padding: 25px; text-align: center; margin-top: 20px;
-        }
         .fairness-badge {
-            display: inline-block; padding: 8px 30px; border-radius: 100px;
+            display: inline-block; padding: 10px 40px; border-radius: 100px;
             background: #000; border: 1px solid var(--border);
-            font-weight: 800; font-size: 1.1rem; margin-bottom: 10px;
+            font-weight: 900; font-size: 1.4rem; margin-bottom: 5px;
         }
-
-        footer { padding: 40px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
     </style>
 </head>
 <body>
@@ -157,8 +180,10 @@
     </nav>
 
     <div class="container">
-        <h1 class="text-3xl font-black uppercase italic">Value Calculator</h1>
-        <p style="color: var(--text-dim); margin-bottom: 30px;">Add items to both sides to check trade fairness.</p>
+        <div class="result-bar">
+            <div class="fairness-badge" id="status">EQUAL</div>
+            <div style="font-size: 0.9rem; color: var(--text-dim); font-weight: 700;" id="difference">Difference: $0</div>
+        </div>
 
         <div class="calc-grid">
             <div class="trade-box">
@@ -166,9 +191,11 @@
                     <h2 class="font-bold uppercase tracking-widest text-xs">Your Side</h2>
                     <div class="value-counter" id="valA">$0</div>
                 </div>
-                <div class="item-slots" id="slotsA">
-                    </div>
-                <div class="slot-empty" onclick="openSearch('A')" style="margin-top: 12px;">+ Add Item</div>
+                <div class="item-slots" id="slotsA"></div>
+                <div class="slot-empty" onclick="openSearch('A')">
+                    <span style="font-size: 2rem;">+</span>
+                    Add Item
+                </div>
             </div>
 
             <div class="trade-box">
@@ -176,25 +203,22 @@
                     <h2 class="font-bold uppercase tracking-widest text-xs">Their Side</h2>
                     <div class="value-counter" id="valB">$0</div>
                 </div>
-                <div class="item-slots" id="slotsB">
-                    </div>
-                <div class="slot-empty" onclick="openSearch('B')" style="margin-top: 12px;">+ Add Item</div>
-            </div>
-
-            <div class="result-bar">
-                <div class="fairness-badge" id="status">EQUAL</div>
-                <div style="font-size: 0.9rem; color: var(--text-dim);" id="difference">Difference: $0</div>
+                <div class="item-slots" id="slotsB"></div>
+                <div class="slot-empty" onclick="openSearch('B')">
+                    <span style="font-size: 2rem;">+</span>
+                    Add Item
+                </div>
             </div>
         </div>
     </div>
 
     <div id="modal">
         <div class="modal-content">
-            <div class="flex justify-between mb-4">
-                <h2 class="font-black uppercase italic">Select Item</h2>
-                <button onclick="closeSearch()" class="text-red-500 font-bold">CLOSE</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="font-weight: 800; text-transform: uppercase; font-style: italic;">Select Item</h2>
+                <button onclick="closeSearch()" style="background:none; border:none; color:var(--red); font-weight:800; cursor:pointer;">CLOSE</button>
             </div>
-            <input type="text" id="modalSearch" class="search-input" placeholder="Search items..." oninput="filterModal()">
+            <input type="text" id="modalSearch" class="search-input" placeholder="Search Database..." oninput="filterModal()">
             <div id="modalResults" class="search-results"></div>
         </div>
     </div>
@@ -208,48 +232,43 @@
         function openSearch(side) {
             activeSide = side;
             document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modalSearch').value = '';
             document.getElementById('modalSearch').focus();
             filterModal();
         }
 
-        function closeSearch() {
-            document.getElementById('modal').style.display = 'none';
-        }
+        function closeSearch() { document.getElementById('modal').style.display = 'none'; }
 
         function filterModal() {
             const query = document.getElementById('modalSearch').value.toLowerCase();
             const results = document.getElementById('modalResults');
             results.innerHTML = '';
 
-            // Flatten all items from db into one searchable list
             let allItems = [];
             for(let cat in db) {
                 db[cat].forEach(item => allItems.push({...item, category: cat}));
             }
 
-            const filtered = allItems.filter(i => i.name.toLowerCase().includes(query)).slice(0, 10);
+            const filtered = allItems.filter(i => i.name.toLowerCase().includes(query)).slice(0, 15);
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'search-item';
                 div.innerHTML = `
-                    <div class="flex items-center gap-3">
+                    <div style="display:flex; align-items:center; gap:10px;">
                         <img src="${item.image}" style="width: 30px; height: 30px; object-fit: contain;">
-                        <span>${item.name}</span>
+                        <span style="font-weight:700; font-size:0.9rem;">${item.name}</span>
                     </div>
-                    <span class="font-mono text-green-400">$${item.cash_value.toLocaleString()}</span>
+                    <span style="font-family:'JetBrains Mono'; color:var(--green); font-size:0.8rem;">$${(item.cash_value || 0).toLocaleString()}</span>
                 `;
-                div.onclick = () => addItem(item);
+                div.onclick = () => {
+                    if (activeSide === 'A') sideA.push(item);
+                    else sideB.push(item);
+                    closeSearch();
+                    updateUI();
+                };
                 results.appendChild(div);
             });
-        }
-
-        function addItem(item) {
-            if (activeSide === 'A') sideA.push(item);
-            else sideB.push(item);
-            
-            closeSearch();
-            updateUI();
         }
 
         function removeItem(side, index) {
@@ -259,25 +278,31 @@
         }
 
         function updateUI() {
-            const drawSide = (side, containerId) => {
+            const renderSlots = (items, containerId, sideKey) => {
                 const container = document.getElementById(containerId);
-                container.innerHTML = side.map((item, index) => `
-                    <div class="selected-item">
-                        <img src="${item.image}">
-                        <div>
-                            <div class="text-xs font-bold text-blue-500 uppercase">${item.category}</div>
-                            <div class="font-bold">${item.name}</div>
+                container.innerHTML = items.map((item, index) => `
+                    <div class="item-card">
+                        <button class="remove-btn" onclick="removeItem('${sideKey}', ${index})">×</button>
+                        <div class="img-container">
+                            <img src="${item.image}" class="img-small" onerror="this.src='https://via.placeholder.com/150/000/333?text=?'">
                         </div>
-                        <div class="remove-btn" onclick="removeItem('${containerId === 'slotsA' ? 'A' : 'B'}', ${index})">×</div>
+                        <div class="card-content">
+                            <span class="item-cat">${item.category}</span>
+                            <h3>${item.name}</h3>
+                            <div class="data-item">
+                                <span class="d-label">Value</span>
+                                <span class="d-val">$${(item.cash_value || 0).toLocaleString()}</span>
+                            </div>
+                        </div>
                     </div>
                 `).join('');
             };
 
-            drawSide(sideA, 'slotsA');
-            drawSide(sideB, 'slotsB');
+            renderSlots(sideA, 'slotsA', 'A');
+            renderSlots(sideB, 'slotsB', 'B');
 
-            const totalA = sideA.reduce((sum, item) => sum + item.cash_value, 0);
-            const totalB = sideB.reduce((sum, item) => sum + item.cash_value, 0);
+            const totalA = sideA.reduce((sum, item) => sum + (item.cash_value || 0), 0);
+            const totalB = sideB.reduce((sum, item) => sum + (item.cash_value || 0), 0);
 
             document.getElementById('valA').innerText = `$${totalA.toLocaleString()}`;
             document.getElementById('valB').innerText = `$${totalB.toLocaleString()}`;
@@ -291,7 +316,7 @@
             if (totalA === 0 && totalB === 0) {
                 status.innerText = "EQUAL";
                 status.style.color = "white";
-            } else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.1)) {
+            } else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.15)) {
                 status.innerText = "FAIR TRADE";
                 status.style.color = "var(--green)";
             } else if (diff > 0) {
