@@ -29,116 +29,71 @@
             background-attachment: fixed;
         }
 
-        /* --- FIXED NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
             align-items: center; justify-content: space-between;
-            padding: 0 60px; z-index: 4000;
+            padding: 0 40px; z-index: 4000;
         }
 
-        .nav-logo { font-weight: 800; font-size: 1.3rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo { font-weight: 800; font-size: 1.3rem; text-decoration: none; color: #fff; }
         .nav-logo span { color: var(--accent); }
 
-        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { 
-            text-decoration: none; color: var(--text-dim); font-size: 0.85rem; 
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
-        }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 14px; min-width: 200px; padding: 10px;
-            opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 14px; min-width: 180px; padding: 10px;
+            opacity: 0; pointer-events: none; transition: 0.3s;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
-        .drop-link {
-            display: flex; justify-content: space-between; padding: 12px 15px; color: var(--text-dim);
-            text-decoration: none; font-size: 0.8rem; font-weight: 600; border-radius: 10px;
-        }
+        .drop-link { display: block; padding: 10px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; font-weight: 600; border-radius: 8px; }
         .drop-link:hover { background: var(--card); color: #fff; }
 
-        /* --- TRADE HUD --- */
+        /* --- HUD --- */
         .hud-wrapper {
             position: sticky; top: 70px; z-index: 2000;
-            padding: 25px 60px; background: rgba(3, 5, 8, 0.7);
-            backdrop-filter: blur(25px); border-bottom: 1px solid var(--border);
+            padding: 20px 40px; background: rgba(3, 5, 8, 0.7);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
         }
-
-        .trade-hud {
-            max-width: 1400px; margin: 0 auto;
-            display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 40px;
-        }
-
+        .trade-hud { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px; }
         .hud-side { display: flex; flex-direction: column; }
         .hud-side.right { text-align: right; }
-        .hud-label { font-size: 0.65rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .hud-value { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
-        
-        .swap-btn {
-            width: 50px; height: 50px; border-radius: 50%; background: var(--card);
-            border: 1px solid var(--border); color: #fff; cursor: pointer;
-            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
-        }
-        .swap-btn:hover { border-color: var(--accent); transform: rotate(180deg) scale(1.1); }
+        .hud-value { font-family: 'JetBrains Mono'; font-size: 2.2rem; font-weight: 800; color: var(--accent); }
+        .swap-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: #fff; cursor: pointer; font-size: 1.2rem; }
 
         /* --- LOGS --- */
-        .logs-container { max-width: 1400px; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 0 60px; }
-        .log-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 24px; padding: 20px; min-height: 100px; }
-        
-        .log-entry {
-            display: flex; align-items: center; gap: 15px; padding: 12px;
-            background: var(--card); border-radius: 16px; border: 1px solid var(--border); margin-bottom: 12px;
-        }
-        .log-img { width: 45px; height: 45px; border-radius: 10px; background: #000; }
-        .log-info { flex: 1; font-weight: 700; font-size: 0.9rem; }
-        .log-price { font-family: 'JetBrains Mono'; color: var(--green); font-size: 0.8rem; }
-        .log-remove { cursor: pointer; opacity: 0.4; font-size: 1.5rem; }
-        .log-remove:hover { color: var(--red); opacity: 1; }
+        .logs-container { max-width: 1200px; margin: 30px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 20px; }
+        .log-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 80px; }
+        .log-entry { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; }
+        .log-img { width: 40px; height: 40px; border-radius: 8px; }
+        .log-info { flex: 1; font-weight: 700; font-size: 0.85rem; }
+        .log-remove { cursor: pointer; opacity: 0.5; font-size: 1.2rem; }
 
         /* --- DISCOVERY --- */
-        .discovery-section { max-width: 1400px; margin: 40px auto 100px auto; padding: 0 60px; }
+        .discovery-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .search-hub { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; margin-bottom: 40px; }
+        .search-input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px 20px; border-radius: 12px; color: #fff; font-size: 1rem; margin-bottom: 20px; }
         
-        .search-hub {
-            background: var(--surface); border: 1px solid var(--border);
-            padding: 30px; border-radius: 28px; margin-bottom: 50px;
-        }
-        
-        .search-input {
-            width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 20px 25px; border-radius: 16px; color: #fff; font-size: 1.1rem; margin-bottom: 25px;
-        }
-
-        .filter-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-        .pill {
-            padding: 12px 22px; border-radius: 12px; background: var(--card);
-            border: 1px solid var(--border); color: var(--text-dim);
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer;
-        }
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .pill { padding: 10px 18px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); color: var(--text-dim); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
         /* --- GRID --- */
-        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .card {
-            background: var(--card); border: 1px solid var(--border); border-radius: 24px;
-            padding: 25px; display: flex; flex-direction: column; gap: 20px;
-        }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .card-header { display: flex; gap: 20px; align-items: center; }
-        .card-img { width: 80px; height: 80px; background: #000; border-radius: 16px; object-fit: contain; }
-        
-        .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 16px; }
-        .stat label { display: block; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
-        .stat span { font-size: 0.9rem; font-family: 'JetBrains Mono'; }
-
-        .btn-group { display: flex; gap: 12px; }
-        .btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .card-img { width: 70px; height: 70px; background: #000; border-radius: 12px; object-fit: contain; }
+        .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; font-size: 0.8rem; }
+        .btn-group { display: flex; gap: 8px; }
+        .btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
         .btn-o { background: var(--green); color: #000; }
         .btn-r { background: #fff; color: #000; }
     </style>
@@ -152,7 +107,7 @@
             <a href="robbery.html" class="nav-link">Robbery</a>
             <a href="sniper.html" class="nav-link">Sniper</a>
             <div class="nav-item">
-                <a href="#" class="nav-link" style="color:#fff">Values ▼</a>
+                <a class="nav-link" style="color:#fff">Values ▼</a>
                 <div class="dropdown">
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                     <a href="market.html" class="drop-link">Market Trends</a>
@@ -165,15 +120,9 @@
 
     <div class="hud-wrapper">
         <div class="trade-hud">
-            <div class="hud-side">
-                <span class="hud-label">You Offering</span>
-                <span class="hud-value" id="val-offering">$0</span>
-            </div>
+            <div class="hud-side"><span class="hud-value" id="val-offering">$0</span></div>
             <button class="swap-btn" onclick="swapSides()">⇄</button>
-            <div class="hud-side right">
-                <span class="hud-label">They Requesting</span>
-                <span class="hud-value" id="val-requesting">$0</span>
-            </div>
+            <div class="hud-side right"><span class="hud-value" id="val-requesting">$0</span></div>
         </div>
     </div>
 
@@ -184,12 +133,12 @@
 
     <div class="discovery-section">
         <div class="search-hub">
-            <input type="text" id="main-search" class="search-input" placeholder="Search for items..." oninput="refreshDiscovery()">
+            <input type="text" id="main-search" class="search-input" placeholder="Search items..." oninput="refreshDiscovery()">
             <div class="filter-row">
                 <div class="pill active" data-type="cat" data-value="all" onclick="updateFilter(this)">All Items</div>
-                <div class="pill" data-type="cat" data-value="Vehicles" onclick="updateFilter(this)">Vehicles</div>
-                <div class="pill" data-type="cat" data-value="Rims" onclick="updateFilter(this)">Rims</div>
-                <div class="pill" data-type="cat" data-value="Furniture" onclick="updateFilter(this)">Furniture</div>
+                <div class="pill" data-type="cat" data-value="vehicle" onclick="updateFilter(this)">Vehicles</div>
+                <div class="pill" data-type="cat" data-value="rim" onclick="updateFilter(this)">Rims</div>
+                <div class="pill" data-type="cat" data-value="furniture" onclick="updateFilter(this)">Furniture</div>
                 <div style="flex:1"></div>
                 <div class="pill active" data-type="sort" data-value="desc" onclick="updateFilter(this)">High Value</div>
                 <div class="pill" data-type="sort" data-value="asc" onclick="updateFilter(this)">Low Value</div>
@@ -210,7 +159,7 @@
             document.querySelectorAll(`.pill[data-type="${type}"]`).forEach(p => p.classList.remove('active'));
             el.classList.add('active');
             
-            if (type === 'cat') activeCat = el.getAttribute('data-value');
+            if (type === 'cat') activeCat = el.getAttribute('data-value').toLowerCase();
             if (type === 'sort') activeSort = el.getAttribute('data-value');
             
             refreshDiscovery();
@@ -221,40 +170,46 @@
             const query = document.getElementById('main-search').value.toLowerCase();
             let pool = [];
 
-            // 1. Build list
-            for (let category in db) {
-                if (activeCat !== 'all' && category !== activeCat) continue;
-                db[category].forEach(item => {
-                    if (item.name.toLowerCase().includes(query)) {
-                        pool.push({...item, category});
-                    }
-                });
+            // Robust Build Logic
+            for (let categoryKey in db) {
+                // Check if this category matches activeCat (case-insensitive & partial match)
+                const isAll = activeCat === 'all';
+                const catMatch = categoryKey.toLowerCase().includes(activeCat);
+
+                if (isAll || catMatch) {
+                    db[categoryKey].forEach(item => {
+                        if (item.name.toLowerCase().includes(query)) {
+                            pool.push({...item, category: categoryKey});
+                        }
+                    });
+                }
             }
 
-            // 2. Sort
-            if (activeSort === 'desc') pool.sort((a,b) => b.cash_value - a.cash_value);
-            else pool.sort((a,b) => a.cash_value - b.cash_value);
+            // Sort Logic
+            pool.sort((a,b) => {
+                return activeSort === 'desc' ? b.cash_value - a.cash_value : a.cash_value - b.cash_value;
+            });
 
-            // 3. Render
+            // Render Logic
             grid.innerHTML = pool.length > 0 ? pool.map(i => `
                 <div class="card">
-                    <div class="card-header">
+                    <div style="display:flex; gap:15px; align-items:center;">
                         <img src="${i.image}" class="card-img" onerror="this.src='https://via.placeholder.com/80/000/333?text=?'">
-                        <div class="card-title">
-                            <label style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${i.category}</label>
-                            <h3>${i.name}</h3>
+                        <div>
+                            <div style="font-size:0.6rem; color:var(--accent); font-weight:800;">${i.category}</div>
+                            <h3 style="margin:0; font-size:1rem;">${i.name}</h3>
                         </div>
                     </div>
                     <div class="card-stats">
-                        <div class="stat"><label>Value</label><span style="color:var(--green)">$${i.cash_value.toLocaleString()}</span></div>
-                        <div class="stat"><label>Demand</label><span>${i.demand || '—'}</span></div>
+                        <div>Value: <span style="color:var(--green)">$${i.cash_value.toLocaleString()}</span></div>
+                        <div>Demand: ${i.demand || '—'}</div>
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-o" onclick="addItem('${i.name.replace(/'/g, "\\'")}', 'offer')">Offer</button>
                         <button class="btn btn-r" onclick="addItem('${i.name.replace(/'/g, "\\'")}', 'request')">Request</button>
                     </div>
                 </div>
-            `).join('') : '<div style="grid-column: 1/-1; text-align: center; color: var(--text-dim); padding: 40px;">No items found matching your filter.</div>';
+            `).join('') : '<div style="grid-column:1/-1; text-align:center; opacity:0.5;">No items found.</div>';
         }
 
         function addItem(name, side) {
@@ -281,24 +236,21 @@
 
         function updateUI() {
             const total = list => list.reduce((a, b) => a + b.cash_value, 0);
-            
             const render = (list, id, side) => {
                 document.getElementById(id).innerHTML = list.map(i => `
                     <div class="log-entry">
-                        <img src="${i.image}" class="log-img" onerror="this.src='https://via.placeholder.com/45/000/333?text=?'">
-                        <div class="log-info">${i.name}<br><span class="log-price">$${i.cash_value.toLocaleString()}</span></div>
+                        <img src="${i.image}" class="log-img" onerror="this.src='https://via.placeholder.com/40/000/333?text=?'">
+                        <div class="log-info">${i.name}<br><span style="color:var(--green)">$${i.cash_value.toLocaleString()}</span></div>
                         <div class="log-remove" onclick="removeItem(${i.uid}, '${side}')">×</div>
                     </div>
                 `).join('');
             };
-
             render(offerList, 'list-offering', 'offer');
             render(requestList, 'list-requesting', 'request');
             document.getElementById('val-offering').innerText = `$${total(offerList).toLocaleString()}`;
             document.getElementById('val-requesting').innerText = `$${total(requestList).toLocaleString()}`;
         }
 
-        // Initialize grid on load
         window.onload = refreshDiscovery;
     </script>
 </body>
