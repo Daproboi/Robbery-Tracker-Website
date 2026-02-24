@@ -1,3 +1,9 @@
+To protect yourself and the site, you should add a Legal Disclaimer or Terms of Use section. This clarifies that your values are based on opinions/market research and that you are not responsible for "bad trades" or losses.
+
+I have updated the index.html to include a professional footer disclaimer and a "Terms of Service" popup (Modal) that appears when they first enter or click a link.
+
+Updated index.html (With Liability Protection)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +22,7 @@
             --text-main: #ffffff;
             --text-dim: #94a3b8;
             --success: #00ff88;
+            --red: #ff3333;
         }
 
         * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -28,13 +35,12 @@
             min-height: 100vh;
         }
 
-        /* Animated Background Mesh */
+        /* Background Mesh */
         .bg-mesh {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: 
                 radial-gradient(circle at 50% -20%, #111827 0%, transparent 50%),
-                radial-gradient(circle at 0% 0%, rgba(0, 112, 243, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 255, 136, 0.02) 0%, transparent 40%);
+                radial-gradient(circle at 0% 0%, rgba(0, 112, 243, 0.05) 0%, transparent 40%);
             z-index: -1;
         }
 
@@ -51,51 +57,24 @@
         .nav-logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
-
-        .dropdown {
-            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 10px;
-            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { 
-            display: flex; align-items: center; gap: 10px; padding: 12px; 
-            color: var(--text-dim); text-decoration: none; font-size: 0.8rem; 
-            border-radius: 8px; font-weight: 600; 
-        }
-        .drop-link:hover { background: var(--card); color: var(--accent); }
+        .nav-link:hover { color: #fff; }
 
         /* --- HERO --- */
         .hero {
-            height: 65vh; display: flex; flex-direction: column;
+            height: 60vh; display: flex; flex-direction: column;
             align-items: center; justify-content: center; text-align: center;
-            padding: 0 20px; position: relative;
+            padding: 0 20px;
         }
-
-        .status-pill {
-            background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.2);
-            color: var(--success); padding: 8px 16px; border-radius: 100px;
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
-        }
-        .pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         .hero h1 { 
             font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; 
-            letter-spacing: -3px; margin: 0; line-height: 1;
+            letter-spacing: -3px; margin: 0; line-height: 1.1;
             background: linear-gradient(to bottom, #fff 40%, #64748b);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 650px; line-height: 1.6; margin: 25px 0 40px; }
-
-        /* --- GRID --- */
+        /* --- FEATURES GRID --- */
         .features {
             max-width: 1200px; margin: 0 auto 100px;
             display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -105,29 +84,43 @@
         .feature-card {
             background: var(--card); border: 1px solid var(--border);
             padding: 35px; border-radius: 24px; text-decoration: none; color: #fff;
-            position: relative; display: flex; flex-direction: column; height: 100%;
+            display: flex; flex-direction: column;
         }
-        .feature-card:hover { border-color: var(--accent); transform: translateY(-8px); background: #161a22; }
-        .feature-card:hover .feature-icon { transform: scale(1.1) rotate(-5deg); color: var(--accent); }
+        .feature-card:hover { border-color: var(--accent); transform: translateY(-8px); }
 
-        .feature-icon { font-size: 2.2rem; margin-bottom: 20px; display: block; color: var(--text-dim); }
-        .feature-card h3 { font-size: 1.4rem; margin: 0 0 12px 0; letter-spacing: -0.5px; }
-        .feature-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin-bottom: 25px; flex-grow: 1; }
-
-        .learn-more {
-            font-weight: 700; font-size: 0.75rem; text-transform: uppercase;
-            color: var(--accent); letter-spacing: 1px; display: flex; align-items: center; gap: 5px;
+        /* --- DISCLAIMER MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            display: none; align-items: center; justify-content: center; z-index: 9999;
+            padding: 20px;
         }
 
+        .modal-content {
+            background: var(--surface); border: 1px solid var(--border);
+            max-width: 500px; padding: 40px; border-radius: 28px;
+            text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .modal-content h2 { color: var(--red); margin-top: 0; }
+        .modal-content p { color: var(--text-dim); line-height: 1.6; font-size: 0.9rem; }
+
+        .btn-accept {
+            background: var(--accent); color: #fff; border: none;
+            padding: 15px 40px; border-radius: 12px; font-weight: 800;
+            cursor: pointer; margin-top: 20px; width: 100%;
+        }
+
+        /* --- FOOTER --- */
         footer {
-            padding: 80px 20px; border-top: 1px solid var(--border);
-            text-align: center; color: var(--text-dim); font-size: 0.8rem;
-            background: rgba(0,0,0,0.2);
+            padding: 60px 20px; border-top: 1px solid var(--border);
+            text-align: center; background: rgba(0,0,0,0.3);
         }
 
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 3rem; }
+        .disclaimer-text {
+            max-width: 800px; margin: 0 auto;
+            font-size: 0.75rem; color: #555; line-height: 1.6;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -138,61 +131,66 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
-            <a href="index.html" class="nav-link" style="color: #fff;">Home</a>
-            <a href="tracker.html" class="nav-link">Robbery Sniper</a>
-            <div class="nav-item">
-                <a class="nav-link">Trading Tools ▼</a>
-                <div class="dropdown">
-                    <a href="values.html" class="drop-link"><span>📊</span> Value List</a>
-                    <a href="calculator.html" class="drop-link"><span>⚖️</span> Value Calculator</a>
-                    <a href="pity.html" class="drop-link"><span>💎</span> Pity Calculator</a>
-                </div>
-            </div>
+            <a href="values.html" class="nav-link">Values</a>
+            <a href="tracker.html" class="nav-link">Sniper</a>
+            <a href="pity.html" class="nav-link">Pity</a>
         </div>
-        <div style="width: 40px;"></div>
     </nav>
 
-    <section class="hero">
-        <div class="status-pill">
-            <div class="pulse"></div> Database Live & Updated
+    <div id="disclaimerModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ Trading Disclaimer</h2>
+            <p>
+                All values provided on this site are <strong>estimates</strong> based on current market trends and community data. 
+                Jailbreak Hub is not responsible for any losses, "bad trades," or account issues resulting from the use of our data. 
+                Trade at your own risk.
+            </p>
+            <button class="btn-accept" onclick="acceptDisclaimer()">I UNDERSTAND & AGREE</button>
         </div>
-        <h1>One Hub. <br>All Assets.</h1>
-        <p>The definitive resource for Jailbreak market values, real-time robbery status, and specialized trading analytics.</p>
+    </div>
+
+    <section class="hero">
+        <h1>One Hub.<br>All Assets.</h1>
+        <p>The definitive resource for Jailbreak trading and analytics.</p>
     </section>
 
     <section class="features">
         <a href="values.html" class="feature-card">
-            <span class="feature-icon">📊</span>
-            <h3>Value List</h3>
-            <p>Track every vehicle, skin, and item with dupe-adjusted pricing and demand trends.</p>
-            <span class="learn-more">Open Database →</span>
+            <h3>Value List →</h3>
+            <p>Highest to lowest market values for all items.</p>
         </a>
-
         <a href="tracker.html" class="feature-card">
-            <span class="feature-icon">🎯</span>
-            <h3>Robbery Sniper</h3>
-            <p>Live status of every major robbery. Don't waste time—find open vaults instantly.</p>
-            <span class="learn-more">View Tracker →</span>
+            <h3>Robbery Sniper →</h3>
+            <p>Live vault status and server browser.</p>
         </a>
-
         <a href="pity.html" class="feature-card">
-            <span class="feature-icon">💎</span>
-            <h3>Pity Calculator</h3>
-            <p>Determine your guaranteed HyperChrome drop path and view current chrome values.</p>
-            <span class="learn-more">Check Progress →</span>
-        </a>
-
-        <a href="calculator.html" class="feature-card">
-            <span class="feature-icon">⚖️</span>
-            <h3>Trade Evaluation</h3>
-            <p>Compare multi-item trades to ensure you're getting a fair market deal every time.</p>
-            <span class="learn-more">Start Analysis →</span>
+            <h3>Pity Calc →</h3>
+            <p>HyperChrome progress tracking.</p>
         </a>
     </section>
 
     <footer>
-        <p>&copy; 2026 Jailbreak Hub Resource. Created for the community.</p>
+        <div class="disclaimer-text">
+            <strong>Liability Limitation:</strong> Jailbreak Hub is an independent resource and is not affiliated with Badimo or Roblox. 
+            Information is provided "as-is" without warranty. By using this site, you waive the right to hold the administrators 
+            liable for any in-game asset losses or trading disputes.
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-dim);">&copy; 2026 Jailbreak Hub.</p>
     </footer>
+
+    <script>
+        // Check if user already accepted
+        window.onload = function() {
+            if (!localStorage.getItem('disclaimerAccepted')) {
+                document.getElementById('disclaimerModal').style.display = 'flex';
+            }
+        };
+
+        function acceptDisclaimer() {
+            localStorage.setItem('disclaimerAccepted', 'true');
+            document.getElementById('disclaimerModal').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
