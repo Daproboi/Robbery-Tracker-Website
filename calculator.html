@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,6 @@ HTML
             --red: #ff3333;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
-            --panel-blur: blur(25px);
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
@@ -26,16 +24,51 @@ HTML
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-bottom: 100px;
+            margin: 0; padding-top: 100px; padding-bottom: 100px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             background-attachment: fixed;
         }
 
+        /* --- RESTORED NAVIGATION --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 4000;
+        }
+
+        .nav-logo { font-weight: 800; font-size: 1.2rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-item { position: relative; }
+        .nav-link { 
+            text-decoration: none; color: var(--text-dim); font-size: 0.8rem; 
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .nav-link:hover, .nav-link.active { color: #fff; }
+
+        /* Dropdown Logic */
+        .dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 160px; padding: 10px;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link {
+            display: block; padding: 10px; color: var(--text-dim);
+            text-decoration: none; font-size: 0.75rem; font-weight: 600; border-radius: 8px;
+        }
+        .drop-link:hover { background: var(--card); color: var(--accent); }
+
         /* --- THE COMMAND CENTER (HUD) --- */
         .hud-wrapper {
-            position: sticky; top: 0; z-index: 2000;
+            position: sticky; top: 70px; z-index: 2000;
             padding: 20px 40px; background: rgba(3, 5, 8, 0.6);
-            backdrop-filter: var(--panel-blur); border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(25px); border-bottom: 1px solid var(--border);
         }
 
         .trade-hud {
@@ -44,149 +77,104 @@ HTML
             align-items: center; gap: 60px;
         }
 
-        .hud-side { display: flex; flex-direction: column; gap: 4px; }
+        .hud-side { display: flex; flex-direction: column; }
         .hud-side.right { text-align: right; }
-        
         .hud-label { font-size: 0.65rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
-        .hud-value { 
-            font-family: 'JetBrains Mono'; font-size: 2.4rem; font-weight: 800; 
-            color: var(--text-main); text-shadow: 0 0 30px rgba(255,255,255,0.1); 
-        }
-        .side-offering .hud-value { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow); }
+        .hud-value { font-family: 'JetBrains Mono'; font-size: 2.2rem; font-weight: 800; color: var(--accent); }
         
-        .fairness-meter {
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-        }
-        .verdict-tag {
-            padding: 6px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1px; background: var(--card); border: 1px solid var(--border);
-        }
-
         .swap-btn {
-            width: 54px; height: 54px; border-radius: 50%; background: var(--card);
+            width: 50px; height: 50px; border-radius: 50%; background: var(--card);
             border: 1px solid var(--border); color: #fff; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
         }
-        .swap-btn:hover { transform: rotate(180deg) scale(1.1); border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+        .swap-btn:hover { border-color: var(--accent); transform: rotate(180deg); }
 
-        /* --- THE LOGS SECTION --- */
+        /* --- LOGS --- */
         .logs-container {
-            max-width: 1400px; margin: 40px auto;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 0 40px;
+            max-width: 1400px; margin: 30px auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 0 40px;
         }
-
-        .log-box { 
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-            border-radius: 24px; padding: 20px; min-height: 120px;
-        }
-
+        .log-box { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 15px; min-height: 80px; }
+        
         .log-entry {
-            display: flex; align-items: center; gap: 16px; padding: 12px;
-            background: var(--card); border-radius: 16px; border: 1px solid var(--border);
-            margin-bottom: 12px; animation: slideIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            display: flex; align-items: center; gap: 12px; padding: 10px;
+            background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .log-img { width: 40px; height: 40px; border-radius: 8px; }
+        .log-info { flex: 1; font-weight: 700; font-size: 0.85rem; }
+        .log-price { font-family: 'JetBrains Mono'; color: var(--green); font-size: 0.75rem; }
+        .log-remove { cursor: pointer; opacity: 0.5; font-size: 1.2rem; }
+        .log-remove:hover { color: var(--red); opacity: 1; }
 
-        .log-img { width: 50px; height: 50px; border-radius: 10px; background: #000; }
-        .log-info { flex: 1; }
-        .log-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
-        .log-price { font-family: 'JetBrains Mono'; font-size: 0.8rem; color: var(--green); }
-        .log-remove { cursor: pointer; opacity: 0.3; font-size: 1.4rem; padding: 0 10px; }
-        .log-remove:hover { opacity: 1; color: var(--red); }
-
-        /* --- THE DISCOVERY (FILTERS) --- */
-        .discovery-header {
-            max-width: 1400px; margin: 80px auto 40px auto; padding: 0 40px;
-        }
-
+        /* --- DATABASE & FILTERS --- */
+        .discovery-section { max-width: 1400px; margin: 60px auto; padding: 0 40px; }
         .search-hub {
-            display: flex; flex-direction: column; gap: 24px;
             background: var(--surface); border: 1px solid var(--border);
-            padding: 30px; border-radius: 32px; box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+            padding: 25px; border-radius: 24px; margin-bottom: 40px;
         }
-
-        .search-bar-wrap { position: relative; }
-        .search-bar-wrap input {
+        .search-input {
             width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 20px 20px 20px 60px; border-radius: 18px; color: #fff;
-            font-size: 1.1rem; font-weight: 500;
+            padding: 18px 25px; border-radius: 14px; color: #fff; font-size: 1rem; margin-bottom: 20px;
         }
-        .search-bar-wrap::before { content: '🔍'; position: absolute; left: 25px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-        .search-bar-wrap input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-
-        .filter-row { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
-        .pill-box { display: flex; gap: 8px; }
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .pill {
-            padding: 10px 20px; border-radius: 12px; background: #1a1f26;
+            padding: 10px 18px; border-radius: 10px; background: var(--card);
             border: 1px solid var(--border); color: var(--text-dim);
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; cursor: pointer;
         }
-        .pill:hover { color: #fff; border-color: #fff; }
-        .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+        .pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-        /* --- ITEM CARDS --- */
-        .item-grid {
-            max-width: 1400px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px; padding: 0 40px;
-        }
-
+        /* --- ITEM GRID --- */
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .card {
-            background: var(--card); border: 1px solid var(--border); border-radius: 28px;
-            padding: 24px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; gap: 20px;
+            background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+            padding: 20px; display: flex; flex-direction: column; gap: 15px;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .card-header { display: flex; gap: 15px; align-items: center; }
+        .card-img { width: 80px; height: 80px; background: #000; border-radius: 12px; object-fit: contain; }
+        .card-title h3 { margin: 0; font-size: 1.1rem; }
+        
+        .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; }
+        .stat { display: flex; flex-direction: column; }
+        .stat label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
+        .stat span { font-size: 0.8rem; font-family: 'JetBrains Mono'; }
 
-        .card-visual { display: flex; gap: 20px; align-items: center; }
-        .card-img { width: 100px; height: 100px; object-fit: contain; background: #000; border-radius: 20px; border: 1px solid var(--border); }
-        .card-title h3 { margin: 0; font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; }
-        .card-cat { font-size: 0.65rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
-
-        .card-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
-        .stat-item { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 16px; border: 1px solid var(--border); }
-        .stat-item label { display: block; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
-        .stat-item span { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 700; }
-
-        .card-btns { display: flex; gap: 12px; }
-        .btn {
-            flex: 1; padding: 14px; border-radius: 14px; border: none; font-weight: 800;
-            font-size: 0.75rem; text-transform: uppercase; cursor: pointer;
-        }
-        .btn-add-offer { background: var(--green); color: #020408; }
-        .btn-add-request { background: #fff; color: #020408; }
-        .btn:hover { transform: scale(1.03); filter: brightness(1.1); }
-
+        .btn-group { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
+        .btn-o { background: var(--green); color: #000; }
+        .btn-r { background: #fff; color: #000; }
     </style>
 </head>
 <body>
 
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="robbery.html" class="nav-link">Robbery</a>
+            <a href="sniper.html" class="nav-link">Sniper</a>
+            <div class="nav-item">
+                <a href="#" class="nav-link active">Values ▼</a>
+                <div class="dropdown">
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                    <a href="market.html" class="drop-link">Market Trends</a>
+                    <a href="demand.html" class="drop-link">Demand List</a>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100px;"></div> </nav>
+
     <div class="hud-wrapper">
         <div class="trade-hud">
-            <div class="hud-side side-offering">
-                <span class="hud-label">Your Offering</span>
+            <div class="hud-side">
+                <span class="hud-label">You Offering</span>
                 <span class="hud-value" id="val-offering">$0</span>
-                <div class="hud-stats">
-                    <span>Items: <b id="count-offering">0</b></span>
-                    <span>Demand Avg: <b id="dem-offering">0</b></span>
-                </div>
             </div>
-
-            <div class="fairness-meter">
-                <div class="verdict-tag" id="trade-verdict">Empty Trade</div>
-                <button class="swap-btn" onclick="swapSides()">⇄</button>
-                <div style="font-size: 0.6rem; color: var(--red); cursor: pointer; font-weight: 800;" onclick="clearAll()">RESET SYSTEM</div>
-            </div>
-
-            <div class="hud-side right side-requesting">
-                <span class="hud-label">Their Requesting</span>
+            <button class="swap-btn" onclick="swapSides()">⇄</button>
+            <div class="hud-side right">
+                <span class="hud-label">They Requesting</span>
                 <span class="hud-value" id="val-requesting">$0</span>
-                <div class="hud-stats">
-                    <span>Demand Avg: <b id="dem-requesting">0</b></span>
-                    <span>Items: <b id="count-requesting">0</b></span>
-                </div>
             </div>
         </div>
     </div>
@@ -196,32 +184,20 @@ HTML
         <div class="log-box" id="list-requesting"></div>
     </div>
 
-    <div class="discovery-header">
+    <div class="discovery-section">
         <div class="search-hub">
-            <div class="search-bar-wrap">
-                <input type="text" id="main-search" placeholder="Filter through market database..." oninput="refreshDiscovery()">
-            </div>
-            
+            <input type="text" id="main-search" class="search-input" placeholder="Search market items..." oninput="refreshDiscovery()">
             <div class="filter-row">
-                <div class="pill-box" id="cat-pills">
-                    <div class="pill active" onclick="setCat('all', this)">All Items</div>
-                    <div class="pill" onclick="setCat('Vehicles', this)">Vehicles</div>
-                    <div class="pill" onclick="setCat('Rims', this)">Rims</div>
-                    <div class="pill" onclick="setCat('Furniture', this)">Furniture</div>
-                </div>
-
-                <div style="flex: 1;"></div>
-
-                <div class="pill-box" id="sort-pills">
-                    <div class="pill active" onclick="setSort('desc', this)">Value High</div>
-                    <div class="pill" onclick="setSort('asc', this)">Value Low</div>
-                    <div class="pill" onclick="setSort('az', this)">A-Z</div>
-                </div>
+                <div class="pill active" onclick="setCat('all', this)">All</div>
+                <div class="pill" onclick="setCat('Vehicles', this)">Vehicles</div>
+                <div class="pill" onclick="setCat('Rims', this)">Rims</div>
+                <div class="pill" onclick="setSort('desc', this)">Value High</div>
+                <div class="pill" onclick="setSort('asc', this)">Value Low</div>
             </div>
         </div>
-    </div>
 
-    <div class="item-grid" id="main-grid"></div>
+        <div class="item-grid" id="main-grid"></div>
+    </div>
 
     <script src="Values.js"></script>
     <script>
@@ -230,51 +206,46 @@ HTML
         let activeCat = 'all';
         let activeSort = 'desc';
 
-        // --- CORE LOGIC ---
         function refreshDiscovery() {
             const grid = document.getElementById('main-grid');
             const query = document.getElementById('main-search').value.toLowerCase();
             let pool = [];
 
-            for (let category in db) {
-                if (activeCat !== 'all' && category !== activeCat) continue;
-                db[category].forEach(item => pool.push({...item, category}));
+            for (let cat in db) {
+                if (activeCat !== 'all' && cat !== activeCat) continue;
+                db[cat].forEach(i => pool.push({...i, category: cat}));
             }
 
             pool = pool.filter(i => i.name.toLowerCase().includes(query));
-
             if (activeSort === 'desc') pool.sort((a,b) => b.cash_value - a.cash_value);
-            if (activeSort === 'asc') pool.sort((a,b) => a.cash_value - b.cash_value);
-            if (activeSort === 'az') pool.sort((a,b) => a.name.localeCompare(b.name));
+            else pool.sort((a,b) => a.cash_value - b.cash_value);
 
-            grid.innerHTML = pool.map(item => `
+            grid.innerHTML = pool.map(i => `
                 <div class="card">
-                    <div class="card-visual">
-                        <img src="${item.image}" class="card-img" onerror="this.src='https://via.placeholder.com/100/000/333?text=?'">
+                    <div class="card-header">
+                        <img src="${i.image}" class="card-img">
                         <div class="card-title">
-                            <span class="card-cat">${item.category}</span>
-                            <h3>${item.name}</h3>
+                            <div style="font-size:0.6rem; color:var(--accent); font-weight:800;">${i.category}</div>
+                            <h3>${i.name}</h3>
                         </div>
                     </div>
                     <div class="card-stats">
-                        <div class="stat-item"><label>Market Value</label><span style="color:var(--green)">$${item.cash_value.toLocaleString()}</span></div>
-                        <div class="stat-item"><label>Demand</label><span>${item.demand || '5/10'}</span></div>
-                        <div class="stat-item"><label>Dupe Value</label><span>$${(item.duped_value || 0).toLocaleString()}</span></div>
-                        <div class="stat-item"><label>Trend</label><span style="color:${item.trend === 'Rising' ? 'var(--green)' : 'white'}">${item.trend || 'Stable'}</span></div>
+                        <div class="stat"><label>Value</label><span>$${i.cash_value.toLocaleString()}</span></div>
+                        <div class="stat"><label>Demand</label><span>${i.demand || '—'}</span></div>
                     </div>
-                    <div class="card-btns">
-                        <button class="btn btn-add-offer" onclick="pushItem('${item.name.replace(/'/g, "\\'")}', 'offer')">Offer</button>
-                        <button class="btn btn-add-request" onclick="pushItem('${item.name.replace(/'/g, "\\'")}', 'request')">Request</button>
+                    <div class="btn-group">
+                        <button class="btn btn-o" onclick="addItem('${i.name.replace(/'/g, "\\'")}', 'offer')">Offer</button>
+                        <button class="btn btn-r" onclick="addItem('${i.name.replace(/'/g, "\\'")}', 'request')">Request</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function pushItem(name, side) {
+        function addItem(name, side) {
             let found = null;
             for(let cat in db) {
                 let match = db[cat].find(i => i.name === name);
-                if(match) { found = {...match, uid: Date.now() + Math.random()}; break; }
+                if(match) { found = {...match, uid: Math.random()}; break; }
             }
             if(side === 'offer') offerList.push(found);
             else requestList.push(found);
@@ -292,60 +263,30 @@ HTML
             updateUI();
         }
 
-        function clearAll() {
-            offerList = []; requestList = [];
-            updateUI();
-        }
-
         function updateUI() {
-            renderList('list-offering', offerList, 'offer');
-            renderList('list-requesting', requestList, 'request');
-            calculateTotals();
-        }
-
-        function renderList(id, list, side) {
-            const container = document.getElementById(id);
-            container.innerHTML = list.map(item => `
-                <div class="log-entry">
-                    <img src="${item.image}" class="log-img">
-                    <div class="log-info">
-                        <div class="log-name">${item.name}</div>
-                        <div class="log-price">$${item.cash_value.toLocaleString()}</div>
+            const render = (list, id, side) => {
+                document.getElementById(id).innerHTML = list.map(i => `
+                    <div class="log-entry">
+                        <img src="${i.image}" class="log-img">
+                        <div class="log-info">${i.name}<br><span class="log-price">$${i.cash_value.toLocaleString()}</span></div>
+                        <div class="log-remove" onclick="removeItem(${i.uid}, '${side}')">×</div>
                     </div>
-                    <div class="log-remove" onclick="removeItem(${item.uid}, '${side}')">×</div>
-                </div>
-            `).join('');
-        }
-
-        function calculateTotals() {
-            const sum = list => list.reduce((a, b) => a + b.cash_value, 0);
-            const valO = sum(offerList);
-            const valR = sum(requestList);
-
-            document.getElementById('val-offering').innerText = `$${valO.toLocaleString()}`;
-            document.getElementById('val-requesting').innerText = `$${valR.toLocaleString()}`;
-            document.getElementById('count-offering').innerText = offerList.length;
-            document.getElementById('count-requesting').innerText = requestList.length;
-
-            const verdict = document.getElementById('trade-verdict');
-            if (valO === 0 && valR === 0) {
-                verdict.innerText = "Empty Trade"; verdict.style.color = "var(--text-dim)";
-            } else if (valO > valR * 1.2) {
-                verdict.innerText = "L (Overpaying)"; verdict.style.color = var(--red);
-            } else if (valR > valO * 1.2) {
-                verdict.innerText = "Big Win (W)"; verdict.style.color = var(--green);
-            } else {
-                verdict.innerText = "Fair Trade"; verdict.style.color = var(--accent);
-            }
+                `).join('');
+            };
+            render(offerList, 'list-offering', 'offer');
+            render(requestList, 'list-requesting', 'request');
+            
+            const total = list => list.reduce((a, b) => a + b.cash_value, 0);
+            document.getElementById('val-offering').innerText = `$${total(offerList).toLocaleString()}`;
+            document.getElementById('val-requesting').innerText = `$${total(requestList).toLocaleString()}`;
         }
 
         function setCat(cat, el) {
-            document.querySelectorAll('#cat-pills .pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active'); activeCat = cat; refreshDiscovery();
         }
-
         function setSort(sort, el) {
-            document.querySelectorAll('#sort-pills .pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active'); activeSort = sort; refreshDiscovery();
         }
 
