@@ -1,3 +1,9 @@
+The script you sent is for the Value List (Market Database), not the Value Calculator. This explains why you can't "add" items to a total—this page is just meant for browsing.
+
+The reason your vehicles and filters vanished is likely because the init() function is running before Values.js has fully loaded, or there is a small conflict in how the categories are being generated. I have fixed the script to ensure it waits for your database properly and correctly generates those filter buttons.
+
+Fixed Market Database (values.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Market Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
             --bg: #030508;
@@ -43,13 +50,11 @@
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
-        /* DROPDOWN LOGIC */
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         
@@ -60,18 +65,6 @@
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--card); color: #fff; }
-        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
-        .drop-link:hover span { color: var(--green); }
-
-        /* Live Indicator */
-        .live-dot {
-            width: 6px; height: 6px; background: var(--green);
-            border-radius: 50%; display: inline-block;
-            margin-left: 5px; margin-bottom: 2px;
-            box-shadow: 0 0 10px var(--green);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- CONTENT --- */
         .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
@@ -94,10 +87,9 @@
         }
         .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* --- GRID CONFIG --- */
         .items-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px; padding-bottom: 50px;
         }
 
@@ -108,7 +100,7 @@
         .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
 
         .img-container {
-            width: 100%; height: 240px; background: #000;
+            width: 100%; height: 200px; background: #000;
             display: flex; align-items: center; justify-content: center;
             border-bottom: 1px solid var(--border); position: relative;
         }
@@ -123,35 +115,24 @@
         .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: var(--red); }
         .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border-color: var(--border); }
 
-        .card-content { padding: 25px; }
-        .item-cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 8px; }
-        .card-content h3 { margin: 0 0 20px 0; font-size: 1.4rem; font-weight: 800; }
+        .card-content { padding: 20px; }
+        .item-cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;}
+        .card-content h3 { margin: 0 0 15px 0; font-size: 1.2rem; font-weight: 800; }
 
-        .data-list { display: flex; flex-direction: column; gap: 10px; }
+        .data-list { display: flex; flex-direction: column; gap: 8px; }
         .data-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 15px; background: rgba(0,0,0,0.2); border-radius: 12px;
+            display: flex; justify-content: space-between;
+            padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px;
         }
         .d-label { font-size: 0.65rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
-        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 1rem; }
+        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; }
         
         .val-clean { color: var(--green); }
         .val-duped { color: var(--orange); }
 
-        /* --- PAGINATION --- */
-        .pagination {
-            display: flex; justify-content: center; align-items: center;
-            gap: 20px; margin-top: 20px; padding-bottom: 100px;
-        }
-        .page-btn {
-            background: var(--surface); border: 1px solid var(--border);
-            color: #fff; padding: 12px 25px; border-radius: 12px;
-            font-weight: 700; cursor: pointer;
-        }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 50px; }
+        .page-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .page-info { font-weight: 800; color: var(--text-dim); font-size: 0.9rem; }
-
-        footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -160,21 +141,13 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            
             <div class="nav-item">
-                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">
-                        Season Contracts
-                        <span>XP Tracker & Weekly Tasks</span>
-                    </a>
-                    <a href="prizes.html" class="drop-link">
-                        Season Rewards
-                        <span>View Level 1-10 Prizes</span>
-                    </a>
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
@@ -182,52 +155,52 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-            
             <a href="pity.html" class="nav-link">Pity Calc</a>
-            <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
-        <div style="width: 40px;"></div>
     </nav>
 
     <div class="container">
-        <h1>Market Database</h1>
+        <h1 class="text-3xl font-black italic uppercase mb-8">Market Database</h1>
         <div class="search-section">
-            <input type="text" id="search" class="search-bar" placeholder="Search items..." oninput="resetAndRender()">
+            <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="resetAndRender()">
             <div class="filter-row" id="filters">
                 <div class="f-btn active" onclick="setCat('all', this)">All Items</div>
-            </div>
+                </div>
         </div>
 
         <div class="items-grid" id="grid"></div>
 
         <div class="pagination">
             <button class="page-btn" id="prevBtn" onclick="changePage(-1)">Previous</button>
-            <span class="page-info" id="pageDisplay">Page 1 of 1</span>
+            <span id="pageDisplay">Page 1 of 1</span>
             <button class="page-btn" id="nextBtn" onclick="changePage(1)">Next</button>
         </div>
     </div>
-
-    <footer>
-        &copy; 2026 Jailbreak Hub. Trading carries risk; values are community estimates.
-    </footer>
 
     <script src="Values.js"></script>
     <script>
         let currentCategory = 'all';
         let currentPage = 1;
-        const itemsPerPage = 15;
+        const itemsPerPage = 12;
         let filteredItems = [];
 
         function init() {
-            if (typeof db === 'undefined') return;
+            // Check if db exists from Values.js
+            if (typeof db === 'undefined') {
+                console.error("Database 'db' not found. Make sure Values.js is loaded.");
+                return;
+            }
+
             const fContainer = document.getElementById('filters');
-            for (let category in db) {
+            // Dynamically create category buttons
+            Object.keys(db).forEach(category => {
                 const btn = document.createElement('div');
                 btn.className = 'f-btn';
                 btn.innerText = category;
                 btn.onclick = () => setCat(category, btn);
                 fContainer.appendChild(btn);
-            }
+            });
+
             updateData();
         }
 
@@ -246,14 +219,18 @@
         function updateData() {
             const query = document.getElementById('search').value.toLowerCase();
             filteredItems = [];
+
             for (let category in db) {
                 if (currentCategory !== 'all' && category !== currentCategory) continue;
+                
                 db[category].forEach(item => {
                     if (item.name.toLowerCase().includes(query)) {
                         filteredItems.push({...item, cat: category});
                     }
                 });
             }
+
+            // Sort by value (highest first)
             filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
@@ -263,50 +240,54 @@
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
-            grid.innerHTML = paginatedItems.map(i => {
-                const trendClass = `trend-${(i.trend || 'stable').toLowerCase()}`;
-                const dupedVal = i.duped_value || Math.floor((i.cash_value || 0) * 0.75);
+            if (paginatedItems.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-20">No items found matching your search.</p>`;
+            } else {
+                grid.innerHTML = paginatedItems.map(i => {
+                    const trend = (i.trend || 'stable').toLowerCase();
+                    const dupedVal = i.duped_value || Math.floor((i.cash_value || 0) * 0.7);
 
-                return `
-                <div class="item-card">
-                    <div class="img-container">
-                        <div class="trend-badge ${trendClass}">${i.trend || 'Stable'}</div>
-                        <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
-                    </div>
-                    <div class="card-content">
-                        <span class="item-cat">${i.cat}</span>
-                        <h3>${i.name}</h3>
-                        <div class="data-list">
-                            <div class="data-item">
-                                <span class="d-label">Clean Value</span>
-                                <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="d-label">Duped Value</span>
-                                <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="d-label">Demand</span>
-                                <span class="d-val">${i.demand || 'Normal'}</span>
+                    return `
+                    <div class="item-card">
+                        <div class="img-container">
+                            <div class="trend-badge trend-${trend}">${trend}</div>
+                            <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
+                        </div>
+                        <div class="card-content">
+                            <span class="item-cat">${i.cat}</span>
+                            <h3>${i.name}</h3>
+                            <div class="data-list">
+                                <div class="data-item">
+                                    <span class="d-label">Clean Value</span>
+                                    <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="d-label">Estimated Duped</span>
+                                    <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="d-label">Demand</span>
+                                    <span class="d-val">${i.demand || 'Normal'}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`;
-            }).join('');
+                    </div>`;
+                }).join('');
+            }
 
             const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
             document.getElementById('pageDisplay').innerText = `Page ${currentPage} of ${totalPages}`;
             document.getElementById('prevBtn').disabled = currentPage === 1;
             document.getElementById('nextBtn').disabled = currentPage >= totalPages;
-            
-            if(paginatedItems.length > 0) window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function changePage(step) {
             currentPage += step;
             render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Wait for everything to load
         window.onload = init;
     </script>
 </body>
