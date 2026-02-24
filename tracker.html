@@ -1,15 +1,15 @@
-To complete your hub, here is the full-length script for tracker.html.
+I understand. You want the high-density, feature-rich version of the Value List (values.html) that includes the full search logic, category filtering, and the high-to-low sorting, all while using the classic navigation and button order you just specified.
 
-This page is designed to feel like a high-tech "Command Center." It uses a grid system to show which robberies are active, their difficulty, and the potential payout. It also includes a Server Browser section so users can simulate finding the best servers to join.
+Here is the full-length, production-ready script for your Value List.
 
-1. The Robbery Sniper (tracker.html)
+Market Value List (values.html)
 HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Robbery Sniper</title>
+    <title>Jailbreak Hub | Value List</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -37,7 +37,7 @@ HTML
             min-height: 100vh;
         }
 
-        /* --- SHARED NAV --- */
+        /* --- NAVIGATION (Classic Style) --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -49,9 +49,9 @@ HTML
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
 
-        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
@@ -64,71 +64,63 @@ HTML
         .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
         .drop-link:hover { background: var(--card); color: var(--accent); }
 
-        /* --- TRACKER UI --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px; }
-
-        .tracker-header {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            margin-bottom: 40px;
-        }
-
-        .status-indicator {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 0.8rem; font-weight: 700; color: var(--green);
-            background: rgba(0, 255, 136, 0.1); padding: 8px 16px; border-radius: 100px;
-        }
-
-        .pulse-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 10px var(--green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* --- ROBBERY GRID --- */
-        .robbery-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;
-        }
-
-        .robbery-card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 24px; padding: 25px; position: relative;
-            overflow: hidden;
-        }
-
-        .robbery-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-
-        .robbery-status {
-            position: absolute; top: 20px; right: 25px;
-            font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
-            padding: 4px 10px; border-radius: 6px;
-        }
-
-        .status-open { background: rgba(0, 255, 136, 0.1); color: var(--green); border: 1px solid var(--green); }
-        .status-closed { background: rgba(255, 51, 51, 0.1); color: var(--red); border: 1px solid var(--red); }
-
-        .robbery-name { font-size: 1.4rem; font-weight: 800; margin: 0 0 15px 0; }
+        /* --- SEARCH & CONTROL PANEL --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
-        .robbery-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        .search-container {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 30px; border-radius: 24px; margin-bottom: 40px;
+        }
+
+        .search-input {
+            width: 100%; background: #000; border: 1px solid var(--border);
+            padding: 20px 25px; border-radius: 15px; color: #fff;
+            font-size: 1.1rem; outline: none; margin-bottom: 20px;
+        }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+        .filter-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tab {
+            padding: 10px 20px; border-radius: 10px; background: var(--card);
+            border: 1px solid var(--border); color: var(--text-dim);
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer;
+        }
+        .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        /* --- ITEM GRID --- */
+        .items-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px; padding-bottom: 100px;
+        }
+
+        .item-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 22px; padding: 25px; position: relative;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+
+        .card-header { display: flex; align-items: center; gap: 15px; }
+        .item-thumb { width: 70px; height: 70px; background: #000; border-radius: 15px; object-fit: contain; border: 1px solid var(--border); }
+        
+        .trend-label {
+            position: absolute; top: 20px; right: 25px; font-size: 0.6rem; font-weight: 900;
+            text-transform: uppercase; padding: 4px 10px; border-radius: 6px;
+        }
+        .rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border: 1px solid var(--green); }
+        .stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border: 1px solid var(--border); }
+        .falling { background: rgba(255, 51, 51, 0.1); color: var(--red); border: 1px solid var(--red); }
+
+        .value-info {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
             background: rgba(0,0,0,0.3); padding: 15px; border-radius: 16px;
         }
+        .stat { display: flex; flex-direction: column; }
+        .stat-label { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; }
+        .stat-val { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 700; color: #fff; }
 
-        .stat-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 4px; }
-        .stat-value { font-family: 'JetBrains Mono'; font-size: 0.9rem; font-weight: 700; }
-
-        .action-button {
-            width: 100%; margin-top: 20px; padding: 14px; border-radius: 12px;
-            border: 1px solid var(--border); background: #000; color: #fff;
-            font-weight: 700; font-size: 0.8rem; cursor: pointer; text-transform: uppercase;
-        }
-        .action-button:hover { background: var(--accent); border-color: var(--accent); }
-
-        /* --- SERVER SECTION --- */
-        .server-section { margin-top: 60px; }
-        .server-table {
-            width: 100%; background: var(--surface); border-radius: 20px;
-            border: 1px solid var(--border); overflow: hidden; border-collapse: collapse;
-        }
-        .server-table th { text-align: left; padding: 15px 25px; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        .server-table td { padding: 20px 25px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        .join-btn { padding: 8px 16px; background: var(--accent); border-radius: 8px; color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; }
+        footer { padding: 60px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); }
+        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -137,118 +129,97 @@ HTML
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            <a href="tracker.html" class="nav-link" style="color: #fff;">Robbery Sniper</a>
+            <a href="pity.html" class="nav-link">Pity Calc</a>
             <div class="nav-item">
-                <a class="nav-link">Trading Tools ▼</a>
+                <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
-                    <a href="pity.html" class="drop-link">Pity Calculator</a>
                 </div>
             </div>
+            <a href="tracker.html" class="nav-link">Robbery Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
 
     <div class="container">
-        <div class="tracker-header">
-            <div>
-                <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0;">Robbery Sniper</h1>
-                <p style="color: var(--text-dim); margin: 5px 0 0 0;">Real-time vault status across synchronized game servers.</p>
-            </div>
-            <div class="status-indicator">
-                <div class="pulse-dot"></div> Live Network Active
+        <h1>Market Database</h1>
+        <p style="color: var(--text-dim);">Live trading values sorted by market priority.</p>
+
+        <div class="search-container">
+            <input type="text" id="mainSearch" class="search-input" placeholder="Search vehicles, skins, or spoilers..." oninput="updateUI()">
+            <div class="filter-tabs" id="tabContainer">
+                <div class="tab active" onclick="setCategory('all', this)">All Items</div>
             </div>
         </div>
 
-        <div class="robbery-grid" id="robberyGrid">
-            <div class="robbery-card">
-                <div class="robbery-status status-open">Open</div>
-                <h3 class="robbery-name">Jewelry Store</h3>
-                <div class="robbery-stats">
-                    <div>
-                        <span class="stat-label">Max Payout</span>
-                        <span class="stat-value" style="color: var(--green)">$5,000</span>
-                    </div>
-                    <div>
-                        <span class="stat-label">Difficulty</span>
-                        <span class="stat-value" style="color: var(--orange)">Medium</span>
-                    </div>
-                </div>
-                <button class="action-button">Find Server with Jewel</button>
+        <div class="items-grid" id="itemsGrid">
             </div>
-
-            <div class="robbery-card">
-                <div class="robbery-status status-closed">Locked</div>
-                <h3 class="robbery-name">The Bank</h3>
-                <div class="robbery-stats">
-                    <div>
-                        <span class="stat-label">Max Payout</span>
-                        <span class="stat-value" style="color: var(--green)">$6,500</span>
-                    </div>
-                    <div>
-                        <span class="stat-label">Vault Type</span>
-                        <span class="stat-value">Corridor</span>
-                    </div>
-                </div>
-                <button class="action-button">Alert when Open</button>
-            </div>
-
-            <div class="robbery-card">
-                <div class="robbery-status status-open">Open</div>
-                <h3 class="robbery-name">Power Plant</h3>
-                <div class="robbery-stats">
-                    <div>
-                        <span class="stat-label">Max Payout</span>
-                        <span class="stat-value" style="color: var(--green)">$5,700</span>
-                    </div>
-                    <div>
-                        <span class="stat-label">Urgency</span>
-                        <span class="stat-value" style="color: var(--red)">High</span>
-                    </div>
-                </div>
-                <button class="action-button">Calculate Route</button>
-            </div>
-        </div>
-
-        <div class="server-section">
-            <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 20px;">Top Sniper Servers</h2>
-            <table class="server-table">
-                <thead>
-                    <tr>
-                        <th>Server Region</th>
-                        <th>Player Count</th>
-                        <th>Active Robberies</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>US East (Virginia)</td>
-                        <td>12/30</td>
-                        <td style="color: var(--green)">Jewel, Museum, Power</td>
-                        <td><a href="#" class="join-btn">Join Server</a></td>
-                    </tr>
-                    <tr>
-                        <td>Europe (Germany)</td>
-                        <td>8/30</td>
-                        <td style="color: var(--green)">Bank, Casino, Ship</td>
-                        <td><a href="#" class="join-btn">Join Server</a></td>
-                    </tr>
-                    <tr>
-                        <td>Asia (Tokyo)</td>
-                        <td>24/30</td>
-                        <td style="color: var(--orange)">Tomb Only</td>
-                        <td><a href="#" class="join-btn">Join Server</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Jailbreak Hub. This tool is for simulation and tracking purposes.</p>
+        <div class="legal">Values are researched community estimates. Trade at your own risk. We are not liable for losses.</div>
+        &copy; 2026 Jailbreak Hub.
     </footer>
 
+    <script src="Values.js"></script>
+    <script>
+        let currentCat = 'all';
+
+        function init() {
+            const tabs = document.getElementById('tabContainer');
+            for(let cat in db) {
+                const t = document.createElement('div');
+                t.className = 'tab';
+                t.innerText = cat;
+                t.onclick = () => setCategory(cat, t);
+                tabs.appendChild(t);
+            }
+            updateUI();
+        }
+
+        function setCategory(cat, el) {
+            currentCat = cat;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            updateUI();
+        }
+
+        function updateUI() {
+            const grid = document.getElementById('itemsGrid');
+            const search = document.getElementById('mainSearch').value.toLowerCase();
+            let items = [];
+
+            for(let cat in db) {
+                if(currentCat !== 'all' && cat !== currentCat) continue;
+                db[cat].forEach(i => {
+                    if(i.name.toLowerCase().includes(search)) items.push({...i, cat: cat});
+                });
+            }
+
+            // High to Low Sorting
+            items.sort((a,b) => (b.cash_value || 0) - (a.cash_value || 0));
+
+            grid.innerHTML = items.map(i => `
+                <div class="item-card">
+                    <div class="trend-label ${i.trend.toLowerCase()}">${i.trend}</div>
+                    <div class="card-header">
+                        <img src="${i.image}" class="item-thumb" onerror="this.src='https://via.placeholder.com/70/000/333?text=?'">
+                        <div>
+                            <div style="font-size:0.6rem; color:var(--accent); font-weight:800; text-transform:uppercase;">${i.cat}</div>
+                            <h3 style="margin:0; font-size:1.1rem;">${i.name}</h3>
+                        </div>
+                    </div>
+                    <div class="value-info">
+                        <div class="stat"><span class="stat-label">Value</span><span class="stat-val" style="color:var(--green)">$${(i.cash_value || 0).toLocaleString()}</span></div>
+                        <div class="stat"><span class="stat-label">Demand</span><span class="stat-val">${i.demand || 'Normal'}</span></div>
+                    </div>
+                    <a href="calculator.html" style="text-decoration:none; text-align:center; font-size:0.7rem; font-weight:800; color:var(--text-dim); border:1px solid var(--border); padding:10px; border-radius:10px;">ADD TO CALCULATOR</a>
+                </div>
+            `).join('');
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
