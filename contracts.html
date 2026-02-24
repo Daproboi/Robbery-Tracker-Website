@@ -44,12 +44,29 @@
 
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
+        /* --- FIXED SELECT STYLING --- */
         select {
             appearance: none;
+            background-color: #1a1d23; /* Solid dark background */
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 1rem center;
             background-size: 1em;
+            color: white !important;
+        }
+
+        /* Ensuring the dropdown list items are visible */
+        select option {
+            background-color: #0a0c10;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Focus state */
+        select:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
         }
     </style>
 </head>
@@ -91,7 +108,7 @@
                 <div class="flex flex-wrap gap-4">
                     <div class="flex flex-col gap-2">
                         <label class="text-[10px] font-bold text-gray-500 uppercase">Current Level</label>
-                        <select id="level-select" onchange="calculateProgress()" class="bg-white/5 border border-white/20 rounded-xl p-3 w-44 text-white font-bold focus:border-[#0070f3] outline-none">
+                        <select id="level-select" onchange="calculateProgress()" class="border border-white/20 rounded-xl p-3 w-44 font-bold">
                             <option value="1">Level 1</option>
                             <option value="2">Level 2</option>
                             <option value="3">Level 3</option>
@@ -136,44 +153,37 @@
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
                 <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
                 <h3 class="text-lg font-bold mt-2">$4,000 Bounty</h3>
-                <p class="text-gray-500 text-sm mb-4">Collect without dying.</p>
                 <p class="text-[#00ff88] font-mono">+25 XP</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
                 <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
                 <h3 class="text-lg font-bold mt-2">Rob Bank (4x)</h3>
-                <p class="text-gray-500 text-sm mb-4">Complete successful robberies.</p>
                 <p class="text-[#00ff88] font-mono">+60 XP</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500">
                 <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
                 <h3 class="text-lg font-bold mt-2">Rob Tomb (4x)</h3>
-                <p class="text-gray-500 text-sm mb-4">Navigate the obstacles.</p>
                 <p class="text-[#00ff88] font-mono">+60 XP</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
                 <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
                 <h3 class="text-lg font-bold mt-2">Arrest 14 Criminals</h3>
-                <p class="text-gray-500 text-sm mb-4">Clear the server.</p>
                 <p class="text-[#00ff88] font-mono">+50 XP</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
                 <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
                 <h3 class="text-lg font-bold mt-2">Targeted Arrest</h3>
-                <p class="text-gray-500 text-sm mb-4">Arrest a $3,000+ bounty.</p>
                 <p class="text-[#00ff88] font-mono">+30 XP</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3]">
                 <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
                 <h3 class="text-lg font-bold mt-2">Pit Maneuver (5x)</h3>
-                <p class="text-gray-500 text-sm mb-4">Against 5 different players.</p>
                 <p class="text-[#00ff88] font-mono">+40 XP</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Updated Season 31 XP Data
         const seasonXP = {
             1: 160, 2: 192, 3: 230, 4: 276, 5: 332, 
             6: 398, 7: 477, 8: 573, 9: 687
@@ -190,13 +200,12 @@
             const percentage = Math.min((currentXp / targetXpForLevel) * 100, 100);
             document.getElementById('progress-bar').style.width = percentage + "%";
 
-            // Calculate total remaining to Level 10
             let totalRemaining = targetXpForLevel - currentXp;
             for (let i = level + 1; i <= 9; i++) {
                 totalRemaining += seasonXP[i];
             }
 
-            const dailyAvg = 100; // Average daily earnings
+            const dailyAvg = 100;
             const daysLeft = Math.ceil(totalRemaining / dailyAvg);
 
             document.getElementById('total-left').innerText = `${totalRemaining.toLocaleString()} XP`;
