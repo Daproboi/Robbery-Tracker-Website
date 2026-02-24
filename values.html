@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,9 +40,9 @@
         }
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
@@ -61,7 +62,7 @@
         .drop-link:hover { background: var(--card); color: #fff; }
 
         /* --- CONTENT --- */
-        .container { max-width: 1500px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
         
         .search-section {
             background: var(--surface); border: 1px solid var(--border);
@@ -81,45 +82,49 @@
         }
         .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+        /* --- FORCED 5 PER LINE --- */
         .items-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px; padding-bottom: 50px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px; padding-bottom: 50px;
         }
+
+        @media (max-width: 1400px) { .items-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
 
         .item-card {
             background: var(--card); border: 1px solid var(--border);
-            border-radius: 24px; display: flex; flex-direction: column; overflow: hidden;
+            border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;
         }
         .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
 
         .img-container {
-            width: 100%; height: 200px; background: #000;
+            width: 100%; height: 180px; background: #000;
             display: flex; align-items: center; justify-content: center;
             border-bottom: 1px solid var(--border); position: relative;
         }
-        .img-large { width: 80%; height: 80%; object-fit: contain; }
+        .img-large { width: 85%; height: 85%; object-fit: contain; }
 
         .trend-badge {
-            position: absolute; top: 15px; right: 15px;
-            padding: 5px 12px; border-radius: 6px; font-size: 0.65rem;
+            position: absolute; top: 12px; right: 12px;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.6rem;
             font-weight: 900; text-transform: uppercase; border: 1px solid;
         }
         .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: var(--green); }
         .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: var(--red); }
         .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border-color: var(--border); }
 
-        .card-content { padding: 20px; }
-        .item-cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block;}
-        .card-content h3 { margin: 0 0 15px 0; font-size: 1.2rem; font-weight: 800; }
+        .card-content { padding: 15px; }
+        .item-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block;}
+        .card-content h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .data-list { display: flex; flex-direction: column; gap: 8px; }
+        .data-list { display: flex; flex-direction: column; gap: 6px; }
         .data-item {
             display: flex; justify-content: space-between;
-            padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px;
+            padding: 8px; background: rgba(0,0,0,0.2); border-radius: 8px;
         }
-        .d-label { font-size: 0.65rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
-        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; }
+        .d-label { font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; }
         
         .val-clean { color: var(--green); }
         .val-duped { color: var(--orange); }
@@ -134,7 +139,9 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
+            <div class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
             <div class="nav-item">
                 <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
@@ -149,7 +156,12 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-            <a href="pity.html" class="nav-link">Pity Calc</a>
+            <div class="nav-item">
+                <a href="tracker.html" class="nav-link">Robbery Tracker</a>
+            </div>
+            <div class="nav-item">
+                <a href="pity.html" class="nav-link">Pity Calc</a>
+            </div>
         </div>
     </nav>
 
@@ -159,7 +171,7 @@
             <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="resetAndRender()">
             <div class="filter-row" id="filters">
                 <div class="f-btn active" onclick="setCat('all', this)">All Items</div>
-                </div>
+            </div>
         </div>
 
         <div class="items-grid" id="grid"></div>
@@ -175,18 +187,16 @@
     <script>
         let currentCategory = 'all';
         let currentPage = 1;
-        const itemsPerPage = 12;
+        const itemsPerPage = 15; // Increased to fit the 5-wide grid better
         let filteredItems = [];
 
         function init() {
-            // Check if db exists from Values.js
             if (typeof db === 'undefined') {
                 console.error("Database 'db' not found. Make sure Values.js is loaded.");
                 return;
             }
 
             const fContainer = document.getElementById('filters');
-            // Dynamically create category buttons
             Object.keys(db).forEach(category => {
                 const btn = document.createElement('div');
                 btn.className = 'f-btn';
@@ -224,7 +234,6 @@
                 });
             }
 
-            // Sort by value (highest first)
             filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
@@ -256,7 +265,7 @@
                                     <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
                                 </div>
                                 <div class="data-item">
-                                    <span class="d-label">Estimated Duped</span>
+                                    <span class="d-label">Est. Duped</span>
                                     <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
                                 </div>
                                 <div class="data-item">
@@ -281,7 +290,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Wait for everything to load
         window.onload = init;
     </script>
 </body>
