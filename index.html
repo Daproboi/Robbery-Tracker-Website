@@ -30,7 +30,7 @@
         #cashCanvas {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: -1; opacity: 0.15; /* Subtle enough not to distract */
+            z-index: -1; opacity: 0.15;
             pointer-events: none;
         }
 
@@ -47,18 +47,30 @@
         .nav-logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover { color: #fff; }
 
+        /* DROPDOWN LOGIC */
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
+        
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 200px; padding: 10px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
+        
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
-        .drop-link:hover { background: var(--card); color: var(--accent); }
+        
+        .drop-link { 
+            display: flex; flex-direction: column; padding: 12px; 
+            color: var(--text-dim); text-decoration: none; 
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
+            margin-bottom: 4px;
+        }
+        .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--jailbreak-green); }
 
         /* --- HERO SECTION --- */
         .hero {
@@ -66,7 +78,6 @@
             text-align: center; z-index: 1;
         }
         
-        /* Safe Cracking Text Animation */
         .hero h1 { 
             font-size: 4.5rem; font-weight: 800; letter-spacing: -3px; margin: 0;
             text-transform: uppercase;
@@ -116,15 +127,31 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link" style="color: #fff;">Home</a>
-            <a href="pity.html" class="nav-link">Pity Calc</a>
-            <div class="nav-item" style="position: relative; height: 70px; display: flex; align-items: center;">
+            
+            <div class="nav-item">
+                <a class="nav-link">Seasons ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">
+                        Season Contracts
+                        <span>XP Tracker & Weekly Tasks</span>
+                    </a>
+                    <a href="prizes.html" class="drop-link">
+                        Season Rewards
+                        <span>View Level 1-10 Prizes</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-item">
                 <a class="nav-link">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-            <a href="tracker.html" class="nav-link">Robbery Tracker</a>
+            
+            <a href="pity.html" class="nav-link">Pity Calc</a>
+            <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
@@ -135,6 +162,12 @@
     </section>
 
     <div class="grid">
+        <a href="contracts.html" class="feature-card" style="border-color: var(--accent);">
+            <div class="icon-box">📜</div>
+            <h3>Season Contracts</h3>
+            <p>Track live missions, daily XP resets, and calculate your path to Level 10.</p>
+        </a>
+
         <a href="values.html" class="feature-card">
             <div class="icon-box">💰</div>
             <h3>Value Database</h3>
@@ -151,12 +184,6 @@
             <div class="icon-box">🏎️</div>
             <h3>Pity Tracker</h3>
             <p>Log your robberies and predict when your next Hyperchrome will drop.</p>
-        </a>
-
-        <a href="tracker.html" class="feature-card">
-            <div class="icon-box">🏢</div>
-            <h3>Vault Monitor</h3>
-            <p>Keep an eye on the Bank, Jewelry, and Museum status in real-time.</p>
         </a>
     </div>
 
@@ -177,11 +204,9 @@
         const drops = Array(Math.floor(columns)).fill(1);
 
         function draw() {
-            // Dark trail effect
             ctx.fillStyle = 'rgba(3, 5, 8, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#00ff88'; // Jailbreak Green
+            ctx.fillStyle = '#00ff88'; 
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < drops.length; i++) {
