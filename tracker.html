@@ -1,3 +1,7 @@
+Here is the updated Robbery Tracker script. I’ve integrated the same Seasons Dropdown with the Live Pulse Indicator, ensured the navigation matches the rest of your site perfectly, and polished the CSS transitions for a seamless experience.
+
+Updated Robbery Tracker (tracker.html)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +32,7 @@
             min-height: 100vh;
         }
 
-        /* --- NAVIGATION (Classic Style) --- */
+        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -45,22 +49,41 @@
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
+        /* DROPDOWN LOGIC */
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 200px; padding: 10px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: block; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; }
-        .drop-link:hover { background: var(--card); color: var(--accent); }
+        
+        .drop-link { 
+            display: flex; flex-direction: column; padding: 12px; 
+            color: var(--text-dim); text-decoration: none; 
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
+            margin-bottom: 4px;
+        }
+        .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--green); }
+
+        /* Live Indicator Dot */
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- TRACKER LAYOUT --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
         .header-area { margin-bottom: 40px; }
-        .header-area h1 { font-size: 2.5rem; margin: 0; }
-        .header-area p { color: var(--text-dim); }
+        .header-area h1 { font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
+        .header-area p { color: var(--text-dim); margin-top: 5px; }
 
         .tracker-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -103,7 +126,21 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
-            <a href="pity.html" class="nav-link">Pity Calc</a>
+            
+            <div class="nav-item">
+                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">
+                        Season Contracts
+                        <span>XP Tracker & Weekly Tasks</span>
+                    </a>
+                    <a href="prizes.html" class="drop-link">
+                        Season Rewards
+                        <span>View Level 1-10 Prizes</span>
+                    </a>
+                </div>
+            </div>
+
             <div class="nav-item">
                 <a class="nav-link">Values ▼</a>
                 <div class="dropdown">
@@ -111,7 +148,9 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-            <a href="tracker.html" class="nav-link" style="color: #fff;">Robbery Tracker</a>
+
+            <a href="pity.html" class="nav-link">Pity Calc</a>
+            <a href="tracker.html" class="nav-link" style="color: #fff;">Tracker</a>
         </div>
         <div style="width: 40px;"></div>
     </nav>
@@ -187,7 +226,7 @@
 
     <footer>
         <div class="legal">
-            Disclaimer: Status data is simulated for display. Jailbreak Hub is not responsible for any in-game losses, failed robberies, or asset disputes. Use this tracker at your own discretion.
+            Disclaimer: Status data is simulated for display. Jailbreak Hub is not responsible for any in-game losses, failed robberies, or asset disputes.
         </div>
         &copy; 2026 Jailbreak Hub.
     </footer>
