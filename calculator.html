@@ -1,3 +1,9 @@
+I understand—you want it to feel like a high-end trading dashboard. To do this, I’ve shifted to a vertical layout where each side has its own massive section. The items are now displayed in a large, clean grid that mirrors your Value List page exactly.
+
+I also added the Swap Side button, Clear All button, and a Category Filter so you can find items faster.
+
+The Ultimate Value Calculator (Market Database Style)
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +24,7 @@
             --red: #ff3333;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -38,184 +44,185 @@
         }
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
-        .dropdown {
-            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 10px;
-            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            z-index: 6000;
-        }
-        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
-        .drop-link:hover { background: var(--card); color: #fff; }
-
-        /* --- CALCULATOR LAYOUT --- */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 100px; }
-        
-        .result-bar {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 24px; padding: 30px; text-align: center; margin-bottom: 30px;
-            position: sticky; top: 90px; z-index: 4000; backdrop-filter: blur(10px);
+        /* --- STICKY STATUS BAR --- */
+        .status-header {
+            position: sticky; top: 70px; z-index: 4000;
+            background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border); padding: 20px 0;
         }
 
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        
-        .trade-box { display: flex; flex-direction: column; gap: 20px; }
-
-        .box-header {
+        .status-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--surface); border: 1px solid var(--border);
-            padding: 20px 25px; border-radius: 20px;
         }
 
-        .value-counter { font-family: 'JetBrains Mono'; font-size: 1.8rem; color: var(--green); font-weight: 800; }
+        .fairness-badge {
+            padding: 12px 35px; border-radius: 12px;
+            background: #000; border: 1px solid var(--border);
+            font-weight: 900; font-size: 1.4rem; letter-spacing: 1px;
+        }
 
-        /* --- MATCHING ITEM CARDS --- */
-        .item-slots { 
+        .controls { display: flex; gap: 10px; }
+        .btn {
+            padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--card); color: white; cursor: pointer; font-weight: 700;
+            font-size: 0.75rem; text-transform: uppercase;
+        }
+        .btn:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-red:hover { background: var(--red); border-color: var(--red); }
+
+        /* --- MAIN LAYOUT --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .side-section { margin-bottom: 60px; }
+        .side-title {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 25px; border-bottom: 2px solid var(--border); padding-bottom: 15px;
+        }
+        .side-title h2 { margin: 0; font-size: 2rem; font-weight: 900; font-style: italic; text-transform: uppercase; }
+        .side-total { font-family: 'JetBrains Mono'; font-size: 2rem; color: var(--green); font-weight: 800; }
+
+        /* --- ITEM GRID --- */
+        .item-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 20px; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 25px; 
         }
 
         .item-card {
             background: var(--card); border: 1px solid var(--border);
             border-radius: 20px; overflow: hidden; position: relative;
-            display: flex; flex-direction: column;
+            animation: fadeIn 0.3s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .img-container {
-            width: 100%; height: 160px; background: #000;
+        .img-wrap {
+            width: 100%; height: 180px; background: #000;
             display: flex; align-items: center; justify-content: center;
-            border-bottom: 1px solid var(--border);
         }
-        .img-small { width: 70%; height: 70%; object-fit: contain; }
+        .img-wrap img { width: 80%; height: 80%; object-fit: contain; }
 
-        .card-content { padding: 15px; }
-        .item-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .card-content h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 800; }
+        .card-info { padding: 20px; border-top: 1px solid var(--border); }
+        .card-info .cat { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
+        .card-info h3 { margin: 5px 0 15px 0; font-size: 1.1rem; font-weight: 800; }
 
-        .data-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 10px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 5px;
+        .stat-row {
+            display: flex; justify-content: space-between; 
+            padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px;
         }
-        .d-label { font-size: 0.55rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
-        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; color: var(--green); }
+        .stat-label { font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+        .stat-value { font-family: 'JetBrains Mono'; color: var(--green); font-weight: 700; }
 
-        .remove-btn {
+        .remove-x {
             position: absolute; top: 10px; right: 10px;
             background: var(--red); color: white; border: none;
-            width: 24px; height: 24px; border-radius: 6px;
-            cursor: pointer; font-weight: 900; z-index: 10;
+            width: 28px; height: 28px; border-radius: 8px;
+            cursor: pointer; font-weight: 900; font-size: 1.2rem;
         }
 
-        .slot-empty {
+        .add-card {
             border: 2px dashed var(--border); border-radius: 20px;
-            height: 150px; display: flex; flex-direction: column;
+            height: 300px; display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             color: var(--text-dim); font-weight: 800; cursor: pointer;
-            text-transform: uppercase; font-size: 0.7rem; gap: 10px;
+            gap: 15px; font-size: 0.8rem; text-transform: uppercase;
         }
-        .slot-empty:hover { border-color: var(--accent); background: rgba(255,255,255,0.02); color: #fff; }
+        .add-card:hover { border-color: var(--accent); color: white; background: rgba(0, 112, 243, 0.05); }
 
-        /* --- MODAL --- */
+        /* --- SEARCH MODAL --- */
         #modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             display: none; align-items: center; justify-content: center; z-index: 9999;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
-        .modal-content {
+        .modal-body {
             background: var(--surface); border: 1px solid var(--border);
-            width: 90%; max-width: 500px; border-radius: 24px; padding: 25px;
-            max-height: 70vh; display: flex; flex-direction: column;
+            width: 95%; max-width: 600px; border-radius: 30px; padding: 35px;
+            max-height: 80vh; display: flex; flex-direction: column;
         }
-        .search-input {
+        .search-bar {
             width: 100%; background: #000; border: 1px solid var(--border);
-            padding: 15px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none;
+            padding: 18px; border-radius: 15px; color: #fff; margin-bottom: 15px; font-size: 1rem;
         }
-        .search-results { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .search-item {
-            padding: 10px; background: var(--card); border-radius: 10px;
+        .filter-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .tag { 
+            padding: 6px 15px; border-radius: 100px; background: var(--card); 
+            font-size: 0.65rem; font-weight: 800; cursor: pointer; white-space: nowrap; border: 1px solid var(--border);
+        }
+        .tag.active { background: var(--accent); border-color: var(--accent); }
+
+        .result-list { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .result-item {
+            padding: 15px; background: var(--card); border-radius: 12px;
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
-        .search-item:hover { background: var(--accent); }
-
-        .fairness-badge {
-            display: inline-block; padding: 10px 40px; border-radius: 100px;
-            background: #000; border: 1px solid var(--border);
-            font-weight: 900; font-size: 1.4rem; margin-bottom: 5px;
-        }
+        .result-item:hover { background: var(--accent); }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <div class="nav-item">
-                <a class="nav-link">Seasons ▼</a>
-                <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a class="nav-link" style="color: #fff;">Values ▼</a>
-                <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
-                </div>
-            </div>
-            <a href="pity.html" class="nav-link">Pity Calc</a>
-        </div>
     </nav>
 
-    <div class="container">
-        <div class="result-bar">
-            <div class="fairness-badge" id="status">EQUAL</div>
-            <div style="font-size: 0.9rem; color: var(--text-dim); font-weight: 700;" id="difference">Difference: $0</div>
-        </div>
-
-        <div class="calc-grid">
-            <div class="trade-box">
-                <div class="box-header">
-                    <h2 class="font-bold uppercase tracking-widest text-xs">Your Side</h2>
-                    <div class="value-counter" id="valA">$0</div>
-                </div>
-                <div class="item-slots" id="slotsA"></div>
-                <div class="slot-empty" onclick="openSearch('A')">
-                    <span style="font-size: 2rem;">+</span>
-                    Add Item
-                </div>
+    <div class="status-header">
+        <div class="status-container">
+            <div>
+                <div class="fairness-badge" id="status">EQUAL</div>
+                <div id="difference" style="color: var(--text-dim); font-size: 0.8rem; font-weight: 700; margin-top: 5px;">DIFFERENCE: $0</div>
             </div>
-
-            <div class="trade-box">
-                <div class="box-header">
-                    <h2 class="font-bold uppercase tracking-widest text-xs">Their Side</h2>
-                    <div class="value-counter" id="valB">$0</div>
-                </div>
-                <div class="item-slots" id="slotsB"></div>
-                <div class="slot-empty" onclick="openSearch('B')">
-                    <span style="font-size: 2rem;">+</span>
-                    Add Item
-                </div>
+            <div class="controls">
+                <button class="btn" onclick="swapSides()">Swap Sides</button>
+                <button class="btn btn-red" onclick="clearAll()">Clear All</button>
             </div>
         </div>
     </div>
 
-    <div id="modal">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="font-weight: 800; text-transform: uppercase; font-style: italic;">Select Item</h2>
-                <button onclick="closeSearch()" style="background:none; border:none; color:var(--red); font-weight:800; cursor:pointer;">CLOSE</button>
+    <div class="container">
+        <section class="side-section">
+            <div class="side-title">
+                <h2>Your Side</h2>
+                <div class="side-total" id="valA">$0</div>
             </div>
-            <input type="text" id="modalSearch" class="search-input" placeholder="Search Database..." oninput="filterModal()">
-            <div id="modalResults" class="search-results"></div>
+            <div class="item-grid" id="gridA">
+                <div class="add-card" onclick="openSearch('A')">
+                    <span style="font-size: 3rem;">+</span>
+                    Add Item
+                </div>
+            </div>
+        </section>
+
+        <section class="side-section">
+            <div class="side-title">
+                <h2>Their Side</h2>
+                <div class="side-total" id="valB">$0</div>
+            </div>
+            <div class="item-grid" id="gridB">
+                <div class="add-card" onclick="openSearch('B')">
+                    <span style="font-size: 3rem;">+</span>
+                    Add Item
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="modal">
+        <div class="modal-body">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin:0; font-weight:900; text-transform:uppercase;">Select Item</h3>
+                <button onclick="closeSearch()" style="background:none; border:none; color:var(--red); font-weight:900; cursor:pointer;">CLOSE</button>
+            </div>
+            <input type="text" id="mSearch" class="search-bar" placeholder="Search item name..." oninput="filterResults()">
+            <div class="filter-tags" id="tags">
+                <div class="tag active" onclick="setFilter('All', this)">All</div>
+                <div class="tag" onclick="setFilter('Vehicles', this)">Vehicles</div>
+                <div class="tag" onclick="setFilter('Textures', this)">Textures</div>
+                <div class="tag" onclick="setFilter('Colors', this)">Colors</div>
+                <div class="tag" onclick="setFilter('Rims', this)">Rims</div>
+                <div class="tag" onclick="setFilter('Spoilers', this)">Spoilers</div>
+            </div>
+            <div id="mResults" class="result-list"></div>
         </div>
     </div>
 
@@ -224,46 +231,58 @@
         let sideA = [];
         let sideB = [];
         let activeSide = 'A';
+        let currentFilter = 'All';
 
         function openSearch(side) {
             activeSide = side;
             document.getElementById('modal').style.display = 'flex';
-            document.getElementById('modalSearch').value = '';
-            document.getElementById('modalSearch').focus();
-            filterModal();
+            document.getElementById('mSearch').focus();
+            filterResults();
         }
 
         function closeSearch() { document.getElementById('modal').style.display = 'none'; }
 
-        function filterModal() {
-            const query = document.getElementById('modalSearch').value.toLowerCase();
-            const results = document.getElementById('modalResults');
-            results.innerHTML = '';
+        function setFilter(cat, el) {
+            currentFilter = cat;
+            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            filterResults();
+        }
 
-            let allItems = [];
+        function filterResults() {
+            const query = document.getElementById('mSearch').value.toLowerCase();
+            const list = document.getElementById('mResults');
+            list.innerHTML = '';
+
+            let all = [];
             for(let cat in db) {
-                db[cat].forEach(item => allItems.push({...item, category: cat}));
+                db[cat].forEach(item => {
+                    if (currentFilter === 'All' || cat === currentFilter) {
+                        all.push({...item, cat});
+                    }
+                });
             }
 
-            const filtered = allItems.filter(i => i.name.toLowerCase().includes(query)).slice(0, 15);
-
-            filtered.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="${item.image}" style="width: 30px; height: 30px; object-fit: contain;">
-                        <span style="font-weight:700; font-size:0.9rem;">${item.name}</span>
+            all.filter(i => i.name.toLowerCase().includes(query)).slice(0, 20).forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'result-item';
+                row.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <img src="${item.image}" style="width:40px; height:40px; object-fit:contain;">
+                        <div>
+                            <div style="font-size:0.6rem; color:var(--accent); font-weight:800;">${item.cat}</div>
+                            <div style="font-weight:800;">${item.name}</div>
+                        </div>
                     </div>
-                    <span style="font-family:'JetBrains Mono'; color:var(--green); font-size:0.8rem;">$${(item.cash_value || 0).toLocaleString()}</span>
+                    <div style="font-family:'JetBrains Mono'; color:var(--green);">$${item.cash_value.toLocaleString()}</div>
                 `;
-                div.onclick = () => {
+                row.onclick = () => {
                     if (activeSide === 'A') sideA.push(item);
                     else sideB.push(item);
                     closeSearch();
                     updateUI();
                 };
-                results.appendChild(div);
+                list.appendChild(row);
             });
         }
 
@@ -273,55 +292,53 @@
             updateUI();
         }
 
+        function clearAll() { sideA = []; sideB = []; updateUI(); }
+
+        function swapSides() {
+            const temp = [...sideA];
+            sideA = [...sideB];
+            sideB = temp;
+            updateUI();
+        }
+
         function updateUI() {
-            const renderSlots = (items, containerId, sideKey) => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = items.map((item, index) => `
+            const render = (items, gridId, sideKey) => {
+                const grid = document.getElementById(gridId);
+                let html = items.map((item, i) => `
                     <div class="item-card">
-                        <button class="remove-btn" onclick="removeItem('${sideKey}', ${index})">×</button>
-                        <div class="img-container">
-                            <img src="${item.image}" class="img-small" onerror="this.src='https://via.placeholder.com/150/000/333?text=?'">
-                        </div>
-                        <div class="card-content">
-                            <span class="item-cat">${item.category}</span>
+                        <button class="remove-x" onclick="removeItem('${sideKey}', ${i})">×</button>
+                        <div class="img-wrap"><img src="${item.image}"></div>
+                        <div class="card-info">
+                            <span class="cat">${item.cat}</span>
                             <h3>${item.name}</h3>
-                            <div class="data-item">
-                                <span class="d-label">Value</span>
-                                <span class="d-val">$${(item.cash_value || 0).toLocaleString()}</span>
+                            <div class="stat-row">
+                                <span class="stat-label">Value</span>
+                                <span class="stat-value">$${item.cash_value.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
                 `).join('');
+                html += `<div class="add-card" onclick="openSearch('${sideKey}')"><span style="font-size: 3rem;">+</span>Add Item</div>`;
+                grid.innerHTML = html;
             };
 
-            renderSlots(sideA, 'slotsA', 'A');
-            renderSlots(sideB, 'slotsB', 'B');
+            render(sideA, 'gridA', 'A');
+            render(sideB, 'gridB', 'B');
 
-            const totalA = sideA.reduce((sum, item) => sum + (item.cash_value || 0), 0);
-            const totalB = sideB.reduce((sum, item) => sum + (item.cash_value || 0), 0);
+            const totalA = sideA.reduce((s, i) => s + i.cash_value, 0);
+            const totalB = sideB.reduce((s, i) => s + i.cash_value, 0);
 
             document.getElementById('valA').innerText = `$${totalA.toLocaleString()}`;
             document.getElementById('valB').innerText = `$${totalB.toLocaleString()}`;
 
             const diff = totalA - totalB;
             const status = document.getElementById('status');
-            const diffEl = document.getElementById('difference');
+            document.getElementById('difference').innerText = `DIFFERENCE: $${Math.abs(diff).toLocaleString()}`;
 
-            diffEl.innerText = `Difference: $${Math.abs(diff).toLocaleString()}`;
-
-            if (totalA === 0 && totalB === 0) {
-                status.innerText = "EQUAL";
-                status.style.color = "white";
-            } else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.15)) {
-                status.innerText = "FAIR TRADE";
-                status.style.color = "var(--green)";
-            } else if (diff > 0) {
-                status.innerText = "SIDE A OVERPAYING";
-                status.style.color = "var(--red)";
-            } else {
-                status.innerText = "SIDE B OVERPAYING";
-                status.style.color = "var(--red)";
-            }
+            if (totalA === 0 && totalB === 0) { status.innerText = "EQUAL"; status.style.color = "white"; }
+            else if (Math.abs(diff) < (Math.max(totalA, totalB) * 0.1)) { status.innerText = "FAIR TRADE"; status.style.color = "var(--green)"; }
+            else if (diff > 0) { status.innerText = "SIDE A OVERPAYING"; status.style.color = "var(--red)"; }
+            else { status.innerText = "SIDE B OVERPAYING"; status.style.color = "var(--red)"; }
         }
     </script>
 </body>
