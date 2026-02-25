@@ -58,6 +58,16 @@
         }
         .drop-link:hover { background: var(--card); color: #fff; }
         .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--green); }
+
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- REWARDS CONTENT --- */
         .container { max-width: 850px; margin: 0 auto; padding: 40px 20px; }
@@ -97,9 +107,24 @@
 
         .reward-desc { color: var(--text-dim); font-size: 0.85rem; line-height: 1.5; margin-top: 8px; }
 
-        /* --- FOOTER --- */
-        footer { padding: 60px 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); margin-top: 40px; }
-        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin-bottom: 10px; max-width: 800px; margin: 0 auto 15px; }
+        /* --- UNIFIED FOOTER --- */
+        footer {
+            background: var(--surface); border-top: 1px solid var(--border);
+            padding: 60px 20px; text-align: center; margin-top: 100px;
+        }
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .footer-brand span { color: var(--accent); }
+        .footer-credits { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
+        .footer-links a:hover { color: var(--accent); }
+        .support-btn { 
+            background: var(--card); border: 1px solid var(--border); 
+            padding: 10px 20px; border-radius: 8px; 
+            font-family: 'JetBrains Mono'; text-decoration: none;
+            display: inline-block; font-size: 0.9rem; font-weight: 800;
+        }
+        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -112,7 +137,7 @@
             </div>
             
             <div class="nav-item">
-                <span class="nav-link" style="color: #fff;">Seasons ▼</span>
+                <span class="nav-link" style="color: #fff;">Seasons <div class="live-dot"></div> ▼</span>
                 <div class="dropdown">
                     <a href="contracts.html" class="drop-link">
                         Season Contracts
@@ -222,10 +247,21 @@
     </div>
 
     <footer>
-        <div class="legal">
-            Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners.
+        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
+        
+        <div class="footer-links">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
         </div>
-        &copy; 2026 Jailbreak Hub.
+        
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
+        
+        <div class="legal">
+            Disclaimer: Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners. Not affiliated with Badimo.
+        </div>
+        <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
 </body>
