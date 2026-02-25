@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Privacy Policy & Legal Terms</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg: #030508;
+            --surface: #0a0c10;
+            --card: #11141a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #0070f3;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --green: #00ff88;
+        }
+
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); color: var(--text-main); 
+            margin: 0; padding-top: 100px;
+            background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+            min-height: 100vh;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: center;
+            padding: 0 40px; z-index: 5000;
+        }
+        .nav-logo { position: absolute; left: 40px; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
+        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
+
+        .dropdown {
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 220px; padding: 10px;
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 6000;
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
+        .drop-link:hover { background: var(--card); color: #fff; }
+
+        /* --- CONTENT STYLING --- */
+        .policy-container { max-width: 900px; margin: 40px auto; padding: 60px; background: var(--surface); border: 1px solid var(--border); border-radius: 32px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
+        h1 { font-size: 3rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -2px; margin-bottom: 10px; }
+        h2 { font-size: 1.2rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-top: 40px; margin-bottom: 15px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        p, li { color: var(--text-dim); line-height: 1.8; font-size: 0.95rem; margin-bottom: 15px; }
+        ul { list-style: none; padding-left: 0; }
+        li::before { content: "•"; color: var(--accent); font-weight: bold; display: inline-block; width: 1em; margin-left: 0; }
+        
+        .last-updated { font-family: 'JetBrains Mono'; color: var(--green); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 40px; display: block; }
+
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 20px; text-align: center; margin-top: 100px; }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            <div class="nav-item">
+                <a class="nav-link">Seasons ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a class="nav-link">Values ▼</a>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
+        </div>
+    </nav>
+
+    <div class="policy-container">
+        <h1>Privacy <span class="text-[#0070f3]">Policy</span></h1>
+        <span class="last-updated">Last Revised: May 22, 2024</span>
+
+        <p>Welcome to <strong>Jailbreak Hub</strong>. Your privacy is critically important to us. This Privacy Policy document outlines the types of personal information that is received and collected by Jailbreak Hub and how it is used. By using our website, you hereby consent to our Privacy Policy and agree to its terms.</p>
+
+        <h2>1. Data Collection & Usage</h2>
+        <p>Jailbreak Hub is designed to be a "No-Login" utility. We do not require users to create accounts, provide email addresses, or link social media profiles. However, some data is collected automatically:</p>
+        <ul>
+            <li><strong>Log Files:</strong> Like many other Web sites, Jailbreak Hub makes use of log files. These files merely log visitors to the site – usually a standard procedure for hosting companies and a part of hosting services' analytics. The information inside the log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date/time stamp, and referring/exit pages.</li>
+            <li><strong>Local Storage:</strong> To improve user experience, we use your browser's "Local Storage" to remember your calculator items and XP progress. This data stays on <strong>your</strong> device and is never uploaded to our servers.</li>
+        </ul>
+
+        <h2>2. Cookies and Web Beacons</h2>
+        <p>Jailbreak Hub uses cookies to store information about visitors' preferences, to record user-specific information on which pages the site visitor accesses or visits, and to personalize or customize our web page content based upon visitors' browser type or other information that the visitor sends via their browser.</p>
+
+        <h2>3. Third-Party Privacy Policies</h2>
+        <p>You should consult the respective privacy policies of these third-party servers for more detailed information on their practices. Jailbreak Hub's privacy policy does not apply to, and we cannot control the activities of, such other advertisers or web sites. This includes:</p>
+        <ul>
+            <li><strong>Roblox Corporation:</strong> We are not affiliated with Roblox. Their data collection is independent of ours.</li>
+            <li><strong>Discord:</strong> If you join our community Discord, your data is subject to Discord's Terms of Service.</li>
+            <li><strong>Google Analytics:</strong> We may use Google Analytics to track site traffic. Google’s use of advertising cookies enables it and its partners to serve ads to our users.</li>
+        </ul>
+
+        <h2>4. Children's Information</h2>
+        <p>We believe it is important to provide added protection for children online. We encourage parents and guardians to spend time online with their children to observe, participate in and/or monitor and guide their online activity. Jailbreak Hub does not knowingly collect any personally identifiable information from children under the age of 13.</p>
+
+        <h2>5. CCPA & GDPR Compliance</h2>
+        <p>Under the CCPA (California Consumer Privacy Act) and GDPR (General Data Protection Regulation), users have the right to request that we disclose what data we collect. Since we do not collect personal identifiers (Names, Emails), there is no data for us to "delete" or "transfer" upon request, as all tool data is stored locally on your own browser.</p>
+
+        <h2>6. Disclaimer of Liability</h2>
+        <p>Jailbreak Hub provides "Values" and "Calculators" for entertainment purposes only. We do not guarantee the accuracy of community-sourced values. By using this site, you agree that we are not responsible for any in-game "losses" or "bad trades" resulting from the use of our data.</p>
+
+        <h2>7. Consent</h2>
+        <p>By using our website, you hereby consent to our privacy policy and agree to its terms. If you require any more information or have any questions about our privacy policy, please feel free to contact us via our official Discord server.</p>
+    </div>
+
+    <footer>
+        <div class="footer-brand" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 10px;">JAILBREAK<span style="color:var(--accent)">HUB</span></div>
+        <p style="color:var(--text-dim); font-size: 0.8rem;">&copy; 2026 Jailbreak Hub. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
