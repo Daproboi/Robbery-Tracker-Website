@@ -23,26 +23,26 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 90px;
+            margin: 0; padding-top: 100px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
 
-        /* --- RESTORED NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; justify-content: space-between;
+            align-items: center; justify-content: center;
             padding: 0 40px; z-index: 5000;
         }
 
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo { position: absolute; left: 40px; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
 
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
@@ -90,7 +90,9 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
+            <div class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+            </div>
             
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Seasons <div class="live-dot"></div> ▼</a>
@@ -114,10 +116,23 @@
                 </div>
             </div>
 
-            <a href="pity.html" class="nav-link">Pity Calc</a>
-            <a href="tracker.html" class="nav-link">Tracker</a>
+            <div class="nav-item">
+                <a class="nav-link">Community ▼</a>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>
+                    <a href="team.html" class="drop-link">Meet the Team</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="pity.html" class="nav-link">Pity Calc</a>
+            </div>
+            
+            <div class="nav-item">
+                <a href="tracker.html" class="nav-link">Tracker</a>
+            </div>
         </div>
-        <div style="width: 40px;"></div>
     </nav>
 
     <div class="max-w-7xl mx-auto px-6 py-8">
@@ -127,12 +142,12 @@
                 <p id="daily-timer" class="text-3xl font-mono text-[#0070f3]">00:00:00</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Contract Deadline</p>
-                <p class="text-3xl font-mono text-[#00ff88]">6d 12h 0m</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Season End Deadline</p>
+                <p class="text-3xl font-mono text-[#00ff88]">12d 04h 22m</p>
             </div>
             <div class="bg-[#0a0c10] border border-white/5 p-6 rounded-2xl flex items-center gap-3">
                 <div class="h-3 w-3 rounded-full bg-[#00ff88] animate-pulse"></div>
-                <p class="text-xl font-bold italic uppercase tracking-tighter">Season 31 Progression</p>
+                <p class="text-xl font-bold italic uppercase tracking-tighter">Season 31 Live</p>
             </div>
         </div>
 
@@ -140,7 +155,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                 <div>
                     <h2 class="text-3xl font-black uppercase italic tracking-tighter">Level <span class="text-[#0070f3]">Calculator</span></h2>
-                    <p class="text-gray-400 text-sm">Select your current level to see remaining requirements for Season 31.</p>
+                    <p class="text-gray-400 text-sm">Input your current progress to project your finish date.</p>
                 </div>
                 <div class="flex flex-wrap gap-4">
                     <div class="flex flex-col gap-2">
@@ -174,18 +189,18 @@
                 </div>
                 <div class="pt-6 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-white/5 p-4 rounded-xl">
-                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Remaining to Max</p>
+                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Total Remaining XP</p>
                         <p id="total-left" class="text-xl font-bold text-white font-mono">3,325 XP</p>
                     </div>
                     <div class="bg-white/5 p-4 rounded-xl">
-                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Time Estimate</p>
+                        <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Estimated Days Left</p>
                         <p id="grind-estimate" class="text-xl font-bold text-[#00ff88] font-mono">~34 Days</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2 class="text-2xl font-black uppercase italic mb-6 border-l-4 border-[#0070f3] pl-4">Season 31 Weekly Tasks</h2>
+        <h2 class="text-2xl font-black uppercase italic mb-6 border-l-4 border-[#0070f3] pl-4">Active Weekly Contracts</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500 hover:scale-[1.02] transition-transform">
                 <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
@@ -197,25 +212,10 @@
                 <h3 class="text-lg font-bold mt-2">Rob Bank (4x)</h3>
                 <p class="text-[#00ff88] font-mono text-xl">+60 XP</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-red-500 hover:scale-[1.02] transition-transform">
-                <span class="text-red-500 text-[10px] font-black uppercase">Criminal</span>
-                <h3 class="text-lg font-bold mt-2">Rob Tomb (4x)</h3>
-                <p class="text-[#00ff88] font-mono text-xl">+60 XP</p>
-            </div>
             <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3] hover:scale-[1.02] transition-transform">
                 <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
                 <h3 class="text-lg font-bold mt-2">Arrest 14 Criminals</h3>
                 <p class="text-[#00ff88] font-mono text-xl">+50 XP</p>
-            </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3] hover:scale-[1.02] transition-transform">
-                <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
-                <h3 class="text-lg font-bold mt-2">Targeted Arrest</h3>
-                <p class="text-[#00ff88] font-mono text-xl">+30 XP</p>
-            </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-6 border-t-4 border-t-[#0070f3] hover:scale-[1.02] transition-transform">
-                <span class="text-[#0070f3] text-[10px] font-black uppercase">Police</span>
-                <h3 class="text-lg font-bold mt-2">Pit Maneuver (5x)</h3>
-                <p class="text-[#00ff88] font-mono text-xl">+40 XP</p>
             </div>
         </div>
     </div>
@@ -237,16 +237,16 @@
             const percentage = Math.min((currentXp / targetXpForLevel) * 100, 100);
             document.getElementById('progress-bar').style.width = percentage + "%";
 
-            let totalRemaining = targetXpForLevel - currentXp;
+            let totalRemaining = Math.max(0, targetXpForLevel - currentXp);
             for (let i = level + 1; i <= 9; i++) {
                 totalRemaining += seasonXP[i];
             }
 
-            const dailyAvg = 100;
+            const dailyAvg = 100; // Average XP per day including tasks
             const daysLeft = Math.ceil(totalRemaining / dailyAvg);
 
             document.getElementById('total-left').innerText = `${totalRemaining.toLocaleString()} XP`;
-            document.getElementById('grind-estimate').innerText = `~${daysLeft} Days (at 100 XP/Day)`;
+            document.getElementById('grind-estimate').innerText = `~${daysLeft} Days (Est.)`;
         }
 
         function updateDailyTimer() {
