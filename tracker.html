@@ -28,16 +28,16 @@
             min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- UNIFIED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; justify-content: space-between;
+            align-items: center; justify-content: center;
             padding: 0 40px; z-index: 5000;
         }
 
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo { position: absolute; left: 40px; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
 
         .nav-links { display: flex; gap: 5px; align-items: center; }
@@ -124,7 +124,7 @@
             </div>
             
             <div class="nav-item">
-                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <span class="nav-link">Seasons <div class="live-dot"></div> ▼</span>
                 <div class="dropdown">
                     <a href="contracts.html" class="drop-link">
                         Season Contracts
@@ -138,7 +138,7 @@
             </div>
 
             <div class="nav-item">
-                <a class="nav-link">Values ▼</a>
+                <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
@@ -146,11 +146,10 @@
             </div>
 
             <div class="nav-item">
-                <a class="nav-link">Community ▼</a>
+                <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
                     <a href="vip.html" class="drop-link">Private Servers</a>
-                    <a href="testimonials.html" class="drop-link">Testimonials</a>
-                    <a href="team.html" class="drop-link">Meet the Team</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
 
