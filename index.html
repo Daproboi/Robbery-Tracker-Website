@@ -1,943 +1,350 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Jailbreak Hub | The Premium Toolkit</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-
         :root {
-
             --bg: #030508;
-
             --surface: #0a0c10;
-
             --card: #11141a;
-
             --border: rgba(255, 255, 255, 0.08);
-
             --accent: #0070f3;
-
             --accent-glow: rgba(0, 112, 243, 0.4);
-
             --jailbreak-green: #00ff88;
-
             --green-glow: rgba(0, 255, 136, 0.3);
-
             --text-main: #ffffff;
-
             --text-dim: #94a3b8;
-
             --invert: 0;
-
         }
-
-
-
-        /* Light Mode Overrides */
 
         body.light-mode {
-
             --bg: #f8fafc;
-
             --surface: #ffffff;
-
             --card: #f1f5f9;
-
             --border: rgba(0, 0, 0, 0.1);
-
             --accent: #005bb5;
-
             --accent-glow: rgba(0, 91, 181, 0.3);
-
             --jailbreak-green: #00b35f;
-
             --green-glow: rgba(0, 179, 95, 0.2);
-
             --text-main: #0f172a;
-
             --text-dim: #475569;
-
             --invert: 1;
-
         }
-
-
 
         * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }
 
-
-
         body { 
-
             font-family: 'Plus Jakarta Sans', sans-serif; 
-
             background: var(--bg); color: var(--text-main); 
-
             margin: 0; padding-top: 70px;
-
             overflow-x: hidden; min-height: 100vh;
-
         }
-
-
-
-        /* --- BACKGROUNDS --- */
 
         #cashCanvas {
-
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-
             z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));
-
         }
-
-
 
         .video-container {
-
             position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
-
             overflow: hidden; z-index: -1;
-
         }
-
         .video-container video {
-
             width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: grayscale(50%);
-
         }
-
         .video-overlay {
-
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-
             background: linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
-
         }
-
-
 
         /* --- NAVIGATION --- */
-
         .nav-top {
-
             position: fixed; top: 0; width: 100%; height: 70px;
-
             background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);
-
             border-bottom: 1px solid var(--border); display: flex;
-
             align-items: center; justify-content: space-between;
-
             padding: 0 40px; z-index: 5000;
-
         }
-
-
 
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }
-
         .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
 
-
-
         .nav-links { display: flex; gap: 20px; align-items: center; }
-
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-
         .nav-link:hover { color: var(--text-main); }
 
-
-
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-
         .dropdown {
-
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-
             background: var(--surface); border: 1px solid var(--border);
-
             border-radius: 12px; min-width: 220px; padding: 10px;
-
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-
             transition: all 0.2s ease;
-
         }
-
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-
         .drop-link { 
-
             display: flex; flex-direction: column; padding: 12px; 
-
             color: var(--text-dim); text-decoration: none; 
-
             font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
-
             margin-bottom: 4px;
-
         }
-
         .drop-link:hover { background: var(--card); color: var(--text-main); }
 
-
-
         .nav-actions { display: flex; align-items: center; gap: 15px; }
-
         .theme-toggle {
-
             background: var(--card); border: 1px solid var(--border); color: var(--text-main);
-
             padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;
-
         }
 
-        .theme-toggle:hover { border-color: var(--accent); }
-
-
-
-        /* --- HERO SECTION --- */
-
-        .hero {
-
-            position: relative; padding: 15vh 20px 10vh; text-align: center; z-index: 1; min-height: 80vh;
-
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-
+        /* --- TESTIMONIAL CARDS --- */
+        .test-card { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            padding: 30px; 
+            border-radius: 24px;
+            break-inside: avoid;
+            margin-bottom: 20px;
         }
 
-        
-
-        .hero-badge {
-
-            background: rgba(0, 112, 243, 0.1); border: 1px solid var(--accent); color: var(--accent);
-
-            padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;
-
-            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px;
-
-            box-shadow: 0 0 15px var(--accent-glow);
-
+        /* --- MODAL --- */
+        #vouchModal {
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+            z-index: 9999; align-items: center; justify-content: center;
         }
-
-
-
-        .hero h1 { 
-
-            font-size: 5rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase;
-
-            background: linear-gradient(135deg, var(--text-main), var(--text-dim));
-
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-
-        }
-
-        .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px; line-height: 1.6; }
-
-
-
-        .hero-buttons { display: flex; gap: 20px; justify-content: center; }
-
-        
-
-        .btn {
-
-            text-decoration: none; padding: 16px 32px; border-radius: 12px; font-weight: 800;
-
-            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;
-
-        }
-
-        .btn-primary {
-
-            background: var(--jailbreak-green); color: #000;
-
-            box-shadow: 0 0 20px var(--green-glow); border: 2px solid var(--jailbreak-green);
-
-        }
-
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px var(--green-glow); }
-
-        
-
-        .btn-discord {
-
-            background: #5865F2; color: #fff; border: 2px solid #5865F2;
-
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
-
-        }
-
-        .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(88, 101, 242, 0.6); }
-
-
-
-        /* --- STATS BAR --- */
-
-        .stats-bar {
-
-            background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-
-            padding: 30px 20px; display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; z-index: 2; position: relative;
-
-        }
-
-        .stat-item { text-align: center; }
-
-        .stat-num { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-
-        .stat-label { color: var(--accent); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-
-
-
-        /* --- CONTENT SECTIONS --- */
-
-        .section { max-width: 1200px; margin: 100px auto; padding: 0 20px; z-index: 2; position: relative; }
-
-        .section-header { text-align: center; margin-bottom: 60px; }
-
-        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; }
-
-        .section-header p { color: var(--text-dim); font-size: 1rem; }
-
-
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-
-        .feature-card {
-
-            background: var(--card); border: 1px solid var(--border); border-radius: 20px;
-
-            padding: 40px 30px; text-decoration: none; color: inherit; 
-
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-
-        }
-
-        .feature-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }
-
-        .icon-box { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--green-glow)); }
-
-        .feature-card h3 { font-size: 1.5rem; margin: 0 0 10px; }
-
-
-
-        .info-split { display: flex; align-items: center; gap: 50px; margin-top: 100px; flex-wrap: wrap; }
-
-        .info-text { flex: 1; min-width: 300px; }
-
-        .info-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
-
-        .info-text p { color: var(--text-dim); line-height: 1.7; font-size: 1.05rem; margin-bottom: 20px; }
-
-        .info-img { flex: 1; min-width: 300px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-
-        .info-img img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
-
-        .info-img:hover img { transform: scale(1.05); }
-
-
-
-        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-
-        .test-card { background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 16px; }
-
-        .test-card p { font-style: italic; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }
-
-        .test-user { display: flex; align-items: center; gap: 15px; }
-
-        .test-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--border); }
-
-        .test-name { font-weight: 700; font-size: 0.9rem; }
-
-        .test-role { color: var(--accent); font-size: 0.75rem; font-family: 'JetBrains Mono'; }
-
-
-
-        .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
-
-        .faq-question { padding: 20px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-
-        .faq-question:hover { background: var(--card); }
-
-        .faq-answer { padding: 0 20px 20px; color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; display: none; }
-
-        .faq-item.active .faq-answer { display: block; }
-
-        .faq-item.active .faq-question { color: var(--accent); }
-
-
-
-        footer {
-
-            background: var(--surface); border-top: 1px solid var(--border);
-
-            padding: 60px 20px; text-align: center; margin-top: 100px;
-
-        }
-
-        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
-
-        .footer-brand span { color: var(--accent); }
-
-        .footer-credits { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
-
-        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-
-        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
-
-        .footer-links a:hover { color: var(--accent); }
-
-        .support-btn { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; }
-
-        
 
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
-
         .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-
-
     </style>
-
 </head>
-
 <body>
 
-
-
     <div class="video-container">
-
         <video autoplay muted loop playsinline>
-
             <source src="https://cdn.pixabay.com/video/2021/08/04/83866-584742468_large.mp4" type="video/mp4">
-
         </video>
-
         <div class="video-overlay"></div>
-
     </div>
-
     <canvas id="cashCanvas"></canvas>
 
-
-
     <nav class="nav-top">
-
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-
-        
-
         <div class="nav-links">
-
             <a href="index.html" class="nav-link" style="color: var(--text-main);">Home</a>
-
             
-
             <div class="nav-item">
-
-                <a class="nav-link">Seasons ▼</a>
-
-                <div class="dropdown">
-
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>
-
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="nav-item">
-
                 <a class="nav-link">Values ▼</a>
-
                 <div class="dropdown">
-
                     <a href="values.html" class="drop-link">Value List</a>
-
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
-
                 </div>
-
             </div>
-
-
 
             <div class="nav-item">
-
                 <a class="nav-link">Community ▼</a>
-
                 <div class="dropdown">
-
                     <a href="vip.html" class="drop-link">Private Servers</a>
-
-                    <a href="testimonials.html" class="drop-link">Testimonials</a>
-
-                    <a href="team.html" class="drop-link">Meet the Team</a>
-
+                    <a href="#testimonials" class="drop-link">Testimonials</a>
+                    <button onclick="toggleModal(true)" class="drop-link text-left w-full text-[#00ff88]">Submit Vouch +</button>
                 </div>
-
             </div>
-
             <a href="pity.html" class="nav-link">Pity Calc</a>
-
             <a href="tracker.html" class="nav-link">Tracker</a>
-
         </div>
-
-
-
         <div class="nav-actions">
-
             <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-
         </div>
-
     </nav>
 
-
-
-    <section class="hero fade-in">
-
-        <div class="hero-badge">System Status: Online & Updating</div>
-
-        <h1>Secure the Bag.</h1>
-
-        <p>The premium, developer-grade toolkit built for the ultimate Jailbreak trader, grinder, and professional robber.</p>
-
-        <div class="hero-buttons">
-
-            <a href="https://www.roblox.com/games/606849621/Jailbreak" target="_blank" class="btn btn-primary">Play Jailbreak</a>
-
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank" class="btn btn-discord">Join Discord</a>
-
+    <section class="hero min-h-[80vh] flex flex-col items-center justify-center text-center px-4 fade-in">
+        <div class="bg-blue-500/10 border border-[#0070f3] text-[#0070f3] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">System Status: Online & Updating</div>
+        <h1 class="text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-4 leading-none">Secure the <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">Bag.</span></h1>
+        <p class="text-gray-400 text-lg max-w-2xl mb-10">The premium, developer-grade toolkit built for the ultimate Jailbreak trader and professional robber.</p>
+        <div class="flex gap-4">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank" class="bg-[#5865F2] text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform">Join Discord</a>
+            <button onclick="document.getElementById('testimonials').scrollIntoView()" class="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-white/10 transition-all">View Vouches</button>
         </div>
-
     </section>
 
-
-
-    <div class="stats-bar fade-in">
-
-        <div class="stat-item">
-
-            <div class="stat-num" id="userCount">1,402</div>
-
-            <div class="stat-label">Active Users Right Now</div>
-
+    <div class="stats-bar bg-[#0a0c10] border-y border-white/5 py-10 flex justify-center gap-20 flex-wrap fade-in">
+        <div class="text-center">
+            <div class="text-4xl font-black mb-1" id="userCount">1,402</div>
+            <div class="text-[#0070f3] text-[10px] font-black uppercase tracking-widest">Active Users</div>
         </div>
-
-        <div class="stat-item">
-
-            <div class="stat-num">380+</div>
-
-            <div class="stat-label">Items Valued</div>
-
+        <div class="text-center">
+            <div class="text-4xl font-black mb-1">380+</div>
+            <div class="text-[#0070f3] text-[10px] font-black uppercase tracking-widest">Items Valued</div>
         </div>
-
-        <div class="stat-item">
-
-            <div class="stat-num">24/7</div>
-
-            <div class="stat-label">Market Monitoring</div>
-
-        </div>
-
     </div>
 
-
-
-    <section class="section fade-in">
-
-        <div class="section-header">
-
-            <h2>Powerful Tools. Real-Time Data.</h2>
-
-            <p>Everything you need to dominate the game, organized in one sleek dashboard.</p>
-
-        </div>
-
-        <div class="grid">
-
-            <a href="contracts.html" class="feature-card">
-
-                <div class="icon-box">📜</div>
-
-                <h3>Season Contracts</h3>
-
-                <p>Track live missions, daily XP resets, and accurately calculate your path to Level 10.</p>
-
-            </a>
-
-            <a href="values.html" class="feature-card">
-
-                <div class="icon-box">💎</div>
-
-                <h3>Value Database</h3>
-
-                <p>Constantly updated market values for every single vehicle and limited item in the game.</p>
-
-            </a>
-
-            <a href="calculator.html" class="feature-card">
-
-                <div class="icon-box">⚖️</div>
-
-                <h3>Trade Calculator</h3>
-
-                <p>Ensure you never take an L. Compare multi-item trades with high-precision data.</p>
-
-            </a>
-
-            <a href="pity.html" class="feature-card">
-
-                <div class="icon-box">🎰</div>
-
-                <h3>Pity Tracker</h3>
-
-                <p>Log your robberies systematically and predict when your next Hyperchrome will drop.</p>
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-
-    <section class="section fade-in">
-
-        <div class="info-split">
-
-            <div class="info-img">
-
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard Interface">
-
+    <section id="testimonials" class="max-w-7xl mx-auto px-6 py-32 fade-in">
+        <div class="flex justify-between items-end mb-16">
+            <div>
+                <h2 class="text-4xl font-black uppercase italic">User <span class="text-[#00ff88]">Vouches</span></h2>
+                <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">Verified Feedback from the community</p>
             </div>
-
-            <div class="info-text">
-
-                <h2>Built for the 1%.</h2>
-
-                <p>Jailbreak Hub isn't just a basic list of prices. It's a comprehensive suite designed to give you an unfair advantage in trading and grinding.</p>
-
-                <p>With data pulled and verified by top-tier traders, you can trust our engine to guide you through complex multi-item trades, season XP planning, and Hyperchrome grinding strategies.</p>
-
-            </div>
-
+            <button onclick="toggleModal(true)" class="bg-[#0070f3] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:brightness-110">Post a Vouch</button>
         </div>
 
-    </section>
-
-
-
-    <section class="section fade-in">
-
-        <div class="section-header">
-
-            <h2>What the Community Says</h2>
-
-        </div>
-
-        <div class="testimonial-grid">
-
+        <div class="columns-1 md:columns-3 gap-6 space-y-6" id="vouchGrid">
             <div class="test-card">
-
-                <p>"The Trade Calculator literally saved me from trading my Torpedo for a massive underpay. The UI is incredibly clean too."</p>
-
-                <div class="test-user">
-
-                    <img src="https://ui-avatars.com/api/?name=xX+Sniper&background=0D8ABC&color=fff" class="test-avatar">
-
+                <p>"The Trade Calculator literally saved me from trading my Torpedo for a massive underpay. Best UI out there."</p>
+                <div class="flex items-center gap-3 mt-6">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center font-bold text-blue-400">X</div>
                     <div>
-
-                        <div class="test-name">xX_Sniper_Xx</div>
-
-                        <div class="test-role">Verified Trader</div>
-
+                        <div class="font-bold text-sm">xX_Sniper_Xx</div>
+                        <div class="text-[#0070f3] text-[10px] font-bold">Verified Trader</div>
                     </div>
-
                 </div>
-
             </div>
-
-            <div class="test-card">
-
-                <p>"I use the Season Contracts page every single day to track my XP. Reached level 10 a week early because of it."</p>
-
-                <div class="test-user">
-
-                    <img src="https://ui-avatars.com/api/?name=Cops+Rule&background=00ff88&color=000" class="test-avatar">
-
-                    <div>
-
-                        <div class="test-name">CopMain2023</div>
-
-                        <div class="test-role">Pro Grinder</div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="test-card">
-
-                <p>"Finally, a values list that actually updates quickly when a new season drops. Essential tool."</p>
-
-                <div class="test-user">
-
-                    <img src="https://ui-avatars.com/api/?name=Trade+King&background=ffac33&color=fff" class="test-avatar">
-
-                    <div>
-
-                        <div class="test-name">TradingKing_JB</div>
-
-                        <div class="test-role">Value Expert</div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
         </div>
-
     </section>
 
-
-
-    <section class="section fade-in">
-
-        <div class="section-header">
-
-            <h2>Frequently Asked Questions</h2>
-
+    <div id="vouchModal">
+        <div class="bg-[#0a0c10] border border-white/10 p-10 rounded-[32px] max-w-md w-full mx-4">
+            <h3 class="text-2xl font-black uppercase italic mb-6">Post a <span class="text-[#0070f3]">Vouch</span></h3>
+            <div class="space-y-4">
+                <input type="text" id="vName" placeholder="Roblox Username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-[#0070f3]">
+                <textarea id="vText" placeholder="Your testimonial..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white outline-none focus:border-[#0070f3] h-32"></textarea>
+            </div>
+            <div class="flex gap-4 mt-8">
+                <button id="submitBtn" onclick="submitVouch()" class="flex-1 bg-[#00ff88] text-black font-black py-4 rounded-xl uppercase text-[10px] tracking-widest">Submit</button>
+                <button onclick="toggleModal(false)" class="flex-1 bg-white/5 text-white font-bold py-4 rounded-xl uppercase text-[10px] tracking-widest">Cancel</button>
+            </div>
         </div>
-
-        <div style="max-width: 800px; margin: 0 auto;">
-
-            <div class="faq-item">
-
-                <div class="faq-question">How often are the item values updated? <span>+</span></div>
-
-                <div class="faq-answer">Our dedicated team monitors the Jailbreak trading hub daily. Major list updates happen weekly, but hot items are adjusted within 24 hours of market shifts.</div>
-
-            </div>
-
-            <div class="faq-item">
-
-                <div class="faq-question">Is the Pity Tracker 100% accurate? <span>+</span></div>
-
-                <div class="faq-answer">The Pity Tracker is based on community-tested algorithms and data sets. While it can't hack the game to guarantee a drop, it provides the most mathematically accurate estimation of your pity percentage available.</div>
-
-            </div>
-
-            <div class="faq-item">
-
-                <div class="faq-question">How can I support Jailbreak Hub? <span>+</span></div>
-
-                <div class="faq-answer">You can support us by joining our Discord, sharing the site with your friends, or checking out our Support page to help keep the servers running!</div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
+    </div>
 
     <footer>
-
-        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-
-        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-
-        
-
-        <div class="footer-links">
-
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-
-            <a href="#">Terms of Service</a>
-
-            <a href="#">Privacy Policy</a>
-
+        <div class="text-center py-20 bg-[#0a0c10] border-t border-white/5">
+            <div class="font-black text-2xl mb-2">JAILBREAK<span class="text-[#0070f3]">HUB</span></div>
+            <div class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Developed by <span class="text-white">Plug™</span> & <span class="text-white">Daproboi</span></div>
+            <div class="flex justify-center gap-6 text-xs font-bold uppercase tracking-widest">
+                <a href="#" class="hover:text-[#0070f3]">Terms</a>
+                <a href="#" class="hover:text-[#0070f3]">Privacy</a>
+                <a href="https://discord.gg/pp4dXmFJnr" class="text-[#5865F2]">Discord Support</a>
+            </div>
+            <p class="mt-10 text-[10px] text-gray-700 uppercase font-bold">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
         </div>
-
-        
-
-        <a href="support.html" class="support-btn btn" style="color: var(--text-main); text-decoration: none;">☕ Support Us</a>
-
-        
-
-        <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
-
     </footer>
 
-
-
     <script>
+        // --- SUPABASE CONFIG ---
+        // REPLACE THESE WITH YOUR OWN KEYS FROM SUPABASE.COM
+        const SB_URL = 'YOUR_SUPABASE_URL'; 
+        const SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-        // --- THEME TOGGLE LOGIC ---
-
+        // --- THEME & UTILS ---
         const themeBtn = document.getElementById('themeBtn');
+        themeBtn.addEventListener('click', () => document.body.classList.toggle('light-mode'));
 
-        themeBtn.addEventListener('click', () => {
+        function toggleModal(show) {
+            document.getElementById('vouchModal').style.display = show ? 'flex' : 'none';
+        }
 
-            document.body.classList.toggle('light-mode');
+        // --- GLOBAL TESTIMONIAL LOGIC ---
+        async function loadVouches() {
+            try {
+                const response = await fetch(`${SB_URL}/rest/v1/vouches?select=*&order=id.desc`, {
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+                });
+                const data = await response.json();
+                data.forEach(vouch => renderVouch(vouch.name, vouch.text));
+            } catch (e) { console.log("Database not connected yet."); }
+        }
 
-        });
+        async function submitVouch() {
+            const name = document.getElementById('vName').value.trim();
+            const text = document.getElementById('vText').value.trim();
+            const btn = document.getElementById('submitBtn');
 
+            if(!name || !text) return alert("Fill in the fields!");
 
+            btn.innerText = "POSTING...";
+            btn.disabled = true;
 
-        // --- FAKE LIVE COUNTER LOGIC ---
+            try {
+                const response = await fetch(`${SB_URL}/rest/v1/vouches`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SB_KEY,
+                        'Authorization': `Bearer ${SB_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, text })
+                });
 
-        let currentUsers = 1402;
+                if(response.ok) {
+                    renderVouch(name, text, true);
+                    toggleModal(false);
+                    document.getElementById('vName').value = '';
+                    document.getElementById('vText').value = '';
+                }
+            } catch (e) { alert("Error connecting to database."); }
+            
+            btn.innerText = "SUBMIT";
+            btn.disabled = false;
+        }
 
-        const userCountElement = document.getElementById('userCount');
+        function renderVouch(name, text, isNew = false) {
+            const grid = document.getElementById('vouchGrid');
+            const card = document.createElement('div');
+            card.className = `test-card ${isNew ? 'border-[#00ff88] animate-pulse' : ''}`;
+            card.innerHTML = `
+                <p>"${text}"</p>
+                <div class="flex items-center gap-3 mt-6">
+                    <div class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center font-bold text-gray-400">${name[0].toUpperCase()}</div>
+                    <div>
+                        <div class="font-bold text-sm">${name}</div>
+                        <div class="text-[#00ff88] text-[10px] font-bold uppercase">Community Member</div>
+                    </div>
+                </div>
+            `;
+            grid.prepend(card);
+        }
 
+        // --- INIT ---
+        window.onload = () => {
+            loadVouches();
+            // Start the cash canvas logic here (same as your original)
+            initCanvas();
+        };
+
+        // ... [Your original Cash Canvas and FAQ scripts here] ...
         
-
-        setInterval(() => {
-
-            const change = Math.floor(Math.random() * 5) - 2; 
-
-            currentUsers += change;
-
-            userCountElement.innerText = currentUsers.toLocaleString();
-
-        }, 3500);
-
-
-
-        // --- FAQ TOGGLE LOGIC ---
-
-        const faqItems = document.querySelectorAll('.faq-item');
-
-        faqItems.forEach(item => {
-
-            item.querySelector('.faq-question').addEventListener('click', () => {
-
-                item.classList.toggle('active');
-
-                const span = item.querySelector('span');
-
-                span.innerText = item.classList.contains('active') ? '-' : '+';
-
-            });
-
-        });
-
-
-
-        // --- SCROLL ANIMATIONS ---
-
-        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-
-        const observer = new IntersectionObserver((entries) => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add('visible');
-
-                    observer.unobserve(entry.target);
-
+        function initCanvas() {
+            const canvas = document.getElementById('cashCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const cashChars = ['$', '💵', '💰', '💸'];
+            const fontSize = 16;
+            let columns = Math.floor(canvas.width / fontSize);
+            let drops = Array(columns).fill(1);
+            function draw() {
+                ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00ff88'; 
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < drops.length; i++) {
+                    const text = cashChars[Math.floor(Math.random() * cashChars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
                 }
-
-            });
-
-        }, observerOptions);
-
-
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-
-
-        // --- FALLING CASH CANVAS ---
-
-        const canvas = document.getElementById('cashCanvas');
-
-        const ctx = canvas.getContext('2d');
-
-
-
-        function resizeCanvas() {
-
-            canvas.width = window.innerWidth;
-
-            canvas.height = window.innerHeight;
-
-        }
-
-        resizeCanvas();
-
-        window.addEventListener('resize', resizeCanvas);
-
-
-
-        const cashChars = ['$', '💵', '💰', '💸'];
-
-        const fontSize = 16;
-
-        let columns = Math.floor(canvas.width / fontSize);
-
-        let drops = Array(columns).fill(1);
-
-
-
-        function draw() {
-
-            ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
-
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#00ff88'; 
-
-            ctx.font = fontSize + 'px monospace';
-
-
-
-            for (let i = 0; i < drops.length; i++) {
-
-                const text = cashChars[Math.floor(Math.random() * cashChars.length)];
-
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-
-                    drops[i] = 0;
-
-                }
-
-                drops[i]++;
-
             }
-
+            setInterval(draw, 50);
         }
 
-        setInterval(draw, 50);
-
+        // SCROLL ANIMATIONS
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
-
 </body>
-
 </html>
