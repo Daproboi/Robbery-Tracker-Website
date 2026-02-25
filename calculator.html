@@ -31,10 +31,11 @@
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; justify-content: space-between;
+            align-items: center; justify-content: center;
             padding: 0 40px; z-index: 9000;
         }
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+
+        .nav-logo { position: absolute; left: 40px; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
         .nav-logo span { color: var(--accent); }
         
         .nav-links { display: flex; gap: 5px; align-items: center; }
@@ -52,20 +53,31 @@
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 8px;
+            border-radius: 12px; min-width: 220px; padding: 10px;
             opacity: 0; pointer-events: none; transition: all 0.2s;
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            z-index: 6000;
         }
         
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         
         .drop-link { 
-            display: block; padding: 12px 16px; color: var(--text-dim); 
-            text-decoration: none; font-size: 0.75rem; font-weight: 600; 
-            border-radius: 8px; transition: all 0.2s;
+            display: flex; flex-direction: column; padding: 12px; 
+            color: var(--text-dim); text-decoration: none; 
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
+            margin-bottom: 4px; transition: all 0.2s;
         }
         
         .drop-link:hover { background: var(--card); color: #fff; }
+
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
 
         /* --- CALCULATOR AREA --- */
         .container { max-width: 1600px; margin: 0 auto; padding: 0 20px; }
@@ -141,20 +153,18 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
-            <div class="nav-item">
-                <a href="index.html" class="nav-link">Home</a>
-            </div>
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
-                <span class="nav-link">Seasons ▼</span>
+                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
                 <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                    <a href="contracts.html" class="drop-link">Season Contracts <span style="font-size:10px; color:var(--green)">XP Tracker Live</span></a>
+                    <a href="prizes.html" class="drop-link">Season Rewards <span>Level 1-10 Prizes</span></a>
                 </div>
             </div>
 
             <div class="nav-item">
-                <span class="nav-link" style="color:#fff">Values ▼</span>
+                <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
@@ -162,23 +172,15 @@
             </div>
 
             <div class="nav-item">
-                <a href="tracker.html" class="nav-link">Robbery Tracker</a>
-            </div>
-
-            <div class="nav-item">
-                <a href="pity.html" class="nav-link">Pity Calc</a>
-            </div>
-
-            <div class="nav-item">
-                <span class="nav-link">Community ▼</span>
+                <a class="nav-link">Community ▼</a>
                 <div class="dropdown">
-                    <a href="crew.html" class="drop-link">Crew Recruiting</a>
-                    <a href="trading.html" class="drop-link">Trading Plaza</a>
-                    <a href="servers.html" class="drop-link">Private Servers</a>
+                    <a href="vip.html" class="drop-link">Private Servers</a>
                     <a href="testimonials.html" class="drop-link">Testimonials</a>
-                    <a href="news.html" class="drop-link">Latest News</a>
                 </div>
             </div>
+
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
         </div>
     </nav>
 
