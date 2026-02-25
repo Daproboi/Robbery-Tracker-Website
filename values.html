@@ -131,6 +131,24 @@
         .pagination { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 50px; }
         .page-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* --- FOOTER STYLES --- */
+        footer {
+            background: var(--surface); border-top: 1px solid var(--border);
+            padding: 60px 20px; text-align: center; margin-top: 100px;
+        }
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .footer-brand span { color: var(--accent); }
+        .footer-credits { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
+        .footer-links a:hover { color: var(--accent); }
+        .support-btn { 
+            background: var(--card); border: 1px solid var(--border); 
+            padding: 10px 20px; border-radius: 8px; 
+            font-family: 'JetBrains Mono'; text-decoration: none;
+            display: inline-block; font-size: 0.9rem; font-weight: 800;
+        }
     </style>
 </head>
 <body>
@@ -186,6 +204,21 @@
             <button class="page-btn" id="nextBtn" onclick="changePage(1)">Next</button>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
+        
+        <div class="footer-links">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
+        
+        <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
+    </footer>
 
     <script src="Values.js"></script>
     <script>
