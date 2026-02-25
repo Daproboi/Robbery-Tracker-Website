@@ -93,6 +93,7 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Seasons <div class="live-dot"></div> ▼</a>
                 <div class="dropdown">
@@ -100,6 +101,7 @@
                     <a href="prizes.html" class="drop-link">Season Rewards <span>Level 1-10 Prizes</span></a>
                 </div>
             </div>
+
             <div class="nav-item">
                 <a class="nav-link">Values ▼</a>
                 <div class="dropdown">
@@ -107,7 +109,17 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
+
+            <div class="nav-item">
+                <a class="nav-link">Community ▼</a>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>
+                </div>
+            </div>
+
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
         </div>
     </nav>
 
@@ -225,7 +237,6 @@
                 totalRemaining += seasonXP[i];
             }
 
-            // Calculations based on 100 XP per day (average for active grinders)
             const dailyAvg = 100; 
             const daysLeft = Math.ceil(totalRemaining / dailyAvg);
 
