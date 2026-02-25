@@ -51,6 +51,17 @@
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--green); }
+
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- STYLES --- */
         .staff-card {
@@ -76,6 +87,25 @@
             background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
             z-index: 9999; align-items: center; justify-content: center;
         }
+
+        /* --- FOOTER STYLES --- */
+        footer {
+            background: var(--surface); border-top: 1px solid var(--border);
+            padding: 60px 20px; text-align: center; margin-top: 100px;
+        }
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .footer-brand span { color: var(--accent); }
+        .footer-credits { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
+        .footer-links a:hover { color: var(--accent); }
+        .support-btn { 
+            background: var(--card); border: 1px solid var(--border); 
+            padding: 10px 20px; border-radius: 8px; 
+            font-family: 'JetBrains Mono'; text-decoration: none;
+            display: inline-block; font-size: 0.9rem; font-weight: 800;
+        }
+        .legal-footer { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -84,6 +114,21 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            
+            <div class="nav-item">
+                <span class="nav-link">Seasons <div class="live-dot"></div> ▼</span>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">
+                        Season Contracts
+                        <span>XP Tracker & Weekly Tasks</span>
+                    </a>
+                    <a href="prizes.html" class="drop-link">
+                        Season Rewards
+                        <span>View Level 1-10 Prizes</span>
+                    </a>
+                </div>
+            </div>
+
             <div class="nav-item">
                 <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
@@ -165,14 +210,6 @@
                 </div>
                 <p class="text-gray-400 text-sm italic leading-relaxed">"Finally a site that actually looks good on mobile. Trading in-game is so much easier now."</p>
             </div>
-
-            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center font-bold text-orange-400 text-sm shadow-inner">X</div>
-                    <p class="font-bold text-sm">xX_RichTrader_Xx</p>
-                </div>
-                <p class="text-gray-400 text-sm italic leading-relaxed">"10/10 service. The private servers are always updated and the team is active."</p>
-            </div>
         </div>
     </div>
 
@@ -189,6 +226,24 @@
             </div>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
+        
+        <div class="footer-links">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
+        
+        <div class="legal-footer">
+            Disclaimer: Jailbreak Hub is not affiliated with Roblox, Badimo, or the official Jailbreak game. All in-game assets belong to their respective owners.
+        </div>
+        <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
+    </footer>
 
     <script>
         // --- PERSISTENCE LOGIC ---
@@ -207,7 +262,6 @@
             const grid = document.getElementById('vouchGrid');
             const card = document.createElement('div');
             
-            // Generate a random accent color
             const colors = ['blue', 'green', 'purple', 'orange', 'pink', 'cyan'];
             const color = colors[Math.floor(Math.random() * colors.length)];
             
@@ -232,21 +286,17 @@
 
             if(!name || !text) return alert("Please fill in both fields!");
 
-            // Save to LocalStorage
             const saved = JSON.parse(localStorage.getItem(VOUCH_KEY) || '[]');
             saved.push({ name, text });
             localStorage.setItem(VOUCH_KEY, JSON.stringify(saved));
 
-            // Render on page
             renderVouch(name, text, true);
 
-            // Reset and close
             document.getElementById('vName').value = '';
             document.getElementById('vText').value = '';
             toggleModal(false);
         }
 
-        // Initialize
         window.onload = loadVouches;
     </script>
 </body>
