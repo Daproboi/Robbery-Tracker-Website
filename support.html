@@ -19,6 +19,8 @@
             --gold: #ffb800;
         }
 
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
@@ -52,6 +54,16 @@
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
         .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* --- TIER CARDS --- */
         .tier-card {
@@ -69,7 +81,6 @@
         .price span { font-size: 1rem; color: var(--text-dim); letter-spacing: 0; }
 
         .benefit-item { display: flex; align-items: flex-start; gap: 12px; color: var(--text-dim); font-size: 0.95rem; margin-bottom: 16px; line-height: 1.4; }
-        .benefit-icon { color: var(--green); margin-top: 4px; }
 
         .patreon-btn {
             background: #fff; color: #000;
@@ -85,7 +96,7 @@
         .featured-tier { border: 2px solid var(--accent); box-shadow: 0 0 40px rgba(0, 112, 243, 0.15); }
         .badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
 
-        /* --- FOOTER STYLES --- */
+        /* --- FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border);
             padding: 60px 20px; text-align: center; margin-top: 100px;
@@ -104,6 +115,15 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            
+            <div class="nav-item">
+                <span class="nav-link">Seasons <div class="live-dot"></div> ▼</span>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts <span>XP Tracker & Weekly Tasks</span></a>
+                    <a href="prizes.html" class="drop-link">Season Rewards <span>View Level 1-10 Prizes</span></a>
+                </div>
+            </div>
+
             <div class="nav-item">
                 <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
@@ -112,20 +132,21 @@
                 </div>
             </div>
             <div class="nav-item">
-                <span class="nav-link" style="color:#fff">Community ▼</span>
+                <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
                     <a href="vip.html" class="drop-link">Private Servers</a>
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
-            <div class="nav-item"><a href="support.html" class="nav-link">Support Us</a></div>
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
         </div>
     </nav>
 
     <div class="max-w-6xl mx-auto px-6 py-20">
         <div class="text-center mb-20">
             <h1 class="text-7xl font-black uppercase italic tracking-tighter mb-6">Join the <span class="text-[#0070f3]">Elite</span></h1>
-            <p class="text-gray-400 max-w-2xl mx-auto text-lg">Help us keep Jailbreak Hub online and growing. Supporting us gives you exclusive access to tools, servers, and community influence.</p>
+            <p class="text-gray-400 max-w-2xl mx-auto text-lg">Help us keep Jailbreak Hub online and growing. Supporting us gives you exclusive access to tools, early data, and community influence.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -133,9 +154,9 @@
                 <h3 class="text-2xl font-black uppercase italic tracking-tight">Criminal</h3>
                 <div class="price">$5<span>/mo</span></div>
                 <div class="benefit-list mb-8">
-                    <div class="benefit-item"><span>✅</span> Lag-Free Private Server Access</div>
                     <div class="benefit-item"><span>✅</span> 2hr Early Value Updates</div>
                     <div class="benefit-item"><span>✅</span> Discord Supporter Role</div>
+                    <div class="benefit-item"><span>✅</span> Dedicated Private Channel</div>
                     <div class="benefit-item"><span>✅</span> Name on Supporters Wall</div>
                 </div>
                 <a href="https://patreon.com/JailbreakHub" target="_blank" class="patreon-btn">Start Grinding</a>
