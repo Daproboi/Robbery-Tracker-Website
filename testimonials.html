@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Team & Testimonials</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg: #030508;
+            --surface: #0a0c10;
+            --card: #11141a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #0070f3;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --green: #00ff88;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); color: var(--text-main); 
+            margin: 0; padding-top: 100px;
+            background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
+            min-height: 100vh;
+        }
+
+        /* --- UNIFIED NAVIGATION --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: center;
+            padding: 0 40px; z-index: 5000;
+        }
+        .nav-logo { position: absolute; left: 40px; font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; letter-spacing: -1px; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 5px; align-items: center; }
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
+        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
+
+        .dropdown {
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; min-width: 220px; padding: 10px;
+            opacity: 0; pointer-events: none; transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 6000;
+        }
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
+        .drop-link:hover { background: var(--card); color: #fff; }
+
+        /* --- MODAL STYLES --- */
+        #vouchModal {
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            z-index: 9999; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            <div class="nav-item">
+                <span class="nav-link">Seasons ▼</span>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Values ▼</span>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link" style="color:#fff">Community ▼</span>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-black uppercase italic tracking-tighter mb-4">The <span class="text-[#0070f3]">Staff</span></h1>
+            <p class="text-gray-400">The minds behind the market.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#0070f3]">
+                <h3 class="text-xl font-bold">Felix</h3>
+                <p class="text-[#0070f3] text-[10px] font-bold uppercase tracking-widest mb-2">Lead Developer</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Shadow" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#ff3333]">
+                <h3 class="text-xl font-bold">ShadowX</h3>
+                <p class="text-[#ff3333] text-[10px] font-bold uppercase tracking-widest mb-2">Value Analyst</p>
+            </div>
+            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Luna" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#00ff88]">
+                <h3 class="text-xl font-bold">Luna</h3>
+                <p class="text-[#00ff88] text-[10px] font-bold uppercase tracking-widest mb-2">Community Support</p>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-3xl font-black uppercase italic">User <span class="text-[#00ff88]">Vouches</span></h2>
+            <button onclick="toggleModal(true)" class="bg-[#0070f3] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all">
+                + Submit Vouch
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vouchGrid">
+            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center font-bold text-blue-400">K</div>
+                    <p class="font-bold text-sm">KrakenTrades</p>
+                </div>
+                <p class="text-gray-400 text-sm italic">"Best value list out there. Cleanest UI by far."</p>
+            </div>
+            </div>
+    </div>
+
+    <div id="vouchModal">
+        <div class="bg-[#0a0c10] border border-white/10 p-8 rounded-3xl max-w-md w-full mx-4">
+            <h3 class="text-2xl font-black uppercase italic mb-4">Submit a <span class="text-[#0070f3]">Vouch</span></h3>
+            <input type="text" id="vName" placeholder="Roblox Username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-4 text-white outline-none focus:border-[#0070f3]">
+            <textarea id="vText" placeholder="Your testimonial..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-6 text-white outline-none focus:border-[#0070f3] h-32"></textarea>
+            
+            <div class="flex gap-4">
+                <button onclick="submitVouch()" class="flex-1 bg-[#00ff88] text-black font-black py-4 rounded-xl uppercase text-xs">Post Vouch</button>
+                <button onclick="toggleModal(false)" class="flex-1 bg-white/5 text-white font-bold py-4 rounded-xl uppercase text-xs">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(show) {
+            document.getElementById('vouchModal').style.display = show ? 'flex' : 'none';
+        }
+
+        function submitVouch() {
+            const name = document.getElementById('vName').value;
+            const text = document.getElementById('vText').value;
+
+            if(!name || !text) return alert("Please fill in both fields!");
+
+            const grid = document.getElementById('vouchGrid');
+            const card = document.createElement('div');
+            card.className = "bg-white/5 border border-white/10 p-6 rounded-2xl animate-pulse";
+            card.innerHTML = `
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center font-bold text-green-400">${name[0].toUpperCase()}</div>
+                    <p class="font-bold text-sm">${name}</p>
+                </div>
+                <p class="text-gray-400 text-sm italic">"${text}"</p>
+            `;
+            
+            grid.prepend(card);
+            setTimeout(() => card.classList.remove('animate-pulse'), 1000);
+            
+            // Reset and close
+            document.getElementById('vName').value = '';
+            document.getElementById('vText').value = '';
+            toggleModal(false);
+        }
+    </script>
+</body>
+</html>
