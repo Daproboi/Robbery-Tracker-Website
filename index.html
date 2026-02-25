@@ -21,7 +21,6 @@
             --invert: 0;
         }
 
-        /* Light Mode Overrides */
         body.light-mode {
             --bg: #f8fafc;
             --surface: #ffffff;
@@ -45,25 +44,24 @@
             overflow-x: hidden; min-height: 100vh;
         }
 
-        /* --- BACKGROUNDS --- */
         #cashCanvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));
         }
 
+        /* --- UPDATED VIDEO CONTAINER --- */
         .video-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
-            overflow: hidden; z-index: -1;
+            overflow: hidden; z-index: -1; background: #000;
         }
         .video-container video {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: grayscale(50%);
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.45; filter: contrast(1.1) brightness(0.8);
         }
         .video-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, var(--bg) 100%);
+            background: linear-gradient(to bottom, rgba(3, 5, 8, 0.2) 0%, var(--bg) 100%);
         }
 
-        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);
@@ -103,7 +101,6 @@
         }
         .theme-toggle:hover { border-color: var(--accent); }
 
-        /* --- HERO SECTION --- */
         .hero {
             position: relative; padding: 15vh 20px 10vh; text-align: center; z-index: 1; min-height: 80vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -121,16 +118,15 @@
             background: linear-gradient(135deg, var(--text-main), var(--text-dim));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px; line-height: 1.6; }
+        .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 
         .hero-buttons { display: flex; gap: 20px; justify-content: center; }
         
         .btn {
             text-decoration: none; padding: 16px 32px; border-radius: 12px; font-weight: 800;
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;
-            display: flex; align-items: center; gap: 10px; /* Aligns icons and text */
+            display: flex; align-items: center; gap: 10px;
         }
-        .btn i { font-size: 1.1rem; } /* Size for the brand icons */
 
         .btn-primary {
             background: var(--jailbreak-green); color: #000;
@@ -144,7 +140,6 @@
         }
         .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(88, 101, 242, 0.6); }
 
-        /* --- STATS BAR --- */
         .stats-bar {
             background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
             padding: 30px 20px; display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; z-index: 2; position: relative;
@@ -153,7 +148,6 @@
         .stat-num { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .stat-label { color: var(--accent); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-        /* --- CONTENT SECTIONS --- */
         .section { max-width: 1200px; margin: 100px auto; padding: 0 20px; z-index: 2; position: relative; }
         .section-header { text-align: center; margin-bottom: 60px; }
         .section-header h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; }
@@ -168,14 +162,6 @@
         .feature-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }
         .icon-box { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--green-glow)); }
         .feature-card h3 { font-size: 1.5rem; margin: 0 0 10px; }
-
-        .info-split { display: flex; align-items: center; gap: 50px; margin-top: 100px; flex-wrap: wrap; }
-        .info-text { flex: 1; min-width: 300px; }
-        .info-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
-        .info-text p { color: var(--text-dim); line-height: 1.7; font-size: 1.05rem; margin-bottom: 20px; }
-        .info-img { flex: 1; min-width: 300px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .info-img img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }
-        .info-img:hover img { transform: scale(1.05); }
 
         .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .test-card { background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 16px; }
@@ -212,19 +198,17 @@
 <body>
 
     <div class="video-container">
-        <video autoplay muted loop playsinline>
-            <source src="https://cdn.pixabay.com/video/2021/08/04/83866-584742468_large.mp4" type="video/mp4">
-        </video>
+        <video autoplay muted loop playsinline poster="https://i.ytimg.com/vi/zMBfDQBOaQA/maxresdefault.jpg">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-urban-city-at-night-4338-large.mp4" type="video/mp4">
+            </video>
         <div class="video-overlay"></div>
     </div>
     <canvas id="cashCanvas"></canvas>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        
         <div class="nav-links">
             <a href="index.html" class="nav-link" style="color: var(--text-main);">Home</a>
-            
             <div class="nav-item">
                 <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
@@ -232,7 +216,6 @@
                     <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link">Values ▼</a>
                 <div class="dropdown">
@@ -240,7 +223,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link">Community ▼</a>
                 <div class="dropdown">
@@ -251,7 +233,6 @@
             <a href="pity.html" class="nav-link">Pity Calc</a>
             <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
-
         <div class="nav-actions">
             <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
         </div>
@@ -315,119 +296,30 @@
         </div>
     </section>
 
-    <section class="section fade-in">
-        <div class="info-split">
-            <div class="info-img">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard Interface">
-            </div>
-            <div class="info-text">      
-                <p>Jailbreak Hub isn't just a basic list of prices. It's a comprehensive suite designed to give you an unfair advantage in trading and grinding.</p>
-                <p>With data pulled and verified by top-tier traders, you can trust our engine to guide you through complex multi-item trades, season XP planning, and Hyperchrome grinding strategies.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section fade-in">
-        <div class="section-header">
-            <h2>What the Community Says</h2>
-        </div>
-        <div class="testimonial-grid">
-            <div class="test-card">
-                <p>"The Trade Calculator literally saved me from trading my Torpedo for a massive underpay. The UI is incredibly clean too."</p>
-                <div class="test-user">
-                    <img src="https://ui-avatars.com/api/?name=xX+Sniper&background=0D8ABC&color=fff" class="test-avatar">
-                    <div>
-                        <div class="test-name">xX_Sniper_Xx</div>
-                        <div class="test-role">Verified Trader</div>
-                    </div>
-                </div>
-            </div>
-            <div class="test-card">
-                <p>"I use the Season Contracts page every single day to track my XP. Reached level 10 a week early because of it."</p>
-                <div class="test-user">
-                    <img src="https://ui-avatars.com/api/?name=Cops+Rule&background=00ff88&color=000" class="test-avatar">
-                    <div>
-                        <div class="test-name">CopMain2023</div>
-                        <div class="test-role">Pro Grinder</div>
-                    </div>
-                </div>
-            </div>
-            <div class="test-card">
-                <p>"Finally, a values list that actually updates quickly when a new season drops. Essential tool."</p>
-                <div class="test-user">
-                    <img src="https://ui-avatars.com/api/?name=Trade+King&background=ffac33&color=fff" class="test-avatar">
-                    <div>
-                        <div class="test-name">TradingKing_JB</div>
-                        <div class="test-role">Value Expert</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section fade-in">
-        <div class="section-header">
-            <h2>Frequently Asked Questions</h2>
-        </div>
-        <div style="max-width: 800px; margin: 0 auto;">
-            <div class="faq-item">
-                <div class="faq-question">How often are the item values updated? <span>+</span></div>
-                <div class="faq-answer">Our dedicated team monitors the Jailbreak trading hub daily. Major list updates happen weekly, but hot items are adjusted within 24 hours of market shifts.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Is the Pity Tracker 100% accurate? <span>+</span></div>
-                <div class="faq-answer">The Pity Tracker is based on community-tested algorithms and data sets. While it can't hack the game to guarantee a drop, it provides the most mathematically accurate estimation of your pity percentage available.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How can I support Jailbreak Hub? <span>+</span></div>
-                <div class="faq-answer">You can support us by joining our Discord, sharing the site with your friends, or checking out our Support page to help keep the servers running!</div>
-            </div>
-        </div>
-    </section>
-
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
         <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        
         <div class="footer-links">
             <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
         </div>
-        
         <a href="support.html" class="support-btn btn" style="color: var(--text-main); text-decoration: none; justify-content: center;">☕ Support Us</a>
-        
         <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
     </footer>
 
     <script>
-        // --- THEME TOGGLE LOGIC ---
         const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-        });
+        themeBtn.addEventListener('click', () => { document.body.classList.toggle('light-mode'); });
 
-        // --- FAKE LIVE COUNTER LOGIC ---
         let currentUsers = 1402;
         const userCountElement = document.getElementById('userCount');
-        
         setInterval(() => {
             const change = Math.floor(Math.random() * 5) - 2; 
             currentUsers += change;
             userCountElement.innerText = currentUsers.toLocaleString();
         }, 3500);
 
-        // --- FAQ TOGGLE LOGIC ---
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            item.querySelector('.faq-question').addEventListener('click', () => {
-                item.classList.toggle('active');
-                const span = item.querySelector('span');
-                span.innerText = item.classList.contains('active') ? '-' : '+';
-            });
-        });
-
-        // --- SCROLL ANIMATIONS ---
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -437,17 +329,11 @@
                 }
             });
         }, observerOptions);
-
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // --- FALLING CASH CANVAS ---
         const canvas = document.getElementById('cashCanvas');
         const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
@@ -461,14 +347,10 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ff88'; 
             ctx.font = fontSize + 'px monospace';
-
             for (let i = 0; i < drops.length; i++) {
                 const text = cashChars[Math.floor(Math.random() * cashChars.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
                 drops[i]++;
             }
         }
