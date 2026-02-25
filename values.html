@@ -1,3 +1,8 @@
+I have updated the navigation bar in your Market Database script to match the new professional structure, including the Community dropdown and the reorganized links.
+
+I also made a small tweak to the body padding to ensure the transition from the header to the content remains seamless.
+
+HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +29,7 @@
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 90px;
+            margin: 0; padding-top: 100px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
@@ -81,7 +86,7 @@
         }
         .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* --- FORCED 5 PER LINE --- */
+        /* --- GRID --- */
         .items-grid {
             display: grid; 
             grid-template-columns: repeat(5, 1fr);
@@ -141,6 +146,7 @@
             <div class="nav-item">
                 <a href="index.html" class="nav-link">Home</a>
             </div>
+            
             <div class="nav-item">
                 <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
@@ -148,6 +154,7 @@
                     <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
+
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
@@ -155,11 +162,21 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
+
             <div class="nav-item">
-                <a href="tracker.html" class="nav-link">Robbery Tracker</a>
+                <a class="nav-link">Community ▼</a>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>
+                    <a href="team.html" class="drop-link">Meet the Team</a>
+                </div>
             </div>
+            
             <div class="nav-item">
                 <a href="pity.html" class="nav-link">Pity Calc</a>
+            </div>
+            <div class="nav-item">
+                <a href="tracker.html" class="nav-link">Tracker</a>
             </div>
         </div>
     </nav>
@@ -186,7 +203,7 @@
     <script>
         let currentCategory = 'all';
         let currentPage = 1;
-        const itemsPerPage = 15; // Increased to fit the 5-wide grid better
+        const itemsPerPage = 15; 
         let filteredItems = [];
 
         function init() {
