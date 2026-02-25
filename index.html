@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | The Premium Toolkit</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --bg: #030508;
@@ -21,6 +20,7 @@
             --invert: 0;
         }
 
+        /* Light Mode Overrides */
         body.light-mode {
             --bg: #f8fafc;
             --surface: #ffffff;
@@ -55,7 +55,7 @@
             overflow: hidden; z-index: -1;
         }
         .video-container video {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: contrast(1.1);
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: grayscale(50%);
         }
         .video-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -127,9 +127,7 @@
         .btn {
             text-decoration: none; padding: 16px 32px; border-radius: 12px; font-weight: 800;
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;
-            display: flex; align-items: center; gap: 10px;
         }
-
         .btn-primary {
             background: var(--jailbreak-green); color: #000;
             box-shadow: 0 0 20px var(--green-glow); border: 2px solid var(--jailbreak-green);
@@ -210,9 +208,8 @@
 <body>
 
     <div class="video-container">
-        <video autoplay muted loop playsinline poster="https://i.imgur.com/8Q8pYnF.png">
-            <source src="https://v.ftcdn.net/06/15/42/41/700_F_615424107_K6u9p2JmK6K7f9f7f9f7f9f7f9f7f9.mp4" type="video/mp4">
-            <source src="https://shsec.org/jailbreak_cinematic_bg.mp4" type="video/mp4">
+        <video autoplay muted loop playsinline>
+            <source src="https://cdn.pixabay.com/video/2021/08/04/83866-584742468_large.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
     </div>
@@ -223,14 +220,37 @@
         
         <div class="nav-links">
             <a href="index.html" class="nav-link" style="color: var(--text-main);">Home</a>
-            <div class="nav-item"><a class="nav-link">Seasons ▼</a><div class="dropdown"><a href="contracts.html" class="drop-link">Season Contracts</a><a href="prizes.html" class="drop-link">Season Rewards</a></div></div>
-            <div class="nav-item"><a class="nav-link">Values ▼</a><div class="dropdown"><a href="values.html" class="drop-link">Value List</a><a href="calculator.html" class="drop-link">Value Calculator</a></div></div>
-            <div class="nav-item"><a class="nav-link">Community ▼</a><div class="dropdown"><a href="vip.html" class="drop-link">Private Servers</a><a href="testimonials.html" class="drop-link">Testimonials</a></div></div>
+            
+            <div class="nav-item">
+                <a class="nav-link">Seasons ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link">Values ▼</a>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link">Community ▼</a>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>
+                </div>
+            </div>
             <a href="pity.html" class="nav-link">Pity Calc</a>
             <a href="tracker.html" class="nav-link">Tracker</a>
         </div>
 
-        <div class="nav-actions"><button class="theme-toggle" id="themeBtn">🌓 Theme</button></div>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+        </div>
     </nav>
 
     <section class="hero fade-in">
@@ -238,50 +258,169 @@
         <h1>Secure the Bag.</h1>
         <p>The premium, developer-grade toolkit built for the ultimate Jailbreak trader, grinder, and professional robber.</p>
         <div class="hero-buttons">
-            <a href="https://www.roblox.com/games/606849621/Jailbreak" target="_blank" class="btn btn-primary">
-                <i class="fa-solid fa-cube"></i> Play Jailbreak
-            </a>
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank" class="btn btn-discord">
-                <i class="fa-brands fa-discord"></i> Join Discord
-            </a>
+            <a href="https://www.roblox.com/games/606849621/Jailbreak" target="_blank" class="btn btn-primary">Play Jailbreak</a>
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank" class="btn btn-discord">Join Discord</a>
         </div>
     </section>
 
     <div class="stats-bar fade-in">
-        <div class="stat-item"><div class="stat-num" id="userCount">1,402</div><div class="stat-label">Active Users Right Now</div></div>
-        <div class="stat-item"><div class="stat-num">380+</div><div class="stat-label">Items Valued</div></div>
-        <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Market Monitoring</div></div>
+        <div class="stat-item">
+            <div class="stat-num" id="userCount">1,402</div>
+            <div class="stat-label">Active Users Right Now</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">380+</div>
+            <div class="stat-label">Items Valued</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Market Monitoring</div>
+        </div>
     </div>
 
     <section class="section fade-in">
-        <div class="section-header"><h2>Powerful Tools. Real-Time Data.</h2><p>Everything you need to dominate the game.</p></div>
+        <div class="section-header">
+            <h2>Powerful Tools. Real-Time Data.</h2>
+            <p>Everything you need to dominate the game, organized in one sleek dashboard.</p>
+        </div>
         <div class="grid">
-            <a href="contracts.html" class="feature-card"><div class="icon-box">📜</div><h3>Season Contracts</h3><p>Track live missions and XP resets.</p></a>
-            <a href="values.html" class="feature-card"><div class="icon-box">💎</div><h3>Value Database</h3><p>Updated market values for every item.</p></a>
-            <a href="calculator.html" class="feature-card"><div class="icon-box">⚖️</div><h3>Trade Calculator</h3><p>Ensure you never take an L.</p></a>
-            <a href="pity.html" class="feature-card"><div class="icon-box">🎰</div><h3>Pity Tracker</h3><p>Predict your next Hyperchrome drop.</p></a>
+            <a href="contracts.html" class="feature-card">
+                <div class="icon-box">📜</div>
+                <h3>Season Contracts</h3>
+                <p>Track live missions, daily XP resets, and accurately calculate your path to Level 10.</p>
+            </a>
+            <a href="values.html" class="feature-card">
+                <div class="icon-box">💎</div>
+                <h3>Value Database</h3>
+                <p>Constantly updated market values for every single vehicle and limited item in the game.</p>
+            </a>
+            <a href="calculator.html" class="feature-card">
+                <div class="icon-box">⚖️</div>
+                <h3>Trade Calculator</h3>
+                <p>Ensure you never take an L. Compare multi-item trades with high-precision data.</p>
+            </a>
+            <a href="pity.html" class="feature-card">
+                <div class="icon-box">🎰</div>
+                <h3>Pity Tracker</h3>
+                <p>Log your robberies systematically and predict when your next Hyperchrome will drop.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="info-split">
+            <div class="info-img">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard Interface">
+            </div>
+            <div class="info-text">       
+                <p>Jailbreak Hub isn't just a basic list of prices. It's a comprehensive suite designed to give you an unfair advantage in trading and grinding.</p>
+                <p>With data pulled and verified by top-tier traders, you can trust our engine to guide you through complex multi-item trades, season XP planning, and Hyperchrome grinding strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>What the Community Says</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="test-card">
+                <p>"The Trade Calculator literally saved me from trading my Torpedo for a massive underpay. The UI is incredibly clean too."</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=xX+Sniper&background=0D8ABC&color=fff" class="test-avatar">
+                    <div>
+                        <div class="test-name">xX_Sniper_Xx</div>
+                        <div class="test-role">Verified Trader</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"I use the Season Contracts page every single day to track my XP. Reached level 10 a week early because of it."</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=Cops+Rule&background=00ff88&color=000" class="test-avatar">
+                    <div>
+                        <div class="test-name">CopMain2023</div>
+                        <div class="test-role">Pro Grinder</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"Finally, a values list that actually updates quickly when a new season drops. Essential tool."</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=Trade+King&background=ffac33&color=fff" class="test-avatar">
+                    <div>
+                        <div class="test-name">TradingKing_JB</div>
+                        <div class="test-role">Value Expert</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item">
+                <div class="faq-question">How often are the item values updated? <span>+</span></div>
+                <div class="faq-answer">Our dedicated team monitors the Jailbreak trading hub daily. Major list updates happen weekly, but hot items are adjusted within 24 hours of market shifts.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is the Pity Tracker 100% accurate? <span>+</span></div>
+                <div class="faq-answer">The Pity Tracker is based on community-tested algorithms and data sets. While it can't hack the game to guarantee a drop, it provides the most mathematically accurate estimation of your pity percentage available.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How can I support Jailbreak Hub? <span>+</span></div>
+                <div class="faq-answer">You can support us by joining our Discord, sharing the site with your friends, or checking out our Support page to help keep the servers running!</div>
+            </div>
         </div>
     </section>
 
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
         <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        <div class="footer-links"><a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
-        <a href="support.html" class="support-btn btn" style="color: var(--text-main); text-decoration: none; justify-content: center;">☕ Support Us</a>
+        
+        <div class="footer-links">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        
+        <a href="support.html" class="support-btn btn" style="color: var(--text-main); text-decoration: none;">☕ Support Us</a>
+        
         <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
     </footer>
 
     <script>
+        // --- THEME TOGGLE LOGIC ---
         const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', () => { document.body.classList.toggle('light-mode'); });
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+        });
 
+        // --- FAKE LIVE COUNTER LOGIC ---
         let currentUsers = 1402;
         const userCountElement = document.getElementById('userCount');
+        
         setInterval(() => {
-            currentUsers += Math.floor(Math.random() * 5) - 2;
+            const change = Math.floor(Math.random() * 5) - 2; 
+            currentUsers += change;
             userCountElement.innerText = currentUsers.toLocaleString();
         }, 3500);
 
+        // --- FAQ TOGGLE LOGIC ---
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('active');
+                const span = item.querySelector('span');
+                span.innerText = item.classList.contains('active') ? '-' : '+';
+            });
+        });
+
+        // --- SCROLL ANIMATIONS ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -289,27 +428,39 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
+
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+        // --- FALLING CASH CANVAS ---
         const canvas = document.getElementById('cashCanvas');
         const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
+
         const cashChars = ['$', '💵', '💰', '💸'];
         const fontSize = 16;
         let columns = Math.floor(canvas.width / fontSize);
         let drops = Array(columns).fill(1);
+
         function draw() {
             ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ff88'; 
             ctx.font = fontSize + 'px monospace';
+
             for (let i = 0; i < drops.length; i++) {
                 const text = cashChars[Math.floor(Math.random() * cashChars.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
                 drops[i]++;
             }
         }
