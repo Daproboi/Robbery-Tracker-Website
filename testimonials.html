@@ -26,7 +26,7 @@
             min-height: 100vh;
         }
 
-        /* --- UNIFIED NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -52,10 +52,28 @@
         .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
 
-        /* --- MODAL STYLES --- */
+        /* --- STYLES --- */
+        .staff-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(145deg, rgba(17, 20, 26, 0.4), rgba(10, 12, 16, 0.9));
+        }
+        .staff-card:hover { transform: translateY(-10px); border-color: var(--accent); }
+
+        .vouch-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+            margin-right: 6px; background: var(--green);
+            box-shadow: 0 0 10px var(--green);
+        }
+
         #vouchModal {
             display: none; position: fixed; inset: 0; 
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
             z-index: 9999; align-items: center; justify-content: center;
         }
     </style>
@@ -66,15 +84,6 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            
-            <div class="nav-item">
-                <span class="nav-link">Seasons ▼</span>
-                <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
-                </div>
-            </div>
-
             <div class="nav-item">
                 <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
@@ -82,7 +91,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <span class="nav-link" style="color:#fff">Community ▼</span>
                 <div class="dropdown">
@@ -90,97 +98,156 @@
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
-
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
         </div>
     </nav>
 
     <div class="max-w-7xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h1 class="text-5xl font-black uppercase italic tracking-tighter mb-4">The <span class="text-[#0070f3]">Staff</span></h1>
-            <p class="text-gray-400">The minds behind the market.</p>
+        <div class="text-center mb-20">
+            <h1 class="text-6xl font-black uppercase italic tracking-tighter mb-4">The <span class="text-[#0070f3]">Team</span></h1>
+            <p class="text-gray-400">The developers behind the Hub.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#0070f3]">
-                <h3 class="text-xl font-bold">Felix</h3>
-                <p class="text-[#0070f3] text-[10px] font-bold uppercase tracking-widest mb-2">Lead Developer</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-32">
+            <div class="staff-card border border-white/5 rounded-[40px] p-10 text-center relative overflow-hidden group">
+                <div class="absolute top-6 right-8 text-[10px] font-bold uppercase tracking-widest text-green-400 flex items-center">
+                    <span class="status-dot"></span> Active
+                </div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Plug" class="w-32 h-32 mx-auto rounded-3xl border-2 border-[#0070f3] mb-6 relative z-10">
+                <h3 class="text-3xl font-extrabold tracking-tight mb-1">Plug™</h3>
+                <p class="text-[#0070f3] text-xs font-black uppercase tracking-[0.2em] mb-4">Lead Developer & Founder</p>
+                <p class="text-gray-500 text-sm">Managing the core systems and vision of Jailbreak Hub.</p>
             </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Shadow" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#ff3333]">
-                <h3 class="text-xl font-bold">ShadowX</h3>
-                <p class="text-[#ff3333] text-[10px] font-bold uppercase tracking-widest mb-2">Value Analyst</p>
-            </div>
-            <div class="bg-[#0a0c10] border border-white/5 rounded-3xl p-8 text-center">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Luna" class="w-24 h-24 mx-auto mb-4 rounded-full border-2 border-[#00ff88]">
-                <h3 class="text-xl font-bold">Luna</h3>
-                <p class="text-[#00ff88] text-[10px] font-bold uppercase tracking-widest mb-2">Community Support</p>
+
+            <div class="staff-card border border-white/5 rounded-[40px] p-10 text-center relative overflow-hidden group">
+                <div class="absolute top-6 right-8 text-[10px] font-bold uppercase tracking-widest text-green-400 flex items-center">
+                    <span class="status-dot"></span> Active
+                </div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daproboi" class="w-32 h-32 mx-auto rounded-3xl border-2 border-cyan-400 mb-6 relative z-10">
+                <h3 class="text-3xl font-extrabold tracking-tight mb-1">Daproboi</h3>
+                <p class="text-cyan-400 text-xs font-black uppercase tracking-[0.2em] mb-4">Core Developer</p>
+                <p class="text-gray-500 text-sm">Handling database management and community integrations.</p>
             </div>
         </div>
 
-        <div class="flex justify-between items-center mb-12">
-            <h2 class="text-3xl font-black uppercase italic">User <span class="text-[#00ff88]">Vouches</span></h2>
-            <button onclick="toggleModal(true)" class="bg-[#0070f3] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all">
-                + Submit Vouch
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+            <div>
+                <h2 class="text-4xl font-black uppercase italic leading-none mb-2">User <span class="text-[#00ff88]">Vouches</span></h2>
+                <p class="text-gray-500 font-semibold uppercase text-[10px] tracking-[0.3em]">Persistent community feedback</p>
+            </div>
+            <button onclick="toggleModal(true)" class="bg-[#0070f3] text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-transform">
+                + Post Your Vouch
             </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="vouchGrid">
-            <div class="bg-white/5 border border-white/10 p-6 rounded-2xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center font-bold text-blue-400">K</div>
-                    <p class="font-bold text-sm">KrakenTrades</p>
+        <div class="columns-1 md:columns-3 gap-6 space-y-6" id="vouchGrid">
+            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center font-bold text-blue-400 text-sm shadow-inner">H</div>
+                    <p class="font-bold text-sm">HyperChrome_Lover</p>
                 </div>
-                <p class="text-gray-400 text-sm italic">"Best value list out there. Cleanest UI by far."</p>
+                <p class="text-gray-400 text-sm italic leading-relaxed">"The calculator is so much more accurate than the other sites. Plug and Daproboi really nailed it."</p>
+            </div>
+
+            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center font-bold text-green-400 text-sm shadow-inner">V</div>
+                    <p class="font-bold text-sm">ViperTrades</p>
+                </div>
+                <p class="text-gray-400 text-sm italic leading-relaxed">"I use this every day to check values. The UI is super smooth and it never lags."</p>
+            </div>
+
+            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center font-bold text-purple-400 text-sm shadow-inner">C</div>
+                    <p class="font-bold text-sm">Celsior_Simp</p>
+                </div>
+                <p class="text-gray-400 text-sm italic leading-relaxed">"Finally a site that actually looks good on mobile. Trading in-game is so much easier now."</p>
+            </div>
+
+            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center font-bold text-orange-400 text-sm shadow-inner">X</div>
+                    <p class="font-bold text-sm">xX_RichTrader_Xx</p>
+                </div>
+                <p class="text-gray-400 text-sm italic leading-relaxed">"10/10 service. The private servers are always updated and the team is active."</p>
             </div>
         </div>
     </div>
 
     <div id="vouchModal">
-        <div class="bg-[#0a0c10] border border-white/10 p-8 rounded-3xl max-w-md w-full mx-4">
-            <h3 class="text-2xl font-black uppercase italic mb-4">Submit a <span class="text-[#0070f3]">Vouch</span></h3>
-            <input type="text" id="vName" placeholder="Roblox Username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-4 text-white outline-none focus:border-[#0070f3]">
-            <textarea id="vText" placeholder="Your testimonial..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-6 text-white outline-none focus:border-[#0070f3] h-32"></textarea>
-            
-            <div class="flex gap-4">
-                <button onclick="submitVouch()" class="flex-1 bg-[#00ff88] text-black font-black py-4 rounded-xl uppercase text-xs">Post Vouch</button>
-                <button onclick="toggleModal(false)" class="flex-1 bg-white/5 text-white font-bold py-4 rounded-xl uppercase text-xs">Cancel</button>
+        <div class="bg-[#0a0c10] border border-white/10 p-10 rounded-[40px] max-w-md w-full mx-4">
+            <h3 class="text-2xl font-black uppercase italic mb-6">Post a <span class="text-[#0070f3]">Vouch</span></h3>
+            <div class="space-y-4">
+                <input type="text" id="vName" placeholder="Roblox Username" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-[#0070f3] transition-all">
+                <textarea id="vText" placeholder="Your testimonial..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-[#0070f3] h-32 transition-all"></textarea>
+            </div>
+            <div class="flex gap-4 mt-8">
+                <button onclick="submitVouch()" class="flex-1 bg-[#00ff88] text-black font-black py-4 rounded-2xl uppercase text-[10px] tracking-widest hover:brightness-110">Post Vouch</button>
+                <button onclick="toggleModal(false)" class="flex-1 bg-white/5 text-white font-bold py-4 rounded-2xl uppercase text-[10px] tracking-widest">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- PERSISTENCE LOGIC ---
+        const VOUCH_KEY = 'jailbreak_hub_vouches';
+
+        function loadVouches() {
+            const saved = JSON.parse(localStorage.getItem(VOUCH_KEY) || '[]');
+            saved.forEach(vouch => renderVouch(vouch.name, vouch.text, false));
+        }
+
         function toggleModal(show) {
             document.getElementById('vouchModal').style.display = show ? 'flex' : 'none';
         }
 
-        function submitVouch() {
-            const name = document.getElementById('vName').value;
-            const text = document.getElementById('vText').value;
-
-            if(!name || !text) return alert("Please fill in both fields!");
-
+        function renderVouch(name, text, isNew = true) {
             const grid = document.getElementById('vouchGrid');
             const card = document.createElement('div');
-            card.className = "bg-white/5 border border-white/10 p-6 rounded-2xl animate-pulse";
+            
+            // Generate a random accent color
+            const colors = ['blue', 'green', 'purple', 'orange', 'pink', 'cyan'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            card.className = `vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid ${isNew ? 'animate-pulse' : ''}`;
             card.innerHTML = `
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center font-bold text-green-400">${name[0].toUpperCase()}</div>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 bg-${color}-500/20 rounded-xl flex items-center justify-center font-bold text-${color}-400 text-sm shadow-inner">
+                        ${name[0].toUpperCase()}
+                    </div>
                     <p class="font-bold text-sm">${name}</p>
                 </div>
-                <p class="text-gray-400 text-sm italic">"${text}"</p>
+                <p class="text-gray-400 text-sm italic leading-relaxed">"${text}"</p>
             `;
             
             grid.prepend(card);
-            setTimeout(() => card.classList.remove('animate-pulse'), 1000);
-            
+            if(isNew) setTimeout(() => card.classList.remove('animate-pulse'), 1000);
+        }
+
+        function submitVouch() {
+            const name = document.getElementById('vName').value.trim();
+            const text = document.getElementById('vText').value.trim();
+
+            if(!name || !text) return alert("Please fill in both fields!");
+
+            // Save to LocalStorage
+            const saved = JSON.parse(localStorage.getItem(VOUCH_KEY) || '[]');
+            saved.push({ name, text });
+            localStorage.setItem(VOUCH_KEY, JSON.stringify(saved));
+
+            // Render on page
+            renderVouch(name, text, true);
+
             // Reset and close
             document.getElementById('vName').value = '';
             document.getElementById('vText').value = '';
             toggleModal(false);
         }
+
+        // Initialize
+        window.onload = loadVouches;
     </script>
 </body>
 </html>
