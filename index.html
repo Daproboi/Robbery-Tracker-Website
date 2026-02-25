@@ -51,11 +51,13 @@
         } 
 
         .video-container { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100vh; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             overflow: hidden; z-index: -1; 
         } 
         .video-container video { 
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.3; filter: grayscale(50%); 
+            min-width: 100%; min-height: 100%; width: auto; height: auto; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            object-fit: cover; opacity: 0.4; filter: grayscale(30%); 
         } 
         .video-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -208,11 +210,12 @@
 <body> 
 
     <div class="video-container"> 
-        <video autoplay muted loop playsinline> 
-            <source src="https://cdn.discordapp.com/attachments/1075133379633844244/1210283084343181312/Jailbreak_Cinematic.mp4" type="video/mp4"> 
+        <video autoplay muted loop playsinline poster="https://i.imgur.com/G3Pz6hC.jpg"> 
+            <source src="https://shsec.org/jailbreak_cinematic_bg.mp4" type="video/mp4"> 
         </video> 
         <div class="video-overlay"></div> 
     </div> 
+
     <canvas id="cashCanvas"></canvas> 
 
     <nav class="nav-top"> 
