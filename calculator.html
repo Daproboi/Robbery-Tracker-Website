@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Pro Calculator</title>
+    <title>Jailbreak Hub | Complete Value Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,274 +18,306 @@
             --red: #ff3333;
         }
 
+        * { box-sizing: border-box; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
-            margin: 0; padding-top: 80px;
-            overflow-x: hidden;
+            margin: 0; padding-top: 100px;
         }
 
-        /* --- PICKER OVERLAY --- */
-        #pickerOverlay {
-            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
-            display: none; flex-direction: column;
+        /* --- TOP NAV BAR --- */
+        .nav-top {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(3, 5, 8, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); display: flex;
+            align-items: center; justify-content: space-between;
+            padding: 0 40px; z-index: 5000;
         }
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: #fff; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .nav-link:hover { color: #fff; }
 
-        .picker-header {
-            padding: 20px 40px; background: var(--surface); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 10;
-        }
-
-        .filter-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 8px; margin-top: 15px;
-        }
-
-        .filter-btn {
-            background: var(--card); border: 1px solid var(--border); color: var(--text-dim);
-            padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-        .picker-body { flex: 1; overflow-y: auto; padding: 30px 40px; }
-
-        /* --- VALUE LIST STYLE CARDS --- */
-        .picker-results {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 20px;
-        }
-
-        .list-card {
-            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-            padding: 15px; text-align: center; cursor: pointer; position: relative;
-        }
-        .list-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .list-card img { width: 120px; height: 120px; object-fit: contain; margin-bottom: 10px; background: #000; border-radius: 10px; }
-        .list-card-name { font-size: 0.9rem; font-weight: 800; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .list-card-val { color: var(--green); font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; }
-
-        /* --- PAGINATION --- */
-        .pagination {
-            display: flex; justify-content: center; gap: 10px; padding: 20px;
-            background: var(--surface); border-top: 1px solid var(--border);
-        }
-        .page-btn {
-            background: var(--card); border: 1px solid var(--border); color: white;
-            padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 700;
-        }
-        .page-btn.active { background: var(--accent); }
-
-        /* --- MAIN PAGE UI --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .trade-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
-        .side-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .total-box { font-family: 'JetBrains Mono'; font-size: 1.5rem; color: var(--accent); font-weight: 800; }
+        /* --- CALCULATOR AREA --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         
-        .item-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 12px; min-height: 300px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px;
+        .status-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 40px;
         }
-        .added-item {
+        #status-text { font-size: 2.5rem; font-weight: 900; margin: 0; }
+
+        .trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .side-title { 
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding-bottom: 10px; border-bottom: 2px solid var(--border); margin-bottom: 15px;
+        }
+        .side-total { color: var(--accent); font-family: 'JetBrains Mono'; font-size: 1.5rem; }
+
+        .item-display { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+            gap: 15px; min-height: 200px; 
+        }
+
+        .card-item {
             background: var(--card); border: 1px solid var(--border); border-radius: 12px;
             padding: 10px; position: relative; text-align: center;
         }
-        .added-item img { width: 80px; height: 80px; object-fit: contain; }
-        .remove-x { position: absolute; top: 5px; right: 5px; color: var(--red); cursor: pointer; font-weight: 800; }
+        .card-item img { width: 100%; height: 80px; object-fit: contain; }
+        .remove-btn { position: absolute; top: 5px; right: 5px; cursor: pointer; color: var(--red); font-weight: bold; }
 
-        .add-trigger {
-            border: 2px dashed var(--border); border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; color: var(--text-dim); font-weight: 700;
+        .add-btn {
+            border: 2px dashed var(--border); border-radius: 12px; height: 130px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-weight: 800; color: var(--text-dim);
         }
 
-        .result-bar {
-            background: var(--surface); border: 1px solid var(--border); padding: 20px;
-            border-radius: 15px; text-align: center; margin-bottom: 30px;
+        /* --- PICKER OVERLAY (VISIBLE AT ALL TIMES) --- */
+        #picker {
+            position: fixed; inset: 0; background: var(--bg); z-index: 10000;
+            display: none; flex-direction: column;
         }
-        #status-text { font-size: 2rem; font-weight: 900; }
+        .picker-header { padding: 25px 40px; background: var(--surface); border-bottom: 1px solid var(--border); }
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        .f-btn { 
+            background: var(--card); border: 1px solid var(--border); color: var(--text-dim); 
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700;
+        }
+        .f-btn.active { background: var(--accent); color: white; }
+
+        .picker-scroll { flex: 1; overflow-y: scroll; padding: 40px; }
+        .list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+
+        .value-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 15px;
+            padding: 15px; text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .value-card:hover { border-color: var(--accent); transform: scale(1.02); }
+        .value-card img { width: 120px; height: 120px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; }
+        .value-card .name { font-weight: 800; font-size: 0.9rem; margin-bottom: 5px; }
+        .value-card .val { color: var(--green); font-family: 'JetBrains Mono'; font-weight: 700; }
+
+        /* --- FOOTER --- */
+        .footer {
+            margin-top: 100px; padding: 60px 40px; background: var(--surface);
+            border-top: 1px solid var(--border); text-align: center;
+        }
+        .footer-content { max-width: 800px; margin: 0 auto; color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+        .footer-links { margin-bottom: 20px; display: flex; justify-content: center; gap: 20px; }
+        .footer-links a { color: #fff; text-decoration: none; font-weight: 700; }
+
     </style>
 </head>
 <body>
 
+    <nav class="nav-top">
+        <a href="#" class="nav-logo">JAILBREAK<span>HUB</span></a>
+        <div class="nav-links">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Value List</a>
+            <a href="#" class="nav-link" style="color:white">Calculator</a>
+            <a href="#" class="nav-link">Community</a>
+            <a href="#" class="nav-link">Tracker</a>
+        </div>
+        <div style="width: 150px;"></div> </nav>
+
     <div class="container">
-        <div class="result-bar">
-            <div id="status-text">EQUAL</div>
-            <div id="diff-text" style="color: var(--text-dim);">Difference: $0</div>
+        <div class="status-card">
+            <h1 id="status-text">EQUAL</h1>
+            <p id="diff-text" style="color:var(--text-dim); font-weight:700;">Difference: $0</p>
         </div>
 
-        <div class="trade-section">
-            <div>
-                <div class="side-header">
-                    <span style="font-weight: 800;">YOUR SIDE</span>
-                    <span class="total-box" id="totalA">$0</span>
+        <div class="trade-grid">
+            <section>
+                <div class="side-title">
+                    <span style="font-weight:900; letter-spacing:1px;">YOUR OFFER</span>
+                    <span class="side-total" id="totalA">$0</span>
                 </div>
-                <div class="item-grid" id="gridA">
-                    <div class="add-trigger" onclick="openPicker('A')">ADD ITEM</div>
+                <div class="item-display" id="gridA">
+                    <div class="add-btn" onclick="showPicker('A')">ADD ITEM</div>
                 </div>
-            </div>
+            </section>
 
-            <div>
-                <div class="side-header">
-                    <span style="font-weight: 800;">THEIR SIDE</span>
-                    <span class="total-box" id="totalB">$0</span>
+            <section>
+                <div class="side-title">
+                    <span style="font-weight:900; letter-spacing:1px;">THEIR OFFER</span>
+                    <span class="side-total" id="totalB">$0</span>
                 </div>
-                <div class="item-grid" id="gridB">
-                    <div class="add-trigger" onclick="openPicker('B')">ADD ITEM</div>
+                <div class="item-display" id="gridB">
+                    <div class="add-btn" onclick="showPicker('B')">ADD ITEM</div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 
-    <div id="pickerOverlay">
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Support</a>
+        </div>
+        <div class="footer-content">
+            <p>Jailbreak Hub is not affiliated with Badimo, Roblox, or any of their partners. All in-game images and names are property of their respective owners. Values are community-driven and should be used as a guide only.</p>
+            <p>&copy; 2026 Jailbreak Hub Trading Network. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="picker">
         <div class="picker-header">
-            <div style="display:flex; gap:20px;">
-                <input type="text" id="pSearch" placeholder="Search item name..." style="flex:1; padding:12px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:white;" oninput="currentPage=1; renderPicker()">
-                <button onclick="closePicker()" style="background:var(--red); color:white; border:none; padding:0 20px; border-radius:8px; font-weight:800; cursor:pointer;">X</button>
+            <div style="display:flex; gap:20px; align-items:center;">
+                <input type="text" id="pSearch" placeholder="Search across all categories..." style="flex:1; padding:15px; border-radius:10px; background:var(--card); border:1px solid var(--border); color:white;" oninput="drawPicker()">
+                <button onclick="hidePicker()" style="background:var(--red); color:white; border:none; padding:15px 30px; border-radius:10px; font-weight:900; cursor:pointer;">CLOSE</button>
             </div>
-            <div class="filter-grid" id="filterContainer">
+            <div class="filter-row" id="filters">
                 </div>
         </div>
-        <div class="picker-body">
-            <div class="picker-results" id="pResults"></div>
+        <div class="picker-scroll">
+            <div class="list-grid" id="listGrid"></div>
         </div>
-        <div class="pagination" id="pPagination"></div>
     </div>
 
     <script>
-        // DATA OBJECT
-        const fullDB = {
+        const db = {
             "Vehicles": [
-                { "name": "Javelin", "cash_value": 49500000, "image": "https://via.placeholder.com/150/0070f3/FFFFFF?text=Javelin" },
-                { "name": "Torpedo", "cash_value": 49000000, "image": "https://via.placeholder.com/150/0070f3/FFFFFF?text=Torpedo" },
-                { "name": "Beignet", "cash_value": 40000000, "image": "https://via.placeholder.com/150/0070f3/FFFFFF?text=Beignet" },
-                { "name": "Celsior", "cash_value": 30000000, "image": "https://via.placeholder.com/150/0070f3/FFFFFF?text=Celsior" },
-                { "name": "Proto-8", "cash_value": 30000000, "image": "https://via.placeholder.com/150/0070f3/FFFFFF?text=Proto-8" },
-                // ... (Truncated here for brevity, but all items from your list are handled by the logic below)
+                { "name": "Javelin", "cash_value": 49500000, "image": "images/javelin.png" },
+                { "name": "Torpedo", "cash_value": 49000000, "image": "images/torpedo.png" },
+                { "name": "Beignet", "cash_value": 40000000, "image": "images/beignet.png" },
+                { "name": "Celsior", "cash_value": 30000000, "image": "images/celsior.png" },
+                { "name": "Proto-8", "cash_value": 30000000, "image": "images/proto8.png" },
+                { "name": "Power 1", "cash_value": 23000000 },
+                { "name": "Arachnid", "cash_value": 21000000 },
+                { "name": "Icebreaker", "cash_value": 20000000 },
+                { "name": "Beam Hybrid", "cash_value": 19000000 },
+                { "name": "Banana Car", "cash_value": 17000000 },
+                { "name": "Molten M12", "cash_value": 15000000 },
+                { "name": "Crew Capsule", "cash_value": 12500000 },
+                { "name": "Raptor", "cash_value": 11000000 },
+                { "name": "Volt 4x4", "cash_value": 10000000 },
+                { "name": "Parisian", "cash_value": 8000000 },
+                { "name": "Aperture", "cash_value": 7500000 },
+                { "name": "Shogun", "cash_value": 6500000 },
+                { "name": "Scorpion", "cash_value": 6000000 },
+                { "name": "Carbonara", "cash_value": 5500000 },
+                { "name": "Macaron", "cash_value": 5500000 },
+                { "name": "Brulee", "cash_value": 3000000 }
             ],
-            "Weapon Skins": [ { "name": "Drip", "cash_value": 15000000 }, { "name": "Snowstorm", "cash_value": 4000000 } ],
-            "Hyperchromes": [ { "name": "HyperShift", "cash_value": 355000000 }, { "name": "HyperDiamond Lvl 5", "cash_value": 70000000 } ],
-            "Drifts": [ { "name": "Blue Fire", "cash_value": 23000000 }, { "name": "Gradient Pixel", "cash_value": 9000000 } ],
-            "Furniture": [ { "name": "Noob Scream", "cash_value": 14000000 } ],
-            "Rims": [ { "name": "Spinner", "cash_value": 55000000 }, { "name": "Void", "cash_value": 30000000 } ],
-            "Body Colors": [ { "name": "Vantablack", "cash_value": 30000000 } ]
+            "Hyperchromes": [
+                { "name": "HyperShift", "cash_value": 355000000 },
+                { "name": "HyperDiamond L5", "cash_value": 70000000 },
+                { "name": "HyperBlue L5", "cash_value": 61000000 },
+                { "name": "HyperPink L5", "cash_value": 58000000 }
+            ],
+            "Rims": [
+                { "name": "Spinner", "cash_value": 55000000 },
+                { "name": "Void", "cash_value": 30000000 },
+                { "name": "Hypno", "cash_value": 15000000 }
+            ],
+            "Skins": [
+                { "name": "Drip", "cash_value": 15000000 },
+                { "name": "Snowstorm", "cash_value": 4000000 }
+            ],
+            "Drifts": [
+                { "name": "Blue Fire", "cash_value": 23000000 },
+                { "name": "Gradient Pixel", "cash_value": 9000000 }
+            ],
+            "Furniture": [
+                { "name": "Noob Scream", "cash_value": 14000000 },
+                { "name": "Sci-Fi Kitchen", "cash_value": 5000000 }
+            ],
+            "Colors": [
+                { "name": "Vantablack", "cash_value": 30000000 },
+                { "name": "Gold", "cash_value": 1250000 }
+            ]
         };
 
-        // Injecting the rest of your raw data into the live categories
-        const rawVehicles = [{ "name": "Power 1", "cash_value": 23000000 }, { "name": "Arachnid", "cash_value": 21000000 }, { "name": "Icebreaker", "cash_value": 20000000 }, { "name": "Beam Hybrid", "cash_value": 19000000 }, { "name": "Banana Car", "cash_value": 17000000 }, { "name": "Molten M12", "cash_value": 15000000 }, { "name": "Crew Capsule", "cash_value": 12500000 }, { "name": "Raptor", "cash_value": 11000000 }, { "name": "Volt 4x4", "cash_value": 10000000 }, { "name": "Parisian", "cash_value": 8000000 }, { "name": "Aperture", "cash_value": 7500000 }, { "name": "Shogun", "cash_value": 6500000 }, { "name": "Scorpion", "cash_value": 6000000 }, { "name": "Carbonara", "cash_value": 5500000 }, { "name": "Macaron", "cash_value": 5500000 }, { "name": "Bandit", "cash_value": 5000000 }, { "name": "Goliath", "cash_value": 5000000 }, { "name": "Rattler", "cash_value": 4000000 }, { "name": "Torero", "cash_value": 4000000 }, { "name": "JB8", "cash_value": 3500000 }, { "name": "Snake", "cash_value": 3500000 }, { "name": "Orion M42", "cash_value": 3500000 }, { "name": "Airtail", "cash_value": 3000000 }, { "name": "Brulee", "cash_value": 3000000 }];
-        fullDB["Vehicles"] = [...fullDB["Vehicles"], ...rawVehicles];
-
+        let activeSide = 'A';
+        let filter = 'All';
         let sideA = [];
         let sideB = [];
-        let activeSide = 'A';
-        let currentFilter = 'All';
-        let currentPage = 1;
-        const itemsPerPage = 12;
 
-        function openPicker(side) {
+        function showPicker(side) {
             activeSide = side;
-            document.getElementById('pickerOverlay').style.display = 'flex';
-            renderFilters();
-            renderPicker();
+            document.getElementById('picker').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            genFilters();
+            drawPicker();
         }
 
-        function closePicker() { document.getElementById('pickerOverlay').style.display = 'none'; }
-
-        function renderFilters() {
-            const container = document.getElementById('filterContainer');
-            const cats = ['All', ...Object.keys(fullDB)];
-            container.innerHTML = cats.map(c => `
-                <button class="filter-btn ${currentFilter === c ? 'active' : ''}" onclick="setFilter('${c}')">${c}</button>
-            `).join('');
+        function hidePicker() {
+            document.getElementById('picker').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
-        function setFilter(c) {
-            currentFilter = c;
-            currentPage = 1;
-            renderFilters();
-            renderPicker();
+        function genFilters() {
+            const row = document.getElementById('filters');
+            const cats = ['All', ...Object.keys(db)];
+            row.innerHTML = cats.map(c => `<button class="f-btn ${filter===c?'active':''}" onclick="setF('${c}')">${c.toUpperCase()}</button>`).join('');
         }
 
-        function renderPicker() {
-            const query = document.getElementById('pSearch').value.toLowerCase();
-            let masterList = [];
+        function setF(c) { filter = c; genFilters(); drawPicker(); }
+
+        function drawPicker() {
+            const grid = document.getElementById('listGrid');
+            const term = document.getElementById('pSearch').value.toLowerCase();
+            let items = [];
             
-            for (let cat in fullDB) {
-                if (currentFilter === 'All' || currentFilter === cat) {
-                    masterList = masterList.concat(fullDB[cat]);
+            for(let cat in db) {
+                if(filter === 'All' || filter === cat) {
+                    items = items.concat(db[cat]);
                 }
             }
 
-            const filtered = masterList.filter(i => i.name.toLowerCase().includes(query));
-            const totalPages = Math.ceil(filtered.length / itemsPerPage);
-            const start = (currentPage - 1) * itemsPerPage;
-            const paginated = filtered.slice(start, start + itemsPerPage);
-
-            const res = document.getElementById('pResults');
-            res.innerHTML = paginated.map(item => `
-                <div class="list-card" onclick="addItem(${item.cash_value}, '${item.name}')">
-                    <img src="${item.image || 'https://via.placeholder.com/150/11141a/FFFFFF?text=' + item.name}">
-                    <div class="list-card-name">${item.name}</div>
-                    <div class="list-card-val">$${(item.cash_value || 0).toLocaleString()}</div>
+            grid.innerHTML = items.filter(i => i.name.toLowerCase().includes(term)).map(i => `
+                <div class="value-card" onclick="add('${i.name}', ${i.cash_value})">
+                    <img src="https://via.placeholder.com/150/0a0c10/FFFFFF?text=${i.name}">
+                    <div class="name">${i.name}</div>
+                    <div class="val">$${(i.cash_value || 0).toLocaleString()}</div>
                 </div>
             `).join('');
-
-            // Pagination Controls
-            const pagBox = document.getElementById('pPagination');
-            let pagHTML = '';
-            for(let i=1; i<=totalPages; i++) {
-                if(i > 10) break; // Limit visible pages
-                pagHTML += `<button class="page-btn ${currentPage === i ? 'active' : ''}" onclick="setPage(${i})">${i}</button>`;
-            }
-            pagBox.innerHTML = pagHTML;
         }
 
-        function setPage(p) { currentPage = p; renderPicker(); }
-
-        function addItem(val, name) {
-            const obj = { name, cash_value: val };
-            if (activeSide === 'A') sideA.push(obj);
-            else sideB.push(obj);
-            closePicker();
-            updateUI();
+        function add(name, val) {
+            const item = { name, val };
+            if(activeSide === 'A') sideA.push(item); else sideB.push(item);
+            hidePicker();
+            renderMain();
         }
 
-        function removeItem(side, index) {
-            if (side === 'A') sideA.splice(index, 1);
-            else sideB.splice(index, 1);
-            updateUI();
+        function remove(side, idx) {
+            if(side === 'A') sideA.splice(idx, 1); else sideB.splice(idx, 1);
+            renderMain();
         }
 
-        function updateUI() {
-            const draw = (list, gridId, side) => {
-                const grid = document.getElementById(gridId);
-                let html = list.map((item, i) => `
-                    <div class="added-item">
-                        <span class="remove-x" onclick="removeItem('${side}', ${i})">×</span>
-                        <img src="https://via.placeholder.com/100/11141a/FFFFFF?text=${item.name}">
-                        <div style="font-size:0.7rem; font-weight:800; margin-top:5px;">${item.name}</div>
+        function renderMain() {
+            const renderGrid = (list, id, s) => {
+                const g = document.getElementById(id);
+                g.innerHTML = list.map((i, idx) => `
+                    <div class="card-item">
+                        <span class="remove-btn" onclick="remove('${s}', ${idx})">×</span>
+                        <img src="https://via.placeholder.com/150/11141a/FFFFFF?text=${i.name}">
+                        <div style="font-size:0.75rem; font-weight:800; margin-top:5px;">${i.name}</div>
                     </div>
-                `).join('');
-                html += `<div class="add-trigger" onclick="openPicker('${side}')" style="height:110px;">+</div>`;
-                grid.innerHTML = html;
+                `).join('') + `<div class="add-btn" onclick="showPicker('${s}')">+</div>`;
             };
 
-            draw(sideA, 'gridA', 'A');
-            draw(sideB, 'gridB', 'B');
+            renderGrid(sideA, 'gridA', 'A');
+            renderGrid(sideB, 'gridB', 'B');
 
-            const totalA = sideA.reduce((s, i) => s + (i.cash_value || 0), 0);
-            const totalB = sideB.reduce((s, i) => s + (i.cash_value || 0), 0);
-            document.getElementById('totalA').innerText = `$${totalA.toLocaleString()}`;
-            document.getElementById('totalB').innerText = `$${totalB.toLocaleString()}`;
+            const tA = sideA.reduce((a, b) => a + b.val, 0);
+            const tB = sideB.reduce((a, b) => a + b.val, 0);
+            document.getElementById('totalA').innerText = `$${tA.toLocaleString()}`;
+            document.getElementById('totalB').innerText = `$${tB.toLocaleString()}`;
 
-            const diff = totalA - totalB;
+            const diff = tA - tB;
             const status = document.getElementById('status-text');
             document.getElementById('diff-text').innerText = `Difference: $${Math.abs(diff).toLocaleString()}`;
 
-            if (totalA === 0 && totalB === 0) { status.innerText = "EQUAL"; status.style.color = "white"; }
-            else if (diff > 0) { status.innerText = "L (OVERPAYING)"; status.style.color = "var(--red)"; }
-            else { status.innerText = "W (PROFIT)"; status.style.color = "var(--green)"; }
+            if(tA === 0 && tB === 0) { status.innerText = "START TRADE"; status.style.color = "white"; }
+            else if(Math.abs(diff) < (Math.max(tA, tB) * 0.1)) { status.innerText = "FAIR"; status.style.color = "var(--green)"; }
+            else if(diff > 0) { status.innerText = "OVERPAYING"; status.style.color = "var(--red)"; }
+            else { status.innerText = "WINNING"; status.style.color = "var(--green)"; }
         }
     </script>
 </body>
