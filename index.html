@@ -113,7 +113,7 @@
         .btn { 
             text-decoration: none; padding: 16px 32px; border-radius: 12px; font-weight: 800; 
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; 
-            display: flex; align-items: center; gap: 10px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
         } 
         .btn-primary { 
             background: var(--jailbreak-green); color: #000; 
@@ -152,9 +152,11 @@
         .icon-box { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--green-glow)); } 
         .feature-card h3 { font-size: 1.5rem; margin: 0 0 10px; } 
 
+        /* --- FOOTER --- */
         footer { 
             background: var(--surface); border-top: 1px solid var(--border); 
             padding: 60px 20px; text-align: center; margin-top: 100px; 
+            position: relative; z-index: 2;
         } 
         .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; } 
         .footer-brand span { color: var(--accent); } 
@@ -273,6 +275,10 @@
             <a href="terms.html">Terms of Service</a> 
             <a href="privacy.html">Privacy Policy</a> 
         </div> 
+
+        <div style="margin-top: 25px;">
+            <a href="support.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 0.8rem;">☕ Support Us</a>
+        </div>
          
         <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p> 
     </footer> 
