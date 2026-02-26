@@ -161,10 +161,6 @@
         .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
 
-        /* --- CONSTRAINT 2: MOBILE STYLES --- */
-        .mobile-toggle { display: none; cursor: pointer; flex-direction: column; gap: 6px; position: absolute; right: 20px; z-index: 10000; }
-        .mobile-toggle span { width: 28px; height: 2px; background: white; transition: 0.3s; }
-
         @media screen and (max-width: 768px) {
             .mobile-toggle { display: flex; }
             .nav-logo { left: 20px; }
@@ -205,14 +201,11 @@
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        
         <div class="mobile-toggle" id="mobileToggle">
             <span></span><span></span><span></span>
         </div>
-
         <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            
             <div class="nav-item">
                 <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
                 <div class="dropdown">
@@ -220,7 +213,6 @@
                     <a href="prizes.html" class="drop-link">Season Rewards <span>Level 1-10 Prizes</span></a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link" style="color: #fff;">Values ▼</a>
                 <div class="dropdown">
@@ -228,7 +220,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <a class="nav-link">Community ▼</a>
                 <div class="dropdown">
@@ -236,7 +227,6 @@
                     <a href="testimonials.html" class="drop-link">Testimonials</a>
                 </div>
             </div>
-
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
         </div>
@@ -278,6 +268,18 @@
         <div class="item-grid" id="gridB">
             <div class="add-box" onclick="openPicker('B')"><h1>+</h1>ADD ITEM</div>
         </div>
+
+        <div style="margin-top: 40px;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4156751217830729"
+                 data-ad-slot="9189516618"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     </div>
 
     <div id="pickerOverlay">
@@ -315,6 +317,7 @@
 
     <script src="Values.js"></script>
     <script>
+        // ... (Existing Calculator JS logic remains identical)
         let sideA = [];
         let sideB = [];
         let activeSide = 'A';
@@ -432,7 +435,6 @@
             }
         }
 
-        /* --- MOBILE MENU LOGIC --- */
         document.getElementById('mobileToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
             const spans = this.querySelectorAll('span');
