@@ -109,13 +109,83 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal-footer { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- MOBILE RESPONSIVENESS (CONSTRAINT 2) --- */
+        @media screen and (max-width: 768px) {
+            /* Navigation adjustments */
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; }
+            
+            /* Hamburger Icon */
+            .menu-toggle {
+                display: block;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--text-main);
+                z-index: 5001;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--bg);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 100px;
+                gap: 0;
+                transition: 0.3s ease-in-out;
+                border-left: 1px solid var(--border);
+                backdrop-filter: blur(20px);
+            }
+
+            .nav-links.active { right: 0; }
+
+            .nav-item {
+                width: 100%;
+                height: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 30px;
+            }
+
+            .dropdown {
+                position: static;
+                transform: none;
+                opacity: 1;
+                pointer-events: auto;
+                box-shadow: none;
+                background: transparent;
+                border: none;
+                padding-left: 10px;
+                width: 100%;
+            }
+
+            /* Sizing & Padding adjustments */
+            h1.text-6xl { font-size: 3rem !important; line-height: 1; }
+            .policy-box { padding: 30px 20px; border-radius: 20px; margin-bottom: 50px; }
+            .policy-box h2 { font-size: 1.1rem; margin-top: 25px; }
+            
+            /* Grid/Container Stacking */
+            .footer-links { flex-direction: column; gap: 15px; }
+        }
+
+        /* Desktop specific display for toggle */
+        @media screen and (min-width: 769px) {
+            .menu-toggle { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+
+        <div class="nav-links" id="nav-content">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -213,5 +283,23 @@
         <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
+    <script>
+        // CONSTRAINT 3: Mobile Menu Logic
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-content');
+
+        mobileMenu.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu when clicking links
+        document.querySelectorAll('.nav-link, .drop-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenu.textContent = '☰';
+            });
+        });
+    </script>
 </body>
 </html>
