@@ -107,13 +107,69 @@
         .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
         .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .footer-links a:hover { color: var(--accent); }
+
+        /* Hamburger Icon (PC Hidden) */
+        .mobile-toggle { display: none; }
+
+        /* --- MOBILE ONLY STYLES --- */
+        @media screen and (max-width: 768px) {
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; }
+            
+            /* Hamburger Button */
+            .mobile-toggle { 
+                display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 6000;
+            }
+            .mobile-toggle span { 
+                width: 25px; height: 3px; background: #fff; border-radius: 2px; transition: 0.3s;
+            }
+
+            /* Mobile Menu Container */
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: var(--surface); flex-direction: column; 
+                padding: 100px 20px; transition: 0.4s ease;
+                box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+                align-items: flex-start;
+            }
+            .nav-links.active { right: 0; }
+            
+            .nav-item { height: auto; padding: 15px 0; width: 100%; border-bottom: 1px solid var(--border); }
+            .nav-link { font-size: 1rem; }
+            
+            /* Dropdown behavior on mobile */
+            .dropdown { 
+                position: static; opacity: 1; pointer-events: auto; transform: none; 
+                background: transparent; border: none; box-shadow: none; padding: 10px 0 0 15px;
+                display: none; 
+            }
+            .nav-item:hover .dropdown { display: block; }
+
+            /* Grid Stacking */
+            .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+            
+            /* Typography Sizing */
+            h1 { font-size: 3.5rem !important; line-height: 1; }
+            .tier-card { padding: 30px 20px; border-radius: 30px; }
+            
+            /* Spacing */
+            .max-w-6xl { padding: 60px 20px !important; }
+            .footer-links { flex-wrap: wrap; gap: 15px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -213,5 +269,37 @@
         </div>
     </footer>
 
+    <script>
+        // --- MOBILE MENU LOGIC ---
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // Hamburger Animation
+            const spans = menuToggle.querySelectorAll('span');
+            if(navLinks.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link, .drop-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                const spans = menuToggle.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
