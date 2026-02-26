@@ -72,6 +72,9 @@
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
+        .mobile-toggle { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+        .mobile-toggle span { width: 25px; height: 2px; background: #fff; border-radius: 2px; }
+
         /* --- TRACKER LAYOUT --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
@@ -127,13 +130,57 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- MOBILE ONLY RESPONSIVENESS --- */
+        @media screen and (max-width: 768px) {
+            body { padding-top: 80px; }
+            .nav-top { padding: 0 20px; justify-content: space-between; height: 60px; }
+            .nav-logo { position: static; font-size: 1.2rem; }
+            
+            .mobile-toggle { display: flex; z-index: 5001; }
+            
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
+                background: var(--surface); flex-direction: column; align-items: flex-start;
+                padding: 80px 30px; gap: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border-left: 1px solid var(--border); box-shadow: -20px 0 40px rgba(0,0,0,0.5);
+            }
+            .nav-links.active { right: 0; }
+            
+            .nav-item { height: auto; width: 100%; padding: 15px 0; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--border); }
+            .nav-link { font-size: 0.9rem; width: 100%; }
+            
+            .dropdown { 
+                position: static; transform: none; opacity: 1; pointer-events: auto;
+                background: transparent; border: none; box-shadow: none;
+                padding: 10px 0 0 15px; min-width: 0;
+            }
+            .drop-link { padding: 8px 0; font-size: 0.8rem; }
+            
+            .header-area h1 { font-size: 1.8rem; }
+            .header-area p { font-size: 0.9rem; }
+            
+            .container { padding: 15px; }
+            .tracker-grid { grid-template-columns: 1fr; gap: 15px; }
+            .robbery-card { padding: 20px; }
+            .robbery-details { grid-template-columns: 1fr; padding: 15px; }
+            
+            .footer-links { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="navMenu">
             <div class="nav-item">
                 <a href="index.html" class="nav-link">Home</a>
             </div>
@@ -265,5 +312,21 @@
         <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
+    <script>
+        // --- MOBILE MENU LOGIC ---
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
