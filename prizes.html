@@ -69,6 +69,9 @@
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
+        /* Hamburger (Hidden on Desktop) */
+        .nav-toggle { display: none; }
+
         /* --- REWARDS CONTENT --- */
         .container { max-width: 850px; margin: 0 auto; padding: 40px 20px; }
         .season-header { margin-bottom: 60px; border-left: 4px solid var(--accent); padding-left: 30px; }
@@ -125,13 +128,54 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- MOBILE ONLY RESPONSIVENESS --- */
+        @media screen and (max-width: 768px) {
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; }
+            
+            .nav-toggle { 
+                display: block; cursor: pointer; color: #fff; font-size: 1.5rem; z-index: 6000;
+            }
+
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+                background: var(--surface); flex-direction: column; align-items: flex-start;
+                padding: 100px 30px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border-left: 1px solid var(--border);
+            }
+            .nav-links.active { right: 0; }
+            .nav-item { height: auto; width: 100%; padding: 10px 0; }
+            .nav-link { font-size: 1rem; }
+
+            .dropdown {
+                position: static; opacity: 1; pointer-events: auto; transform: none;
+                background: transparent; border: none; box-shadow: none; padding: 10px 0;
+            }
+
+            .season-header { padding-left: 20px; margin-bottom: 40px; }
+            .season-header h1 { font-size: 1.8rem; }
+
+            .timeline { padding-left: 30px; }
+            .timeline::before { left: 8px; }
+            .reward-node::after { left: -26px; width: 14px; height: 14px; top: 15px; }
+
+            .reward-card { flex-direction: column; align-items: flex-start; padding: 15px; }
+            .reward-img { width: 100%; height: 160px; }
+            .reward-card:hover { transform: translateY(-5px); }
+
+            .footer-links { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="nav-toggle" id="menuBtn">☰</div>
+
+        <div class="nav-links" id="navMenu">
             <div class="nav-item">
                 <a href="index.html" class="nav-link">Home</a>
             </div>
@@ -264,5 +308,23 @@
         <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
+    <script>
+        // --- MOBILE MENU FUNCTIONALITY ---
+        const menuBtn = document.getElementById('menuBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuBtn.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                navMenu.classList.remove('active');
+                menuBtn.innerHTML = '☰';
+            }
+        });
+    </script>
 </body>
 </html>
