@@ -159,13 +159,57 @@
         .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
 
+        /* --- CONSTRAINT 2: MOBILE STYLES --- */
+        .mobile-toggle { display: none; cursor: pointer; flex-direction: column; gap: 6px; position: absolute; right: 20px; z-index: 10000; }
+        .mobile-toggle span { width: 28px; height: 2px; background: white; transition: 0.3s; }
+
+        @media screen and (max-width: 768px) {
+            .mobile-toggle { display: flex; }
+            .nav-logo { left: 20px; }
+            .nav-links { 
+                display: none; position: fixed; inset: 0; background: var(--bg); 
+                flex-direction: column; justify-content: center; gap: 15px; 
+                padding: 20px; z-index: 9500; overflow-y: auto;
+            }
+            .nav-links.active { display: flex; }
+            .nav-item { height: auto; width: 100%; justify-content: center; }
+            .nav-link { font-size: 1.1rem; }
+            .dropdown { 
+                position: relative; top: 0; left: 0; transform: none; opacity: 1; 
+                pointer-events: auto; background: transparent; border: none; 
+                box-shadow: none; display: none; text-align: center;
+            }
+            .nav-item:hover .dropdown { display: block; }
+
+            .result-panel { 
+                flex-direction: column; gap: 20px; text-align: center; position: relative; top: 0; padding: 20px;
+            }
+            .status-big { font-size: 1.5rem; }
+            .item-grid { grid-template-columns: 1fr !important; }
+            
+            h2 { font-size: 1.2rem !important; }
+            h2 span { float: none !important; display: block; margin-top: 5px; }
+
+            .picker-header { padding: 0 10px; }
+            .search-giant { padding: 15px; font-size: 1rem; }
+            .picker-results { grid-template-columns: repeat(2, 1fr); padding: 10px; }
+            
+            .footer-links { flex-direction: column; gap: 15px; }
+            .container { padding: 0 15px; }
+        }
+
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="mobileToggle">
+            <span></span><span></span><span></span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -375,6 +419,21 @@
                 status.style.color = "var(--red)"; 
             }
         }
+
+        /* --- CONSTRAINT 3: MOBILE MENU LOGIC --- */
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+            const spans = this.querySelectorAll('span');
+            if(document.getElementById('navLinks').classList.contains('active')) {
+                spans[0].style.transform = "rotate(45deg) translate(5px, 6px)";
+                spans[1].style.opacity = "0";
+                spans[2].style.transform = "rotate(-45deg) translate(5px, -6px)";
+            } else {
+                spans[0].style.transform = "none";
+                spans[1].style.opacity = "1";
+                spans[2].style.transform = "none";
+            }
+        });
     </script>
 </body>
 </html>
