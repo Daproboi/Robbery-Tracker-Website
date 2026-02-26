@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Market Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -59,6 +60,8 @@
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--card); color: #fff; }
+
+        .mobile-toggle { display: none; }
 
         /* --- CONTENT --- */
         .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
@@ -149,13 +152,58 @@
             font-family: 'JetBrains Mono'; text-decoration: none;
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
+
+        /* --- MOBILE RESPONSIVE OVERRIDES --- */
+        @media screen and (max-width: 768px) {
+            body { padding-top: 80px; }
+            .nav-top { padding: 0 20px; justify-content: space-between; height: 60px; }
+            .nav-logo { position: static; font-size: 1.1rem; }
+            
+            .mobile-toggle { 
+                display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; 
+            }
+
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: var(--surface); flex-direction: column; align-items: flex-start;
+                padding: 80px 30px; gap: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
+            }
+            .nav-links.active { right: 0; }
+
+            .nav-item { height: auto; width: 100%; padding: 15px 0; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--border); }
+            .nav-link { font-size: 0.9rem; }
+            
+            .dropdown { 
+                position: static; opacity: 1; pointer-events: auto; transform: none; 
+                box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0;
+            }
+            .drop-link { padding: 8px 0; font-size: 0.8rem; }
+
+            .container { padding: 15px; }
+            h1.text-3xl { font-size: 1.75rem !important; text-align: center; }
+
+            .search-section { padding: 20px; border-radius: 16px; }
+            .search-bar { padding: 15px; font-size: 0.95rem; }
+            .filter-row { justify-content: center; }
+
+            .items-grid { grid-template-columns: 1fr !important; gap: 15px; }
+            
+            .footer-links { flex-direction: column; gap: 10px; }
+            .pagination { flex-direction: column; gap: 15px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="mobileMenuOpen">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -328,6 +376,28 @@
         }
 
         window.onload = init;
+
+        // --- MOBILE MENU FUNCTIONALITY ---
+        const mobileBtn = document.getElementById('mobileMenuOpen');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        });
+
+        // Close menu when clicking a link (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
+            });
+        });
     </script>
 </body>
 </html>
