@@ -97,13 +97,59 @@
         }
         .support-btn:hover { border-color: var(--accent); background: var(--surface); }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- CONSTRAINT 2: MOBILE ONLY STYLES --- */
+        .mobile-toggle { display: none; cursor: pointer; z-index: 6000; flex-direction: column; gap: 5px; position: absolute; right: 20px; }
+        .mobile-toggle div { width: 25px; height: 2px; background: white; transition: 0.3s; }
+
+        @media screen and (max-width: 768px) {
+            body { padding-top: 80px; }
+            h2 { font-size: 1.5rem !important; }
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; }
+            .mobile-toggle { display: flex; }
+            
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+                background: var(--bg); flex-direction: column; justify-content: center;
+                gap: 20px; padding: 40px; transition: 0.4s ease;
+            }
+            .nav-links.active { right: 0; }
+            .nav-item { height: auto; width: 100%; display: block; text-align: center; }
+            .nav-link { font-size: 1.1rem; }
+            .dropdown { 
+                position: relative; top: 0; left: 0; transform: none; 
+                opacity: 1; pointer-events: auto; background: transparent; 
+                border: none; box-shadow: none; display: none; 
+            }
+            .nav-item:hover .dropdown { display: block; }
+            
+            /* Grids */
+            .grid-cols-3 { grid-template-columns: 1fr !important; }
+            .md\:grid-cols-2 { grid-template-columns: 1fr !important; }
+            .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+            
+            /* Sizing & Padding */
+            .max-w-7xl { px-4 !important; }
+            .p-8 { padding: 1.5rem !important; }
+            .footer-links { flex-direction: column; gap: 10px; }
+            select, .w-44, .w-32 { width: 100% !important; }
+            .flex-wrap { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="mobile-toggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="nav-links" id="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -289,6 +335,19 @@
         setInterval(updateDailyTimer, 1000);
         updateDailyTimer();
         calculateProgress();
+
+        /* --- CONSTRAINT 3: MOBILE MENU LOGIC --- */
+        const toggle = document.getElementById('mobile-toggle');
+        const links = document.getElementById('nav-links');
+        
+        toggle.addEventListener('click', () => {
+            links.classList.toggle('active');
+            // Toggle hamburger animation if desired
+            const bars = toggle.querySelectorAll('div');
+            bars[0].style.transform = links.classList.contains('active') ? "rotate(45deg) translate(5px, 5px)" : "none";
+            bars[1].style.opacity = links.classList.contains('active') ? "0" : "1";
+            bars[2].style.transform = links.classList.contains('active') ? "rotate(-45deg) translate(5px, -5px)" : "none";
+        });
     </script>
 </body>
 </html>
