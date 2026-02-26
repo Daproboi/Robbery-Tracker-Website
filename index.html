@@ -21,7 +21,6 @@
             --invert: 0;  
         } 
 
-        /* Light Mode Overrides */  
         body.light-mode {  
             --bg: #f8fafc;  
             --surface: #ffffff;  
@@ -45,13 +44,11 @@
             overflow-x: hidden; min-height: 100vh;  
         }  
 
-        /* --- BACKGROUNDS --- */  
         #cashCanvas {  
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;  
             z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));  
         }  
 
-        /* --- NAVIGATION --- */  
         .nav-top {  
             position: fixed; top: 0; width: 100%; height: 70px;  
             background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);  
@@ -91,7 +88,6 @@
         }  
         .theme-toggle:hover { border-color: var(--accent); }  
 
-        /* --- HERO SECTION --- */  
         .hero {  
             position: relative; padding: 15vh 20px 10vh; text-align: center; z-index: 1; min-height: 80vh;  
             display: flex; flex-direction: column; align-items: center; justify-content: center;  
@@ -119,7 +115,6 @@
             display: flex; align-items: center; gap: 12px;  
         }  
 
-        /* Custom Icon Hover Animations */
         .btn i { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 1.1rem; }
         .btn:hover i { transform: scale(1.3) rotate(-10deg); }
 
@@ -135,7 +130,6 @@
         }  
         .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(88, 101, 242, 0.6); }  
 
-        /* --- STATS BAR --- */  
         .stats-bar {  
             background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);  
             padding: 30px 20px; display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; z-index: 2; position: relative;  
@@ -144,7 +138,6 @@
         .stat-num { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.2); }  
         .stat-label { color: var(--accent); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }  
 
-        /* --- CONTENT SECTIONS --- */  
         .section { max-width: 1200px; margin: 100px auto; padding: 0 20px; z-index: 2; position: relative; }  
         .section-header { text-align: center; margin-bottom: 60px; }  
         .section-header h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; }  
@@ -297,6 +290,11 @@
                 <h3>Pity Tracker</h3>  
                 <p>Log your robberies systematically and predict when your next Hyperchrome will drop.</p>  
             </a>  
+            <a href="tracker.html" class="feature-card">  
+                <div class="icon-box">🚔</div>  
+                <h3>Robbery Tracker</h3>  
+                <p>Real-time countdowns for store openings and robbery rotations across all servers.</p>  
+            </a>  
         </div>  
     </section>  
 
@@ -386,13 +384,11 @@
     </footer>  
 
     <script>  
-        // --- THEME TOGGLE LOGIC ---  
         const themeBtn = document.getElementById('themeBtn');  
         themeBtn.addEventListener('click', () => {  
             document.body.classList.toggle('light-mode');  
         });  
 
-        // --- FAKE LIVE COUNTER LOGIC ---  
         let currentUsers = 1402;  
         const userCountElement = document.getElementById('userCount');  
           
@@ -402,7 +398,6 @@
             userCountElement.innerText = currentUsers.toLocaleString();  
         }, 3500);  
 
-        // --- FAQ TOGGLE LOGIC ---  
         const faqItems = document.querySelectorAll('.faq-item');  
         faqItems.forEach(item => {  
             item.querySelector('.faq-question').addEventListener('click', () => {  
@@ -412,7 +407,6 @@
             });  
         });  
 
-        // --- SCROLL ANIMATIONS ---  
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };  
         const observer = new IntersectionObserver((entries) => {  
             entries.forEach(entry => {  
@@ -425,7 +419,6 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));  
 
-        // --- FALLING CASH CANVAS ---  
         const canvas = document.getElementById('cashCanvas');  
         const ctx = canvas.getContext('2d');  
 
