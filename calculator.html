@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Value Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
     <style>
         :root {
             --bg: #030508;
@@ -199,7 +199,6 @@
             .footer-links { flex-direction: column; gap: 15px; }
             .container { padding: 0 15px; }
         }
-
     </style>
 </head>
 <body>
@@ -244,6 +243,17 @@
     </nav>
 
     <div class="container">
+        <div style="margin-bottom: 20px; display: flex; justify-content: center;">
+            <amp-ad width="100vw" height="320"
+                 type="adsense"
+                 data-ad-client="ca-pub-4156751217830729"
+                 data-ad-slot="7094340893"
+                 data-auto-format="rspv"
+                 data-full-width="">
+              <div overflow=""></div>
+            </amp-ad>
+        </div>
+
         <div class="result-panel">
             <div>
                 <div class="status-big" id="status">EQUAL</div>
@@ -422,7 +432,7 @@
             }
         }
 
-        /* --- CONSTRAINT 3: MOBILE MENU LOGIC --- */
+        /* --- MOBILE MENU LOGIC --- */
         document.getElementById('mobileToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
             const spans = this.querySelectorAll('span');
