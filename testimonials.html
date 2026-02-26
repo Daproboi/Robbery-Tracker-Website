@@ -106,13 +106,63 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal-footer { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- MOBILE MENU ICON --- */
+        .mobile-toggle {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; z-index: 6000; position: absolute; right: 40px;
+        }
+        .mobile-toggle span { width: 25px; height: 2px; background: #fff; border-radius: 2px; transition: 0.3s; }
+
+        /* --- MOBILE ONLY RESPONSIVENESS --- */
+        @media screen and (max-width: 768px) {
+            body { padding-top: 80px; }
+            .nav-top { padding: 0 20px; height: 60px; justify-content: space-between; }
+            .nav-logo { position: static; font-size: 1.1rem; }
+            .mobile-toggle { display: flex; right: 20px; }
+
+            /* Navigation menu conversion */
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: var(--surface); flex-direction: column; align-items: flex-start;
+                padding: 100px 30px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+                border-left: 1px solid var(--border); box-shadow: -20px 0 40px rgba(0,0,0,0.5);
+                overflow-y: auto;
+            }
+            .nav-links.mobile-active { right: 0; }
+            .nav-item { height: auto; width: 100%; padding: 15px 0; flex-direction: column; align-items: flex-start; }
+            .nav-link { font-size: 1rem; }
+            
+            /* Dropdown adjustments for mobile */
+            .dropdown { 
+                position: static; transform: none; opacity: 1; pointer-events: auto;
+                background: transparent; border: none; box-shadow: none; min-width: 0;
+                padding-left: 20px; padding-top: 10px;
+            }
+
+            /* Sizing & Grid adjustments */
+            h1 { font-size: 2.5rem !important; line-height: 1; }
+            h2 { font-size: 1.8rem !important; }
+            .staff-card { padding: 30px 20px; border-radius: 24px; }
+            
+            /* Prevent edge touching */
+            .max-w-7xl { px: 4 !important; }
+            .footer-links { flex-wrap: wrap; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="mobile-toggle" id="mobile-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -187,30 +237,7 @@
         </div>
 
         <div class="columns-1 md:columns-3 gap-6 space-y-6" id="vouchGrid">
-            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center font-bold text-blue-400 text-sm shadow-inner">H</div>
-                    <p class="font-bold text-sm">HyperChrome_Lover</p>
-                </div>
-                <p class="text-gray-400 text-sm italic leading-relaxed">"The calculator is so much more accurate than the other sites. Plug and Daproboi really nailed it."</p>
             </div>
-
-            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center font-bold text-green-400 text-sm shadow-inner">V</div>
-                    <p class="font-bold text-sm">ViperTrades</p>
-                </div>
-                <p class="text-gray-400 text-sm italic leading-relaxed">"I use this every day to check values. The UI is super smooth and it never lags."</p>
-            </div>
-
-            <div class="vouch-card border border-white/10 p-8 rounded-[32px] break-inside-avoid">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center font-bold text-purple-400 text-sm shadow-inner">C</div>
-                    <p class="font-bold text-sm">Celsior_Simp</p>
-                </div>
-                <p class="text-gray-400 text-sm italic leading-relaxed">"Finally a site that actually looks good on mobile. Trading in-game is so much easier now."</p>
-            </div>
-        </div>
     </div>
 
     <div id="vouchModal">
@@ -251,7 +278,17 @@
 
         function loadVouches() {
             const saved = JSON.parse(localStorage.getItem(VOUCH_KEY) || '[]');
-            saved.forEach(vouch => renderVouch(vouch.name, vouch.text, false));
+            // Clear current grid to prevent duplicates on double load
+            document.getElementById('vouchGrid').innerHTML = ''; 
+            
+            // Render default vouches if empty
+            if (saved.length === 0) {
+                renderVouch("HyperChrome_Lover", "The calculator is so much more accurate than the other sites. Plug and Daproboi really nailed it.", false);
+                renderVouch("ViperTrades", "I use this every day to check values. The UI is super smooth and it never lags.", false);
+                renderVouch("Celsior_Simp", "Finally a site that actually looks good on mobile. Trading in-game is so much easier now.", false);
+            } else {
+                saved.forEach(vouch => renderVouch(vouch.name, vouch.text, false));
+            }
         }
 
         function toggleModal(show) {
@@ -298,6 +335,21 @@
         }
 
         window.onload = loadVouches;
+
+        // --- MOBILE MENU FUNCTIONALITY ---
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-active');
+        });
+
+        // Close menu if clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navLinks.classList.remove('mobile-active');
+            }
+        });
     </script>
 </body>
 </html>
