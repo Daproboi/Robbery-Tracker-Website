@@ -37,9 +37,9 @@
 
         * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }  
 
-        body {   
-            font-family: 'Plus Jakarta Sans', sans-serif;   
-            background: var(--bg); color: var(--text-main);   
+        body {  
+            font-family: 'Plus Jakarta Sans', sans-serif;  
+            background: var(--bg); color: var(--text-main);  
             margin: 0; padding-top: 70px;  
             overflow-x: hidden; min-height: 100vh;  
         }  
@@ -73,10 +73,10 @@
             transition: all 0.2s ease;  
         }  
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }  
-        .drop-link {   
-            display: flex; flex-direction: column; padding: 12px;   
-            color: var(--text-dim); text-decoration: none;   
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600;   
+        .drop-link {  
+            display: flex; flex-direction: column; padding: 12px;  
+            color: var(--text-dim); text-decoration: none;  
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600;  
             margin-bottom: 4px;  
         }  
         .drop-link:hover { background: var(--card); color: var(--text-main); }  
@@ -100,7 +100,7 @@
             box-shadow: 0 0 15px var(--accent-glow);  
         }  
 
-        .hero h1 {   
+        .hero h1 {  
             font-size: 5rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase;  
             background: linear-gradient(135deg, var(--text-main), var(--text-dim));  
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;  
@@ -146,7 +146,7 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }  
         .feature-card {  
             background: var(--card); border: 1px solid var(--border); border-radius: 20px;  
-            padding: 40px 30px; text-decoration: none; color: inherit;   
+            padding: 40px 30px; text-decoration: none; color: inherit;  
             display: flex; flex-direction: column; align-items: center; text-align: center;  
         }  
         .feature-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }  
@@ -228,7 +228,6 @@
             </div>  
             <a href="pity.html" class="nav-link">Pity Calc</a>  
             <a href="tracker.html" class="nav-link">Tracker</a>  
-            <a href="testimonials.html" class="nav-link">Testimonials</a>
         </div>  
 
         <div class="nav-actions">  
@@ -295,6 +294,11 @@
                 <div class="icon-box">🚔</div>  
                 <h3>Robbery Tracker</h3>  
                 <p>Real-time countdowns for store openings and robbery rotations across all servers.</p>  
+            </a>  
+            <a href="testimonials.html" class="feature-card">  
+                <div class="icon-box">⭐</div>  
+                <h3>Testimonials</h3>  
+                <p>See what the Jailbreak community thinks about our tools and value accuracy.</p>  
             </a>  
         </div>  
     </section>  
