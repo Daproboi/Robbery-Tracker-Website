@@ -107,13 +107,57 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal-footer { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        /* --- MOBILE TOGGLE ICON --- */
+        .nav-toggle { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 6000; position: absolute; right: 20px; }
+        .nav-toggle span { width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; }
+
+        /* --- MOBILE ONLY RESPONSIVENESS --- */
+        @media screen and (max-width: 768px) {
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; font-size: 1.2rem; }
+            .nav-toggle { display: flex; }
+            
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background: var(--surface); flex-direction: column; padding: 80px 20px;
+                transition: 0.3s ease-in-out; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                align-items: flex-start; gap: 0;
+            }
+            .nav-links.active { right: 0; }
+            .nav-item { width: 100%; height: auto; padding: 15px 0; border-bottom: 1px solid var(--border); flex-direction: column; align-items: flex-start; }
+            .nav-link { font-size: 1rem; width: 100%; }
+            
+            .dropdown { 
+                position: static; transform: none; opacity: 1; pointer-events: auto; 
+                background: transparent; border: none; box-shadow: none; padding: 10px 0 0 15px;
+                display: none; /* Hidden by default on mobile unless clicked/toggled */
+            }
+            .nav-item:hover .dropdown { display: block; } /* Simple toggle for mobile view */
+
+            /* Typography & Layout */
+            h1 { font-size: 3rem !important; }
+            .legal-box { padding: 30px 20px; border-radius: 25px; }
+            .container { padding: 0 15px; }
+            
+            /* Grid Stacking */
+            .grid { grid-template-columns: 1fr !important; }
+            .footer-links { flex-wrap: wrap; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
+        
+        <div class="nav-toggle" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="nav-menu">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             
             <div class="nav-item">
@@ -206,5 +250,29 @@
         <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
+    <script>
+        // Existing script logic (if any) would go here
+
+        // --- MOBILE MENU SCRIPT ---
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            
+            // Optional: Animate hamburger to X
+            const spans = menuBtn.querySelectorAll('span');
+            spans[0].style.transform = navMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 6px)' : 'none';
+            spans[1].style.opacity = navMenu.classList.contains('active') ? '0' : '1';
+            spans[2].style.transform = navMenu.classList.contains('active') ? 'rotate(-45deg) translate(5px, -6px)' : 'none';
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link, .drop-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
