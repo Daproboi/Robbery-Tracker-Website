@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Changelogs</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729"
+     crossorigin="anonymous"></script>
     <style>
         :root {
             --bg: #030508;
@@ -14,12 +15,13 @@
             --card: #11141a;
             --border: rgba(255, 255, 255, 0.08);
             --accent: #0070f3;
-            --green: #00ff88;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
+            --green: #00ff88;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); color: var(--text-main); 
@@ -28,6 +30,7 @@
             min-height: 100vh;
         }
 
+        /* --- UNIFIED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -50,37 +53,80 @@
             z-index: 6000;
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
-        .drop-link { 
-            display: flex; flex-direction: column; padding: 12px; 
-            color: var(--text-dim); text-decoration: none; 
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600; 
-            margin-bottom: 4px;
-        }
+        .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
+        .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--green); }
 
+        .live-dot {
+            width: 6px; height: 6px; background: var(--green);
+            border-radius: 50%; display: inline-block;
+            margin-left: 5px; margin-bottom: 2px;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+
+        /* --- CHANGELOG SPECIFIC STYLES --- */
         .log-card {
             background: linear-gradient(145deg, rgba(17, 20, 26, 0.4), rgba(10, 12, 16, 0.9));
             border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 40px;
-            margin-bottom: 40px;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 3rem;
         }
-        .log-header { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .log-title { font-size: 2.5rem; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 25px; font-style: italic; text-transform: uppercase; }
-        .log-content h2 { color: var(--text-main); font-size: 1.2rem; font-weight: 800; margin-top: 25px; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; }
-        .log-content h2::before { content: ''; width: 4px; height: 18px; background: var(--accent); display: inline-block; margin-right: 12px; border-radius: 2px; }
-        .log-content ul { list-style: none; padding-left: 0; margin-bottom: 20px; }
-        .log-content li { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 8px; padding-left: 24px; position: relative; line-height: 1.6; }
-        .log-content li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+        .log-header { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
+        .log-title { font-size: 2.5rem; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 1.5rem; font-style: italic; text-transform: uppercase; line-height: 1; }
+        
+        .log-section-title { 
+            color: var(--text-main); font-size: 1.1rem; font-weight: 800; 
+            margin-top: 2rem; margin-bottom: 1rem; text-transform: uppercase; 
+            display: flex; align-items: center; 
+        }
+        .log-section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); display: inline-block; margin-right: 12px; border-radius: 2px; }
+        
+        .log-list { list-style: none; padding-left: 0; }
+        .log-list li { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; line-height: 1.6; }
+        .log-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
 
+        /* --- UNIFIED FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border);
             padding: 60px 20px; text-align: center; margin-top: 100px;
         }
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .footer-brand span { color: var(--accent); }
+        .footer-credits { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 20px; }
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
+        .footer-links a:hover { color: var(--accent); }
+        .support-btn { 
+            background: var(--card); border: 1px solid var(--border); 
+            padding: 10px 20px; border-radius: 8px; 
+            font-family: 'JetBrains Mono'; text-decoration: none;
+            display: inline-block; font-size: 0.9rem; font-weight: 800;
+        }
+        .support-btn:hover { border-color: var(--accent); background: var(--surface); }
+        .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
+
+        .mobile-toggle { display: none; cursor: pointer; z-index: 6000; flex-direction: column; gap: 5px; position: absolute; right: 20px; }
+        .mobile-toggle div { width: 25px; height: 2px; background: white; transition: 0.3s; }
 
         @media screen and (max-width: 768px) {
-            .nav-links { display: none; }
+            body { padding-top: 80px; }
+            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-logo { position: static; }
+            .mobile-toggle { display: flex; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+                background: var(--bg); flex-direction: column; justify-content: center;
+                gap: 20px; padding: 40px; transition: 0.4s ease;
+            }
+            .nav-links.active { right: 0; }
+            .nav-item { height: auto; width: 100%; display: block; text-align: center; }
+            .dropdown { display: none; }
+            .nav-item:hover .dropdown { display: block; position: relative; top: 0; transform: none; box-shadow: none; border: none; }
+            .log-title { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -88,120 +134,208 @@
 
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
-            <div class="nav-item"><a href="changelogs.html" class="nav-link" style="color:#fff">Changelogs</a></div>
+        
+        <div class="mobile-toggle" id="mobile-toggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+            
+            <div class="nav-item">
+                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
+                <div class="dropdown">
+                    <a href="contracts.html" class="drop-link">Season Contracts <span>XP Tracker & Weekly Tasks</span></a>
+                    <a href="prizes.html" class="drop-link">Season Rewards <span>Level 1-10 Prizes</span></a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link">Values ▼</a>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">Value List</a>
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a class="nav-link">Community ▼</a>
+                <div class="dropdown">
+                    <a href="vip.html" class="drop-link">Private Servers</a>
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>
+                </div>
+            </div>
+
+            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
+            <div class="nav-item"><a href="changelogs.html" class="nav-link" style="color: #fff;">Changelogs</a></div>
         </div>
     </nav>
 
-    <div class="max-w-4xl mx-auto px-6 py-12">
-        <div class="text-center mb-20">
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        
+        <div class="text-center mb-16">
             <h1 class="text-6xl font-black uppercase italic tracking-tighter mb-4">Patch <span class="text-[#0070f3]">Notes</span></h1>
+            <p class="text-gray-400 font-medium">Tracking every change, fix, and feature in Jailbreak.</p>
         </div>
 
-        <div id="changelog-container">
+        <div class="log-card">
+            <div class="log-header">Jan 23 2026 - Version 1530</div>
+            <div class="log-title">Robbery Revamp: Bank Truck</div>
+            
+            <div class="log-section-title">Bank-Truck Revamp</div>
+            <ul class="log-list">
+                <li>New truck delivery zones.</li>
+                <li>Bank Truck now uses Bank Cash UI for nearby Police and participating players.</li>
+                <li>Bank Truck starts at 11,000 cash and now depletes as you drive.</li>
+                <li>Players now receive the full truck cash amount when collecting.</li>
+                <li>Police within 200 studs of an active Bank Truck robbery will see the Robbery UI.</li>
+                <li>Upon delivery, Police within 100 studs will be automatically awarded the full amount.</li>
+                <li>Upon theft, Nearby criminals have can walk inside and collect the full amount.</li>
+                <li>Upon theft or delivery, the truck now screeches to a halt.</li>
+                <li>Players now have 20 seconds to collect their reward upon theft or delivery.</li>
+                <li>Removed the 2 Police starter requirement.</li>
+                <li>New garage with closed sign, lights, and an "arrests required" counter.</li>
+                <li>New truck design, refined and with more detail, and a steering wheel.</li>
+                <li>New sound effects for engine start, tire screech, and more.</li>
+                <li>Faster, Semi Truck Performance engine tune.</li>
+            </ul>
 
-            <div class="log-card">
-                <div class="log-header">Jan 23 2026 // VERSION 1530</div>
-                <div class="log-title">Robbery Revamp: Bank Truck</div>
-                <div class="log-content">
-                    <h2>Bank-Truck Revamp</h2>
-                    <ul>
-                        <li>New truck delivery zones.</li>
-                        <li>Bank Truck now uses Bank Cash UI for nearby Police and participating players.</li>
-                        <li>Bank Truck starts at 11,000 cash and now depletes as you drive.</li>
-                        <li>Players now receive the full truck cash amount when collecting.</li>
-                        <li>Police within 200 studs of an active Bank Truck robbery will see the Robbery UI.</li>
-                        <li>Upon delivery, Police within 100 studs will be automatically awarded the full amount.</li>
-                        <li>Upon theft, Nearby criminals have can walk inside and collect the full amount.</li>
-                        <li>Upon theft or delivery, the truck now screeches to a halt.</li>
-                        <li>Players now have 20 seconds to collect their reward upon theft or delivery.</li>
-                        <li>Removed the 2 Police starter requirement.</li>
-                        <li>New garage with closed sign, lights, and an "arrests required" counter.</li>
-                        <li>New truck design, refined and with more detail, and a steering wheel.</li>
-                        <li>New sound effects for engine start, tire screech, and more.</li>
-                        <li>Faster, Semi Truck Performance engine tune.</li>
-                    </ul>
-
-                    <h2>More</h2>
-                    <ul>
-                        <li>New "Purchase Vehicle" UI.</li>
-                        <li>New Bank Floor: Deductions V2. Revolving escape doors change how you rob and escape.</li>
-                        <li>Bank Floor: Underwater escape has been updated.</li>
-                        <li>Bank Floor: Presidential now has a larger vault and easier collection.</li>
-                        <li>Bank Floor: Basement now has improved Glider prevention and better head room.</li>
-                        <li>Bank trapdoors now use our latest door technology.</li>
-                        <li>Updates to Haptics on Controller! Controllers can disable Haptics in settings.</li>
-                        <li>World Markers now account for map height and appear on fullscreen Minimap.</li>
-                        <li>World Marker visuals have been slightly updated.</li>
-                        <li>Improved camera for vehicle turrets.</li>
-                        <li>Popped tire vehicles now roll on their rims instead of floating.</li>
-                        <li>Added inflation sound to popped tires and custom tire pop sound to Volt.</li>
-                        <li>Added Start Engine sound to Semi vehicles.</li>
-                        <li>Added new player "onboard funnels" to better track new users.</li>
-                        <li>Added the top secret, dev only, nuke vehicle. Stay tuned.</li>
-                        <li>Fixed home raids, UFO HyperChrome, and C4 sticking to your character.</li>
-                        <li>Fixed camera shake being FPS dependent and road bollard collisions.</li>
-                        <li>Fixed players getting trapped behind opening Presidential Vault door.</li>
-                        <li>Fixed avatar accessory first person camera bug and Bank aiming bugs.</li>
-                        <li>Fixed "arrests off" command not disabling Bank Busts.</li>
-                        <li>Fixed arrest after breakout sending players to Prison too quickly.</li>
-                        <li>Fixed Helicopter Ropes colliding with cars when empty.</li>
-                        <li>Removed the old Bank Truck notification.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="log-card">
-                <div class="log-header">Jan 16 2026 // VERSION 1528</div>
-                <div class="log-title">Rising Bank Revamp</div>
-                <div class="log-content">
-                    <h2>New Rising City Bank</h2>
-                    <ul>
-                        <li>New exterior design with exterior neon lighting (when open) and OG inspired interior.</li>
-                        <li><strong>Floor: Upper Management</strong> - Built from scratch; shortened ladder; new Exit Penthouse/roof door; vault view change; widened halls.</li>
-                        <li><strong>Floor: Corridor</strong> - Modified design; new zipline entry; "Jail Gate" door for tactics; expanded side rooms; updated lighting.</li>
-                        <li><strong>Floor: Classic</strong> - True 1:1 visual of 2017’s OG floor; expanded exit room; original lighting.</li>
-                        <li><strong>Floor: Underwater</strong> - Built from scratch to remove swimming; extended main room/stairs; larger escape.</li>
-                        <li><strong>Floor: The Mint</strong> - Widened halls; new cover; fewer lasers; new double escape doors; rapid conveyor belts.</li>
-                        <li>All floors require less dynamite and cash collection is ~25% faster.</li>
-                        <li>New rapid ticking cash UI visual.</li>
-                    </ul>
-
-                    <h2>Crater City Bank Updates</h2>
-                    <ul>
-                        <li>Removed: Deductions and Blue Floor.</li>
-                        <li><strong>Floor: Basement</strong> - Widened entry; simplified escape; fewer lasers; new glass walls; new stairwell.</li>
-                        <li><strong>Floor: Presidential Vault</strong> - New zipline; increased head room; widened hall; halved laser speed; simplified escape.</li>
-                    </ul>
-
-                    <h2>Map & More</h2>
-                    <ul>
-                        <li>Roblox Brick is back! Updated Rising City Tunnel; NoVehicle zone at Bank trapdoor.</li>
-                        <li>New sun GeographicLatitude (40) for improved lighting.</li>
-                        <li>New Oil Rig escape: Roof Ziplines with free cruiser spawn below.</li>
-                        <li>New “Lowest” sort in Garages (new default).</li>
-                        <li>New Controller Haptics (v1) and improved high-speed driving.</li>
-                        <li>Reduced prison punch box requirement from 10 to 8.</li>
-                        <li>Equip items by clicking anywhere in the weapon shop window.</li>
-                        <li>Criminals no longer get a pistol when broken out of handcuffs.</li>
-                        <li>Bank “Place Dynamite” prompts hidden once initiated; "Closed" signs support translations.</li>
-                        <li>Bank escape doors stay open longer; Bank-Truck spawning and icons improved.</li>
-                        <li>Removed Rising Penthouse roof hatch; revamped UFO Hyperchrome effects.</li>
-                        <li>Jeep spawn added to Military Base.</li>
-                        <li>Private Server commands: towing toggle and op list functionality.</li>
-                        <li>Smoother rejoining; fixed ATV invisibility, Jewelry roof no-clip, and mansion doors.</li>
-                        <li>Fixed racetrack minimap, home furniture teleporting, and garage previews.</li>
-                    </ul>
-                </div>
-            </div>
-
+            <div class="log-section-title">More</div>
+            <ul class="log-list">
+                <li>New "Purchase Vehicle" UI.</li>
+                <li>New Bank Floor: Deductions V2. Revolving escape doors change how you rob and escape.</li>
+                <li>Bank Floor: Underwater escape has been updated.</li>
+                <li>Bank Floor: Presidential now has a larger vault and easier collection.</li>
+                <li>Bank Floor: Basement now has improved Glider prevention and better head room.</li>
+                <li>Bank trapdoors now use our latest door technology.</li>
+                <li>Updates to Haptics on Controller! Thank you for your feedback.</li>
+                <li>Controllers can disable Haptics in the Roblox menu settings.</li>
+                <li>World Markers now account for map height for improved navigation.</li>
+                <li>World Markers now appear on your fullscreen Minimap.</li>
+                <li>World Marker visuals have been slightly updated.</li>
+                <li>Improved camera for vehicle turrets.</li>
+                <li>Popped tire vehicles now roll on their rims instead of floating.</li>
+                <li>Added inflation sound to popped tires.</li>
+                <li>Added custom tire pop sound to Volt.</li>
+                <li>Added Start Engine sound to Semi vehicles.</li>
+                <li>Added new player "onboard funnels" to better track new users.</li>
+                <li>Added the top secret, dev only, nuke vehicle. Stay tuned.</li>
+                <li>Fixed home raids.</li>
+                <li>Fixed UFO HyperChrome.</li>
+                <li>Fixed C4 sticking to your own character.</li>
+                <li>Fixed camera shake being FPS dependent.</li>
+                <li>Fixed collisions being disabled for road bollards.</li>
+                <li>Fixed players getting trapped behind the opening Presidential Vault door.</li>
+                <li>Fixed an avatar accessory first person camera bug.</li>
+                <li>Fixed a weapon aiming bug in the Bank, related to too many regions.</li>
+                <li>Fixed "arrests off" command not disabling Bank Busts.</li>
+                <li>Fixed an arrest after breakout sending players to Prison too quickly.</li>
+                <li>Fixed Helicopter Ropes colliding with cars when empty.</li>
+                <li>Removed the old Bank Truck notification.</li>
+                <li>Update text.</li>
+            </ul>
         </div>
+
+        <div class="log-card">
+            <div class="log-header">Jan 16 2026 - Version 1528</div>
+            <div class="log-title">Rising Bank Revamp</div>
+            
+            <div class="log-section-title">New Rising City Bank</div>
+            <ul class="log-list">
+                <li>New exterior design with exterior neon lighting (when open) and OG inspired interior.</li>
+                <li><strong>Floor: Upper Management</strong> - Built from scratch to fit the new Rising Bank exterior. Shortened exit ladder. New Exit Penthouse with new roof exit door option. Vault placement change with a clear, defendable, view down the room. Widened hallways and increased headspace.</li>
+                <li><strong>Floor: Corridor</strong> - Modified design with new zipline entry option, better cover, and widened halls. New “Jail Gate” door, optional, for quicker entry and exit to the vault. Expanded side rooms for better cover and team interaction. Updated lighting and visuals.</li>
+                <li><strong>Floor: Classic (Previously Classic Remastered)</strong> - Now a true, near 1:1, visual of 2017’s Jailbreak original Bank floor. Expanded exit room for better team interaction. Original lighting and visuals.</li>
+                <li><strong>Floor: Underwater</strong> - Familiar design, but built from scratch to remove swimming. Extended main room, added stairs. Larger escape room.</li>
+                <li><strong>Floor: The Mint</strong> - Widened hallways and new cover options. Fewer lasers and updated main room leading to the vault. New double escape door design. New escape room with rapid moving cash conveyor belts.</li>
+                <li>All floors now require less dynamite on vault doors, speeding up robberies.</li>
+                <li>Cash collection is now ~25% faster.</li>
+                <li>New, rapid, ticking cash UI visual.</li>
+            </ul>
+
+            <div class="log-section-title">Crater City Bank Updates</div>
+            <ul class="log-list">
+                <li>Removed: Deductions and Blue Floor.</li>
+                <li><strong>Floor: Basement</strong> - Widened entry staircase. Simplified escape. Fewer lasers and new glass walls to better team interaction. New stairwell and extended hall in the Vault.</li>
+                <li><strong>Floor: Presidential Vault</strong> - New zipline entry option and increased head room. Widened main hall with deeper pockets for wall dodging. Updated Vault room design with clear markings for where to collect cash. Halved the speed of the lasers in the Vault. Simplified the escape, and flipped the ladder direction 180 degrees.</li>
+            </ul>
+
+            <div class="log-section-title">Map & World</div>
+            <ul class="log-list">
+                <li>Roblox Brick is back! We’ll be using both brick styles.</li>
+                <li>Updated Rising City Tunnel.</li>
+                <li>NoVehicle zone added to Bank trapdoor exit.</li>
+                <li>New sun GeographicLatitude, 40, for improved lighting.</li>
+            </ul>
+
+            <div class="log-section-title">More Changes & Fixes</div>
+            <ul class="log-list">
+                <li>New Oil Rig escape: Roof Ziplines. With free cruiser spawn waiting below.</li>
+                <li>New “Lowest” sort in Garages, our new default.</li>
+                <li>New Controller Haptics (v1).</li>
+                <li>Improved very high speed driving.</li>
+                <li>Reduced prison punch box punches from 10 to 8.</li>
+                <li>You can now click anywhere in the weapon shop window for easier equipping.</li>
+                <li>Criminals no longer get a pistol when broken out of handcuffs by another criminal.</li>
+                <li>Bank “Place Dynamite” prompts are now hidden once initiated.</li>
+                <li>Bank “Closed” signs now support translations.</li>
+                <li>Bank escape doors now stay open longer.</li>
+                <li>Bank-Truck now only spawns when available.</li>
+                <li>Bank-Truck icon now displays to Police, and only when available.</li>
+                <li>Bank-Truck icon now appears to criminals, and only when being driven.</li>
+                <li>Removed Rising Penthouse roof hatch.</li>
+                <li>Revamped UFO Hyperchrome/Hypershift effects.</li>
+                <li>Added Jeep spawn, Military now spawn next to free jeeps.</li>
+                <li>Updates to Private Server commands (towing command, listing ops).</li>
+                <li>Rejoining Jailbreak is now smoother. New update migration UI.</li>
+                <li>Backend improvements and ongoing security work.</li>
+                <li>Fixed an invisibility glitch using ATVs.</li>
+                <li>Fixed a Jewelry Store roof no-clip and gate trapping players.</li>
+                <li>Fixed Oil Rig barrel centering.</li>
+                <li>Fixed Iceborn effects on exit and mansion doors.</li>
+                <li>Fixed the racetrack minimap.</li>
+                <li>Fixed home teleporting and sitting issues when moving furniture.</li>
+                <li>Fixed garage previews working on Engine and Brake categories.</li>
+                <li>Fixed passenger shooting in Manta and Scorpion.</li>
+                <li>Improved Black Widow stability.</li>
+                <li>Updated Minimap and update text.</li>
+            </ul>
+        </div>
+
     </div>
 
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-        <p>&copy; 2026 Jailbreak Hub. All Rights Reserved.</p>
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
+        
+        <div class="footer-links">
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
+        
+        <div class="legal">
+            Disclaimer: Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners. Not affiliated with Badimo.
+        </div>
+        <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
+    <script>
+        const toggle = document.getElementById('mobile-toggle');
+        const links = document.getElementById('nav-links');
+        
+        toggle.addEventListener('click', () => {
+            links.classList.toggle('active');
+            const bars = toggle.querySelectorAll('div');
+            bars[0].style.transform = links.classList.contains('active') ? "rotate(45deg) translate(5px, 5px)" : "none";
+            bars[1].style.opacity = links.classList.contains('active') ? "0" : "1";
+            bars[2].style.transform = links.classList.contains('active') ? "rotate(-45deg) translate(5px, -5px)" : "none";
+        });
+    </script>
 </body>
 </html>
