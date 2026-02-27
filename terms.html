@@ -7,6 +7,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729"
      crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -31,7 +32,7 @@
             min-height: 100vh;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- UNIFIED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -44,7 +45,7 @@
         .nav-links { display: flex; gap: 5px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
-        .nav-link:hover { color: #fff; }
+        .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
 
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
@@ -57,6 +58,7 @@
         .drop-link { display: flex; flex-direction: column; padding: 12px; color: var(--text-dim); text-decoration: none; font-size: 0.75rem; border-radius: 8px; font-weight: 600; margin-bottom: 4px; }
         .drop-link:hover { background: var(--card); color: #fff; }
         .drop-link span { font-size: 0.65rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+        .drop-link:hover span { color: var(--green); }
 
         .live-dot {
             width: 6px; height: 6px; background: var(--green);
@@ -110,41 +112,38 @@
         }
         .legal-footer { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
 
-        /* --- MOBILE TOGGLE ICON --- */
-        .nav-toggle { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 6000; position: absolute; right: 20px; }
-        .nav-toggle span { width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; }
+        /* --- MOBILE MENU ICON --- */
+        .mobile-toggle { display: none; }
 
-        /* --- MOBILE ONLY RESPONSIVENESS --- */
         @media screen and (max-width: 768px) {
-            .nav-top { justify-content: space-between; padding: 0 20px; }
+            .nav-top { justify-content: space-between; padding: 0 20px; height: 60px; }
             .nav-logo { position: static; font-size: 1.2rem; }
-            .nav-toggle { display: flex; }
             
+            .mobile-toggle { 
+                display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; 
+            }
+
             .nav-links {
                 position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
-                background: var(--surface); flex-direction: column; padding: 80px 20px;
-                transition: 0.3s ease-in-out; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-                align-items: flex-start; gap: 0;
+                background: var(--surface); flex-direction: column; align-items: flex-start;
+                padding: 80px 20px; gap: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
+                overflow-y: auto;
             }
             .nav-links.active { right: 0; }
+
             .nav-item { width: 100%; height: auto; padding: 15px 0; border-bottom: 1px solid var(--border); flex-direction: column; align-items: flex-start; }
             .nav-link { font-size: 1rem; width: 100%; }
             
             .dropdown { 
-                position: static; transform: none; opacity: 1; pointer-events: auto; 
-                background: transparent; border: none; box-shadow: none; padding: 10px 0 0 15px;
-                display: none; /* Hidden by default on mobile unless clicked/toggled */
+                position: static; opacity: 1; pointer-events: auto; transform: none; 
+                box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0;
+                display: none;
             }
-            .nav-item:hover .dropdown { display: block; } /* Simple toggle for mobile view */
+            .nav-item:hover .dropdown { display: block; }
 
-            /* Typography & Layout */
             h1 { font-size: 3rem !important; }
             .legal-box { padding: 30px 20px; border-radius: 25px; }
-            .container { padding: 0 15px; }
-            
-            /* Grid Stacking */
-            .grid { grid-template-columns: 1fr !important; }
-            .footer-links { flex-wrap: wrap; gap: 10px; }
         }
     </style>
 </head>
@@ -153,10 +152,8 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         
-        <div class="nav-toggle" id="mobile-menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="mobile-toggle" id="mobile-menu-btn">
+            <i class="fa-solid fa-bars"></i>
         </div>
 
         <div class="nav-links" id="nav-menu">
@@ -177,6 +174,7 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
+
             <div class="nav-item">
                 <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
@@ -184,8 +182,10 @@
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
+            
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
+            <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
         </div>
     </nav>
 
@@ -253,8 +253,6 @@
     </footer>
 
     <script>
-        // Existing script logic (if any) would go here
-
         // --- MOBILE MENU SCRIPT ---
         const menuBtn = document.getElementById('mobile-menu-btn');
         const navMenu = document.getElementById('nav-menu');
@@ -262,17 +260,20 @@
         menuBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
             
-            // Optional: Animate hamburger to X
-            const spans = menuBtn.querySelectorAll('span');
-            spans[0].style.transform = navMenu.classList.contains('active') ? 'rotate(45deg) translate(5px, 6px)' : 'none';
-            spans[1].style.opacity = navMenu.classList.contains('active') ? '0' : '1';
-            spans[2].style.transform = navMenu.classList.contains('active') ? 'rotate(-45deg) translate(5px, -6px)' : 'none';
+            // Toggle between bars and X icon
+            const icon = menuBtn.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+            }
         });
 
         // Close menu when clicking a link
         document.querySelectorAll('.nav-link, .drop-link').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
+                menuBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
             });
         });
     </script>
