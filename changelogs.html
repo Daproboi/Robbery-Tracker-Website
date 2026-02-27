@@ -3,253 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Update Changelogs</title>
+    <title>Game Change Logs</title>
     <style>
-        :root {
-            --bg-color: #0f0f13;
-            --card-bg: #1a1a24;
-            --accent-color: #00d2ff;
-            --text-color: #e0e0e0;
-            --muted-text: #a0a0a0;
-            --border-color: #2d2d3d;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: sans-serif;
             line-height: 1.6;
-            margin: 0;
             padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
+            background-color: #f4f4f4;
+            color: #333;
         }
-
-        header {
-            text-align: center;
-            margin-bottom: 50px;
+        .log-entry {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        header h1 {
-            color: var(--accent-color);
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .changelog-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .date-tag {
-            background-color: var(--accent-color);
-            color: #000;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-
-        .version-title {
-            margin: 15px 0 10px 0;
-            font-size: 1.6rem;
-            color: #fff;
-        }
-
-        .section-header {
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-top: 20px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        ul li {
-            position: relative;
-            padding-left: 20px;
-            margin-bottom: 8px;
-        }
-
-        ul li::before {
-            content: "•";
-            color: var(--accent-color);
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        .nested-list {
-            padding-left: 25px;
-            color: var(--muted-text);
-            font-size: 0.95rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: var(--muted-text);
-            font-size: 0.9rem;
-        }
+        h1 { color: #222; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        h2 { color: #444; margin-top: 20px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Jailbreak Change Logs</h1>
-        <p>Keeping track of every update from the past two years.</p>
-    </header>
+    <div id="changelog-container">
+        <div class="log-entry">
+            <h1># Feb 23 2026 - Version 1540</h1>
+            <h2>## Patch</h2>
 
-    <div class="changelog-card">
-        <span class="date-tag">Feb 23, 2026</span>
-        <h2 class="version-title">Version 1540 - Patch Notes</h2>
-        
-        <div class="section-header">Bug Fixes & Polish</div>
-        <ul>
-            <li>Fixed <b>Safe Pity</b> resetting for specific users.</li>
-            <li>Private Server command autocomplete window is now scrollable.</li>
-            <li>Updated Cassette Spoiler and Military Jeep garage visuals.</li>
-            <li>Fixed Train robberies closing abruptly and E-circles on Passenger Train.</li>
-            <li>Fixed perm-ragdoll and camera glitches when exiting vehicles quickly.</li>
-        </ul>
+            <h3>## Patch Notes</h3>
+            <ul>
+                <li>Fixed an old bug that would reset Safe Pity for only some users.</li>
+                <li>Command autocomplete window is now scrollable. (Private Servers)</li>
+                <li>Reset Season Leaderboards.</li>
+                <li>Updated Cassette Spoiler.</li>
+                <li>Fixed Rim Garage visuals for the Military Jeep.</li>
+                <li>Fixed Rainboom Drift visuals.</li>
+                <li>Fixed an issue with the Train robberies not properly closing.</li>
+                <li>Fixed E circles on the Passenger Train.</li>
+                <li>Fixed vehicles breaking if you enter/exit too quickly.</li>
+                <li>Fixed vehicle camera sometimes breaking on exit.</li>
+                <li>Fixed perm-ragdoll when exiting vehicles.</li>
+            </ul>
+        </div>
     </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Feb 20, 2026</span>
-        <h2 class="version-title">Version 1539 - Season 31: FREESTYLE</h2>
-        
-        <div class="section-header">New Content</div>
-        <ul>
-            <li><b>New Vehicle:</b> JBX-0031 (Level 10 prize) with 3 rocket thrusters and working hatch.</li>
-            <li><b>Tier-5 Safe Revamp:</b> Added the <b>Bluebird Dragster</b> (Legendary).</li>
-            <li>New items: Digital RGB Skin, Dark Matter Drift, and Theory Rims.</li>
-            <li>Private Servers: Camera tracking for players using "/" and removed Team Full restrictions.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Jan 03, 2026</span>
-        <h2 class="version-title">Version 1527 - Game Cleanup Update</h2>
-        
-        <div class="section-header">Core Gameplay</div>
-        <ul>
-            <li>Weapon code rewrite: <b>Wallbang no longer supported.</b></li>
-            <li>Criminal experiment over: All players spawn as Prisoners (Pistol included on escape).</li>
-            <li>Home doors now swing open based on approach direction.</li>
-            <li><b>New UGC:</b> Uranium Back Item.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Dec 19, 2025</span>
-        <h2 class="version-title">Version 1523 - The Winter Update</h2>
-        
-        <div class="section-header">Season 30: Horror/Dark Winter</div>
-        <ul>
-            <li><b>New Limited:</b> Polaire Vehicle (7 days only) with Jump ability.</li>
-            <li><b>Season Prize:</b> Black Widow (Spider design with thrusters).</li>
-            <li><b>New Escapes:</b> Two-player Wall Escape and Sewer Revamp.</li>
-            <li><b>High Roller Servers:</b> Exclusive for players with 5M+ cash and 60+ day old accounts.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Oct 03, 2025</span>
-        <h2 class="version-title">Version 1465 - The "Epic" Update</h2>
-        
-        <div class="section-header">Revamps & Additions</div>
-        <ul>
-            <li><b>Dynamic Robbery System:</b> Groups removed; 4 robberies open randomly at a time.</li>
-            <li><b>Tank Revamp:</b> New high-detail model by NxmblePolo.</li>
-            <li><b>Private Server Features:</b> Tank Royale gamemode and Custom Racetracks.</li>
-            <li><b>Aerial Spawning:</b> Keypads added to helicopter spawns.</li>
-            <li><b>Technical:</b> Patched 11 major exploits and fixed Heli Fling bug.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Aug 29, 2025</span>
-        <h2 class="version-title">Version 1453 - Season 28: Cyberpunk City</h2>
-        
-        <div class="section-header">Cyberpunk Content</div>
-        <ul>
-            <li><b>New Vehicle:</b> Katana (Scissor doors and trim LEDs).</li>
-            <li><b>Tier-3 Safe:</b> WYNDR (Legendary) with holographic barrier at 100mph.</li>
-            <li><b>Cracky4 Skin:</b> Fulfillment of a 2017 promise to the creator of 99 Nights.</li>
-            <li><b>Map:</b> Neon-striped roads and taller buildings in Rising City.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">June 27, 2025</span>
-        <h2 class="version-title">Version 1424 - Season 27: A Pirate's Life</h2>
-        
-        <div class="section-header">Nautical Content</div>
-        <ul>
-            <li><b>New Vehicle:</b> Blackbeard (Drives on water).</li>
-            <li><b>New Limited:</b> Orion M42 ($999,999 for 6 days).</li>
-            <li><b>Radiant White:</b> Earned via Nuke at Level 10.</li>
-            <li>Trampoline Escape returned.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">May 02, 2025</span>
-        <h2 class="version-title">Version 1402 - Season 26: Jungle Adventure</h2>
-        
-        <div class="section-header">Jungle Content</div>
-        <ul>
-            <li><b>New Vehicle:</b> Cobra with driver-controlled turret.</li>
-            <li><b>New Lighting:</b> Moved to Roblox's latest engine technology.</li>
-            <li><b>Arrest Tuning:</b> Handcuff range reduced to 10 studs; Taser ragdoll reduced by 25%.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Apr 20, 2024</span>
-        <h2 class="version-title">Version 1327 - 2024 Live Event / OG Rewind</h2>
-        
-        <div class="section-header">Special Events</div>
-        <ul>
-            <li><b>OG Jailbreak:</b> Limited-time return of the 2017 game mode.</li>
-            <li><b>Reward:</b> OG Matador for participants.</li>
-            <li><b>Season 21:</b> OG Monster Truck returned as Level 10 prize.</li>
-            <li>New Plasma Shotgun weapon added via alien encounters.</li>
-        </ul>
-    </div>
-
-    <div class="changelog-card">
-        <span class="date-tag">Mar 08, 2024</span>
-        <h2 class="version-title">Version 1295 - Weapons Revamp 2024</h2>
-        
-        <div class="section-header">Weapon & System Overhaul</div>
-        <ul>
-            <li><b>Models:</b> High-detail remakes for AK47, Uzi, Sniper, and Revolver.</li>
-            <li><b>Equip Times:</b> Added to most weapons to prevent spam firing.</li>
-            <li><b>Jetpack 2.0:</b> New model and physics; automatic refueling.</li>
-            <li><b>Safe Pity:</b> Pity system added to all safes for guaranteed items.</li>
-            <li><b>New Vehicle:</b> Hammerhead added to Police Safe.</li>
-        </ul>
-    </div>
-
-    <footer>
-        &copy; 2026 Game Development Team. All rights reserved.
-    </footer>
-</div>
 
 </body>
 </html>
