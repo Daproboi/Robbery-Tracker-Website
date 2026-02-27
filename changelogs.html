@@ -28,7 +28,7 @@
             min-height: 100vh;
         }
 
-        /* --- UNIFIED NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.9); backdrop-filter: blur(20px);
@@ -91,7 +91,7 @@
         .log-content li { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 12px; padding-left: 24px; position: relative; line-height: 1.6; }
         .log-content li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
 
-        /* --- FOOTER STYLES --- */
+        /* --- FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border);
             padding: 60px 20px; text-align: center; margin-top: 100px;
@@ -138,7 +138,6 @@
 
         <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            
             <div class="nav-item">
                 <span class="nav-link">Seasons <div class="live-dot"></div> ▼</span>
                 <div class="dropdown">
@@ -146,7 +145,6 @@
                     <a href="prizes.html" class="drop-link">Season Rewards <span>View Level 1-10 Prizes</span></a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
@@ -154,7 +152,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
@@ -162,7 +159,6 @@
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
-            
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
             <div class="nav-item"><a href="changelogs.html" class="nav-link" style="color:#fff">Changelogs</a></div>
@@ -185,9 +181,7 @@
                     <ul>
                         <li>Fixed an old bug that would reset Safe Pity for only some users.</li>
                         <li>Command autocomplete window is now scrollable for Private Servers.</li>
-                        <li>Reset Season Leaderboards.</li>
-                        <li>Updated Cassette Spoiler and fixed various vehicle visuals.</li>
-                        <li>Fixed Train robberies not properly closing and E circle issues.</li>
+                        <li>Reset Season Leaderboards and updated Cassette Spoiler visuals.</li>
                     </ul>
                 </div>
             </div>
@@ -196,11 +190,10 @@
                 <div class="log-header">Feb 20 2026 // VERSION 1539</div>
                 <div class="log-title">Season 31: Freestyle</div>
                 <div class="log-content">
-                    <h2>Season 31: Freestyle</h2>
+                    <h2>Season 31</h2>
                     <ul>
-                        <li>New Vehicle: JBX-0031. Triple rocket thrusters, unique hatch, and seating for 3.</li>
-                        <li>Tier-5 Safe Revamp: New Bluebird Dragster! Legendary power with custom body opening mechanism.</li>
-                        <li>Animated Cassette Wings: Subtle animations when playing the radio.</li>
+                        <li>New Vehicle: JBX-0031. Triple rocket thrusters and seating for 3.</li>
+                        <li>Tier-5 Safe Revamp: New Bluebird Dragster (Legendary) and Animated Cassette Wings.</li>
                     </ul>
                 </div>
             </div>
@@ -211,8 +204,8 @@
                 <div class="log-content">
                     <h2>Patch Notes</h2>
                     <ul>
-                        <li>New Private Server command: keepInventory. Keeps items on death.</li>
-                        <li>Menu Clean-up: Minimap and Player markers hidden; Team Switch button locked in Menu.</li>
+                        <li>New Private Server command: keepInventory.</li>
+                        <li>Menu Clean-up: Minimap and Player markers hidden in Menu.</li>
                     </ul>
                 </div>
             </div>
@@ -224,7 +217,7 @@
                     <h2>Spring 2026: HD</h2>
                     <ul>
                         <li>Upgraded lighting: Deep skies, richer visuals, and darker shadows.</li>
-                        <li>Military Forcefield (Beta): Security forcefield around Military Base. Police/Keycard access only.</li>
+                        <li>Military Forcefield: Security barrier around Military Base; Police/Keycard access only.</li>
                     </ul>
                 </div>
             </div>
@@ -235,8 +228,8 @@
                 <div class="log-content">
                     <h2>Crime Cards</h2>
                     <ul>
-                        <li>New Item: Crime Card. Police can search detained criminals for access cards.</li>
-                        <li>Grants criminals access to main gates at Criminal Bases and Volcano Level 4.</li>
+                        <li>New Item: Crime Card. Search arrested criminals for access cards to bases.</li>
+                        <li>Controller Support: Aim Assist now live for controllers.</li>
                     </ul>
                 </div>
             </div>
@@ -245,11 +238,9 @@
                 <div class="log-header">Jan 24 2026 // VERSION 1532</div>
                 <div class="log-title">Hot Patch!</div>
                 <div class="log-content">
-                    <h2>Patch Notes</h2>
+                    <h2>Fixes</h2>
                     <ul>
-                        <li>Fixed first person weapon cameras.</li>
-                        <li>Fixed the Deductions V2 Bank Floor.</li>
-                        <li>Fixed the Jewelry Store allowing easy teleports out.</li>
+                        <li>Fixed first person weapon cameras and Deductions V2 Bank Floor.</li>
                     </ul>
                 </div>
             </div>
@@ -258,23 +249,40 @@
                 <div class="log-header">Jan 23 2026 // VERSION 1530</div>
                 <div class="log-title">Robbery Revamp: Bank Truck</div>
                 <div class="log-content">
-                    <h2>Bank Truck Revamp</h2>
+                    <h2>Bank Truck & Bank Floors</h2>
                     <ul>
-                        <li>Complete redesign: New detail, steering wheel, and Semi Truck engine performance.</li>
-                        <li>New mechanics: Starts at 11k cash and depletes as you drive; awarded automatically to nearby Police/Criminals upon delivery/theft.</li>
-                        <li>Removal of the 2 Police requirement to start the robbery.</li>
+                        <li>Bank Truck: Complete redesign; cash depletes as you drive; rewards awarded automatically.</li>
+                        <li>New Bank Floor: Deductions V2 with revolving escape doors.</li>
                     </ul>
-                    <h2>Bank & World Updates</h2>
+                </div>
+            </div>
+
+            <div class="log-card">
+                <div class="log-header">Jan 16 2026 // VERSION 1528</div>
+                <div class="log-title">Rising Bank Revamp</div>
+                <div class="log-content">
+                    <h2>New Rising City Bank</h2>
                     <ul>
-                        <li>New Bank Floor: Deductions V2 featuring revolving escape doors.</li>
-                        <li>Bank Updates: Revamped Presidential Vault, Underwater escape, and Basement Glider prevention.</li>
-                        <li>Navigation: World Markers now appear on the fullscreen Minimap and account for height.</li>
-                        <li>Vehicle Improvements: Popped tires now roll on rims with custom sound effects.</li>
+                        <li>Complete Exterior/Interior redesign with neon lighting and OG-inspired vibes.</li>
+                        <li><strong>Upper Management:</strong> Built from scratch; new roof exit option via Penthouse.</li>
+                        <li><strong>Corridor:</strong> New zipline entry and "Jail Gate" door for tactical options.</li>
+                        <li><strong>Classic:</strong> A true 1:1 visual recreation of the 2017 original floor.</li>
+                        <li><strong>Underwater:</strong> Design familiar but removal of swimming; added stairs and extended halls.</li>
+                        <li><strong>The Mint:</strong> Rapid cash conveyor belts in escape room and widened hallways.</li>
+                        <li><strong>Buffs:</strong> 25% faster cash collection and less dynamite required for vaults.</li>
                     </ul>
-                    <h2>Fixes</h2>
+                    <h2>Crater City Bank Updates</h2>
                     <ul>
-                        <li>Fixed home raids, C4 sticking to characters, and camera shake issues.</li>
-                        <li>Fixed collision bugs and Presidential Vault trap issues.</li>
+                        <li><strong>Basement:</strong> Simplified escape and new glass walls for team interaction.</li>
+                        <li><strong>Presidential Vault:</strong> New zipline entry; halved laser speeds in the vault.</li>
+                        <li><strong>Removed:</strong> Deductions (replaced later) and Blue Floor.</li>
+                    </ul>
+                    <h2>Gameplay & Map Improvements</h2>
+                    <ul>
+                        <li><strong>Oil Rig:</strong> New Roof Zipline escape with free cruiser spawn.</li>
+                        <li><strong>World:</strong> Roblox "Brick" material returns; updated lighting with new GeographicLatitude.</li>
+                        <li><strong>Mechanics:</strong> Controller Haptics v1; improved high-speed driving stability.</li>
+                        <li><strong>Private Servers:</strong> New <code>/towing</code> toggle command.</li>
                     </ul>
                 </div>
             </div>
@@ -285,33 +293,23 @@
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
         <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        
         <div class="footer-links">
             <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
         </div>
-        
         <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
-        
-        <div class="legal-footer">
-            Disclaimer: Jailbreak Hub is not affiliated with Roblox, Badimo, or the official Jailbreak game. All in-game assets belong to their respective owners.
-        </div>
-        <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
+        <div class="legal-footer">Disclaimer: Jailbreak Hub is not affiliated with Roblox, Badimo, or official owners.</div>
     </footer>
 
     <script>
         const mobileBtn = document.getElementById('mobileMenuOpen');
         const navLinks = document.getElementById('navLinks');
-
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             const icon = mobileBtn.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-xmark');
-            } else {
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            }
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
         });
     </script>
 </body>
