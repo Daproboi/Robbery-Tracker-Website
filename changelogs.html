@@ -3,38 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Change Logs</title>
+    <title>Jailbreak Change Logs</title>
     <style>
         body {
             font-family: sans-serif;
-            line-height: 1.6;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 40px;
+            line-height: 1.4;
+        }
+        .header, .footer {
+            text-align: center;
+            font-weight: bold;
             padding: 20px;
+            border: 2px solid #000;
+            margin-bottom: 30px;
+        }
+        .footer {
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+        .content {
             max-width: 800px;
             margin: 0 auto;
-            background-color: #f4f4f4;
-            color: #333;
         }
-        .log-entry {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .entry {
+            margin-bottom: 40px;
         }
-        h1 { color: #222; border-bottom: 2px solid #333; padding-bottom: 10px; }
-        h2 { color: #444; margin-top: 20px; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 5px; }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-top: 5px;
+        }
+        li {
+            margin-bottom: 3px;
+        }
     </style>
 </head>
 <body>
 
-    <div id="changelog-container">
-        <div class="log-entry">
+    <div class="header">
+        JAILBREAK UPDATE LOGS
+    </div>
+
+    <div class="content">
+
+        <div class="entry">
             <h1># Feb 23 2026 - Version 1540</h1>
             <h2>## Patch</h2>
-
-            <h3>## Patch Notes</h3>
+            <h2>## Patch Notes</h2>
             <ul>
                 <li>Fixed an old bug that would reset Safe Pity for only some users.</li>
                 <li>Command autocomplete window is now scrollable. (Private Servers)</li>
@@ -49,6 +74,11 @@
                 <li>Fixed perm-ragdoll when exiting vehicles.</li>
             </ul>
         </div>
+
+    </div>
+
+    <div class="footer">
+        END OF LOGS
     </div>
 
 </body>
