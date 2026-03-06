@@ -4,10 +4,28 @@
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>Jailbreak Hub | The Premium Toolkit</title>  
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  
+    
+    <!-- ADDED: DISCORD ROBLOX LAUNCHER LOGIC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            if (jobId) {
+                const placeId = "606849621"; 
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
+                window.location.href = launchUri;
+                
+                // Keep the page looking normal, but show a status briefly
+                document.title = "Launching Roblox...";
+                console.log("Attempting to launch JobID: " + jobId);
+            }
+        });
+    </script>
+    <!-- END LAUNCHER LOGIC -->
+
     <style>  
         :root {  
             --bg: #030508;  
@@ -22,7 +40,6 @@
             --text-dim: #94a3b8;  
             --invert: 0;  
         } 
-
         body.light-mode {  
             --bg: #f8fafc;  
             --surface: #ffffff;  
@@ -36,21 +53,17 @@
             --text-dim: #475569;  
             --invert: 1;  
         }  
-
         * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }  
-
         body {  
             font-family: 'Plus Jakarta Sans', sans-serif;  
             background: var(--bg); color: var(--text-main);  
             margin: 0; padding-top: 70px;  
             overflow-x: hidden; min-height: 100vh;  
         }  
-
         #cashCanvas {  
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;  
             z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));  
         }  
-
         .nav-top {  
             position: fixed; top: 0; width: 100%; height: 70px;  
             background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);  
@@ -58,14 +71,11 @@
             align-items: center; justify-content: space-between;  
             padding: 0 40px; z-index: 5000;  
         }  
-
         .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }  
         .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }  
-
         .nav-links { display: flex; gap: 20px; align-items: center; }  
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }  
         .nav-link:hover { color: var(--text-main); }  
-
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; }  
         .dropdown {  
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);  
@@ -82,17 +92,14 @@
             margin-bottom: 4px;  
         }  
         .drop-link:hover { background: var(--card); color: var(--text-main); }  
-
         .nav-actions { display: flex; align-items: center; gap: 15px; }  
         .theme-toggle {  
             background: var(--card); border: 1px solid var(--border); color: var(--text-main);  
             padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;  
         }  
         .theme-toggle:hover { border-color: var(--accent); }  
-
         /* Mobile Menu Toggle - Hidden on Desktop */
         .mobile-menu-btn { display: none; font-size: 1.5rem; background: none; border: none; color: var(--text-main); cursor: pointer; }
-
         .hero {  
             position: relative; padding: 15vh 20px 10vh; text-align: center; z-index: 1; min-height: 80vh;  
             display: flex; flex-direction: column; align-items: center; justify-content: center;  
@@ -104,14 +111,12 @@
             text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px;  
             box-shadow: 0 0 15px var(--accent-glow);  
         }  
-
         .hero h1 {  
             font-size: 5rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase;  
             background: linear-gradient(135deg, var(--text-main), var(--text-dim));  
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;  
         }  
         .hero p { color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 20px auto 40px; line-height: 1.6; }  
-
         .hero-buttons { display: flex; gap: 20px; justify-content: center; }  
           
         .btn {  
@@ -119,10 +124,8 @@
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);  
             display: flex; align-items: center; gap: 12px;  
         }  
-
         .btn i { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 1.1rem; }
         .btn:hover i { transform: scale(1.3) rotate(-10deg); }
-
         .btn-primary {  
             background: var(--jailbreak-green); color: #000;  
             box-shadow: 0 0 20px var(--green-glow); border: 2px solid var(--jailbreak-green);  
@@ -134,7 +137,6 @@
             box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);  
         }  
         .btn-discord:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(88, 101, 242, 0.6); }  
-
         .stats-bar {  
             background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);  
             padding: 30px 20px; display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; z-index: 2; position: relative;  
@@ -142,12 +144,10 @@
         .stat-item { text-align: center; }  
         .stat-num { font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: 800; color: var(--text-main); text-shadow: 0 0 10px rgba(255,255,255,0.2); }  
         .stat-label { color: var(--accent); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }  
-
         .section { max-width: 1200px; margin: 100px auto; padding: 0 20px; z-index: 2; position: relative; }  
         .section-header { text-align: center; margin-bottom: 60px; }  
         .section-header h2 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; }  
         .section-header p { color: var(--text-dim); font-size: 1rem; }  
-
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }  
         .feature-card {  
             background: var(--card); border: 1px solid var(--border); border-radius: 20px;  
@@ -157,7 +157,6 @@
         .feature-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px var(--accent-glow); }  
         .icon-box { font-size: 3rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--green-glow)); }  
         .feature-card h3 { font-size: 1.5rem; margin: 0 0 10px; }  
-
         .info-split { display: flex; align-items: center; gap: 50px; margin-top: 100px; flex-wrap: wrap; }  
         .info-text { flex: 1; min-width: 300px; }  
         .info-text h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }  
@@ -165,7 +164,6 @@
         .info-img { flex: 1; min-width: 300px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }  
         .info-img img { width: 100%; height: auto; display: block; transition: transform 0.5s ease; }  
         .info-img:hover img { transform: scale(1.05); }  
-
         .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }  
         .test-card { background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 16px; }  
         .test-card p { font-style: italic; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }  
@@ -173,14 +171,12 @@
         .test-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--border); }  
         .test-name { font-weight: 700; font-size: 0.9rem; }  
         .test-role { color: var(--accent); font-size: 0.75rem; font-family: 'JetBrains Mono'; }  
-
         .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }  
         .faq-question { padding: 20px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }  
         .faq-question:hover { background: var(--card); }  
         .faq-answer { padding: 0 20px 20px; color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; display: none; }  
         .faq-item.active .faq-answer { display: block; }  
         .faq-item.active .faq-question { color: var(--accent); }  
-
         footer {  
             background: var(--surface); border-top: 1px solid var(--border);  
             padding: 60px 20px; text-align: center; margin-top: 100px;  
@@ -195,7 +191,6 @@
           
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }  
         .fade-in.visible { opacity: 1; transform: translateY(0); }  
-
         /* =========================================
             MOBILE OVERRIDES (Only triggers < 768px)
             ========================================= */
@@ -212,7 +207,6 @@
             }
             
             .nav-links.active { left: 0; } /* When menu is open */
-
             .nav-item { height: auto; width: 100%; flex-direction: column; align-items: flex-start; }
             .dropdown { 
                 position: static; transform: none; opacity: 1; pointer-events: auto; 
@@ -220,30 +214,23 @@
                 display: block; /* Show dropdowns by default on mobile for ease */
             }
             .drop-link { padding: 8px 0; border-radius: 0; }
-
             .hero h1 { font-size: 2.8rem; letter-spacing: -1px; }
             .hero p { font-size: 1rem; }
             .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
             .btn { justify-content: center; }
-
             .stats-bar { gap: 30px; padding: 40px 20px; }
             .stat-num { font-size: 2rem; }
-
             .section-header h2 { font-size: 1.8rem; }
             .section { margin: 60px auto; }
-
             .grid { grid-template-columns: 1fr; } /* Stack cards 1 by 1 */
             .info-split { gap: 30px; text-align: center; }
             
             .footer-links { flex-wrap: wrap; gap: 15px; }
         }
-
     </style>  
 </head>  
 <body>  
-
     <canvas id="cashCanvas"></canvas>  
-
     <nav class="nav-top">  
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>  
           
@@ -257,7 +244,6 @@
                     <a href="prizes.html" class="drop-link">Season Rewards</a>  
                 </div>  
             </div>  
-
             <div class="nav-item">  
                 <a class="nav-link">Values ▼</a>  
                 <div class="dropdown">  
@@ -265,7 +251,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>  
                 </div>  
             </div>  
-
             <div class="nav-item">  
                 <a class="nav-link">Community ▼</a>  
                 <div class="dropdown">  
@@ -277,13 +262,11 @@
             <a href="tracker.html" class="nav-link">Tracker</a> 
             <a href="changelogs.html" class="nav-link">Change Logs</a> 
         </div>  
-
         <div class="nav-actions">  
             <button class="theme-toggle" id="themeBtn">🌓 Theme</button>  
             <button class="mobile-menu-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
         </div>  
     </nav>  
-
     <section class="hero fade-in">  
         <div class="hero-badge">System Status: Online </div>  
         <h1>Secure the Bag.</h1>  
@@ -297,7 +280,6 @@
             </a>  
         </div>  
     </section>  
-
     <div class="stats-bar fade-in">  
         <div class="stat-item">  
             <div class="stat-num" id="userCount">1,402</div>  
@@ -312,7 +294,6 @@
             <div class="stat-label">Market Monitoring</div>  
         </div>  
     </div>  
-
     <section class="section fade-in">  
         <div class="section-header">  
             <h2>Powerful Tools. Real-Time Data.</h2>  
@@ -351,7 +332,6 @@
             </a>  
         </div>  
     </section>  
-
     <section class="section fade-in">  
         <div class="info-split">  
             <div class="info-img">  
@@ -363,7 +343,6 @@
             </div>  
         </div>  
     </section>  
-
     <section class="section fade-in">  
         <div class="section-header">  
             <h2>What the Community Says</h2>  
@@ -401,7 +380,6 @@
             </div>  
         </div>  
     </section>  
-
     <section class="section fade-in">  
         <div class="section-header">  
             <h2>Frequently Asked Questions</h2>  
@@ -421,7 +399,6 @@
             </div>  
         </div>  
     </section>  
-
     <footer>  
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>  
         <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>  
@@ -436,13 +413,11 @@
           
         <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>  
     </footer>  
-
     <script>  
         const themeBtn = document.getElementById('themeBtn');  
         themeBtn.addEventListener('click', () => {  
             document.body.classList.toggle('light-mode');  
         });  
-
         /* Mobile Menu Script */
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
@@ -452,7 +427,6 @@
             icon.classList.toggle('fa-bars');
             icon.classList.toggle('fa-xmark');
         });
-
         let currentUsers = 1402;  
         const userCountElement = document.getElementById('userCount');  
           
@@ -461,7 +435,6 @@
             currentUsers += change;  
             userCountElement.innerText = currentUsers.toLocaleString();  
         }, 3500);  
-
         const faqItems = document.querySelectorAll('.faq-item');  
         faqItems.forEach(item => {  
             item.querySelector('.faq-question').addEventListener('click', () => {  
@@ -470,7 +443,6 @@
                 span.innerText = item.classList.contains('active') ? '-' : '+';  
             });  
         });  
-
         const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };  
         const observer = new IntersectionObserver((entries) => {  
             entries.forEach(entry => {  
@@ -480,34 +452,27 @@
                 }  
             });  
         }, observerOptions);  
-
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));  
-
         const canvas = document.getElementById('cashCanvas');  
         const ctx = canvas.getContext('2d');  
-
         function resizeCanvas() {  
             canvas.width = window.innerWidth;  
             canvas.height = window.innerHeight;  
         }  
         resizeCanvas();  
         window.addEventListener('resize', resizeCanvas);  
-
         const cashChars = ['$', '💵', '💰', '💸'];  
         const fontSize = 16;  
         let columns = Math.floor(canvas.width / fontSize);  
         let drops = Array(columns).fill(1);  
-
         function draw() {  
             ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)';  
             ctx.fillRect(0, 0, canvas.width, canvas.height);  
             ctx.fillStyle = '#00ff88';   
             ctx.font = fontSize + 'px monospace';  
-
             for (let i = 0; i < drops.length; i++) {  
                 const text = cashChars[Math.floor(Math.random() * cashChars.length)];  
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);  
-
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {  
                     drops[i] = 0;  
                 }  
