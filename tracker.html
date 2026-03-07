@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Robbery Tracker</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend/js/adsbygoogle.js?client=ca-pub-4156751217830729"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- EXPERIENCE START LAUNCHER LOGIC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            if (jobId) {
+                const launchUri = `roblox://experiences/start?placeId=606849621&gameInstanceId=${jobId}`;
+                window.location.href = launchUri;
+            }
+        });
+    </script>
+    
     <style>
         :root {
             --bg: #030508;
@@ -22,7 +34,6 @@
             --text-main: #ffffff;
             --text-dim: #94a3b8;
         }
-
         * { box-sizing: border-box; transition: all 0.2s ease; }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -31,7 +42,6 @@
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
-
         /* --- UNIFIED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
@@ -46,7 +56,6 @@
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
         .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; }
-
         .dropdown {
             position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
@@ -54,7 +63,6 @@
             opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
         .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        
         .drop-link { 
             display: flex; flex-direction: column; padding: 12px; 
             color: var(--text-dim); text-decoration: none; 
@@ -62,38 +70,36 @@
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--card); color: #fff; }
-
         .mobile-toggle { display: none; }
-
         /* --- TRACKER LAYOUT --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
         .header-area { margin-bottom: 40px; }
         .header-area h1 { font-size: 2.5rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
         .header-area p { color: var(--text-dim); margin-top: 5px; }
-
         .tracker-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px; padding-bottom: 100px;
         }
-
+        
+        /* DYNAMIC CARD STYLING */
         .robbery-card {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 24px; padding: 30px; position: relative;
-            overflow: hidden;
+            overflow: hidden; display: flex; flex-direction: column; gap: 15px;
         }
         .robbery-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-
+        
         .status-indicator {
             position: absolute; top: 25px; right: 25px;
             font-size: 0.65rem; font-weight: 900; text-transform: uppercase;
             padding: 5px 12px; border-radius: 100px;
         }
         .status-open { background: rgba(0, 255, 136, 0.1); color: var(--green); border: 1px solid var(--green); }
-        .status-closed { background: rgba(255, 51, 51, 0.1); color: var(--red); border: 1px solid var(--red); }
-
-        .robbery-name { font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; }
-
+        .status-closed { background: rgba(255, 172, 51, 0.1); color: var(--orange); border: 1px solid var(--orange); }
+        
+        .robbery-name { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; padding-right: 80px; }
+        
         .robbery-details {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
             background: rgba(0,0,0,0.2); padding: 20px; border-radius: 18px;
@@ -101,6 +107,17 @@
         .detail-box span { display: block; }
         .detail-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
         .detail-val { font-family: 'JetBrains Mono'; font-size: 0.95rem; font-weight: 700; color: #fff; }
+        
+        .rob-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin-top: 10px; }
+        
+        .join-btn {
+            background: var(--accent); color: white; text-align: center; text-decoration: none;
+            padding: 12px; border-radius: 8px; font-weight: 700; margin-top: auto;
+            transition: all 0.2s; cursor: pointer; display: block;
+        }
+        .join-btn:hover { background: #005bb5; box-shadow: 0 0 15px var(--accent-glow); }
+
+        .loading { text-align: center; color: var(--text-dim); font-size: 1.2rem; margin-top: 50px; grid-column: 1 / -1; }
 
         /* --- FOOTER STYLES --- */
         footer {
@@ -120,16 +137,12 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
-
+        
         @media screen and (max-width: 768px) {
             body { padding-top: 80px; }
             .nav-top { padding: 0 20px; justify-content: space-between; height: 60px; }
             .nav-logo { position: static; font-size: 1.1rem; }
-            
-            .mobile-toggle { 
-                display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; 
-            }
-
+            .mobile-toggle { display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; }
             .nav-links {
                 position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
                 background: var(--surface); flex-direction: column; align-items: flex-start;
@@ -137,14 +150,9 @@
                 transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
             }
             .nav-links.active { right: 0; }
-
             .nav-item { height: auto; width: 100%; padding: 15px 0; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--border); }
             .nav-link { font-size: 0.9rem; }
-            
-            .dropdown { 
-                position: static; opacity: 1; pointer-events: auto; transform: none; 
-                box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0;
-            }
+            .dropdown { position: static; opacity: 1; pointer-events: auto; transform: none; box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0; }
             .drop-link { padding: 8px 0; font-size: 0.8rem; }
             .header-area h1 { font-size: 1.8rem; }
             .tracker-grid { grid-template-columns: 1fr; }
@@ -152,17 +160,11 @@
     </style>
 </head>
 <body>
-
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        
-        <div class="mobile-toggle" id="mobileMenuOpen">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
+        <div class="mobile-toggle" id="mobileMenuOpen"><i class="fa-solid fa-bars"></i></div>
         <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            
             <div class="nav-item">
                 <span class="nav-link">Seasons ▼</span>
                 <div class="dropdown">
@@ -170,7 +172,6 @@
                     <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
@@ -178,7 +179,6 @@
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
-
             <div class="nav-item">
                 <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
@@ -186,7 +186,6 @@
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
                 </div>
             </div>
-            
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link" style="color: #fff;">Tracker</a></div>
             <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
@@ -195,85 +194,24 @@
 
     <div class="container">
         <div class="header-area">
-            <h1>Robbery Tracker</h1>
-            <p>Real-time robbery status and vault data for all major locations.</p>
+            <h1>Live Robbery Tracker</h1>
+            <p><i class="fa-solid fa-satellite-dish" style="color: var(--green);"></i> Real-time sync with Bot Farm activated.</p>
         </div>
-
-        <div class="tracker-grid">
-            <div class="robbery-card">
-                <div class="status-indicator status-open">Open</div>
-                <div class="robbery-name">Jewelry Store</div>
-                <div class="robbery-details">
-                    <div class="detail-box">
-                        <span class="detail-label">Max Payout</span>
-                        <span class="detail-val">$5,000</span>
-                    </div>
-                    <div class="detail-box">
-                        <span class="detail-label">Difficulty</span>
-                        <span class="detail-val">Medium</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="robbery-card">
-                <div class="status-indicator status-closed">Closed</div>
-                <div class="robbery-name">The Bank</div>
-                <div class="robbery-details">
-                    <div class="detail-box">
-                        <span class="detail-label">Max Payout</span>
-                        <span class="detail-val">$6,500</span>
-                    </div>
-                    <div class="detail-box">
-                        <span class="detail-label">Vault Type</span>
-                        <span class="detail-val">Randomized</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="robbery-card">
-                <div class="status-indicator status-open">Open</div>
-                <div class="robbery-name">Power Plant</div>
-                <div class="robbery-details">
-                    <div class="detail-box">
-                        <span class="detail-label">Max Payout</span>
-                        <span class="detail-val">$5,700</span>
-                    </div>
-                    <div class="detail-box">
-                        <span class="detail-label">Puzzle Type</span>
-                        <span class="detail-val">Flow</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="robbery-card">
-                <div class="status-indicator status-closed">Closed</div>
-                <div class="robbery-name">Museum</div>
-                <div class="robbery-details">
-                    <div class="detail-box">
-                        <span class="detail-label">Max Payout</span>
-                        <span class="detail-val">$7,000</span>
-                    </div>
-                    <div class="detail-box">
-                        <span class="detail-label">Min Players</span>
-                        <span class="detail-val">2 People</span>
-                    </div>
-                </div>
-            </div>
+        
+        <div id="grid" class="tracker-grid">
+            <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Establishing secure uplink to API...</div>
         </div>
     </div>
 
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
         <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        
         <div class="footer-links">
             <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
         </div>
-        
         <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
-        
         <div class="legal">
             Disclaimer: Status data is simulated for display. Jailbreak Hub is not responsible for any in-game losses, failed robberies, or asset disputes. Not affiliated with Roblox or Badimo.
         </div>
@@ -284,7 +222,6 @@
         // --- MOBILE MENU FUNCTIONALITY ---
         const mobileBtn = document.getElementById('mobileMenuOpen');
         const navLinks = document.getElementById('navLinks');
-
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             const icon = mobileBtn.querySelector('i');
@@ -294,14 +231,96 @@
                 icon.classList.replace('fa-xmark', 'fa-bars');
             }
         });
-
-        // Close menu when clicking a link (mobile)
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
                 mobileBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
             });
         });
+
+        // ==========================================
+        // PASTE YOUR TUNNEL URL HERE! (Cloudflare or Ngrok)
+        // Example: "https://random-words.trycloudflare.com/getRobberies"
+        // ==========================================
+        const API_URL = "https://affiliation-nvidia-remarkable-fire.trycloudflare.com";
+
+        async function fetchRobberies() {
+            try {
+                // Header explicitly bypasses Ngrok free-tier warning screens
+                const response = await fetch(API_URL, {
+                    headers: { "ngrok-skip-browser-warning": "true" }
+                });
+                
+                if (!response.ok) throw new Error("API Connection Failed");
+                
+                const data = await response.json();
+                const grid = document.getElementById('grid');
+                grid.innerHTML = ''; 
+
+                if (data.length === 0) {
+                    grid.innerHTML = '<div class="loading" style="grid-column: 1/-1;">No high-value targets currently active.</div>';
+                    return;
+                }
+
+                // Reverse the data so newest hits appear at the top
+                data.reverse().forEach(rob => {
+                    const card = document.createElement('div');
+                    card.className = 'robbery-card';
+                    
+                    let isGreen = ["Open", "Falling", "Unopened"].includes(rob.status);
+                    let statClass = isGreen ? "status-open" : "status-closed";
+                    
+                    let imgSrc = "";
+                    if (rob.image && rob.image.startsWith("http")) {
+                        imgSrc = `<img src="${rob.image}" class="rob-img">`;
+                    }
+
+                    // Dynamically building the details box
+                    let detailsHTML = `
+                        <div class="detail-box">
+                            <span class="detail-label">Players</span>
+                            <span class="detail-val">${rob.players || "N/A"}</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="detail-label">Time</span>
+                            <span class="detail-val">${rob.gameTime || "N/A"}</span>
+                        </div>
+                    `;
+
+                    // If it's a High Bounty Server or Player, adapt the text
+                    if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
+                        detailsHTML = `
+                            <div class="detail-box">
+                                <span class="detail-label">Type</span>
+                                <span class="detail-val">Target Intel</span>
+                            </div>
+                        `;
+                        statClass = "status-open";
+                        rob.status = "Located";
+                    }
+
+                    card.innerHTML = `
+                        <div class="status-indicator ${statClass}">${rob.status}</div>
+                        <div class="robbery-name">${rob.name}</div>
+                        <div class="robbery-details">
+                            ${detailsHTML}
+                        </div>
+                        ${imgSrc}
+                        <a href="?jobid=${rob.jobId}" class="join-btn">
+                            <i class="fa-solid fa-rocket"></i> Join Server
+                        </a>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red);"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The tunnel may be offline.</div>';
+            }
+        }
+
+        // Fetch immediately, then refresh every 10 seconds
+        fetchRobberies();
+        setInterval(fetchRobberies, 10000);
     </script>
 </body>
 </html>
