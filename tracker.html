@@ -239,19 +239,25 @@
         });
 
         // ==========================================
-        // PASTE YOUR TUNNEL URL HERE! (Cloudflare or Ngrok)
-        // Example: "https://random-words.trycloudflare.com/getRobberies"
+        // PASTE YOUR TUNNEL URL HERE!
         // ==========================================
-        const API_URL = "https://double-concord-seating-creates.trycloudflare.com";
+        const API_URL = "https://poultry-allowing-regression-treatment.trycloudflare.com/getRobberies";
 
         async function fetchRobberies() {
             try {
-                // Header explicitly bypasses Ngrok free-tier warning screens
+                // Request explicitly configured to bypass tunnel warnings and CORS blocks
                 const response = await fetch(API_URL, {
-                    headers: { "ngrok-skip-browser-warning": "true" }
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: {
+                        'Accept': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
+                        'bypass-tunnel-reminder': 'true' // Also works for Cloudflare sometimes
+                    }
                 });
                 
-                if (!response.ok) throw new Error("API Connection Failed");
+                if (!response.ok) throw new Error("API Offline or Tunnel Blocked");
                 
                 const data = await response.json();
                 const grid = document.getElementById('grid');
@@ -287,7 +293,6 @@
                         </div>
                     `;
 
-                    // If it's a High Bounty Server or Player, adapt the text
                     if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
                         detailsHTML = `
                             <div class="detail-box">
@@ -314,11 +319,10 @@
                 });
             } catch (err) {
                 console.error(err);
-                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red);"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The tunnel may be offline.</div>';
+                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The tunnel may be offline.</div>';
             }
         }
 
-        // Fetch immediately, then refresh every 10 seconds
         fetchRobberies();
         setInterval(fetchRobberies, 10000);
     </script>
