@@ -243,21 +243,20 @@
         // ==========================================
         const API_URL = "https://jb-tracker-api.vercel.app/getRobberies";
 
-        async function fetchRobberies() {
+                async function fetchRobberies() {
             try {
-                // Request explicitly configured to bypass tunnel warnings and CORS blocks
+                // Removed the ngrok/cloudflare specific header
                 const response = await fetch(API_URL, {
                     method: 'GET',
                     mode: 'cors',
                     credentials: 'omit',
                     headers: {
-                        'Accept': 'application/json',
-                        'ngrok-skip-browser-warning': 'true',
-                        'bypass-tunnel-reminder': 'true' // Also works for Cloudflare sometimes
+                        'Accept': 'application/json'
+                        // No 'ngrok-skip-browser-warning' here anymore!
                     }
                 });
                 
-                if (!response.ok) throw new Error("API Offline or Tunnel Blocked");
+                if (!response.ok) throw new Error("API Connection Failed");
                 
                 const data = await response.json();
                 const grid = document.getElementById('grid');
@@ -276,6 +275,15 @@
                     let isGreen = ["Open", "Falling", "Unopened"].includes(rob.status);
                     let statClass = isGreen ? "status-open" : "status-closed";
                     
+                    // Set Status Color
+                    let statusColor = "var(--jailbreak-green)";
+                    let statusBg = "rgba(0, 255, 136, 0.1)";
+                    if(rob.status !== "Open" && rob.status !== "Falling" && rob.status !== "Unopened") {
+                        statusColor = "#ffac33"; // Orange for in progress
+                        statusBg = "rgba(255, 172, 51, 0.1)";
+                    }
+
+                    // Only render image if a valid URL exists
                     let imgSrc = "";
                     if (rob.image && rob.image.startsWith("http")) {
                         imgSrc = `<img src="${rob.image}" class="rob-img">`;
@@ -293,6 +301,7 @@
                         </div>
                     `;
 
+                    // If it's a High Bounty Server or Player, adapt the text
                     if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
                         detailsHTML = `
                             <div class="detail-box">
@@ -311,7 +320,7 @@
                             ${detailsHTML}
                         </div>
                         ${imgSrc}
-                        <a href="?jobid=${rob.jobId}" class="join-btn">
+                        <a href="roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}" class="join-btn">
                             <i class="fa-solid fa-rocket"></i> Join Server
                         </a>
                     `;
@@ -319,7 +328,7 @@
                 });
             } catch (err) {
                 console.error(err);
-                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The tunnel may be offline.</div>';
+                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The system may be offline.</div>';
             }
         }
 
