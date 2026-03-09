@@ -155,7 +155,6 @@
         .page-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* --- FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border);
             padding: 60px 20px; text-align: center; margin-top: 100px;
@@ -296,6 +295,7 @@
 
             grid.innerHTML = paginatedItems.map((i, idx) => {
                 const trend = (i.trend || 'stable').toLowerCase();
+                const dupedVal = i.duped_value || Math.floor((i.cash_value || 0) * 0.7);
                 return `
                 <div class="item-card" onclick="openModal(${startIndex + idx})">
                     <div class="img-container">
@@ -307,8 +307,12 @@
                         <h3>${i.name}</h3>
                         <div class="data-list">
                             <div class="data-item">
-                                <span class="d-label">Value</span>
+                                <span class="d-label">Clean Value</span>
                                 <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="d-label">Est. Duped</span>
+                                <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
                             </div>
                         </div>
                     </div>
@@ -360,7 +364,7 @@
                         <span class="detail-label">Market Status</span>
                         <p class="text-[var(--text-dim)] text-sm leading-relaxed mt-2">
                             This item is currently seeing <strong>${trend}</strong> market activity. 
-                            Trade with caution regarding duped variants.
+                            Values are calculated based on current community trading data.
                         </p>
                     </div>
                 </div>
