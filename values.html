@@ -86,7 +86,7 @@
         }
         .f-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        /* --- GRID --- */
+        /* --- UPDATED GRID & CARDS (PHOTO STYLE) --- */
         .items-grid {
             display: grid; 
             grid-template-columns: repeat(5, 1fr);
@@ -97,47 +97,54 @@
         @media (max-width: 900px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
 
         .item-card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;
+            background: #0f1218; /* Darker card background from photo */
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px; 
+            display: flex; flex-direction: column; 
+            overflow: hidden;
+            position: relative;
         }
-        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
         .img-container {
-            width: 100%; height: 180px; background: #000;
+            width: 100%; height: 200px; 
+            background: radial-gradient(circle at center, #1a1f29 0%, #0f1218 100%);
             display: flex; align-items: center; justify-content: center;
-            border-bottom: 1px solid var(--border); position: relative;
+            position: relative; padding: 20px;
         }
-        .img-large { width: 85%; height: 85%; object-fit: contain; }
+        .img-large { width: 90%; height: 90%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
 
         .trend-badge {
-            position: absolute; top: 12px; right: 12px;
-            padding: 4px 10px; border-radius: 6px; font-size: 0.6rem;
-            font-weight: 900; text-transform: uppercase; border: 1px solid;
+            position: absolute; top: 15px; left: 15px;
+            padding: 5px 12px; border-radius: 8px; font-size: 0.65rem;
+            font-weight: 800; text-transform: uppercase; border: 1px solid;
+            backdrop-filter: blur(10px);
         }
-        .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: var(--green); }
-        .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: var(--red); }
+        .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: rgba(0, 255, 136, 0.2); }
+        .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: rgba(255, 68, 68, 0.2); }
         .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border-color: var(--border); }
 
-        .card-content { padding: 15px; }
-        .item-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block;}
-        .card-content h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-content { padding: 20px; background: #0f1218; }
+        .item-cat { color: var(--accent); font-size: 0.65rem; font-weight: 900; text-transform: uppercase; margin-bottom: 6px; display: block; opacity: 0.8; }
+        .card-content h3 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
 
-        .data-list { display: flex; flex-direction: column; gap: 6px; }
+        .data-list { display: flex; flex-direction: column; gap: 8px; }
         .data-item {
-            display: flex; justify-content: space-between;
-            padding: 8px; background: rgba(0,0,0,0.2); border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 14px; background: rgba(0,0,0,0.3); border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
         }
-        .d-label { font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+        .d-label { font-size: 0.65rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
         .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; }
         
-        .val-clean { color: var(--green); }
-        .val-duped { color: var(--orange); }
+        .val-clean { color: #fff; }
+        .val-duped { color: var(--text-dim); }
 
         .pagination { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 50px; }
         .page-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* --- FOOTER STYLES --- */
+        /* --- FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border);
             padding: 60px 20px; text-align: center; margin-top: 100px;
@@ -155,44 +162,21 @@
             display: inline-block; font-size: 0.9rem; font-weight: 800;
         }
 
-        /* --- MOBILE RESPONSIVE OVERRIDES --- */
+        /* --- MOBILE --- */
         @media screen and (max-width: 768px) {
             body { padding-top: 80px; }
             .nav-top { padding: 0 20px; justify-content: space-between; height: 60px; }
             .nav-logo { position: static; font-size: 1.1rem; }
-            
-            .mobile-toggle { 
-                display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; 
-            }
-
+            .mobile-toggle { display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; }
             .nav-links {
                 position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
                 background: var(--surface); flex-direction: column; align-items: flex-start;
-                padding: 80px 30px; gap: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
+                padding: 80px 30px; gap: 0; transition: 0.4s; border-left: 1px solid var(--border);
             }
             .nav-links.active { right: 0; }
-
             .nav-item { height: auto; width: 100%; padding: 15px 0; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--border); }
-            .nav-link { font-size: 0.9rem; }
-            
-            .dropdown { 
-                position: static; opacity: 1; pointer-events: auto; transform: none; 
-                box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0;
-            }
-            .drop-link { padding: 8px 0; font-size: 0.8rem; }
-
-            .container { padding: 15px; }
-            h1.text-3xl { font-size: 1.75rem !important; text-align: center; }
-
-            .search-section { padding: 20px; border-radius: 16px; }
-            .search-bar { padding: 15px; font-size: 0.95rem; }
-            .filter-row { justify-content: center; }
-
-            .items-grid { grid-template-columns: 1fr !important; gap: 15px; }
-            
-            .footer-links { flex-direction: column; gap: 10px; }
-            .pagination { flex-direction: column; gap: 15px; }
+            .dropdown { position: static; opacity: 1; pointer-events: auto; transform: none; box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; }
+            .items-grid { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
@@ -358,7 +342,7 @@
                                 </div>
                                 <div class="data-item">
                                     <span class="d-label">Demand</span>
-                                    <span class="d-val">${i.demand || 'Normal'}</span>
+                                    <span class="d-val" style="color: #fff;">${i.demand || 'Normal'}</span>
                                 </div>
                             </div>
                         </div>
@@ -380,7 +364,7 @@
 
         window.onload = init;
 
-        // --- MOBILE MENU FUNCTIONALITY ---
+        // --- MOBILE MENU ---
         const mobileBtn = document.getElementById('mobileMenuOpen');
         const navLinks = document.getElementById('navLinks');
 
@@ -394,7 +378,6 @@
             }
         });
 
-        // Close menu when clicking a link (mobile)
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
