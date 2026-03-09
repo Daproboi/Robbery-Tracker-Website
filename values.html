@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Hub | Market Database</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend/js/adsbygoogle.js?client=ca-pub-4156751217830729"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -140,7 +139,6 @@
         .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; }
         
         .val-clean { color: #fff; }
-        .val-duped { color: var(--text-dim); }
 
         .info-btn {
             width: 100%; padding: 15px; background: var(--surface);
@@ -164,38 +162,34 @@
         }
         .back-btn:hover { color: #fff; }
         
-        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .detail-layout { display: grid; grid-template-columns: 450px 1fr; gap: 40px; align-items: start; }
         .detail-img-card {
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: 40px; padding: 60px; display: flex;
+            border-radius: 30px; padding: 40px; display: flex;
             align-items: center; justify-content: center;
             position: relative;
         }
-        .detail-img-card img { width: 100%; height: auto; filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7)); }
+        .detail-img-card img { width: 100%; height: auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)); }
         
-        .detail-info h1 { font-size: 3.5rem; font-weight: 900; margin: 10px 0; letter-spacing: -2px; }
-        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+        .detail-info h1 { font-size: 3rem; font-weight: 900; margin: 5px 0; letter-spacing: -1.5px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
+        
         .big-stat {
-            background: var(--surface); border: 1px solid var(--border);
-            padding: 30px; border-radius: 24px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 20px; border-radius: 16px;
         }
-        .big-stat .label { font-size: 0.7rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
-        .big-stat .val { font-size: 1.8rem; font-weight: 900; font-family: 'JetBrains Mono'; }
+        .big-stat .label { font-size: 0.65rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+        .big-stat .val { font-size: 1.4rem; font-weight: 900; font-family: 'JetBrains Mono'; }
 
-        /* --- PAGINATION & FOOTER --- */
-        .pagination { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 50px; }
-        .page-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
-        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-        footer {
-            background: var(--surface); border-top: 1px solid var(--border);
-            padding: 60px 20px; text-align: center; margin-top: 100px;
+        .analysis-box {
+            background: rgba(0, 112, 243, 0.05);
+            border: 1px solid rgba(0, 112, 243, 0.2);
+            padding: 25px; border-radius: 20px; margin-top: 30px;
         }
-        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
-        .footer-brand span { color: var(--accent); }
-        
+
         /* --- MOBILE --- */
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 900px) {
+            .detail-layout { grid-template-columns: 1fr; }
             .nav-top { padding: 0 20px; justify-content: space-between; }
             .mobile-toggle { display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; }
             .nav-links {
@@ -204,8 +198,6 @@
                 padding: 80px 30px; gap: 0; transition: 0.4s; border-left: 1px solid var(--border);
             }
             .nav-links.active { right: 0; }
-            .detail-layout { grid-template-columns: 1fr; gap: 30px; }
-            .detail-info h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -353,44 +345,69 @@
             document.getElementById('nextBtn').disabled = currentPage >= totalPages;
         }
 
-        // --- FULL SCREEN LOGIC ---
+        // --- UPDATED FULL SCREEN LOGIC ---
         function openDetails(name) {
             const item = filteredItems.find(i => i.name === name);
             if (!item) return;
 
             const trend = (item.trend || 'stable').toLowerCase();
             const dupedVal = item.duped_value || Math.floor((item.cash_value || 0) * 0.7);
+            
+            // New In-Depth Fields (Fallback logic)
+            const obtain = item.obtainability || "Retired / Limited";
+            const rarity = item.rarity || "Legendary";
+            const notes = item.notes || "Our market team is currently analyzing the trade volume for this item. Check back soon for detailed breakdown notes.";
+            const perf = item.performance || "Stats pending verification.";
 
             document.getElementById('detailContent').innerHTML = `
                 <div class="detail-layout">
-                    <div class="detail-img-card">
-                        <div class="trend-badge trend-${trend}" style="top:30px; left:30px; font-size:0.9rem; padding:8px 20px;">Trend: ${trend}</div>
-                        <img src="${item.image}">
+                    <div class="detail-left">
+                        <div class="detail-img-card">
+                            <div class="trend-badge trend-${trend}" style="top:20px; left:20px;">Trend: ${trend}</div>
+                            <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400'">
+                        </div>
+                        
+                        <div class="big-stat" style="margin-top: 20px; background: rgba(0,0,0,0.4);">
+                            <div class="label"><i class="fa-solid fa-gauge-high"></i> Performance Data</div>
+                            <div class="val" style="font-size: 0.9rem; color: #fff; margin-top: 10px; font-family: sans-serif;">${perf}</div>
+                        </div>
                     </div>
-                    <div class="detail-info">
-                        <span class="item-cat" style="font-size:1rem;">${item.cat}</span>
-                        <h1>${item.name}</h1>
-                        <p style="color:var(--text-dim); line-height:1.8; margin-top:20px; font-size:1.1rem;">
-                            The ${item.name} is a high-tier ${item.cat} in the Jailbreak market. Values represent the current average trading price in the community.
-                        </p>
 
+                    <div class="detail-info">
+                        <span class="item-cat" style="font-size:0.9rem; letter-spacing: 2px;">${item.cat} • ${obtain}</span>
+                        <h1>${item.name}</h1>
+                        
                         <div class="detail-grid">
                             <div class="big-stat">
                                 <div class="label">Clean Market Value</div>
                                 <div class="val" style="color:var(--green);">$${(item.cash_value || 0).toLocaleString()}</div>
                             </div>
                             <div class="big-stat">
-                                <div class="label">Estimated Duped</div>
-                                <div class="val" style="color:var(--text-dim);">$${dupedVal.toLocaleString()}</div>
-                            </div>
-                            <div class="big-stat">
                                 <div class="label">Trading Demand</div>
-                                <div class="val" style="color:var(--accent);">${item.demand || 'Very High'}</div>
+                                <div class="val" style="color:var(--accent);">${item.demand || 'High'}</div>
                             </div>
                             <div class="big-stat">
-                                <div class="label">Market Status</div>
-                                <div class="val" style="text-transform:capitalize;">${trend}</div>
+                                <div class="label">Est. Duped Value</div>
+                                <div class="val" style="color:var(--red);">$${dupedVal.toLocaleString()}</div>
                             </div>
+                            <div class="big-stat">
+                                <div class="label">Rarity Class</div>
+                                <div class="val" style="color:#fff;">${rarity}</div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-box">
+                            <h4 style="text-transform: uppercase; font-size: 0.7rem; font-weight: 900; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-chart-line"></i> Market Analysis & Notes
+                            </h4>
+                            <p style="color: #e2e8f0; line-height: 1.7; font-size: 1rem;">
+                                ${notes}
+                            </p>
+                        </div>
+
+                        <div style="margin-top: 30px; display: flex; gap: 15px;">
+                             <button class="f-btn active" style="flex:1; padding: 15px;" onclick="window.print()">Export Data</button>
+                             <button class="f-btn" style="flex:1; padding: 15px;" onclick="closeDetails()">Close View</button>
                         </div>
                     </div>
                 </div>
