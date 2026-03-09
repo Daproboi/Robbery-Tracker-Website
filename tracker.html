@@ -22,33 +22,26 @@
     
     <style>
         :root {
-            /* Exact Jailbreak Changelogs Palette */
             --bg: #030508;
             --surface: #0a0c10;
             --card: #11141a;
             --border: rgba(255, 255, 255, 0.08);
-            --accent: #2462cd; /* Updated to the specific blue */
+            --accent: #2462cd; /* Exact blue from changelogs */
             --green: #4ade80;
             --red: #f87171;
             --orange: #fbbf24;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
         }
-
         * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding-top: 100px;
-            /* The specific radial gradient from their site */
+            background: var(--bg); color: var(--text-main); 
+            margin: 0; padding-top: 100px;
             background-image: radial-gradient(circle at 50% -20%, #111827 0%, #030508 60%);
             min-height: 100vh;
         }
-
-        /* --- UNIFIED NAVIGATION (Styles Updated) --- */
+        /* --- UNIFIED NAVIGATION --- */
         .nav-top {
             position: fixed; top: 0; width: 100%; height: 70px;
             background: rgba(3, 5, 8, 0.75); backdrop-filter: blur(12px);
@@ -60,12 +53,8 @@
         .nav-logo span { color: var(--accent); }
         .nav-links { display: flex; gap: 8px; align-items: center; }
         .nav-item { position: relative; height: 70px; display: flex; align-items: center; padding: 0 12px; }
-        .nav-link { 
-            text-decoration: none; color: var(--text-dim); font-size: 0.8rem; 
-            font-weight: 700; text-transform: none; letter-spacing: 0px; cursor: pointer; 
-        }
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.8rem; font-weight: 700; text-transform: none; cursor: pointer; }
         .nav-link:hover, .nav-item:hover .nav-link { color: #fff; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 8px; }
-        
         .dropdown {
             position: absolute; top: 65px; left: 50%; transform: translateX(-50%) translateY(10px);
             background: var(--surface); border: 1px solid var(--border);
@@ -81,19 +70,19 @@
             margin-bottom: 4px;
         }
         .drop-link:hover { background: var(--accent); color: #fff; }
+        .mobile-toggle { display: none; }
 
         /* --- TRACKER LAYOUT --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .header-area { margin-bottom: 60px; }
         .header-area h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
-        .header-area p { color: var(--text-dim); margin-top: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
-        
+        .header-area p { color: var(--text-dim); margin-top: 10px; font-size: 1.1rem; }
         .tracker-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px; padding-bottom: 100px;
         }
         
-        /* DYNAMIC CARD STYLING (The "Changelogs" Look) */
+        /* DYNAMIC CARD STYLING - CHANGELOGS STYLE */
         .robbery-card {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 32px; padding: 32px; position: relative;
@@ -113,7 +102,7 @@
         .status-open { background: rgba(74, 222, 128, 0.1); color: var(--green); border: 1px solid rgba(74, 222, 128, 0.3); }
         .status-closed { background: rgba(251, 191, 36, 0.1); color: var(--orange); border: 1px solid rgba(251, 191, 36, 0.3); }
         
-        .robbery-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 0px; padding-right: 90px; }
+        .robbery-name { font-size: 1.5rem; font-weight: 800; padding-right: 90px; }
         
         .robbery-details {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
@@ -124,12 +113,12 @@
         .detail-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
         .detail-val { font-family: 'JetBrains Mono'; font-size: 1rem; font-weight: 700; color: #fff; }
         
-        .rob-img { width: 100%; border-radius: 18px; border: 1px solid var(--border); margin-top: 5px; height: 160px; object-cover: cover; }
+        .rob-img { width: 100%; border-radius: 18px; border: 1px solid var(--border); margin-top: 5px; height: 160px; object-fit: cover; }
         
         .join-btn {
             background: var(--accent); color: white; text-align: center; text-decoration: none;
             padding: 16px; border-radius: 14px; font-weight: 800; margin-top: auto;
-            display: flex; items-center; justify-content: center; gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             font-size: 0.9rem;
         }
         .join-btn:hover { background: #1d4ed8; transform: scale(1.02); }
@@ -153,44 +142,48 @@
             font-family: 'Plus Jakarta Sans'; text-decoration: none;
             display: inline-block; font-size: 0.95rem; font-weight: 700;
         }
-        .legal { font-size: 0.75rem; color: #555; text-transform: none; margin: 40px auto 20px; max-width: 900px; line-height: 1.8; }
+        .legal { font-size: 0.75rem; color: #444; text-transform: none; margin: 40px auto 20px; max-width: 800px; line-height: 1.8; }
         
         @media screen and (max-width: 768px) {
-            .nav-top { padding: 0 20px; justify-content: space-between; }
-            .nav-logo { position: static; }
+            body { padding-top: 80px; }
+            .nav-top { padding: 0 20px; justify-content: space-between; height: 60px; }
+            .nav-logo { position: static; font-size: 1.1rem; }
+            .mobile-toggle { display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; }
             .nav-links {
                 position: fixed; top: 0; right: -100%; width: 85%; height: 100vh;
                 background: var(--bg); flex-direction: column; align-items: flex-start;
-                padding: 100px 40px; gap: 0; z-index: 9999;
+                padding: 100px 40px; gap: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
             }
             .nav-links.active { right: 0; }
-            .nav-item { height: auto; width: 100%; border-bottom: 1px solid var(--border); padding: 20px 0; }
+            .nav-item { height: auto; width: 100%; padding: 20px 0; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--border); }
             .header-area h1 { font-size: 2.2rem; }
+            .tracker-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="mobile-toggle" id="mobileMenuOpen" style="cursor:pointer; font-size:1.5rem;"><i class="fa-solid fa-bars"></i></div>
+        <div class="mobile-toggle" id="mobileMenuOpen"><i class="fa-solid fa-bars"></i></div>
         <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             <div class="nav-item">
-                <span class="nav-link">Seasons <i class="fa-solid fa-chevron-down" style="font-size:0.6rem; margin-left:5px;"></i></span>
+                <span class="nav-link">Seasons ▼</span>
                 <div class="dropdown">
                     <a href="contracts.html" class="drop-link">Season Contracts</a>
                     <a href="prizes.html" class="drop-link">Season Rewards</a>
                 </div>
             </div>
             <div class="nav-item">
-                <span class="nav-link">Values <i class="fa-solid fa-chevron-down" style="font-size:0.6rem; margin-left:5px;"></i></span>
+                <span class="nav-link">Values ▼</span>
                 <div class="dropdown">
                     <a href="values.html" class="drop-link">Value List</a>
                     <a href="calculator.html" class="drop-link">Value Calculator</a>
                 </div>
             </div>
             <div class="nav-item">
-                <span class="nav-link">Community <i class="fa-solid fa-chevron-down" style="font-size:0.6rem; margin-left:5px;"></i></span>
+                <span class="nav-link">Community ▼</span>
                 <div class="dropdown">
                     <a href="vip.html" class="drop-link">Private Servers</a>
                     <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
@@ -204,52 +197,44 @@
 
     <div class="container">
         <div class="header-area">
-            <h1>Robbery <span style="color: var(--accent)">LIVE</span> Tracker</h1>
-            <p>
-                <span class="relative flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                Real-time uplink with Bot Farm established.
-            </p>
+            <h1>Live <span style="color: var(--accent)">Tracker</span></h1>
+            <p><i class="fa-solid fa-satellite-dish" style="color: var(--green);"></i> Real-time sync with Bot Farm activated.</p>
         </div>
         
         <div id="grid" class="tracker-grid">
-            <div class="loading">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent mb-4"></div>
-                <p>ESTABLISHING SECURE UPLINK TO API...</p>
-            </div>
+            <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Establishing secure uplink to API...</div>
         </div>
     </div>
 
     <footer>
         <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-        <div class="footer-credits">Crafted with <i class="fa-solid fa-heart" style="color:var(--red)"></i> by <strong>Daproboi</strong> & <strong>Plug™</strong></div>
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
         <div class="footer-links">
             <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-            <a href="terms.html">Terms</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="bot.html">Bot</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
         </div>
-        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support the Project</a>
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>
         <div class="legal">
-            This project is NOT affiliated with Badimo or Roblox. All data is real-time and subject to change. Jailbreak Hub is not responsible for in-game losses or server sync issues.
+            Disclaimer: Status data is simulated for display. Jailbreak Hub is not responsible for any in-game losses, failed robberies, or asset disputes. Not affiliated with Roblox or Badimo.
         </div>
-        <p style="margin-top: 10px; color: #333; font-size: 0.7rem;">&copy; 2024 - 2026 Jailbreak Hub LLC.</p>
+        <p style="margin-top: 10px; color: #222; font-size: 0.7rem;">&copy; 2026 Jailbreak Hub.</p>
     </footer>
 
     <script>
-        /* --- MOBILE MENU (YOUR ORIGINAL LOGIC) --- */
+        // --- MOBILE MENU FUNCTIONALITY ---
         const mobileBtn = document.getElementById('mobileMenuOpen');
         const navLinks = document.getElementById('navLinks');
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             const icon = mobileBtn.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-xmark');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars');
+            }
         });
 
-        /* --- API LOGIC (YOUR ORIGINAL LOGIC) --- */
         const API_URL = "https://jb-tracker-api.vercel.app/getRobberies";
 
         async function fetchRobberies() {
@@ -279,25 +264,35 @@
                     let isGreen = ["Open", "Falling", "Unopened"].includes(rob.status);
                     let statClass = isGreen ? "status-open" : "status-closed";
                     
-                    if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
-                        rob.status = "Located";
-                        statClass = "status-open";
-                    }
-
                     let imgSrc = (rob.image && rob.image.startsWith("http")) ? `<img src="${rob.image}" class="rob-img">` : "";
+
+                    let detailsHTML = `
+                        <div class="detail-box">
+                            <span class="detail-label">Players</span>
+                            <span class="detail-val">${rob.players || "N/A"}</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="detail-label">Time</span>
+                            <span class="detail-val">${rob.gameTime || "N/A"}</span>
+                        </div>
+                    `;
+
+                    if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
+                        detailsHTML = `
+                            <div class="detail-box">
+                                <span class="detail-label">Type</span>
+                                <span class="detail-val">Target Intel</span>
+                            </div>
+                        `;
+                        statClass = "status-open";
+                        rob.status = "Located";
+                    }
 
                     card.innerHTML = `
                         <div class="status-indicator ${statClass}">${rob.status}</div>
                         <div class="robbery-name">${rob.name}</div>
                         <div class="robbery-details">
-                            <div class="detail-box">
-                                <span class="detail-label">Players</span>
-                                <span class="detail-val">${rob.players || "N/A"}</span>
-                            </div>
-                            <div class="detail-box">
-                                <span class="detail-label">Time</span>
-                                <span class="detail-val">${rob.gameTime || "N/A"}</span>
-                            </div>
+                            ${detailsHTML}
                         </div>
                         ${imgSrc}
                         <a href="roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}" class="join-btn">
@@ -308,7 +303,7 @@
                 });
             } catch (err) {
                 console.error(err);
-                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> UPLINK FAILURE: BOT FARM OFFLINE</div>';
+                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> API OFFLINE: RECONNECTING...</div>';
             }
         }
 
