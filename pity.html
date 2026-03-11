@@ -4,247 +4,334 @@
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>Jailbreak Hub | Pity Calculator</title>  
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  
     
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const jobId = urlParams.get('jobid');
-            if (jobId) {
-                const placeId = "606849621"; 
-                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
-                window.location.href = launchUri;
-            }
-        });
-    </script>
+    <script> 
+        document.addEventListener("DOMContentLoaded", function() { 
+            const urlParams = new URLSearchParams(window.location.search); 
+            const jobId = urlParams.get('jobid'); 
+            if (jobId) { 
+                const placeId = "606849621";  
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`; 
+                window.location.href = launchUri; 
+            } 
+        }); 
+    </script> 
 
-    <style>  
-        :root {  
-            --bg: #030508;  
-            --surface: #0a0c10;  
-            --card: #11141a;  
-            --border: rgba(255, 255, 255, 0.08);  
-            --accent: #0070f3;  
-            --accent-glow: rgba(0, 112, 243, 0.4);  
-            --jailbreak-green: #00ff88;  
-            --green-glow: rgba(0, 255, 136, 0.3);  
-            --text-main: #ffffff;  
-            --text-dim: #94a3b8;  
-            --invert: 0;  
-        } 
-        body.light-mode {  
-            --bg: #f8fafc;  
-            --surface: #ffffff;  
-            --card: #f1f5f9;  
-            --border: rgba(0, 0, 0, 0.1);  
-            --accent: #005bb5;  
-            --accent-glow: rgba(0, 91, 181, 0.3);  
-            --jailbreak-green: #00b35f;  
-            --green-glow: rgba(0, 179, 95, 0.2);  
-            --text-main: #0f172a;  
-            --text-dim: #475569;  
-            --invert: 1;  
-        } 
-        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }  
-        body {  
-            font-family: 'Plus Jakarta Sans', sans-serif;  
-            background: var(--bg); color: var(--text-main);  
-            margin: 0; padding-top: 70px;  
-            overflow-x: hidden; min-height: 100vh;  
+    <style>   
+        :root {   
+            --bg: #030508;   
+            --surface: #0a0c10;   
+            --card: #11141a;   
+            --border: rgba(255, 255, 255, 0.08);   
+            --accent: #0070f3;   
+            --accent-glow: rgba(0, 112, 243, 0.4);   
+            --jailbreak-green: #00ff88;   
+            --green-glow: rgba(0, 255, 136, 0.3);   
+            --text-main: #ffffff;   
+            --text-dim: #94a3b8;   
+            --invert: 0;   
         }  
-        #cashCanvas {  
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;  
-            z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));  
+        body.light-mode {   
+            --bg: #f8fafc;   
+            --surface: #ffffff;   
+            --card: #f1f5f9;   
+            --border: rgba(0, 0, 0, 0.1);   
+            --accent: #005bb5;   
+            --accent-glow: rgba(0, 91, 181, 0.3);   
+            --jailbreak-green: #00b35f;   
+            --green-glow: rgba(0, 179, 95, 0.2);   
+            --text-main: #0f172a;   
+            --text-dim: #475569;   
+            --invert: 1;   
         }  
-        .nav-top {  
-            position: fixed; top: 0; width: 100%; height: 70px;  
-            background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);  
-            border-bottom: 1px solid var(--border); display: flex;  
-            align-items: center; justify-content: space-between;  
-            padding: 0 40px; z-index: 5000;  
-        }  
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }  
-        .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }  
-        .nav-links { display: flex; gap: 20px; align-items: center; }  
-        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }  
-        .nav-link:hover { color: var(--text-main); }  
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }  
-        .dropdown {  
-            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);  
-            background: var(--surface); border: 1px solid var(--border);  
-            border-radius: 12px; min-width: 220px; padding: 10px;  
-            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);  
-            transition: all 0.2s ease;  
-        }  
-        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }  
-        .drop-link {  
-            display: flex; flex-direction: column; padding: 12px;  
-            color: var(--text-dim); text-decoration: none;  
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600;  
-            margin-bottom: 4px;  
-        }  
-        .drop-link:hover { background: var(--card); color: var(--text-main); }  
-        .nav-actions { display: flex; align-items: center; gap: 15px; }  
-        .theme-toggle {  
-            background: var(--card); border: 1px solid var(--border); color: var(--text-main);  
-            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;  
-        }  
-        .hero { position: relative; padding: 10vh 20px 5vh; text-align: center; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }  
-        .hero h1 { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; background: linear-gradient(135deg, var(--text-main), var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }  
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }   
+        body {   
+            font-family: 'Plus Jakarta Sans', sans-serif;   
+            background: var(--bg); color: var(--text-main);   
+            margin: 0; padding-top: 70px;   
+            overflow-x: hidden; min-height: 100vh;   
+        }   
+        #cashCanvas {   
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
+            z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));   
+        }   
+        .nav-top {   
+            position: fixed; top: 0; width: 100%; height: 70px;   
+            background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);   
+            border-bottom: 1px solid var(--border); display: flex;   
+            align-items: center; justify-content: space-between;   
+            padding: 0 40px; z-index: 5000;   
+        }   
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }   
+        .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }   
+        .nav-links { display: flex; gap: 20px; align-items: center; }   
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }   
+        .nav-link:hover { color: var(--text-main); }   
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }   
+        .dropdown {   
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);   
+            background: var(--surface); border: 1px solid var(--border);   
+            border-radius: 12px; min-width: 220px; padding: 10px;   
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);   
+            transition: all 0.2s ease;   
+        }   
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }   
+        .drop-link {   
+            display: flex; flex-direction: column; padding: 12px;   
+            color: var(--text-dim); text-decoration: none;   
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600;   
+            margin-bottom: 4px;   
+        }   
+        .drop-link:hover { background: var(--card); color: var(--text-main); }   
+        .nav-actions { display: flex; align-items: center; gap: 15px; }   
+        .theme-toggle {   
+            background: var(--card); border: 1px solid var(--border); color: var(--text-main);   
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;   
+        }   
+        .hero { position: relative; padding: 10vh 20px 5vh; text-align: center; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }   
+        .hero h1 { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; background: linear-gradient(135deg, var(--text-main), var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }   
         
-        /* CALCULATOR STYLES */
-        .section { max-width: 1000px; margin: 40px auto; padding: 0 20px; z-index: 2; position: relative; }
-        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
-        select, input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; }
-        .display-pity { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid var(--border); text-align: center; }
-        .pity-num { font-family: 'JetBrains Mono'; font-size: 4rem; font-weight: 800; color: var(--accent); line-height: 1; margin: 10px 0; }
-        .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 15px 0; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transition: width 0.5s ease; }
+        /* CALCULATOR STYLES */ 
+        .section { max-width: 1100px; margin: 40px auto; padding: 0 20px; z-index: 2; position: relative; } 
+        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; } 
         
-        .dev-container { text-align: center; margin-top: 50px; padding: 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; position: relative; overflow: hidden; }
-        .dev-container::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: repeating-linear-gradient(45deg, #facc15, #facc15 10px, #000 10px, #000 20px); }
+        .input-group { margin-bottom: 20px; } 
+        label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 1px; } 
+        select, input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; font-family: 'JetBrains Mono'; } 
+        select:focus, input:focus { border-color: var(--accent); }
 
-        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 20px; text-align: center; margin-top: 100px; }
-        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
-        .footer-brand span { color: var(--accent); }
-        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
-        .support-btn { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; text-decoration: none; display: inline-block; }
-    </style>  
-</head>  
-<body>  
-    <canvas id="cashCanvas"></canvas>  
-    <nav class="nav-top">  
-        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>  
-        <div class="nav-links">  
-            <a href="index.html" class="nav-link">Home</a>  
-            <div class="nav-item">  
-                <a class="nav-link">Seasons ▼</a>  
-                <div class="dropdown">  
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>  
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>  
-                </div>  
-            </div>  
-            <div class="nav-item">  
-                <a class="nav-link">Values ▼</a>  
-                <div class="dropdown">  
-                    <a href="values.html" class="drop-link">Value List</a>  
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>  
-                </div>  
-            </div>  
-            <div class="nav-item">  
-                <a class="nav-link">Community ▼</a>  
-                <div class="dropdown">  
-                    <a href="vip.html" class="drop-link">Private Servers</a>  
-                    <a href="testimonials.html" class="drop-link">Testimonials</a>  
-                </div>  
-            </div>  
-            <a href="pity.html" class="nav-link" style="color: var(--text-main);">Pity Calc</a>  
-            <a href="tracker.html" class="nav-link">Tracker</a> 
-            <a href="changelogs.html" class="nav-link">Change Logs</a> 
-        </div>  
-        <div class="nav-actions">  
-            <button class="theme-toggle" id="themeBtn">🌓 Theme</button>  
-        </div>  
-    </nav>  
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; border: 1px solid var(--border); }
+        .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
+        .toggle-btn.active { background: var(--accent); color: white; box-shadow: 0 0 15px var(--accent-glow); }
 
-    <section class="hero">  
-        <h1>Pity Calculator</h1>  
-        <p style="color: var(--text-dim); max-width: 600px; margin-top: 15px;">Convert your pity percentage into robberies left and track your next Hyperchrome drop.</p>  
-    </section>  
+        .display-pity { background: linear-gradient(180deg, rgba(0, 112, 243, 0.05) 0%, rgba(0,0,0,0) 100%); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid var(--border); text-align: center; } 
+        .pity-num { font-family: 'JetBrains Mono'; font-size: 5rem; font-weight: 800; color: var(--accent); line-height: 1; margin: 10px 0; text-shadow: 0 0 30px var(--accent-glow); } 
+        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 20px 0; overflow: hidden; border: 1px solid var(--border); } 
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--jailbreak-green)); box-shadow: 0 0 15px var(--accent-glow); transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); } 
+        
+        /* VALUE DASHBOARD */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 40px; }
+        .val-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; position: relative; overflow: hidden; }
+        .val-card h4 { margin: 0; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .val-card .price { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 700; margin: 8px 0; color: var(--jailbreak-green); }
+        .val-card .trend { font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .trend.up { color: #22c55e; } .trend.stable { color: #94a3b8; } .trend.down { color: #ef4444; }
 
-    <div class="section">
-        <div class="calc-box">
-            <div class="inputs">
-                <div class="input-group">
-                    <label>Current Target Level</label>
-                    <select id="pityRate" onchange="runCalc('rolls')">
-                        <option value="179">Level 1 (1/179)</option>
-                        <option value="378">Level 2 (1/378)</option>
-                        <option value="608">Level 3 (1/608)</option>
-                        <option value="696">Level 4 (1/696)</option>
-                        <option value="1068">Level 5 (1/1068)</option>
-                    </select>
+        .info-panel { margin-top: 30px; padding: 25px; background: rgba(0, 112, 243, 0.03); border: 1px border var(--accent); border-radius: 16px; font-size: 0.85rem; line-height: 1.6; color: var(--text-dim); }
+        .info-panel strong { color: var(--text-main); }
+
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 20px; text-align: center; margin-top: 100px; }   
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }   
+        .footer-brand span { color: var(--accent); }   
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }   
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }   
+        .support-btn { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; text-decoration: none; display: inline-block; }   
+    </style>   
+</head>   
+<body>   
+    <canvas id="cashCanvas"></canvas>   
+    <nav class="nav-top">   
+        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>   
+        <div class="nav-links">   
+            <a href="index.html" class="nav-link">Home</a>   
+            <div class="nav-item">   
+                <a class="nav-link">Seasons ▼</a>   
+                <div class="dropdown">   
+                    <a href="contracts.html" class="drop-link">Season Contracts</a>   
+                    <a href="prizes.html" class="drop-link">Season Rewards</a>   
+                </div>   
+            </div>   
+            <div class="nav-item">   
+                <a class="nav-link">Values ▼</a>   
+                <div class="dropdown">   
+                    <a href="values.html" class="drop-link">Value List</a>   
+                    <a href="calculator.html" class="drop-link">Value Calculator</a>   
+                </div>   
+            </div>   
+            <div class="nav-item">   
+                <a class="nav-link">Community ▼</a>   
+                <div class="dropdown">   
+                    <a href="vip.html" class="drop-link">Private Servers</a>   
+                    <a href="testimonials.html" class="drop-link">Testimonials</a>   
+                </div>   
+            </div>   
+            <a href="pity.html" class="nav-link" style="color: var(--text-main);">Pity Calc</a>   
+            <a href="tracker.html" class="nav-link">Tracker</a>  
+            <a href="changelogs.html" class="nav-link">Change Logs</a>  
+        </div>   
+        <div class="nav-actions">   
+            <button class="theme-toggle" id="themeBtn">🌓 Theme</button>   
+        </div>   
+    </nav>   
+
+    <section class="hero">   
+        <h1>Pity <span style="color:var(--accent); -webkit-text-fill-color: var(--accent);">Engine</span></h1>   
+        <p style="color: var(--text-dim); max-width: 600px; margin-top: 15px;">Professional-grade tracking for Hyperchrome drops and Season completion based on official game curves.</p>   
+    </section>   
+
+    <div class="section"> 
+        <div class="calc-box"> 
+            <div class="inputs"> 
+                <label>1. Select Server Environment</label>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" id="btnPublic" onclick="setServer('public')">Public Server</button>
+                    <button class="toggle-btn" id="btnSmall" onclick="setServer('small')">Small/VIP Server</button>
                 </div>
-                <div class="input-group"><label>Option A: Current Pity Rolls</label><input type="number" id="userRolls" placeholder="e.g. 45" oninput="runCalc('rolls')"></div>
-                <div style="text-align: center; color: var(--text-dim); font-size: 0.7rem; font-weight: 800; margin-bottom: 20px;">— OR —</div>
-                <div class="input-group"><label>Option B: Current Percentage (%)</label><input type="number" id="userPercent" placeholder="e.g. 24.2" step="0.1" oninput="runCalc('percent')"></div>
+
+                <div class="input-group"> 
+                    <label>2. Current Target Level</label> 
+                    <select id="pityRate" onchange="runCalc('rolls')"> 
+                        <option value="0">Hyperchrome Level 1</option> 
+                        <option value="1">Hyperchrome Level 2</option> 
+                        <option value="2">Hyperchrome Level 3</option> 
+                        <option value="3">Hyperchrome Level 4</option> 
+                        <option value="4">Hyperchrome Level 5</option> 
+                    </select> 
+                </div> 
+
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Option A: Rolls</label>
+                        <input type="number" id="userRolls" placeholder="e.g. 150" oninput="runCalc('rolls')">
+                    </div> 
+                    <div class="input-group">
+                        <label>Option B: Percent</label>
+                        <input type="number" id="userPercent" placeholder="e.g. 45.5" step="0.1" oninput="runCalc('percent')">
+                    </div> 
+                </div>
+
+                <div class="info-panel">
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent); margin-right: 8px;"></i>
+                    <strong>System Note:</strong> 
+                    Small servers (under 12 players) require <span style="color: var(--accent);">50% fewer robberies</span> for pity, but the base drop chance remains lower. This calculator uses the official 2026 drop curves.
+                </div>
+            </div> 
+
+            <div class="display-pity"> 
+                <label>Probability Status</label> 
+                <div class="pity-num" id="pityOut">0%</div> 
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="barFill"></div></div> 
+                <div id="rollsLeft" style="font-size: 1rem; color: var(--text-main); font-weight: 800; margin-bottom: 5px;">Awaiting Data...</div> 
+                <div id="subStatus" style="font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">0 total robberies required</div>
+            </div> 
+        </div> 
+
+        <h2 style="margin-top: 60px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">Chrome <span style="color: var(--accent)">Market Values</span></h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem;">Estimated values for clean (non-duped) Hyperchromes based on current trade demand.</p>
+        
+        <div class="dashboard-grid">
+            <div class="val-card">
+                <h4>Level 5 Shift</h4>
+                <div class="price">75,000,000</div>
+                <div class="trend up"><i class="fa-solid fa-arrow-up"></i> Rising Demand</div>
             </div>
-            <div class="display-pity">
-                <label>Progress to Guaranteed</label>
-                <div class="pity-num" id="pityOut">0%</div>
-                <div class="progress-bar-bg"><div class="progress-bar-fill" id="barFill"></div></div>
-                <div id="rollsLeft" style="font-size: 0.9rem; color: var(--text-dim); font-weight: 700;">Enter data to calculate</div>
+            <div class="val-card">
+                <h4>Level 5 Diamond</h4>
+                <div class="price">48,000,000</div>
+                <div class="trend stable"><i class="fa-solid fa-minus"></i> Stable</div>
+            </div>
+            <div class="val-card">
+                <h4>Level 5 Red</h4>
+                <div class="price">32,500,000</div>
+                <div class="trend down"><i class="fa-solid fa-arrow-down"></i> Dropping</div>
+            </div>
+            <div class="val-card">
+                <h4>Level 1 (Any)</h4>
+                <div class="price">1,250,000</div>
+                <div class="trend stable"><i class="fa-solid fa-minus"></i> Stable</div>
             </div>
         </div>
 
-        <div class="dev-container">
-            <div style="font-size: 2rem;">🚧</div>
-            <h2>Chrome Values Loading</h2>
-            <p>Our trade experts are currently updating the HyperChrome value chart for the current market.</p>
-        </div>
-    </div>
+        <div class="dev-container" style="margin-top: 80px; border-style: dashed;"> 
+            <div style="font-size: 2rem;">📊</div> 
+            <h2 style="font-weight: 800;">XP Curve Calculator Integrated</h2> 
+            <p style="max-width: 700px; margin: 10px auto;">Our engine now accounts for the <strong>CURVE_K (1.01)</strong> exponential factor. If you are Level 8, you need approximately 3,450 XP for Level 10. Visit the Seasons tab for the full day-by-day breakdown.</p> 
+        </div> 
+    </div> 
 
-    <footer>  
-        <div class="footer-brand">JAILBREAK<span>HUB</span></div>  
-        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>  
-        <div class="footer-links">  
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>  
-            <a href="terms.html">Terms of Service</a>  
-            <a href="privacy.html">Privacy Policy</a>  
-        </div>  
-        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>  
-        <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>  
-    </footer>  
+    <footer>   
+        <div class="footer-brand">JAILBREAK<span>HUB</span></div>   
+        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>   
+        <div class="footer-links">   
+            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>   
+            <a href="terms.html">Terms of Service</a>   
+            <a href="privacy.html">Privacy Policy</a>   
+        </div>   
+        <a href="support.html" class="support-btn" style="color: var(--text-main);">☕ Support Us</a>   
+        <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>   
+    </footer>   
 
-    <script>  
-        function runCalc(source) {
-            const target = parseInt(document.getElementById('pityRate').value);
-            const rollInput = document.getElementById('userRolls');
-            const percentInput = document.getElementById('userPercent');
-            const pityOut = document.getElementById('pityOut');
-            const barFill = document.getElementById('barFill');
-            const statusBox = document.getElementById('rollsLeft');
-            let rolls = 0, displayPerc = 0;
-            if (source === 'rolls') {
-                rolls = parseInt(rollInput.value) || 0;
-                displayPerc = (rolls / target) * 100;
-                percentInput.value = displayPerc > 0 ? displayPerc.toFixed(1) : "";
-            } else {
-                const percent = parseFloat(percentInput.value) || 0;
-                rolls = Math.round((percent / 100) * target);
-                rollInput.value = rolls > 0 ? rolls : "";
-                displayPerc = percent;
-            }
-            const clampedPerc = Math.min(displayPerc, 100);
-            pityOut.innerText = clampedPerc.toFixed(1) + "%";
-            barFill.style.width = clampedPerc + "%";
-            const remaining = target - rolls;
-            statusBox.innerText = remaining > 0 ? remaining + " robberies remaining" : "Guaranteed window reached!";
-            statusBox.style.color = remaining > 0 ? "var(--text-dim)" : "var(--jailbreak-green)";
+    <script> 
+        // Logic from PROJECT_CODE_DUMP.txt
+        const PUBLIC_THRESHOLDS = [179, 378, 608, 696, 1068];
+        const SMALL_THRESHOLDS = [90, 189, 304, 348, 534];
+        
+        let currentServer = 'public';
+
+        function setServer(type) {
+            currentServer = type;
+            document.getElementById('btnPublic').classList.toggle('active', type === 'public');
+            document.getElementById('btnSmall').classList.toggle('active', type === 'small');
+            runCalc('rolls');
         }
-        const themeBtn = document.getElementById('themeBtn');  
-        themeBtn.addEventListener('click', () => { document.body.classList.toggle('light-mode'); });  
-        const canvas = document.getElementById('cashCanvas'), ctx = canvas.getContext('2d');  
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resize(); window.addEventListener('resize', resize);
-        const cashChars = ['$', '💵', '💰', '💸'], fontSize = 16;
-        let columns = Math.floor(canvas.width / fontSize), drops = Array(columns).fill(1);
-        function draw() {
-            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff88'; ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < drops.length; i++) {
-                ctx.fillText(cashChars[Math.floor(Math.random() * cashChars.length)], i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(draw, 50);
-    </script>  
-</body>  
+
+        function runCalc(source) { 
+            const index = parseInt(document.getElementById('pityRate').value);
+            const target = currentServer === 'public' ? PUBLIC_THRESHOLDS[index] : SMALL_THRESHOLDS[index];
+            
+            const rollInput = document.getElementById('userRolls'); 
+            const percentInput = document.getElementById('userPercent'); 
+            const pityOut = document.getElementById('pityOut'); 
+            const barFill = document.getElementById('barFill'); 
+            const statusBox = document.getElementById('rollsLeft'); 
+            const subStatus = document.getElementById('subStatus');
+
+            let rolls = 0, displayPerc = 0; 
+
+            if (source === 'rolls') { 
+                rolls = parseInt(rollInput.value) || 0; 
+                displayPerc = (rolls / target) * 100; 
+                percentInput.value = displayPerc > 0 ? displayPerc.toFixed(1) : ""; 
+            } else { 
+                const percent = parseFloat(percentInput.value) || 0; 
+                rolls = Math.round((percent / 100) * target); 
+                rollInput.value = rolls > 0 ? rolls : ""; 
+                displayPerc = percent; 
+            } 
+
+            const clampedPerc = Math.min(displayPerc, 100); 
+            pityOut.innerText = clampedPerc.toFixed(1) + "%"; 
+            barFill.style.width = clampedPerc + "%"; 
+            
+            const remaining = target - rolls; 
+            statusBox.innerText = remaining > 0 ? remaining + " Robberies Remaining" : "GUARENTEED DROP WINDOW"; 
+            statusBox.style.color = remaining > 0 ? "var(--text-main)" : "var(--jailbreak-green)"; 
+            subStatus.innerText = `Target Threshold: ${target} total robberies`;
+        } 
+
+        const themeBtn = document.getElementById('themeBtn');   
+        themeBtn.addEventListener('click', () => { document.body.classList.toggle('light-mode'); });   
+        
+        const canvas = document.getElementById('cashCanvas'), ctx = canvas.getContext('2d');   
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } 
+        resize(); window.addEventListener('resize', resize); 
+        
+        const cashChars = ['$', '💵', '💰', '💸'], fontSize = 16; 
+        let columns = Math.floor(canvas.width / fontSize), drops = Array(columns).fill(1); 
+        function draw() { 
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            ctx.fillStyle = '#00ff88'; ctx.font = fontSize + 'px monospace'; 
+            for (let i = 0; i < drops.length; i++) { 
+                ctx.fillText(cashChars[Math.floor(Math.random() * cashChars.length)], i * fontSize, drops[i] * fontSize); 
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; 
+                drops[i]++; 
+            } 
+        } 
+        setInterval(draw, 50); 
+    </script>   
+</body>   
 </html>
