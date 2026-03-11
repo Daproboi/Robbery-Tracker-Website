@@ -77,6 +77,28 @@
         .header-area { margin-bottom: 60px; }
         .header-area h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
         .header-area p { color: var(--text-dim); margin-top: 10px; font-size: 1.1rem; }
+        
+        /* --- IMPROVED SEARCH & FILTERS --- */
+        .filter-controls {
+            display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .search-wrapper {
+            position: relative; flex: 1; min-width: 280px;
+        }
+        .search-input {
+            width: 100%; background: var(--surface); border: 1px solid var(--border);
+            padding: 14px 20px 14px 45px; border-radius: 16px; color: #fff;
+            font-weight: 600; outline: none;
+        }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(36, 98, 205, 0.1); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
+        
+        .status-filter {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 0 15px; border-radius: 16px; color: #fff;
+            font-weight: 600; outline: none; cursor: pointer;
+        }
+
         .tracker-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px; padding-bottom: 100px;
@@ -200,6 +222,19 @@
             <h1>Live <span style="color: var(--accent)">Tracker</span></h1>
             <p><i class="fa-solid fa-satellite-dish" style="color: var(--green);"></i> Real-time sync with Bot Farm activated.</p>
         </div>
+
+        <div class="filter-controls">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="robberySearch" class="search-input" placeholder="Search robberies or high-value targets...">
+            </div>
+            <select id="statusFilter" class="status-filter">
+                <option value="all">All Statuses</option>
+                <option value="open">Open / Located</option>
+                <option value="progress">In Progress</option>
+                <option value="closed">Closed / Unknown</option>
+            </select>
+        </div>
         
         <div id="grid" class="tracker-grid">
             <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Establishing secure uplink to API...</div>
@@ -236,6 +271,7 @@
         });
 
         const API_URL = "https://jb-tracker-api.vercel.app/getRobberies";
+        let cachedData = []; // Store data for local filtering
         
         async function fetchRobberies() {
             try {
@@ -243,93 +279,101 @@
                     method: 'GET',
                     mode: 'cors',
                     credentials: 'omit',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
                 
                 if (!response.ok) throw new Error("API Connection Failed");
                 
-                const data = await response.json();
-                const grid = document.getElementById('grid');
-                grid.innerHTML = ''; 
-
-                if (data.length === 0) {
-                    grid.innerHTML = '<div class="loading" style="grid-column: 1/-1;">No high-value targets currently active.</div>';
-                    return;
-                }
-
-                data.reverse().forEach(rob => {
-                    const card = document.createElement('div');
-                    card.className = 'robbery-card';
-                    
-                    // --- FIX: Add null checks for rob.status ---
-                    const status = rob.status || "Unknown"; // Default to "Unknown" if null
-                    let isGreen = ["Open", "Falling", "Unopened"].includes(status);
-                    let statClass = isGreen ? "status-open" : "status-closed";
-                    
-                    let statusDisplay = status;
-                    if(status === "Active") { // For High Value Player/Server
-                        statusDisplay = "Located";
-                        statClass = "status-open"; // Always green for "Located"
-                    }
-
-                    // Set Status Color
-                    let statusColor = "var(--jailbreak-green)";
-                    let statusBg = "rgba(0, 255, 136, 0.1)";
-                    if(status === "Unknown" || status === "Closed") {
-                        statusColor = "var(--red)";
-                        statusBg = "rgba(255, 51, 51, 0.1)";
-                    } else if(status === "In Robbery" || status === "In Progress") {
-                        statusColor = "var(--orange)";
-                        statusBg = "rgba(255, 172, 51, 0.1)";
-                    }
-
-                    let imgSrc = "";
-                    if (rob.image && typeof rob.image === 'string' && rob.image.startsWith("http")) {
-                        imgSrc = `<img src="${rob.image}" class="rob-img">`;
-                    }
-
-                    // Dynamically building the details box
-                    let detailsHTML = `
-                        <div class="detail-box">
-                            <span class="detail-label">Players</span>
-                            <span class="detail-val">${rob.players || "N/A"}</span>
-                        </div>
-                        <div class="detail-box">
-                            <span class="detail-label">Time</span>
-                            <span class="detail-val">${rob.gameTime || "N/A"}</span>
-                        </div>
-                    `;
-
-                    // If it's a High Bounty Server or Player, adapt the text
-                    if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
-                        detailsHTML = `
-                            <div class="detail-box">
-                                <span class="detail-label">Type</span>
-                                <span class="detail-val">Target Intel</span>
-                            </div>
-                        `;
-                    }
-
-                    card.innerHTML = `
-                        <div class="status-indicator ${statClass}" style="color: ${statusColor}; background: ${statusBg};">${statusDisplay}</div>
-                        <div class="robbery-name">${rob.name || "Unknown Robbery"}</div>
-                        <div class="robbery-details">
-                            ${detailsHTML}
-                        </div>
-                        ${imgSrc}
-                        <a href="roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}" class="join-btn">
-                            <i class="fa-solid fa-rocket"></i> Join Server
-                        </a>
-                    `;
-                    grid.appendChild(card);
-                });
+                cachedData = await response.json();
+                renderGrid();
             } catch (err) {
                 console.error("Failed to load tracker", err);
                 document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red); grid-column: 1/-1;"><i class="fa-solid fa-triangle-exclamation"></i> Cannot connect to Bot Farm API. The system may be offline.</div>';
             }
         }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            const searchQuery = document.getElementById('robberySearch').value.toLowerCase();
+            const filterValue = document.getElementById('statusFilter').value;
+            
+            grid.innerHTML = ''; 
+
+            const filteredData = cachedData.filter(rob => {
+                const nameMatch = rob.name.toLowerCase().includes(searchQuery);
+                const status = (rob.status || "Unknown").toLowerCase();
+                
+                let statusMatch = true;
+                if (filterValue === "open") {
+                    statusMatch = ["open", "falling", "unopened", "active"].includes(status);
+                } else if (filterValue === "progress") {
+                    statusMatch = ["in robbery", "in progress"].includes(status);
+                } else if (filterValue === "closed") {
+                    statusMatch = ["closed", "unknown"].includes(status);
+                }
+                
+                return nameMatch && statusMatch;
+            });
+
+            if (filteredData.length === 0) {
+                grid.innerHTML = '<div class="loading" style="grid-column: 1/-1;">No targets match your current filters.</div>';
+                return;
+            }
+
+            // Copy of the original rendering logic, now operating on filteredData
+            filteredData.reverse().forEach(rob => {
+                const card = document.createElement('div');
+                card.className = 'robbery-card';
+                
+                const status = rob.status || "Unknown";
+                let isGreen = ["Open", "Falling", "Unopened", "Active"].includes(status);
+                let statClass = isGreen ? "status-open" : "status-closed";
+                let statusDisplay = status === "Active" ? "Located" : status;
+
+                let statusColor = "var(--green)";
+                let statusBg = "rgba(74, 222, 128, 0.1)";
+                if(status === "Unknown" || status === "Closed") {
+                    statusColor = "var(--red)";
+                    statusBg = "rgba(248, 113, 113, 0.1)";
+                } else if(status === "In Robbery" || status === "In Progress") {
+                    statusColor = "var(--orange)";
+                    statusBg = "rgba(251, 191, 36, 0.1)";
+                    statClass = "status-closed";
+                }
+
+                let imgSrc = (rob.image && rob.image.startsWith("http")) ? `<img src="${rob.image}" class="rob-img">` : "";
+
+                let detailsHTML = `
+                    <div class="detail-box">
+                        <span class="detail-label">Players</span>
+                        <span class="detail-val">${rob.players || "N/A"}</span>
+                    </div>
+                    <div class="detail-box">
+                        <span class="detail-label">Time</span>
+                        <span class="detail-val">${rob.gameTime || "N/A"}</span>
+                    </div>
+                `;
+
+                if (rob.name.includes("High Bounty Server") || rob.name.includes("High Value Target")) {
+                    detailsHTML = `<div class="detail-box"><span class="detail-label">Type</span><span class="detail-val">Target Intel</span></div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="status-indicator ${statClass}" style="color: ${statusColor}; background: ${statusBg};">${statusDisplay}</div>
+                    <div class="robbery-name">${rob.name || "Unknown Robbery"}</div>
+                    <div class="robbery-details">${detailsHTML}</div>
+                    ${imgSrc}
+                    <a href="roblox://experiences/start?placeId=606849621&gameInstanceId=${rob.jobId}" class="join-btn">
+                        <i class="fa-solid fa-rocket"></i> Join Server
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- FILTER EVENT LISTENERS ---
+        document.getElementById('robberySearch').addEventListener('input', renderGrid);
+        document.getElementById('statusFilter').addEventListener('change', renderGrid);
 
         fetchRobberies();
         setInterval(fetchRobberies, 10000);
