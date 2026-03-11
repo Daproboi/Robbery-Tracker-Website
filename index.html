@@ -22,6 +22,7 @@
     </script> 
 
     <style>   
+        /* --- CORE VARIABLES --- */
         :root {   
             --bg: #030407;   
             --surface: rgba(10, 12, 16, 0.9);   
@@ -50,12 +51,13 @@
             --card-hover: rgba(0, 0, 0, 0.02);
         }   
 
+        /* --- GLOBAL RESET --- */
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
             transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.2, 0, 0.2, 1); 
-            cursor: default; 
+            cursor: default;
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -63,364 +65,422 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+        body {   
+            font-family: 'Plus Jakarta Sans', sans-serif;   
             background: var(--bg); 
-            color: var(--text-main); 
+            color: var(--text-main);   
             overflow-x: hidden; 
-            min-height: 100vh; 
-            line-height: 1.5; 
+            min-height: 100vh;
+            line-height: 1.5;
         }   
 
-        canvas#cashCanvas { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -2; 
-            opacity: 0.12; 
-            pointer-events: none; 
+        canvas#cashCanvas {   
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
+            z-index: -2; opacity: 0.12; pointer-events: none;
         }
 
-        .ambient-glow { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -1; 
-            pointer-events: none; 
-            overflow: hidden; 
+        /* --- BACKGROUND BLOBS --- */
+        .ambient-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; overflow: hidden;
         }
-
-        .blob { 
-            position: absolute; 
-            width: 600px; 
-            height: 600px; 
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); 
-            border-radius: 50%; 
-            filter: blur(80px); 
-            opacity: 0.3; 
-            animation: float 20s infinite alternate; 
+        .blob {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(80px); opacity: 0.3;
+            animation: float 20s infinite alternate;
         }
-
-        .blob-2 { 
-            top: 40%; 
-            right: -100px; 
-            background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%); 
-            animation-delay: -5s; 
-        }
-
+        .blob-2 { top: 40%; right: -100px; background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%); animation-delay: -5s; }
         @keyframes float { 
-            0% { transform: translate(0, 0) scale(1); } 
-            100% { transform: translate(100px, 50px) scale(1.1); } 
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.1); }
         }
 
-        .nav-container { 
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 92%; 
-            max-width: 1400px; 
-            height: 74px; 
-            background: var(--surface); 
-            border: 1px solid var(--border); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            border-radius: 22px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 30px; 
-            z-index: 9999; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
+        /* --- TOP NAVIGATION --- */
+        .nav-container {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 1400px; height: 74px;
+            background: var(--surface); border: 1px solid var(--border);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 22px; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 30px; z-index: 9999;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
-
         .logo { 
-            font-weight: 900; 
-            font-size: 1.5rem; 
-            text-decoration: none; 
-            color: var(--text-main); 
-            letter-spacing: -1.5px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            cursor: pointer; 
+            font-weight: 900; font-size: 1.5rem; text-decoration: none; color: var(--text-main); letter-spacing: -1.5px;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
         }
-
-        .logo i { 
-            color: var(--accent); 
-            filter: drop-shadow(0 0 10px var(--accent-glow)); 
-        }
-
+        .logo i { color: var(--accent); filter: drop-shadow(0 0 10px var(--accent-glow)); }
         .logo span { color: var(--accent); }
 
-        .nav-menu { 
-            display: flex; 
-            gap: 5px; 
-            align-items: center; 
-        }
-
+        .nav-menu { display: flex; gap: 5px; align-items: center; }
         .nav-link { 
-            text-decoration: none; 
-            color: var(--text-dim); 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            padding: 12px 18px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            position: relative; 
+            text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 1px; padding: 12px 18px; border-radius: 12px;
+            cursor: pointer; position: relative;
         }
-
-        .nav-link:hover { 
-            color: var(--text-main); 
-            background: var(--card-hover); 
-        }
-
-        .nav-link.active { 
-            color: var(--accent); 
-            background: rgba(0, 112, 243, 0.1); 
-        }
+        .nav-link:hover { color: var(--text-main); background: var(--card-hover); }
+        .nav-link.active { color: var(--accent); background: rgba(0, 112, 243, 0.1); }
 
         .dropdown-parent { position: relative; }
-        .dropdown-menu { 
-            position: absolute; 
-            top: 100%; 
-            left: 0; 
-            padding-top: 15px; 
-            opacity: 0; 
-            transform: translateY(10px); 
-            pointer-events: none; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        .dropdown-menu {
+            position: absolute; top: 100%; left: 0; padding-top: 15px;
+            opacity: 0; transform: translateY(10px); pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .dropdown-parent:hover .dropdown-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .dropdown-inner {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+            padding: 10px; min-width: 220px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .dropdown-item {
+            display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px;
+            text-decoration: none; color: var(--text-dim); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+        .dropdown-item:hover { background: var(--card-hover); color: var(--text-main); transform: translateX(5px); }
+        .dropdown-item i { width: 20px; text-align: center; color: var(--accent); }
 
-        .dropdown-parent:hover .dropdown-menu { 
-            opacity: 1; 
-            transform: translateY(0); 
-            pointer-events: auto; 
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .icon-btn {
+            background: var(--border); border: 1px solid var(--border); color: var(--text-main);
+            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; font-size: 1.1rem;
         }
-
-        .dropdown-inner { 
-            background: var(--surface); 
-            border: 1px solid var(--border); 
-            border-radius: 18px; 
-            padding: 10px; 
-            min-width: 220px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
-        }
-
-        .dropdown-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            padding: 14px; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            color: var(--text-dim); 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-        }
-
-        .dropdown-item:hover { 
-            background: var(--card-hover); 
-            color: var(--text-main); 
-            transform: translateX(5px); 
-        }
-
-        .dropdown-item i { 
-            width: 20px; 
-            text-align: center; 
-            color: var(--accent); 
-        }
-
-        .nav-actions { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-        }
-
-        .icon-btn { 
-            background: var(--border); 
-            border: 1px solid var(--border); 
-            color: var(--text-main); 
-            width: 44px; 
-            height: 44px; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            font-size: 1.1rem; 
-        }
-
-        .icon-btn:hover { 
-            background: var(--text-main); 
-            color: var(--bg); 
-            transform: rotate(15deg); 
-        }
+        .icon-btn:hover { background: var(--text-main); color: var(--bg); transform: rotate(15deg); }
 
         /* --- HERO SECTION --- */
-        .hero { 
-            padding: 220px 20px 100px; 
-            text-align: center; 
-            position: relative; 
-            z-index: 10; 
+        .hero {
+            padding: 220px 20px 100px; text-align: center; position: relative; z-index: 10;
         }
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2); color: var(--jailbreak-green);
+            padding: 8px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 35px;
+        }
+        .badge-dot { width: 8px; height: 8px; background: var(--jailbreak-green); border-radius: 50%; box-shadow: 0 0 10px var(--jailbreak-green); }
 
-        .badge { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            background: rgba(0, 255, 136, 0.1); 
-            border: 1px solid rgba(0, 255, 136, 0.2); 
-            color: var(--jailbreak-green); 
-            padding: 8px 16px; 
-            border-radius: 100px; 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            margin-bottom: 35px; 
+        .hero h1 {
+            font-size: 6.5rem; font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px;
+            background: linear-gradient(180deg, #fff 0%, #64748b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .badge-dot { 
-            width: 8px; 
-            height: 8px; 
-            background: var(--jailbreak-green); 
-            border-radius: 50%; 
-            box-shadow: 0 0 10px var(--jailbreak-green); 
+        .hero p {
+            color: var(--text-dim); font-size: 1.25rem; max-width: 650px; margin: 0 auto 50px; font-weight: 500;
         }
-
-        .hero h1 { 
-            font-size: 6.5rem; 
-            font-weight: 900; 
-            letter-spacing: -4px; 
-            line-height: 0.9; 
-            margin-bottom: 30px; 
-            background: linear-gradient(180deg, #fff 0%, #64748b 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-
-        .hero p { 
-            color: var(--text-dim); 
-            font-size: 1.25rem; 
-            max-width: 650px; 
-            margin: 0 auto 50px; 
-            font-weight: 500; 
-        }
-
-        .hero-btns { 
-            display: flex; 
-            justify-content: center; 
-            gap: 20px; 
-        }
+        .hero-btns { display: flex; justify-content: center; gap: 20px; }
         
-        .main-btn { 
-            padding: 18px 38px; 
-            border-radius: 16px; 
-            text-decoration: none; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-size: 0.9rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            cursor: pointer; 
-            position: relative; 
-            overflow: hidden; 
+        .main-btn {
+            padding: 18px 38px; border-radius: 16px; text-decoration: none; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; position: relative; overflow: hidden;
         }
-
-        .btn-green { 
-            background: var(--jailbreak-green); 
-            color: #022c16; 
-            box-shadow: 0 15px 35px rgba(0, 255, 136, 0.2); 
-        }
-
-        .btn-discord { 
-            background: #5865F2; 
-            color: #fff; 
-            box-shadow: 0 15px 35px rgba(88, 101, 242, 0.2); 
-        }
-
-        .main-btn:hover { 
-            transform: translateY(-5px); 
-            filter: brightness(1.1); 
-        }
+        .btn-green { background: var(--jailbreak-green); color: #022c16; box-shadow: 0 15px 35px rgba(0, 255, 136, 0.2); }
+        .btn-discord { background: #5865F2; color: #fff; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.2); }
+        .main-btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
 
         /* --- STATS STRIP --- */
-        .stats-strip { 
-            background: var(--surface); 
-            border-top: 1px solid var(--border); 
-            border-bottom: 1px solid var(--border); 
-            padding: 50px 0; 
-            margin: 80px 0; 
-            display: flex; 
-            justify-content: center; 
-            gap: 100px; 
-            flex-wrap: wrap; 
+        .stats-strip {
+            background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            padding: 50px 0; margin: 80px 0; display: flex; justify-content: center; gap: 100px; flex-wrap: wrap;
         }
-
         .stat-box { text-align: center; }
+        .stat-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 800; display: block; color: var(--text-main); }
+        .stat-lab { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
 
-        .stat-val { 
-            font-family: 'JetBrains Mono'; 
-            font-size: 3.5rem; 
-            font-weight: 800; 
-            display: block; 
-            color: var(--text-main); 
+        /* --- BENTO GRID --- */
+        .section-wrapper { max-width: 1300px; margin: 0 auto; padding: 100px 20px; }
+        .section-head { text-align: center; margin-bottom: 70px; }
+        .section-head h2 { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 15px; }
+        .section-head p { color: var(--text-dim); font-size: 1.1rem; }
+
+        .bento-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 320px); gap: 25px;
+        }
+        .bento-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 32px;
+            padding: 45px; text-decoration: none; color: inherit; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+            cursor: pointer;
+        }
+        .bento-card:hover { border-color: var(--accent); background: var(--card-hover); }
+        .bento-card.large { grid-column: span 2; }
+        .bento-card i {
+            position: absolute; top: 40px; left: 45px; font-size: 3rem; color: var(--accent);
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .bento-card h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+        .bento-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+
+        /* --- FEATURE SPLIT --- */
+        .feature-split {
+            display: flex; align-items: center; gap: 80px; margin-top: 150px;
+        }
+        .split-image {
+            flex: 1; border-radius: 40px; border: 1px solid var(--border); overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative;
+        }
+        .split-image img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; }
+        .split-image:hover img { transform: scale(1.05); }
+        .split-content { flex: 1; }
+        .split-content h2 { font-size: 3rem; font-weight: 900; margin-bottom: 25px; }
+        .split-content p { color: var(--text-dim); font-size: 1.15rem; margin-bottom: 35px; line-height: 1.8; }
+        
+        .feature-list { display: flex; flex-direction: column; gap: 20px; }
+        .f-item { display: flex; align-items: center; gap: 15px; font-weight: 700; color: var(--text-main); }
+        .f-item i { color: var(--jailbreak-green); font-size: 1.2rem; }
+
+        /* --- TESTIMONIALS SCROLL --- */
+        .test-scroll { display: flex; gap: 25px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
+        .test-card {
+            min-width: 400px; background: var(--surface); border: 1px solid var(--border); padding: 40px;
+            border-radius: 28px; position: relative;
+        }
+        .test-card::before { content: '“'; position: absolute; top: 20px; right: 30px; font-size: 5rem; font-family: serif; opacity: 0.1; }
+        .test-card p { font-style: italic; font-size: 1.1rem; line-height: 1.7; margin-bottom: 30px; }
+        .author { display: flex; align-items: center; gap: 15px; }
+        .author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent); }
+        .author-name { font-weight: 800; font-size: 1rem; }
+        .author-role { color: var(--accent); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- FAQ ACCORDION --- */
+        .faq-box { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+        .faq-btn {
+            width: 100%; padding: 30px; background: none; border: none; text-align: left;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 1.15rem; font-weight: 800; color: var(--text-main); cursor: pointer;
+        }
+        .faq-btn:hover { background: var(--card-hover); }
+        .faq-content { padding: 0 30px 30px; color: var(--text-dim); line-height: 1.8; display: none; }
+        .faq-item.active .faq-content { display: block; }
+        .faq-item.active .faq-btn i { transform: rotate(45deg); color: var(--accent); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--surface); border-top: 1px solid var(--border); padding: 100px 20px 50px;
+            margin-top: 150px; position: relative; overflow: hidden;
+        }
+        .footer-grid {
+            max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px;
+        }
+        .footer-brand h2 { font-size: 2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1.5px; }
+        .footer-brand h2 span { color: var(--accent); }
+        .footer-brand p { color: var(--text-dim); max-width: 300px; line-height: 1.7; }
+        
+        .footer-col h4 { text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 25px; color: var(--text-main); }
+        .footer-links { display: flex; flex-direction: column; gap: 12px; }
+        .footer-links a { text-decoration: none; color: var(--text-dim); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+        .footer-links a:hover { color: var(--accent); }
+
+        .socials { display: flex; gap: 15px; margin-top: 30px; }
+        .social-btn {
+            width: 45px; height: 45px; background: var(--border); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--text-main);
+            text-decoration: none; font-size: 1.2rem;
+        }
+        .social-btn:hover { background: var(--accent); transform: translateY(-5px); }
+
+        .legal-footer {
+            max-width: 1300px; margin: 80px auto 0; padding-top: 40px; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            color: #555; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .stat-lab { 
-            color: var(--accent); 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            margin-top: 10px; 
+        /* --- MOBILE MENU --- */
+        .mobile-toggle { display: none; }
+        @media screen and (max-width: 1024px) {
+            .nav-menu { display: none; }
+            .mobile-toggle { display: flex; }
+            .hero h1 { font-size: 4rem; letter-spacing: -2px; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .bento-card.large { grid-column: auto; }
+            .feature-split { flex-direction: column; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        /* --- BENTO GRID SECTION --- */
-        .section-wrapper { 
-            max-width: 1300px; 
-            margin: 0 auto; 
-            padding: 100px 20px; 
-        }
+        /* --- ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>   
+</head>   
+<body>   
+    <canvas id="cashCanvas"></canvas>   
 
-        .section-head { 
-            text-align: center; 
-            margin-bottom: 70px; 
-        }
+    <div class="ambient-glow">
+        <div class="blob"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav class="nav-container">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-vault"></i> JAILBREAK<span>HUB</span>
+        </a>
+
+        <div class="nav-menu">
+            <a href="#" class="nav-link active">Dashboard</a>
+            
+            <div class="dropdown-parent">
+                <a class="nav-link">Marketplace <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
+                <div class="dropdown-menu"><div class="dropdown-inner">
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-gem"></i> Value List</a>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-calculator"></i> Trade Calculator</a>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-chart-line"></i> Market Trends</a>
+                </div></div>
+            </div>
+
+            <div class="dropdown-parent">
+                <a class="nav-link">Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
+                <div class="dropdown-menu"><div class="dropdown-inner">
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Contract Tracker</a>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-dice"></i> Pity Calculator</a>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-satellite"></i> Server Tracker</a>
+                </div></div>
+            </div>
+
+            <a href="#" class="nav-link">Community</a>
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+            <button class="icon-btn mobile-toggle"><i class="fa-solid fa-bars"></i></button>
+            <a href="#" class="main-btn btn-green" style="padding: 10px 20px; font-size: 0.75rem; border-radius: 10px;">Login</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="reveal">
+            <div class="badge">
+                <div class="badge-dot"></div> Live Market: $3.4B Transacted
+            </div>
+            <h1>The New Standard<br>In Jailbreak.</h1>
+            <p>Access the most sophisticated trading suite ever developed. Real-time values, precision calculators, and automated grinding tools.</p>
+            <div class="hero-btns">
+                <a href="#" class="main-btn btn-green"><i class="fa-solid fa-play"></i> Launch App</a>
+                <a href="#" class="main-btn btn-discord"><i class="fa-brands fa-discord"></i> Join Discord</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-strip reveal">
+        <div class="stat-box">
+            <span class="stat-val" id="count">1,402</span>
+            <span class="stat-lab">Global Users</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-val">384</span>
+            <span class="stat-lab">Indexed Items</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-val">12ms</span>
+            <span class="stat-lab">Data Refresh Rate</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-val">99.9%</span>
+            <span class="stat-lab">Value Accuracy</span>
+        </div>
+    </div>
+
+    <section class="section-wrapper">
+        <div class="section-head reveal">
+            <h2>Ultimate Command Center.</h2>
+            <p>A unified interface for everything you need to dominate the rising market.</p>
+        </div>
+
         <div class="bento-grid">
-            <a href="values.html" class="bento-card large">
+            <a href="#" class="bento-card large reveal">
                 <i class="fa-solid fa-sack-dollar"></i>
-                <h3>Value List</h3>
-                <p>Proprietary algorithms analyze thousands of trades daily to provide the most stable value list on the market. Integrated with real-time demand shifts and rarity scoring.</p>
+                <h3>Advanced Value List</h3>
+                <p>Proprietary algorithms analyze over 50,000 trades daily to provide the most stable value list in the Jailbreak community. No more overpaying.</p>
             </a>
-            
-            <a href="calculator.html" class="bento-card">
+            <a href="#" class="bento-card reveal">
                 <i class="fa-solid fa-bolt"></i>
-                <h3>Calculator</h3>
-                <p>Instant item comparisons with automatic overpay warnings and trade balance indicators.</p>
+                <h3>Fast Calculator</h3>
+                <p>Instant item comparisons with clean UI.</p>
             </a>
-            
-            <a href="tracker.html" class="bento-card">
+            <a href="#" class="bento-card reveal">
                 <i class="fa-solid fa-shield-halved"></i>
-                <h3>Contract Tracker</h3>
-                <p>Track your daily progression and calculate exactly how many days remain until your next Season car.</p>
+                <h3>Verified Traders</h3>
+                <p>Connect with high-tier robbers who have a proven reputation.</p>
             </a>
-            
-            <a href="pity.html" class="bento-card large">
+            <a href="#" class="bento-card large reveal">
                 <i class="fa-solid fa-microchip"></i>
-                <h3>Pity Calc</h3>
-                <p>Advanced statistical models to optimize your path to Hyperchromes and safe rewards. Know your odds before you spend your hard-earned cash.</p>
+                <h3>XP Optimization Engine</h3>
+                <p>Plug in your current level and we'll map the exact daily contracts you need to hit level 10 before the season concludes. Efficiency at its peak.</p>
             </a>
+        </div>
+
+        <div class="feature-split reveal">
+            <div class="split-image">
+                <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard">
+            </div>
+            <div class="split-content">
+                <h2>Precision Grinding.<br>Proven Results.</h2>
+                <p>Stop guessing when your next Hyperchrome will drop. Our Pity Tracker uses community-verified mathematical models to estimate your luck percentage with 94% precision.</p>
+                <div class="feature-list">
+                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Automated Robbery Timers</div>
+                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Daily XP Reset Countdown</div>
+                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Server Region Filtering</div>
+                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Cross-Platform Sync</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrapper">
+        <div class="section-head reveal">
+            <h2>Trusted by Pros.</h2>
+        </div>
+        <div class="test-scroll reveal">
+            <div class="test-card">
+                <p>"The only site I trust for values. The UI makes trading actually feel like a professional experience."</p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=JB+King&background=0070f3&color=fff" alt="User">
+                    <div>
+                        <div class="author-name">Trading_Legend</div>
+                        <div class="author-role">Torpedo Collector</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"Finally stopped getting scammed in the trade hub. The multi-item calculator is a lifesaver for big deals."</p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=Rich+Robber&background=00ff88&color=000" alt="User">
+                    <div>
+                        <div class="author-name">M_Grinder_99</div>
+                        <div class="author-role">Billionaire Club</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"The Contract tracker is better than the in-game UI. I know exactly what I'm doing every morning."</p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=Contract+Pro&background=5865f2&color=fff" alt="User">
+                    <div>
+                        <div class="author-name">DailyContractor</div>
+                        <div class="author-role">Verified Grinder</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrapper">
+        <div class="section-head reveal">
+            <h2>Frequently Asked</h2>
+        </div>
+        <div class="faq-box reveal">
+            <div class="faq-item">
+                <button class="faq-btn">How are values calculated? <i class="fa-solid fa-plus"></i></button>
+                <div class="faq-content">We utilize a combination of community trade logs, demand-supply ratios, and expert trader consensus to update values twice daily.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-btn">Is this affiliated with Badimo? <i class="fa-solid fa-plus"></i></button>
+                <div class="faq-content">No, Jailbreak Hub is a community-driven resource made by fans for fans. We are an independent toolkit for traders and players.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-btn">Is the server tracker real-time? <i class="fa-solid fa-plus"></i></button>
+                <div class="faq-content">Yes, our satellite tracker polls active public servers every 30 seconds to determine store states and robbery cycles.</div>
+            </div>
         </div>
     </section>
 
@@ -428,82 +488,102 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <h2>JAILBREAK<span>HUB</span></h2>
-                <p>Premium infrastructure for the next generation of grinders. Not affiliated with Badimo or Roblox Corporation.</p>
+                <p>The premium infrastructure for the next generation of Roblox traders and professional grinders.</p>
+                <div class="socials">
+                    <a href="#" class="social-btn"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                </div>
             </div>
-            
             <div class="footer-col">
                 <h4>Platform</h4>
-                <a href="values.html">Value List</a>
-                <a href="calculator.html">Trade Calculator</a>
-                <a href="tracker.html">Contract Tracker</a>
-                <a href="pity.html">Pity Calculator</a>
+                <div class="footer-links">
+                    <a href="#">Value List</a>
+                    <a href="#">Calculator</a>
+                    <a href="#">Tracker</a>
+                    <a href="#">Server List</a>
+                </div>
             </div>
-            
             <div class="footer-col">
-                <h4>Community</h4>
-                <a href="https://discord.gg/pp4dXmFJnr">Discord Server</a>
-                <a href="#">Trading Guides</a>
-                <a href="#">Market Trends</a>
+                <h4>Resources</h4>
+                <div class="footer-links">
+                    <a href="#">Changelogs</a>
+                    <a href="#">Support</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Privacy</a>
+                </div>
             </div>
-            
             <div class="footer-col">
-                <h4>Support</h4>
-                <a href="#">Help Center</a>
-                <a href="#">Terms of Use</a>
-                <a href="#">Privacy Policy</a>
+                <h4>Status</h4>
+                <div class="footer-links">
+                    <a href="#">API Status</a>
+                    <a href="#">Uptime</a>
+                    <a href="#">Incident Logs</a>
+                </div>
             </div>
         </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2024 Jailbreak Hub. All rights reserved.</p>
-            <p>Designed for performance.</p>
+        <div class="legal-footer">
+            <div>&copy; 2026 Jailbreak Hub. Developed by Daproboi & Plug™</div>
+            <div>Not affiliated with Roblox Corp or Badimo</div>
         </div>
     </footer>
 
     <script>
-        // --- GAME LAUNCHER ---
-        function launchGame() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const jobId = urlParams.get('jobid');
-            const placeId = "606849621";
-            
-            if (jobId) {
-                window.location.href = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
-            } else {
-                window.location.href = `roblox://experiences/start?placeId=${placeId}`;
-            }
-        }
-
-        // --- THEME ENGINE ---
+        // THEME TOGGLE
         const themeBtn = document.getElementById('themeBtn');
         themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
             const icon = themeBtn.querySelector('i');
-            if (document.body.classList.contains('light-mode')) {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
         });
 
-        // --- MATRIX RAIN CANVAS ---
+        // COUNTER ANIMATION
+        let count = 1402;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 5) - 2;
+            document.getElementById('count').innerText = count.toLocaleString();
+        }, 3000);
+
+        // FAQ ACCORDION
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // REVEAL ON SCROLL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // MATRIX CASH CANVAS
         const canvas = document.getElementById('cashCanvas');
         const ctx = canvas.getContext('2d');
-        let width, height, columns, drops;
-        const fontSize = 16;
-        const cashChars = "$£€¥01";
+        let width, height, columns;
+        const cashChars = ['$', '💵', '💰', '💸', '💎'];
+        const fontSize = 18;
+        let drops = [];
 
         function initCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
             columns = Math.floor(width / fontSize);
             drops = Array(columns).fill(1);
         }
-            function drawMatrix() {
-            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248,250,252,0.1)' : 'rgba(3,4,7,0.1)';
-            ctx.fillRect(0, 0, width, height);
-            ctx.font = fontSize + 'px monospace';
 
+        function drawMatrix() {
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.15)' : 'rgba(3, 4, 7, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.font = fontSize + 'px monospace';
+            
             for (let i = 0; i < drops.length; i++) {
                 const text = cashChars[Math.floor(Math.random() * cashChars.length)];
                 
@@ -524,7 +604,7 @@
         window.addEventListener('resize', initCanvas);
         setInterval(drawMatrix, 60);
 
-        // --- 3D PARALLAX EFFECT ON CARDS ---
+        // 3D PARALLAX EFFECT ON CARDS
         document.querySelectorAll('.bento-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -537,45 +617,9 @@
                 card.style.transform = `perspective(1000px) rotateY(${dx / 20}deg) rotateX(${-dy / 20}deg) translateY(-5px)`;
             });
             card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+                card.style.transform = `perspective(1000px) rotateY(0) rotateX(0) translateY(0)`;
             });
         });
-
-        // --- SCROLL REVEAL SYSTEM ---
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // --- STATS COUNTER ANIMATION ---
-        function animateCounter(id, target) {
-            let current = 0;
-            const el = document.getElementById(id);
-            if(!el) return;
-            const duration = 2000;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = target / steps;
-
-            const interval = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    el.innerText = target.toLocaleString();
-                    clearInterval(interval);
-                } else {
-                    el.innerText = Math.floor(current).toLocaleString();
-                }
-            }, stepTime);
-        }
-        
-        window.onload = () => {
-            animateCounter('userCount', 1402);
-        };
     </script>
 </body>
-</html> 
+</html>
