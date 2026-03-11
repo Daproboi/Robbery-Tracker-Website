@@ -220,6 +220,10 @@
             <div class="nav-item">
                 <a href="tracker.html" class="nav-link">Tracker</a>
             </div>
+
+            <div class="nav-item">
+                <a href="changelogs.html" class="nav-link">Change Logs</a>
+            </div>
         </div>
     </nav>
 
@@ -385,6 +389,7 @@
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                navMenu.classList.remove('active');
                 navMenu.classList.remove('active');
                 menuBtn.innerHTML = '☰';
             }
