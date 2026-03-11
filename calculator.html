@@ -115,6 +115,16 @@
 
         .nav-item:hover::after { width: 100%; }
 
+        /* Mobile Menu Button */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         /* --- CALCULATOR UI --- */
         .container { 
             max-width: 1400px; 
@@ -349,7 +359,18 @@
         /* Responsive */
         @media (max-width: 1024px) {
             .trade-grid-container { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            
+            .mobile-toggle { display: block; }
+            
+            .nav-links { 
+                display: none; 
+                position: absolute; top: 80px; left: 0; width: 100%; 
+                background: var(--surface-deep); flex-direction: column; 
+                gap: 0; height: auto; border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .nav-item { padding: 20px; width: 100%; border-bottom: 1px solid var(--border); }
+
             .container { padding-top: 100px; }
             .trade-header { flex-direction: column; gap: 24px; text-align: center; top: 20px; }
         }
@@ -363,7 +384,7 @@
     <nav class="nav-top">
         <a href="index.html" class="nav-logo">JAILBREAK<span class="logo-accent">HUB</span></a>
         
-        <div class="nav-links">
+        <div class="nav-links" id="navLinks">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
             <div class="nav-item"><a href="values.html" class="nav-link">Values</a></div>
             <div class="nav-item"><a href="calculator.html" class="nav-link" style="color:#fff">Calculator</a></div>
@@ -371,10 +392,23 @@
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
         </div>
 
-        <button class="btn btn-outline">Discord</button>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn btn-outline" onclick="window.location.href='https://discord.gg/yourlink'">Discord</button>
+            <button class="mobile-toggle" onclick="ui.toggleMenu()">☰</button>
+        </div>
     </nav>
 
     <div class="container">
+        <div style="margin: 20px 0; text-align: center;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4156751217830729"
+                 data-ad-slot="YOUR_TOP_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
         <div class="trade-header animate-in">
             <div class="status-container">
                 <span class="status-label">Trade Evaluation</span>
@@ -399,8 +433,7 @@
                     <span class="side-title">Your Offering</span>
                     <span class="side-total" id="total-a">$0</span>
                 </div>
-                <div class="item-grid" id="grid-a">
-                    </div>
+                <div class="item-grid" id="grid-a"></div>
             </div>
 
             <div class="side-panel">
@@ -408,9 +441,18 @@
                     <span class="side-title">Their Offering</span>
                     <span class="side-total" id="total-b">$0</span>
                 </div>
-                <div class="item-grid" id="grid-b">
-                    </div>
+                <div class="item-grid" id="grid-b"></div>
             </div>
+        </div>
+
+        <div style="margin: 40px 0; text-align: center;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4156751217830729"
+                 data-ad-slot="YOUR_BOTTOM_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
     </div>
 
@@ -428,11 +470,10 @@
 
                 <div class="filter-row" id="filter-pills">
                     <div class="filter-pill active" onclick="ui.setFilter('All', this)">All</div>
-                    </div>
+                </div>
             </div>
 
-            <div class="results-grid" id="results-grid">
-                </div>
+            <div class="results-grid" id="results-grid"></div>
         </div>
     </div>
 
@@ -446,9 +487,7 @@
     </footer>
 
     <script>
-        /* TRADE STATE ENGINE
-           Based on the patterns in SRC/hooks/useTradeStore.ts
-        */
+        /* TRADE STATE ENGINE */
         const state = {
             sideA: [],
             sideB: [],
@@ -498,7 +537,6 @@
 
         const ui = {
             init() {
-                // Initialize categories from Values.js database
                 const filterContainer = document.getElementById('filter-pills');
                 if (typeof db !== 'undefined') {
                     Object.keys(db).forEach(cat => {
@@ -530,6 +568,10 @@
                 document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
                 el.classList.add('active');
                 this.renderPicker();
+            },
+
+            toggleMenu() {
+                document.getElementById('navLinks').classList.toggle('active');
             },
 
             renderPicker() {
@@ -568,27 +610,20 @@
 
             update() {
                 const totals = tradeOps.calculateTotals();
-                
-                // Draw Side A
                 this.drawGrid(state.sideA, 'grid-a', 'A');
-                // Draw Side B
                 this.drawGrid(state.sideB, 'grid-b', 'B');
 
-                // Update Totals
                 document.getElementById('total-a').innerText = `$${totals.a.toLocaleString()}`;
                 document.getElementById('total-b').innerText = `$${totals.b.toLocaleString()}`;
                 document.getElementById('diff-display').innerText = `Difference: $${Math.abs(totals.diff).toLocaleString()}`;
 
-                // Logic for Status Display
                 const statusEl = document.getElementById('status-display');
-                
                 if (totals.a === 0 && totals.b === 0) {
                     statusEl.innerText = "EQUAL";
                     statusEl.style.color = "#fff";
                 } else {
                     const max = Math.max(totals.a, totals.b);
                     const ratio = Math.abs(totals.diff) / (max || 1);
-
                     if (ratio < 0.1) {
                         statusEl.innerText = "FAIR TRADE";
                         statusEl.style.color = "var(--green)";
@@ -605,7 +640,6 @@
             drawGrid(items, gridId, side) {
                 const grid = document.getElementById(gridId);
                 grid.innerHTML = '';
-
                 items.forEach(item => {
                     const el = document.createElement('div');
                     el.className = 'card animate-in';
@@ -620,7 +654,6 @@
                     grid.appendChild(el);
                 });
 
-                // Add "Add Item" button
                 const addBtn = document.createElement('div');
                 addBtn.className = 'add-placeholder';
                 addBtn.innerHTML = `
@@ -632,9 +665,7 @@
             }
         };
 
-        // Initialize on Load
         window.onload = () => ui.init();
-
     </script>
 </body>
 </html>
