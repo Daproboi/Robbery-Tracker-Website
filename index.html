@@ -7,7 +7,6 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  
-    
     <script> 
         document.addEventListener("DOMContentLoaded", function() { 
             const urlParams = new URLSearchParams(window.location.search); 
@@ -20,7 +19,6 @@
             } 
         }); 
     </script> 
-
     <style>   
         /* --- CORE VARIABLES --- */
         :root {   
@@ -37,7 +35,6 @@
             --card-hover: rgba(255, 255, 255, 0.03);
             --gradient: linear-gradient(135deg, #0070f3 0%, #00ff88 100%);
         }  
-
         body.light-mode {   
             --bg: #f8fafc;   
             --surface: rgba(255, 255, 255, 0.95);   
@@ -50,7 +47,6 @@
             --text-dim: #475569;   
             --card-hover: rgba(0, 0, 0, 0.02);
         }   
-
         /* --- GLOBAL RESET --- */
         * { 
             box-sizing: border-box; 
@@ -59,12 +55,10 @@
             transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.2, 0, 0.2, 1); 
             cursor: default;
         }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
-
         body {   
             font-family: 'Plus Jakarta Sans', sans-serif;   
             background: var(--bg); 
@@ -73,12 +67,10 @@
             min-height: 100vh;
             line-height: 1.5;
         }   
-
         canvas#cashCanvas {   
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
             z-index: -2; opacity: 0.12; pointer-events: none;
         }
-
         /* --- BACKGROUND BLOBS --- */
         .ambient-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -95,7 +87,6 @@
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(100px, 50px) scale(1.1); }
         }
-
         /* --- TOP NAVIGATION --- */
         .nav-container {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
@@ -112,7 +103,6 @@
         }
         .logo i { color: var(--accent); filter: drop-shadow(0 0 10px var(--accent-glow)); }
         .logo span { color: var(--accent); }
-
         .nav-menu { display: flex; gap: 5px; align-items: center; }
         .nav-link { 
             text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 800; 
@@ -121,7 +111,6 @@
         }
         .nav-link:hover { color: var(--text-main); background: var(--card-hover); }
         .nav-link.active { color: var(--accent); background: rgba(0, 112, 243, 0.1); }
-
         .dropdown-parent { position: relative; }
         .dropdown-menu {
             position: absolute; top: 100%; left: 0; padding-top: 15px;
@@ -139,7 +128,6 @@
         }
         .dropdown-item:hover { background: var(--card-hover); color: var(--text-main); transform: translateX(5px); }
         .dropdown-item i { width: 20px; text-align: center; color: var(--accent); }
-
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         .icon-btn {
             background: var(--border); border: 1px solid var(--border); color: var(--text-main);
@@ -147,7 +135,6 @@
             justify-content: center; cursor: pointer; font-size: 1.1rem;
         }
         .icon-btn:hover { background: var(--text-main); color: var(--bg); transform: rotate(15deg); }
-
         /* --- HERO SECTION --- */
         .hero {
             padding: 220px 20px 100px; text-align: center; position: relative; z-index: 10;
@@ -159,7 +146,6 @@
             text-transform: uppercase; letter-spacing: 2px; margin-bottom: 35px;
         }
         .badge-dot { width: 8px; height: 8px; background: var(--jailbreak-green); border-radius: 50%; box-shadow: 0 0 10px var(--jailbreak-green); }
-
         .hero h1 {
             font-size: 6.5rem; font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px;
             background: linear-gradient(180deg, #fff 0%, #64748b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -177,7 +163,6 @@
         .btn-green { background: var(--jailbreak-green); color: #022c16; box-shadow: 0 15px 35px rgba(0, 255, 136, 0.2); }
         .btn-discord { background: #5865F2; color: #fff; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.2); }
         .main-btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
-
         /* --- STATS STRIP --- */
         .stats-strip {
             background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -186,13 +171,11 @@
         .stat-box { text-align: center; }
         .stat-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 800; display: block; color: var(--text-main); }
         .stat-lab { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
-
         /* --- BENTO GRID --- */
         .section-wrapper { max-width: 1300px; margin: 0 auto; padding: 100px 20px; }
         .section-head { text-align: center; margin-bottom: 70px; }
         .section-head h2 { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 15px; }
         .section-head p { color: var(--text-dim); font-size: 1.1rem; }
-
         .bento-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 320px); gap: 25px;
         }
@@ -210,7 +193,6 @@
         }
         .bento-card h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
         .bento-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
-
         /* --- FEATURE SPLIT --- */
         .feature-split {
             display: flex; align-items: center; gap: 80px; margin-top: 150px;
@@ -228,7 +210,6 @@
         .feature-list { display: flex; flex-direction: column; gap: 20px; }
         .f-item { display: flex; align-items: center; gap: 15px; font-weight: 700; color: var(--text-main); }
         .f-item i { color: var(--jailbreak-green); font-size: 1.2rem; }
-
         /* --- TESTIMONIALS SCROLL --- */
         .test-scroll { display: flex; gap: 25px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
         .test-card {
@@ -241,7 +222,6 @@
         .author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent); }
         .author-name { font-weight: 800; font-size: 1rem; }
         .author-role { color: var(--accent); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-
         /* --- FAQ ACCORDION --- */
         .faq-box { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
         .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
@@ -254,7 +234,6 @@
         .faq-content { padding: 0 30px 30px; color: var(--text-dim); line-height: 1.8; display: none; }
         .faq-item.active .faq-content { display: block; }
         .faq-item.active .faq-btn i { transform: rotate(45deg); color: var(--accent); }
-
         /* --- FOOTER --- */
         footer {
             background: var(--surface); border-top: 1px solid var(--border); padding: 100px 20px 50px;
@@ -266,12 +245,10 @@
         .footer-brand h2 { font-size: 2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1.5px; }
         .footer-brand h2 span { color: var(--accent); }
         .footer-brand p { color: var(--text-dim); max-width: 300px; line-height: 1.7; }
-        
         .footer-col h4 { text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 25px; color: var(--text-main); }
         .footer-links { display: flex; flex-direction: column; gap: 12px; }
         .footer-links a { text-decoration: none; color: var(--text-dim); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
         .footer-links a:hover { color: var(--accent); }
-
         .socials { display: flex; gap: 15px; margin-top: 30px; }
         .social-btn {
             width: 45px; height: 45px; background: var(--border); border-radius: 50%;
@@ -279,13 +256,11 @@
             text-decoration: none; font-size: 1.2rem;
         }
         .social-btn:hover { background: var(--accent); transform: translateY(-5px); }
-
         .legal-footer {
             max-width: 1300px; margin: 80px auto 0; padding-top: 40px; border-top: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center;
             color: #555; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
         }
-
         /* --- MOBILE MENU --- */
         .mobile-toggle { display: none; }
         @media screen and (max-width: 1024px) {
@@ -297,7 +272,6 @@
             .feature-split { flex-direction: column; text-align: center; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
         }
-
         /* --- ANIMATIONS --- */
         .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -305,48 +279,40 @@
 </head>   
 <body>   
     <canvas id="cashCanvas"></canvas>   
-
     <div class="ambient-glow">
         <div class="blob"></div>
         <div class="blob blob-2"></div>
     </div>
-
     <nav class="nav-container">
         <a href="#" class="logo">
             <i class="fa-solid fa-vault"></i> JAILBREAK<span>HUB</span>
         </a>
-
         <div class="nav-menu">
             <a href="#" class="nav-link active">Dashboard</a>
-            
             <div class="dropdown-parent">
-                <a class="nav-link">Marketplace <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
+                <a href="#" class="nav-link">Marketplace <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
                 <div class="dropdown-menu"><div class="dropdown-inner">
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-gem"></i> Value List</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-calculator"></i> Trade Calculator</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-chart-line"></i> Market Trends</a>
                 </div></div>
             </div>
-
             <div class="dropdown-parent">
-                <a class="nav-link">Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
+                <a href="#" class="nav-link">Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
                 <div class="dropdown-menu"><div class="dropdown-inner">
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Contract Tracker</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-dice"></i> Pity Calculator</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-satellite"></i> Server Tracker</a>
                 </div></div>
             </div>
-
             <a href="#" class="nav-link">Community</a>
         </div>
-
         <div class="nav-actions">
             <button class="icon-btn" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
             <button class="icon-btn mobile-toggle"><i class="fa-solid fa-bars"></i></button>
             <a href="#" class="main-btn btn-green" style="padding: 10px 20px; font-size: 0.75rem; border-radius: 10px;">Login</a>
         </div>
     </nav>
-
     <header class="hero">
         <div class="reveal">
             <div class="badge">
@@ -360,7 +326,6 @@
             </div>
         </div>
     </header>
-
     <div class="stats-strip reveal">
         <div class="stat-box">
             <span class="stat-val" id="count">1,402</span>
@@ -379,13 +344,11 @@
             <span class="stat-lab">Value Accuracy</span>
         </div>
     </div>
-
     <section class="section-wrapper">
         <div class="section-head reveal">
             <h2>Ultimate Command Center.</h2>
             <p>A unified interface for everything you need to dominate the rising market.</p>
         </div>
-
         <div class="bento-grid">
             <a href="#" class="bento-card large reveal">
                 <i class="fa-solid fa-sack-dollar"></i>
@@ -408,7 +371,6 @@
                 <p>Plug in your current level and we'll map the exact daily contracts you need to hit level 10 before the season concludes. Efficiency at its peak.</p>
             </a>
         </div>
-
         <div class="feature-split reveal">
             <div class="split-image">
                 <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard">
@@ -425,7 +387,6 @@
             </div>
         </div>
     </section>
-
     <section class="section-wrapper">
         <div class="section-head reveal">
             <h2>Trusted by Pros.</h2>
@@ -463,7 +424,6 @@
             </div>
         </div>
     </section>
-
     <section class="section-wrapper">
         <div class="section-head reveal">
             <h2>Frequently Asked</h2>
@@ -483,7 +443,6 @@
             </div>
         </div>
     </section>
-
     <footer>
         <div class="footer-grid">
             <div class="footer-brand">
@@ -527,7 +486,6 @@
             <div>Not affiliated with Roblox Corp or Badimo</div>
         </div>
     </footer>
-
     <script>
         // THEME TOGGLE
         const themeBtn = document.getElementById('themeBtn');
@@ -537,14 +495,12 @@
             icon.classList.toggle('fa-moon');
             icon.classList.toggle('fa-sun');
         });
-
         // COUNTER ANIMATION
         let count = 1402;
         setInterval(() => {
             count += Math.floor(Math.random() * 5) - 2;
             document.getElementById('count').innerText = count.toLocaleString();
         }, 3000);
-
         // FAQ ACCORDION
         document.querySelectorAll('.faq-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -552,7 +508,6 @@
                 item.classList.toggle('active');
             });
         });
-
         // REVEAL ON SCROLL
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -560,7 +515,6 @@
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
         // MATRIX CASH CANVAS
         const canvas = document.getElementById('cashCanvas');
         const ctx = canvas.getContext('2d');
@@ -568,7 +522,6 @@
         const cashChars = ['$', '💵', '💰', '💸', '💎'];
         const fontSize = 18;
         let drops = [];
-
         function initCanvas() {
             width = window.innerWidth;
             height = window.innerHeight;
@@ -577,33 +530,25 @@
             columns = Math.floor(width / fontSize);
             drops = Array(columns).fill(1);
         }
-
         function drawMatrix() {
             ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.15)' : 'rgba(3, 4, 7, 0.1)';
             ctx.fillRect(0, 0, width, height);
-
             ctx.font = fontSize + 'px monospace';
-            
             for (let i = 0; i < drops.length; i++) {
                 const text = cashChars[Math.floor(Math.random() * cashChars.length)];
-                
                 // Variating Green Tones
                 ctx.fillStyle = i % 2 === 0 ? '#00ff88' : '#0070f3';
                 ctx.globalAlpha = Math.random() * 0.5 + 0.5;
-                
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
                 if (drops[i] * fontSize > height && Math.random() > 0.98) {
                     drops[i] = 0;
                 }
                 drops[i]++;
             }
         }
-
         initCanvas();
         window.addEventListener('resize', initCanvas);
         setInterval(drawMatrix, 60);
-
         // 3D PARALLAX EFFECT ON CARDS
         document.querySelectorAll('.bento-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
