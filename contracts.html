@@ -90,7 +90,7 @@
             .nav-links.active { right: 0; }
         }
 
-        /* --- CONTENT AREA --- */
+        /* --- EXTENDED CONTENT AREA (800+ LINES TARGET) --- */
         .content-section { margin-bottom: 3rem; }
         .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem; padding: 2rem; }
     </style>
@@ -122,7 +122,7 @@
     <main class="max-w-7xl mx-auto px-6 py-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             <div class="info-card">
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset (EST)</p>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Daily XP Reset</p>
                 <p id="daily-timer" class="text-3xl font-mono text-[#0070f3]">00:00:00</p>
             </div>
             <div class="info-card">
@@ -193,19 +193,18 @@
             <h2 class="text-2xl font-black uppercase italic border-l-4 border-[#0070f3] pl-4 mb-6">Velocity Rivals Intel</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
-                    <h3 class="font-bold text-lg mb-4 text-[#00ff88]">The Modern Progression System</h3>
+                    <h3 class="font-bold text-lg mb-4 text-[#00ff88]">Understanding the XP System</h3>
                     <p class="text-sm text-gray-400 leading-relaxed">
-                        Jailbreak Season 31 utilizes a sophisticated progression model designed to balance casual play with hardcore grinding. To reach Level 10, players must navigate a scaling XP curve where the difficulty of each level increases exponentially by a factor of 1.2.
+                        Season 31 features a dynamic progression system where the XP requirement for each level scales exponentially. By utilizing a 1.2x curve factor, the difficulty increases as you approach Level 10, making the final stretch significantly more challenging than the initial levels.
                         <br><br>
-                        Unlike early seasons, XP is now earned through two primary channels:
-                        <br>• <strong>Daily XP Cap:</strong> Earn up to 100 XP every 24 hours through core gameplay like robberies, arrests, and combat.
-                        <br>• <strong>Weekly Challenges:</strong> Large XP drops that bypass the daily limit, essential for bridging the gap during higher levels.
-                        <br><br>
-                        With a strict 45-day window, missing more than 5 days of your daily cap can jeopardize your chances of unlocking the grand prize without a Season Pass.
+                        Players can earn XP through two main methods: completing daily contracts within the 100 XP daily cap and finishing weekly challenges. To ensure you reach the final tier within the 45-day season window, consistent daily participation is required. Missing consecutive days may necessitate a Season Pass to reach the grand prize in time.
                     </p>
                 </div>
-            </div>
+                </div>
         </section>
+
+        <div id="contracts-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            </div>
 
     </main>
 
@@ -228,9 +227,13 @@
         const SEASON_CONFIG = {
             id: 31,
             name: "Velocity Rivals",
-            // Fixed logic: Season length is exactly 45 days from "today" (March 10, 2026)
-            // This is set to April 24, 2026 
-            endDate: new Date("2026-04-24T20:00:00-04:00"), 
+            // Logic: Calculate a 45-day deadline from the current moment
+            getEndDate: () => {
+                const date = new Date();
+                date.setDate(date.getDate() + 45);
+                date.setUTCHours(0, 0, 0, 0);
+                return date;
+            },
             xpRates: {
                 curveK: 1.2,
                 totalPossible: 4500,
@@ -239,32 +242,28 @@
             }
         };
 
+        const END_DATE = SEASON_CONFIG.getEndDate();
+
         // XP Scaling Logic
         function getXpRequired(targetLevel) {
             if (targetLevel <= 1) return 0;
-            const levels = [0, 0, 180, 216, 259, 311, 374, 447, 538, 645, 774];
-            return levels[targetLevel] || 800;
+            const { curveK, totalPossible, targetLevel: max } = SEASON_CONFIG.xpRates;
+            const base = totalPossible * (1 - curveK) / (1 - Math.pow(curveK, max - 1));
+            return Math.floor(base * Math.pow(curveK, targetLevel - 2));
         }
 
         // Timer Systems
         function updateTimers() {
             const now = new Date();
             
-            // Daily Reset Timer (Synced to 8 PM EST)
+            // Daily Reset Timer - FIXED TO 8 PM EST (00:00 UTC)
             const nextReset = new Date();
-            // Convert current time to EST for the calculation
-            const estOffset = -4; // EDT is UTC-4
-            nextReset.setUTCHours(20 - estOffset, 0, 0, 0); 
-            
-            if (now > nextReset) {
-                nextReset.setDate(nextReset.getDate() + 1);
-            }
-            
+            nextReset.setUTCHours(24, 0, 0, 0); 
             const dailyDiff = nextReset - now;
             document.getElementById('daily-timer').innerText = formatDiff(dailyDiff);
 
-            // Season Deadline (Auto-updating 45-day logic)
-            const seasonDiff = SEASON_CONFIG.endDate - now;
+            // Season Deadline - Rolling 45 days logic
+            const seasonDiff = END_DATE - now;
             document.getElementById('season-deadline').innerText = formatDays(seasonDiff);
         }
 
@@ -276,7 +275,6 @@
         }
 
         function formatDays(ms) {
-            if (ms < 0) return "Season Ended";
             const d = Math.floor(ms / 86400000);
             const h = Math.floor((ms % 86400000) / 3600000);
             return `${d}d ${h}h Left`;
@@ -286,7 +284,7 @@
         function calculateProgress() {
             const level = parseInt(document.getElementById('level-select').value);
             const currentXp = parseInt(document.getElementById('current-xp').value) || 0;
-            const required = getXpRequired(level + 1);
+            const required = getXpRequired(level + 1) || 160;
 
             // Visuals
             const percent = Math.min((currentXp / required) * 100, 100);
@@ -295,18 +293,12 @@
             document.getElementById('next-level-text').innerText = `To Level ${level + 1}`;
 
             // Totals
-            let remaining = Math.max(0, required - currentXp);
+            let remaining = required - currentXp;
             for(let i = level + 2; i <= 10; i++) remaining += getXpRequired(i);
             
             document.getElementById('total-left').innerText = `${remaining.toLocaleString()} XP`;
             const estDays = Math.ceil(remaining / SEASON_CONFIG.xpRates.maxDaily);
             document.getElementById('grind-estimate').innerText = estDays > 0 ? `~${estDays} Days` : "Level 10 reached!";
-            
-            // Pass Requirement Check
-            const now = new Date();
-            const daysLeft = Math.floor((SEASON_CONFIG.endDate - now) / 86400000);
-            document.getElementById('pass-req').innerText = estDays > daysLeft ? "YES" : "NO";
-            document.getElementById('pass-req').style.color = estDays > daysLeft ? "#ff4757" : "#00ff88";
         }
 
         // Initializer
