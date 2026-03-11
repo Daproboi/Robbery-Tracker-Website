@@ -3,7 +3,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Jailbreak Hub | The Premium Toolkit</title>  
+    <title>Jailbreak Hub | The Premium Toolkit</title> [cite: 1, 2]
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script> 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">  
@@ -13,294 +13,343 @@
             const urlParams = new URLSearchParams(window.location.search); 
             const jobId = urlParams.get('jobid'); 
             if (jobId) { 
-                const placeId = "606849621";  
-                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`; 
-                window.location.href = launchUri; 
-                console.log("Attempting to launch JobID: " + jobId); 
+                const placeId = "606849621"; [cite: 3]
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`; [cite: 3]
+                window.location.href = launchUri; [cite: 3]
+                console.log("Attempting to launch JobID: " + jobId); [cite: 3]
             } 
-        }); 
-    </script> 
+        });
+    </script> [cite: 4]
 
     <style>   
         /* --- CORE VARIABLES --- */
         :root {   
-            --bg: #030407;   
-            --surface: rgba(10, 12, 16, 0.9);   
+            --bg: #030407;
+            --surface: rgba(10, 12, 16, 0.9); [cite: 5]
             --card: rgba(17, 20, 26, 0.4);   
             --border: rgba(255, 255, 255, 0.07);   
-            --accent: #0070f3;   
-            --accent-glow: rgba(0, 112, 243, 0.5);   
+            --accent: #0070f3;
+            --accent-glow: rgba(0, 112, 243, 0.5); [cite: 6]
             --jailbreak-green: #00ff88;   
             --green-glow: rgba(0, 255, 136, 0.4);   
             --text-main: #ffffff;   
-            --text-dim: #94a3b8;   
-            --card-hover: rgba(255, 255, 255, 0.03);
+            --text-dim: #94a3b8;
+            --card-hover: rgba(255, 255, 255, 0.03); [cite: 7]
             --gradient: linear-gradient(135deg, #0070f3 0%, #00ff88 100%);
-        }  
+        } [cite: 8]
 
         body.light-mode {   
-            --bg: #f8fafc;   
-            --surface: rgba(255, 255, 255, 0.95);   
+            --bg: #f8fafc;
+            --surface: rgba(255, 255, 255, 0.95); [cite: 9]
             --card: rgba(241, 245, 249, 0.7);   
             --border: rgba(0, 0, 0, 0.1);   
-            --accent: #005bb5;   
-            --accent-glow: rgba(0, 91, 181, 0.2);   
+            --accent: #005bb5;
+            --accent-glow: rgba(0, 91, 181, 0.2); [cite: 10]
             --jailbreak-green: #00b35f;   
             --text-main: #0f172a;   
             --text-dim: #475569;   
             --card-hover: rgba(0, 0, 0, 0.02);
-        }   
+        } [cite: 11]
 
         /* --- GLOBAL RESET --- */
         * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.2, 0, 0.2, 1); 
-            cursor: default;
-        }
+            box-sizing: border-box;
+            margin: 0; [cite: 12]
+            padding: 0; [cite: 12]
+            transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.2, 0, 0.2, 1); [cite: 12]
+            cursor: default; [cite: 12]
+        } [cite: 13]
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+        ::-webkit-scrollbar { width: 8px; } [cite: 14]
+        ::-webkit-scrollbar-track { background: var(--bg); } [cite: 15]
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; } [cite: 16]
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); } [cite: 17]
 
         body {   
-            font-family: 'Plus Jakarta Sans', sans-serif;   
-            background: var(--bg); 
+            font-family: 'Plus Jakarta Sans', sans-serif; [cite: 18]
+            background: var(--bg); [cite: 18]
             color: var(--text-main);   
             overflow-x: hidden; 
             min-height: 100vh;
             line-height: 1.5;
-        }   
+        } [cite: 19]
 
         canvas#cashCanvas {   
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
+            position: fixed; [cite: 20]
+            top: 0; left: 0; width: 100%; height: 100%; [cite: 20]
             z-index: -2; opacity: 0.12; pointer-events: none;
-        }
+        } [cite: 21]
 
         /* --- BACKGROUND BLOBS --- */
         .ambient-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; [cite: 22]
+            top: 0; left: 0; width: 100%; height: 100%; [cite: 22]
             z-index: -1; pointer-events: none; overflow: hidden;
-        }
+        } [cite: 23]
         .blob {
-            position: absolute; width: 600px; height: 600px;
+            position: absolute; [cite: 24]
+            width: 600px; height: 600px; [cite: 24]
             background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
             border-radius: 50%; filter: blur(80px); opacity: 0.3;
-            animation: float 20s infinite alternate;
+            animation: float 20s infinite alternate; [cite: 25]
         }
-        .blob-2 { top: 40%; right: -100px; background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%); animation-delay: -5s; }
+        .blob-2 { top: 40%; right: -100px; [cite: 26]
+            background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%); animation-delay: -5s; }
         @keyframes float { 
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 50px) scale(1.1); }
+            0% { transform: translate(0, 0) scale(1); } [cite: 27]
+            100% { transform: translate(100px, 50px) scale(1.1); } [cite: 28]
         }
 
         /* --- TOP NAVIGATION --- */
         .nav-container {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            position: fixed; [cite: 29]
+            top: 20px; left: 50%; transform: translateX(-50%); [cite: 29]
             width: 92%; max-width: 1400px; height: 74px;
             background: var(--surface); border: 1px solid var(--border);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px); [cite: 30]
+            -webkit-backdrop-filter: blur(25px); [cite: 30]
             border-radius: 22px; display: flex; align-items: center;
             justify-content: space-between; padding: 0 30px; z-index: 9999;
             box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-        }
+        } [cite: 31]
         .logo { 
-            font-weight: 900; font-size: 1.5rem; text-decoration: none; color: var(--text-main); letter-spacing: -1.5px;
+            font-weight: 900; [cite: 32]
+            font-size: 1.5rem; text-decoration: none; color: var(--text-main); letter-spacing: -1.5px; [cite: 32]
             display: flex; align-items: center; gap: 10px; cursor: pointer;
-        }
-        .logo i { color: var(--accent); filter: drop-shadow(0 0 10px var(--accent-glow)); }
-        .logo span { color: var(--accent); }
+        } [cite: 33]
+        .logo i { color: var(--accent); filter: drop-shadow(0 0 10px var(--accent-glow)); } [cite: 34]
+        .logo span { color: var(--accent); } [cite: 35]
 
-        .nav-menu { display: flex; gap: 5px; align-items: center; }
+        .nav-menu { display: flex; gap: 5px; align-items: center; } [cite: 36]
         .nav-link { 
-            text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 800; 
+            text-decoration: none; [cite: 37]
+            color: var(--text-dim); font-size: 0.75rem; font-weight: 800; [cite: 37]
             text-transform: uppercase; letter-spacing: 1px; padding: 12px 18px; border-radius: 12px;
             cursor: pointer; position: relative;
-        }
-        .nav-link:hover { color: var(--text-main); background: var(--card-hover); }
-        .nav-link.active { color: var(--accent); background: rgba(0, 112, 243, 0.1); }
+        } [cite: 38]
+        .nav-link:hover { color: var(--text-main); background: var(--card-hover); } [cite: 39]
+        .nav-link.active { color: var(--accent); background: rgba(0, 112, 243, 0.1); } [cite: 40]
 
-        .dropdown-parent { position: relative; }
+        .dropdown-parent { position: relative; } [cite: 41]
         .dropdown-menu {
-            position: absolute; top: 100%; left: 0; padding-top: 15px;
+            position: absolute; [cite: 42]
+            top: 100%; left: 0; padding-top: 15px; [cite: 42]
             opacity: 0; transform: translateY(10px); pointer-events: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .dropdown-parent:hover .dropdown-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        } [cite: 43]
+        .dropdown-parent:hover .dropdown-menu { opacity: 1; transform: translateY(0); pointer-events: auto; } [cite: 44]
         .dropdown-inner {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+            background: var(--surface); [cite: 45]
+            border: 1px solid var(--border); border-radius: 18px; [cite: 45]
             padding: 10px; min-width: 220px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
+        } [cite: 46]
         .dropdown-item {
-            display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px;
+            display: flex; [cite: 47]
+            align-items: center; gap: 12px; padding: 14px; border-radius: 12px; [cite: 47]
             text-decoration: none; color: var(--text-dim); font-size: 0.85rem; font-weight: 600; cursor: pointer;
-        }
-        .dropdown-item:hover { background: var(--card-hover); color: var(--text-main); transform: translateX(5px); }
-        .dropdown-item i { width: 20px; text-align: center; color: var(--accent); }
+        } [cite: 48]
+        .dropdown-item:hover { background: var(--card-hover); color: var(--text-main); transform: translateX(5px); } [cite: 49]
+        .dropdown-item i { width: 20px; text-align: center; color: var(--accent); } [cite: 50]
 
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; } [cite: 51]
         .icon-btn {
-            background: var(--border); border: 1px solid var(--border); color: var(--text-main);
+            background: var(--border); [cite: 52]
+            border: 1px solid var(--border); color: var(--text-main); [cite: 52]
             width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; font-size: 1.1rem;
+            justify-content: center; cursor: pointer; [cite: 53]
+            font-size: 1.1rem;
         }
-        .icon-btn:hover { background: var(--text-main); color: var(--bg); transform: rotate(15deg); }
+        .icon-btn:hover { background: var(--text-main); color: var(--bg); transform: rotate(15deg); } [cite: 54]
 
         /* --- HERO SECTION --- */
         .hero {
-            padding: 220px 20px 100px; text-align: center; position: relative; z-index: 10;
+            padding: 220px 20px 100px; [cite: 55]
+            text-align: center; position: relative; z-index: 10;
         }
         .badge {
-            display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.2); color: var(--jailbreak-green);
-            padding: 8px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 800;
+            display: inline-flex; [cite: 56]
+            align-items: center; gap: 8px; background: rgba(0, 255, 136, 0.1); [cite: 56]
+            border: 1px solid rgba(0, 255, 136, 0.2); color: var(--jailbreak-green); [cite: 56]
+            padding: 8px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; [cite: 57]
             text-transform: uppercase; letter-spacing: 2px; margin-bottom: 35px;
-        }
-        .badge-dot { width: 8px; height: 8px; background: var(--jailbreak-green); border-radius: 50%; box-shadow: 0 0 10px var(--jailbreak-green); }
+        } [cite: 58]
+        .badge-dot { width: 8px; height: 8px; background: var(--jailbreak-green); border-radius: 50%; [cite: 59]
+            box-shadow: 0 0 10px var(--jailbreak-green); }
 
         .hero h1 {
-            font-size: 6.5rem; font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px;
+            font-size: 6.5rem; [cite: 60]
+            font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px; [cite: 60]
             background: linear-gradient(180deg, #fff 0%, #64748b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        } [cite: 61]
         .hero p {
-            color: var(--text-dim); font-size: 1.25rem; max-width: 650px; margin: 0 auto 50px; font-weight: 500;
-        }
-        .hero-btns { display: flex; justify-content: center; gap: 20px; }
+            color: var(--text-dim); [cite: 62]
+            font-size: 1.25rem; max-width: 650px; margin: 0 auto 50px; font-weight: 500; [cite: 62]
+        } [cite: 63]
+        .hero-btns { display: flex; justify-content: center; gap: 20px; } [cite: 64]
         
         .main-btn {
-            padding: 18px 38px; border-radius: 16px; text-decoration: none; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; display: flex; align-items: center; gap: 12px;
-            cursor: pointer; position: relative; overflow: hidden;
-        }
-        .btn-green { background: var(--jailbreak-green); color: #022c16; box-shadow: 0 15px 35px rgba(0, 255, 136, 0.2); }
-        .btn-discord { background: #5865F2; color: #fff; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.2); }
-        .main-btn:hover { transform: translateY(-5px); filter: brightness(1.1); }
+            padding: 18px 38px; [cite: 65]
+            border-radius: 16px; text-decoration: none; font-weight: 800; [cite: 65]
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; display: flex; align-items: center; gap: 12px; [cite: 65]
+            cursor: pointer; [cite: 65]
+            position: relative; overflow: hidden;
+        } [cite: 66]
+        .btn-green { background: var(--jailbreak-green); color: #022c16; [cite: 67]
+            box-shadow: 0 15px 35px rgba(0, 255, 136, 0.2); }
+        .btn-discord { background: #5865F2; [cite: 68]
+            color: #fff; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.2); [cite: 68]
+        } [cite: 69]
+        .main-btn:hover { transform: translateY(-5px); filter: brightness(1.1); } [cite: 70]
 
         /* --- STATS STRIP --- */
         .stats-strip {
-            background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-            padding: 50px 0; margin: 80px 0; display: flex; justify-content: center; gap: 100px; flex-wrap: wrap;
+            background: var(--surface); [cite: 71]
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); [cite: 71]
+            padding: 50px 0; margin: 80px 0; display: flex; justify-content: center; gap: 100px; [cite: 71]
+            flex-wrap: wrap; [cite: 72]
         }
-        .stat-box { text-align: center; }
-        .stat-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 800; display: block; color: var(--text-main); }
-        .stat-lab { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
+        .stat-box { text-align: center; } [cite: 73]
+        .stat-val { font-family: 'JetBrains Mono'; font-size: 3.5rem; font-weight: 800; display: block; [cite: 74]
+            color: var(--text-main); } [cite: 74]
+        .stat-lab { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; [cite: 75]
+            letter-spacing: 2px; margin-top: 10px; } [cite: 75]
 
         /* --- BENTO GRID --- */
-        .section-wrapper { max-width: 1300px; margin: 0 auto; padding: 100px 20px; }
-        .section-head { text-align: center; margin-bottom: 70px; }
-        .section-head h2 { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 15px; }
-        .section-head p { color: var(--text-dim); font-size: 1.1rem; }
+        .section-wrapper { max-width: 1300px; [cite: 76]
+            margin: 0 auto; padding: 100px 20px; } [cite: 76]
+        .section-head { text-align: center; margin-bottom: 70px; } [cite: 77]
+        .section-head h2 { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 15px; } [cite: 78]
+        .section-head p { color: var(--text-dim); font-size: 1.1rem; } [cite: 79]
 
         .bento-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 320px); gap: 25px;
+            display: grid; [cite: 80]
+            grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 320px); gap: 25px; [cite: 80]
         }
         .bento-card {
-            background: var(--card); border: 1px solid var(--border); border-radius: 32px;
+            background: var(--card); [cite: 81]
+            border: 1px solid var(--border); border-radius: 32px; [cite: 81]
             padding: 45px; text-decoration: none; color: inherit; position: relative;
-            display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: flex-end; [cite: 81]
+            overflow: hidden; [cite: 82]
             cursor: pointer;
         }
-        .bento-card:hover { border-color: var(--accent); background: var(--card-hover); }
-        .bento-card.large { grid-column: span 2; }
+        .bento-card:hover { border-color: var(--accent); background: var(--card-hover); } [cite: 83]
+        .bento-card.large { grid-column: span 2; } [cite: 84]
         .bento-card i {
-            position: absolute; top: 40px; left: 45px; font-size: 3rem; color: var(--accent);
-            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .bento-card h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
-        .bento-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+            position: absolute; [cite: 85]
+            top: 40px; left: 45px; font-size: 3rem; color: var(--accent); [cite: 85]
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; [cite: 85]
+        } [cite: 86]
+        .bento-card h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; } [cite: 87]
+        .bento-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; } [cite: 88]
 
         /* --- FEATURE SPLIT --- */
         .feature-split {
-            display: flex; align-items: center; gap: 80px; margin-top: 150px;
+            display: flex; [cite: 89]
+            align-items: center; gap: 80px; margin-top: 150px; [cite: 89]
         }
         .split-image {
-            flex: 1; border-radius: 40px; border: 1px solid var(--border); overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative;
-        }
-        .split-image img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; }
-        .split-image:hover img { transform: scale(1.05); }
-        .split-content { flex: 1; }
-        .split-content h2 { font-size: 3rem; font-weight: 900; margin-bottom: 25px; }
-        .split-content p { color: var(--text-dim); font-size: 1.15rem; margin-bottom: 35px; line-height: 1.8; }
+            flex: 1; [cite: 90]
+            border-radius: 40px; border: 1px solid var(--border); overflow: hidden; [cite: 90]
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; [cite: 90]
+        } [cite: 91]
+        .split-image img { width: 100%; height: 100%; object-fit: cover; transition: 1s ease; } [cite: 92]
+        .split-image:hover img { transform: scale(1.05); } [cite: 93]
+        .split-content { flex: 1; } [cite: 94]
+        .split-content h2 { font-size: 3rem; font-weight: 900; margin-bottom: 25px; } [cite: 95]
+        .split-content p { color: var(--text-dim); font-size: 1.15rem; margin-bottom: 35px; line-height: 1.8; } [cite: 96]
         
-        .feature-list { display: flex; flex-direction: column; gap: 20px; }
-        .f-item { display: flex; align-items: center; gap: 15px; font-weight: 700; color: var(--text-main); }
-        .f-item i { color: var(--jailbreak-green); font-size: 1.2rem; }
+        .feature-list { display: flex; [cite: 97]
+            flex-direction: column; gap: 20px; }
+        .f-item { display: flex; align-items: center; gap: 15px; [cite: 98]
+            font-weight: 700; color: var(--text-main); } [cite: 98]
+        .f-item i { color: var(--jailbreak-green); font-size: 1.2rem; } [cite: 99]
 
         /* --- TESTIMONIALS SCROLL --- */
-        .test-scroll { display: flex; gap: 25px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
+        .test-scroll { display: flex; [cite: 100]
+            gap: 25px; overflow-x: auto; padding-bottom: 40px; scrollbar-width: none; }
         .test-card {
-            min-width: 400px; background: var(--surface); border: 1px solid var(--border); padding: 40px;
-            border-radius: 28px; position: relative;
-        }
+            min-width: 400px; [cite: 101]
+            background: var(--surface); border: 1px solid var(--border); padding: 40px; [cite: 101]
+            border-radius: 28px; position: relative; [cite: 101]
+        } [cite: 102]
         .test-card::before { content: '“'; position: absolute; top: 20px; right: 30px; font-size: 5rem; font-family: serif; opacity: 0.1; }
         .test-card p { font-style: italic; font-size: 1.1rem; line-height: 1.7; margin-bottom: 30px; }
         .author { display: flex; align-items: center; gap: 15px; }
         .author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent); }
         .author-name { font-weight: 800; font-size: 1rem; }
-        .author-role { color: var(--accent); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .author-role { color: var(--accent); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; } [cite: 103]
 
         /* --- FAQ ACCORDION --- */
         .faq-box { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
         .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
         .faq-btn {
-            width: 100%; padding: 30px; background: none; border: none; text-align: left;
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 1.15rem; font-weight: 800; color: var(--text-main); cursor: pointer;
+            width: 100%; padding: 30px; background: none; border: none; text-align: left; [cite: 104]
+            display: flex; justify-content: space-between; align-items: center; [cite: 104]
+            font-size: 1.15rem; font-weight: 800; [cite: 104]
+            color: var(--text-main); cursor: pointer; [cite: 105]
         }
-        .faq-btn:hover { background: var(--card-hover); }
-        .faq-content { padding: 0 30px 30px; color: var(--text-dim); line-height: 1.8; display: none; }
-        .faq-item.active .faq-content { display: block; }
-        .faq-item.active .faq-btn i { transform: rotate(45deg); color: var(--accent); }
+        .faq-btn:hover { background: var(--card-hover); } [cite: 106]
+        .faq-content { padding: 0 30px 30px; color: var(--text-dim); line-height: 1.8; display: none; } [cite: 107]
+        .faq-item.active .faq-content { display: block; } [cite: 108]
+        .faq-item.active .faq-btn i { transform: rotate(45deg); color: var(--accent); } [cite: 109]
 
         /* --- FOOTER --- */
         footer {
-            background: var(--surface); border-top: 1px solid var(--border); padding: 100px 20px 50px;
-            margin-top: 150px; position: relative; overflow: hidden;
-        }
+            background: var(--surface); [cite: 110]
+            border-top: 1px solid var(--border); padding: 100px 20px 50px; [cite: 110]
+            margin-top: 150px; position: relative; overflow: hidden; [cite: 110]
+        } [cite: 111]
         .footer-grid {
-            max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px;
-        }
-        .footer-brand h2 { font-size: 2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1.5px; }
-        .footer-brand h2 span { color: var(--accent); }
-        .footer-brand p { color: var(--text-dim); max-width: 300px; line-height: 1.7; }
+            max-width: 1300px; [cite: 112]
+            margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; [cite: 112]
+        } [cite: 113]
+        .footer-brand h2 { font-size: 2rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1.5px; } [cite: 114]
+        .footer-brand h2 span { color: var(--accent); } [cite: 115]
+        .footer-brand p { color: var(--text-dim); max-width: 300px; line-height: 1.7; } [cite: 116]
         
-        .footer-col h4 { text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 25px; color: var(--text-main); }
-        .footer-links { display: flex; flex-direction: column; gap: 12px; }
-        .footer-links a { text-decoration: none; color: var(--text-dim); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
-        .footer-links a:hover { color: var(--accent); }
+        .footer-col h4 { text-transform: uppercase; [cite: 117]
+            letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 25px; color: var(--text-main); }
+        .footer-links { display: flex; [cite: 118]
+            flex-direction: column; gap: 12px; }
+        .footer-links a { text-decoration: none; color: var(--text-dim); [cite: 119]
+            font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+        .footer-links a:hover { color: var(--accent); } [cite: 120]
 
-        .socials { display: flex; gap: 15px; margin-top: 30px; }
+        .socials { display: flex; gap: 15px; margin-top: 30px; } [cite: 121]
         .social-btn {
-            width: 45px; height: 45px; background: var(--border); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: var(--text-main);
-            text-decoration: none; font-size: 1.2rem;
-        }
-        .social-btn:hover { background: var(--accent); transform: translateY(-5px); }
+            width: 45px; [cite: 122]
+            height: 45px; background: var(--border); border-radius: 50%; [cite: 122]
+            display: flex; align-items: center; justify-content: center; color: var(--text-main); [cite: 122]
+            text-decoration: none; font-size: 1.2rem; [cite: 122]
+        } [cite: 123]
+        .social-btn:hover { background: var(--accent); transform: translateY(-5px); } [cite: 124]
 
         .legal-footer {
-            max-width: 1300px; margin: 80px auto 0; padding-top: 40px; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-            color: #555; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            max-width: 1300px; [cite: 125]
+            margin: 80px auto 0; padding-top: 40px; border-top: 1px solid var(--border); [cite: 125]
+            display: flex; justify-content: space-between; align-items: center; [cite: 125]
+            color: #555; font-size: 0.75rem; [cite: 125]
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px; [cite: 126]
         }
 
         /* --- MOBILE MENU --- */
-        .mobile-toggle { display: none; }
+        .mobile-toggle { display: none; } [cite: 127]
         @media screen and (max-width: 1024px) {
-            .nav-menu { display: none; }
-            .mobile-toggle { display: flex; }
-            .hero h1 { font-size: 4rem; letter-spacing: -2px; }
-            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-            .bento-card.large { grid-column: auto; }
-            .feature-split { flex-direction: column; text-align: center; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .nav-menu { display: none; } [cite: 128]
+            .mobile-toggle { display: flex; } [cite: 129]
+            .hero h1 { font-size: 4rem; letter-spacing: -2px; } [cite: 130]
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; } [cite: 131]
+            .bento-card.large { grid-column: auto; } [cite: 132]
+            .feature-split { flex-direction: column; text-align: center; } [cite: 133]
+            .footer-grid { grid-template-columns: 1fr 1fr; } [cite: 134]
         }
 
         /* --- ANIMATIONS --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 0; [cite: 135]
+            transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; [cite: 136]
+            transform: translateY(0); }
     </style>   
 </head>   
 <body>   
@@ -317,24 +366,24 @@
         </a>
 
         <div class="nav-menu">
-            <a href="#" class="nav-link active">Dashboard</a>
+            <a href="#" class="nav-link active">Dashboard</a> [cite: 137]
             
             <div class="dropdown-parent">
                 <a class="nav-link">Marketplace <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
                 <div class="dropdown-menu"><div class="dropdown-inner">
-                    <a href="#" class="dropdown-item"><i class="fa-solid fa-gem"></i> Value List</a>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-gem"></i> Value List</a> [cite: 138]
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-calculator"></i> Trade Calculator</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-chart-line"></i> Market Trends</a>
                 </div></div>
             </div>
 
             <div class="dropdown-parent">
-                <a class="nav-link">Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a>
+                <a class="nav-link">Tools <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem; margin-left: 5px;"></i></a> [cite: 139, 140]
                 <div class="dropdown-menu"><div class="dropdown-inner">
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Contract Tracker</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-dice"></i> Pity Calculator</a>
                     <a href="#" class="dropdown-item"><i class="fa-solid fa-satellite"></i> Server Tracker</a>
-                </div></div>
+                </div></div> [cite: 141]
             </div>
 
             <a href="#" class="nav-link">Community</a>
@@ -343,7 +392,7 @@
         <div class="nav-actions">
             <button class="icon-btn" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
             <button class="icon-btn mobile-toggle"><i class="fa-solid fa-bars"></i></button>
-            <a href="#" class="main-btn btn-green" style="padding: 10px 20px; font-size: 0.75rem; border-radius: 10px;">Login</a>
+            <a href="#" class="main-btn btn-green" style="padding: 10px 20px; font-size: 0.75rem; border-radius: 10px;">Login</a> [cite: 142]
         </div>
     </nav>
 
@@ -353,23 +402,23 @@
                 <div class="badge-dot"></div> Live Market: $3.4B Transacted
             </div>
             <h1>The New Standard<br>In Jailbreak.</h1>
-            <p>Access the most sophisticated trading suite ever developed. Real-time values, precision calculators, and automated grinding tools.</p>
+            <p>Access the most sophisticated trading suite ever developed. Real-time values, precision calculators, and automated grinding tools.</p> [cite: 143]
             <div class="hero-btns">
-                <a href="#" class="main-btn btn-green"><i class="fa-solid fa-play"></i> Launch App</a>
-                <a href="#" class="main-btn btn-discord"><i class="fa-brands fa-discord"></i> Join Discord</a>
+                <a href="#" class="main-btn btn-green" id="launchBtn"><i class="fa-solid fa-play"></i> Launch App</a>
+                <a href="https://discord.gg/jailbreak" target="_blank" class="main-btn btn-discord"><i class="fa-brands fa-discord"></i> Join Discord</a>
             </div>
-        </div>
+        </div> [cite: 144]
     </header>
 
     <div class="stats-strip reveal">
         <div class="stat-box">
-            <span class="stat-val" id="count">1,402</span>
+            <span class="stat-val" id="count">1,402</span> [cite: 145]
             <span class="stat-lab">Global Users</span>
         </div>
         <div class="stat-box">
             <span class="stat-val">384</span>
             <span class="stat-lab">Indexed Items</span>
-        </div>
+        </div> [cite: 145]
         <div class="stat-box">
             <span class="stat-val">12ms</span>
             <span class="stat-lab">Data Refresh Rate</span>
@@ -380,7 +429,7 @@
         </div>
     </div>
 
-    <section class="section-wrapper">
+    <section class="section-wrapper"> [cite: 146]
         <div class="section-head reveal">
             <h2>Ultimate Command Center.</h2>
             <p>A unified interface for everything you need to dominate the rising market.</p>
@@ -389,23 +438,23 @@
         <div class="bento-grid">
             <a href="#" class="bento-card large reveal">
                 <i class="fa-solid fa-sack-dollar"></i>
-                <h3>Advanced Value List</h3>
-                <p>Proprietary algorithms analyze over 50,000 trades daily to provide the most stable value list in the Jailbreak community. No more overpaying.</p>
+                <h3>Advanced Value List</h3> [cite: 147]
+                <p>Proprietary algorithms analyze over 50,000 trades daily to provide the most stable value list in the Jailbreak community. No more overpaying.</p> [cite: 147, 148]
             </a>
             <a href="#" class="bento-card reveal">
                 <i class="fa-solid fa-bolt"></i>
                 <h3>Fast Calculator</h3>
                 <p>Instant item comparisons with clean UI.</p>
             </a>
-            <a href="#" class="bento-card reveal">
+            <a href="#" class="bento-card reveal"> [cite: 149]
                 <i class="fa-solid fa-shield-halved"></i>
                 <h3>Verified Traders</h3>
                 <p>Connect with high-tier robbers who have a proven reputation.</p>
             </a>
             <a href="#" class="bento-card large reveal">
-                <i class="fa-solid fa-microchip"></i>
+                <i class="fa-solid fa-microchip"></i> [cite: 150]
                 <h3>XP Optimization Engine</h3>
-                <p>Plug in your current level and we'll map the exact daily contracts you need to hit level 10 before the season concludes. Efficiency at its peak.</p>
+                <p>Plug in your current level and we'll map the exact daily contracts you need to hit level 10 before the season concludes. Efficiency at its peak.</p> [cite: 150, 151]
             </a>
         </div>
 
@@ -414,12 +463,12 @@
                 <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard">
             </div>
             <div class="split-content">
-                <h2>Precision Grinding.<br>Proven Results.</h2>
-                <p>Stop guessing when your next Hyperchrome will drop. Our Pity Tracker uses community-verified mathematical models to estimate your luck percentage with 94% precision.</p>
+                <h2>Precision Grinding.<br>Proven Results.</h2> [cite: 152]
+                <p>Stop guessing when your next Hyperchrome will drop. Our Pity Tracker uses community-verified mathematical models to estimate your luck percentage with 94% precision.</p> [cite: 152, 153]
                 <div class="feature-list">
                     <div class="f-item"><i class="fa-solid fa-check-circle"></i> Automated Robbery Timers</div>
                     <div class="f-item"><i class="fa-solid fa-check-circle"></i> Daily XP Reset Countdown</div>
-                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Server Region Filtering</div>
+                    <div class="f-item"><i class="fa-solid fa-check-circle"></i> Server Region Filtering</div> [cite: 154]
                     <div class="f-item"><i class="fa-solid fa-check-circle"></i> Cross-Platform Sync</div>
                 </div>
             </div>
@@ -428,36 +477,36 @@
 
     <section class="section-wrapper">
         <div class="section-head reveal">
-            <h2>Trusted by Pros.</h2>
+            <h2>Trusted by Pros.</h2> [cite: 155]
         </div>
         <div class="test-scroll reveal">
             <div class="test-card">
                 <p>"The only site I trust for values. The UI makes trading actually feel like a professional experience."</p>
                 <div class="author">
-                    <img src="https://ui-avatars.com/api/?name=JB+King&background=0070f3&color=fff" alt="User">
+                    <img src="https://ui-avatars.com/api/?name=JB+King&background=0070f3&color=fff" alt="User"> [cite: 156]
                     <div>
                         <div class="author-name">Trading_Legend</div>
                         <div class="author-role">Torpedo Collector</div>
                     </div>
-                </div>
+                </div> [cite: 157]
             </div>
             <div class="test-card">
-                <p>"Finally stopped getting scammed in the trade hub. The multi-item calculator is a lifesaver for big deals."</p>
+                <p>"Finally stopped getting scammed in the trade hub. The multi-item calculator is a lifesaver for big deals."</p> [cite: 158]
                 <div class="author">
                     <img src="https://ui-avatars.com/api/?name=Rich+Robber&background=00ff88&color=000" alt="User">
                     <div>
                         <div class="author-name">M_Grinder_99</div>
-                        <div class="author-role">Billionaire Club</div>
+                        <div class="author-role">Billionaire Club</div> [cite: 159]
                     </div>
                 </div>
             </div>
             <div class="test-card">
-                <p>"The Contract tracker is better than the in-game UI. I know exactly what I'm doing every morning."</p>
+                <p>"The Contract tracker is better than the in-game UI. I know exactly what I'm doing every morning."</p> [cite: 159, 160]
                 <div class="author">
                     <img src="https://ui-avatars.com/api/?name=Contract+Pro&background=5865f2&color=fff" alt="User">
                     <div>
                         <div class="author-name">DailyContractor</div>
-                        <div class="author-role">Verified Grinder</div>
+                        <div class="author-role">Verified Grinder</div> [cite: 161]
                     </div>
                 </div>
             </div>
@@ -466,19 +515,19 @@
 
     <section class="section-wrapper">
         <div class="section-head reveal">
-            <h2>Frequently Asked</h2>
+            <h2>Frequently Asked</h2> [cite: 162]
         </div>
         <div class="faq-box reveal">
             <div class="faq-item">
                 <button class="faq-btn">How are values calculated? <i class="fa-solid fa-plus"></i></button>
                 <div class="faq-content">We utilize a combination of community trade logs, demand-supply ratios, and expert trader consensus to update values twice daily.</div>
+            </div> [cite: 163]
+            <div class="faq-item">
+                <button class="faq-btn">Is this affiliated with Badimo? <i class="fa-solid fa-plus"></i></button> [cite: 164]
+                <div class="faq-content">No, Jailbreak Hub is a community-driven resource made by fans for fans. We are an independent toolkit for traders and players.</div> [cite: 164, 165]
             </div>
             <div class="faq-item">
-                <button class="faq-btn">Is this affiliated with Badimo? <i class="fa-solid fa-plus"></i></button>
-                <div class="faq-content">No, Jailbreak Hub is a community-driven resource made by fans for fans. We are an independent toolkit for traders and players.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-btn">Is the server tracker real-time? <i class="fa-solid fa-plus"></i></button>
+                <button class="faq-btn">Is the server tracker real-time? <i class="fa-solid fa-plus"></i></button> [cite: 166]
                 <div class="faq-content">Yes, our satellite tracker polls active public servers every 30 seconds to determine store states and robbery cycles.</div>
             </div>
         </div>
@@ -487,139 +536,141 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-brand">
-                <h2>JAILBREAK<span>HUB</span></h2>
+                <h2>JAILBREAK<span>HUB</span></h2> [cite: 167]
                 <p>The premium infrastructure for the next generation of Roblox traders and professional grinders.</p>
                 <div class="socials">
                     <a href="#" class="social-btn"><i class="fa-brands fa-discord"></i></a>
                     <a href="#" class="social-btn"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a> [cite: 168]
                 </div>
             </div>
             <div class="footer-col">
                 <h4>Platform</h4>
                 <div class="footer-links">
-                    <a href="#">Value List</a>
+                    <a href="#">Value List</a> [cite: 169]
                     <a href="#">Calculator</a>
                     <a href="#">Tracker</a>
                     <a href="#">Server List</a>
                 </div>
-            </div>
+            </div> [cite: 170]
             <div class="footer-col">
                 <h4>Resources</h4>
                 <div class="footer-links">
                     <a href="#">Changelogs</a>
                     <a href="#">Support</a>
-                    <a href="#">Terms of Use</a>
+                    <a href="#">Terms of Use</a> [cite: 171]
                     <a href="#">Privacy</a>
                 </div>
             </div>
             <div class="footer-col">
                 <h4>Status</h4>
-                <div class="footer-links">
+                <div class="footer-links"> [cite: 172]
                     <a href="#">API Status</a>
                     <a href="#">Uptime</a>
                     <a href="#">Incident Logs</a>
                 </div>
-            </div>
+            </div> [cite: 173]
         </div>
         <div class="legal-footer">
-            <div>&copy; 2026 Jailbreak Hub. Developed by Daproboi & Plug™</div>
+            <div>&copy; 2026 Jailbreak Hub. Developed by Daproboi & Plug™</div> [cite: 174]
             <div>Not affiliated with Roblox Corp or Badimo</div>
         </div>
     </footer>
 
     <script>
         // THEME TOGGLE
-        const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            const icon = themeBtn.querySelector('i');
-            icon.classList.toggle('fa-moon');
-            icon.classList.toggle('fa-sun');
-        });
+        const themeBtn = document.getElementById('themeBtn'); [cite: 175]
+        themeBtn.addEventListener('click', () => { [cite: 175]
+            document.body.classList.toggle('light-mode'); [cite: 175]
+            const icon = themeBtn.querySelector('i'); [cite: 175]
+            icon.classList.toggle('fa-moon'); [cite: 175]
+            icon.classList.toggle('fa-sun'); [cite: 175]
+        }); [cite: 175]
 
         // COUNTER ANIMATION
-        let count = 1402;
-        setInterval(() => {
-            count += Math.floor(Math.random() * 5) - 2;
-            document.getElementById('count').innerText = count.toLocaleString();
-        }, 3000);
+        let count = 1402; [cite: 176]
+        setInterval(() => { [cite: 177]
+            count += Math.floor(Math.random() * 5) - 2; [cite: 177]
+            document.getElementById('count').innerText = count.toLocaleString(); [cite: 177]
+        }, 3000); [cite: 177]
 
         // FAQ ACCORDION
-        document.querySelectorAll('.faq-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = btn.parentElement;
-                item.classList.toggle('active');
-            });
-        });
+        document.querySelectorAll('.faq-btn').forEach(btn => { [cite: 178]
+            btn.addEventListener('click', () => { [cite: 178]
+                const item = btn.parentElement; [cite: 178]
+                item.classList.toggle('active'); [cite: 178]
+            }); [cite: 178]
+        }); [cite: 178]
 
         // REVEAL ON SCROLL
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const observer = new IntersectionObserver((entries) => { [cite: 179]
+            entries.forEach(entry => { [cite: 179]
+                if (entry.isIntersecting) entry.target.classList.add('active'); [cite: 179]
+            }); [cite: 179]
+        }, { threshold: 0.1 }); [cite: 179]
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); [cite: 180]
+
+        // LAUNCH APP BUTTON
+        document.getElementById('launchBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const placeId = "606849621";
+            window.location.href = `roblox://experiences/start?placeId=${placeId}`;
+        });
 
         // MATRIX CASH CANVAS
-        const canvas = document.getElementById('cashCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, columns;
-        const cashChars = ['$', '💵', '💰', '💸', '💎'];
-        const fontSize = 18;
-        let drops = [];
+        const canvas = document.getElementById('cashCanvas'); [cite: 181]
+        const ctx = canvas.getContext('2d'); [cite: 181]
+        let width, height, columns; [cite: 181]
+        const cashChars = ['$', '💵', '💰', '💸', '💎']; [cite: 181]
+        const fontSize = 18; [cite: 181]
+        let drops = []; [cite: 182]
 
-        function initCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            columns = Math.floor(width / fontSize);
-            drops = Array(columns).fill(1);
-        }
+        function initCanvas() { [cite: 183]
+            width = window.innerWidth; [cite: 183]
+            height = window.innerHeight; [cite: 183]
+            canvas.width = width; [cite: 183]
+            canvas.height = height; [cite: 183]
+            columns = Math.floor(width / fontSize); [cite: 183]
+            drops = Array(columns).fill(1); [cite: 183]
+        } [cite: 184]
 
-        function drawMatrix() {
-            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.15)' : 'rgba(3, 4, 7, 0.1)';
-            ctx.fillRect(0, 0, width, height);
+        function drawMatrix() { [cite: 185]
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? [cite: 185]
+            'rgba(248, 250, 252, 0.15)' : 'rgba(3, 4, 7, 0.1)'; [cite: 185]
+            ctx.fillRect(0, 0, width, height); [cite: 185]
+            ctx.font = fontSize + 'px monospace'; [cite: 185]
+            for (let i = 0; i < drops.length; i++) { [cite: 186]
+                const text = cashChars[Math.floor(Math.random() * cashChars.length)]; [cite: 186]
+                ctx.fillStyle = i % 2 === 0 ? '#00ff88' : '#0070f3'; [cite: 187, 188]
+                ctx.globalAlpha = Math.random() * 0.5 + 0.5; [cite: 188]
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize); [cite: 188]
+                if (drops[i] * fontSize > height && Math.random() > 0.98) { [cite: 189]
+                    drops[i] = 0; [cite: 189]
+                } [cite: 190]
+                drops[i]++; [cite: 190]
+            } [cite: 191]
+        } [cite: 191]
 
-            ctx.font = fontSize + 'px monospace';
-            
-            for (let i = 0; i < drops.length; i++) {
-                const text = cashChars[Math.floor(Math.random() * cashChars.length)];
-                
-                // Variating Green Tones
-                ctx.fillStyle = i % 2 === 0 ? '#00ff88' : '#0070f3';
-                ctx.globalAlpha = Math.random() * 0.5 + 0.5;
-                
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > height && Math.random() > 0.98) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        initCanvas();
-        window.addEventListener('resize', initCanvas);
-        setInterval(drawMatrix, 60);
+        initCanvas(); [cite: 192]
+        window.addEventListener('resize', initCanvas); [cite: 192]
+        setInterval(drawMatrix, 60); [cite: 192]
 
         // 3D PARALLAX EFFECT ON CARDS
-        document.querySelectorAll('.bento-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const xc = rect.width / 2;
-                const yc = rect.height / 2;
-                const dx = x - xc;
-                const dy = y - yc;
-                card.style.transform = `perspective(1000px) rotateY(${dx / 20}deg) rotateX(${-dy / 20}deg) translateY(-5px)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateY(0) rotateX(0) translateY(0)`;
-            });
-        });
-    </script>
+        document.querySelectorAll('.bento-card').forEach(card => { [cite: 193]
+            card.addEventListener('mousemove', (e) => { [cite: 193]
+                const rect = card.getBoundingClientRect(); [cite: 193]
+                const x = e.clientX - rect.left; [cite: 193]
+                const y = e.clientY - rect.top; [cite: 193]
+                const xc = rect.width / 2; [cite: 193]
+                const yc = rect.height / 2; [cite: 193]
+                const dx = x - xc; [cite: 193]
+                const dy = y - yc; [cite: 193]
+                card.style.transform = `perspective(1000px) rotateY(${dx / 20}deg) rotateX(${-dy / 20}deg) translateY(-5px)`; [cite: 193, 194]
+            }); [cite: 194]
+            card.addEventListener('mouseleave', () => { [cite: 194]
+                card.style.transform = `perspective(1000px) rotateY(0) rotateX(0) translateY(0)`; [cite: 194]
+            }); [cite: 194]
+        }); [cite: 194]
+    </script> [cite: 195]
 </body>
 </html>
