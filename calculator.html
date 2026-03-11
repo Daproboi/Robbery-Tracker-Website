@@ -105,6 +105,7 @@
         .card-details { padding: 15px; border-top: 1px solid var(--border); }
         .card-name { font-size: 1rem; font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .val-num { font-family: 'JetBrains Mono'; color: var(--green); font-weight: 800; font-size: 0.9rem; }
+        .dupe-val { font-family: 'JetBrains Mono'; color: var(--text-dim); font-size: 0.75rem; font-weight: 600; margin-top: 2px; }
 
         .remove-btn {
             position: absolute; top: 10px; right: 10px; background: var(--red); color: white;
@@ -113,7 +114,7 @@
         }
 
         .add-box {
-            border: 2px dashed var(--border); border-radius: 20px; height: 235px;
+            border: 2px dashed var(--border); border-radius: 20px; min-height: 235px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text-dim); font-weight: 800; gap: 8px;
             text-transform: uppercase; font-size: 0.8rem;
@@ -363,6 +364,7 @@
                     <img src="${item.image}" alt="${item.name}" loading="lazy">
                     <div style="font-weight:800; font-size:1.1rem; color:#fff;">${item.name}</div>
                     <div style="font-family:'JetBrains Mono'; color:${valColor}; font-size:1rem; margin-top:8px; font-weight:800;">$${item.cash_value.toLocaleString()}</div>
+                    <div style="font-family:'JetBrains Mono'; color:var(--text-dim); font-size:0.75rem; font-weight:600; margin-top:4px;">Duped: $${(item.duped_value || 0).toLocaleString()}</div>
                 `;
                 card.onclick = () => {
                     if (activeSide === 'A') sideA.push(item);
@@ -404,6 +406,7 @@
                             <div style="font-size:0.65rem; color:var(--accent); font-weight:800; text-transform:uppercase; margin-bottom:2px;">${item.category || 'Item'}</div>
                             <div class="card-name">${item.name}</div>
                             <div class="val-num">$${item.cash_value.toLocaleString()}</div>
+                            <div class="dupe-val">Duped: $${(item.duped_value || 0).toLocaleString()}</div>
                         </div>
                     </div>
                 `).join('');
