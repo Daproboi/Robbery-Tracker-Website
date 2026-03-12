@@ -128,32 +128,199 @@ const vehicleData = [
 ];
 
 const weaponSkinData = [
-  { "name": "Drip", "cash_value": 15000000, "duped_value": 15000000 },
-  { "name": "Snowstorm", "cash_value": 4000000, "duped_value": 4000000 },
-  { "name": "Flaming", "cash_value": 1750000, "duped_value": 1750000 },
-  { "name": "Circuit Board", "cash_value": 1500000, "duped_value": 1500000 },
-  { "name": "Digital Confetti", "cash_value": 1500000, "duped_value": 1500000 },
-  { "name": "White Marble", "cash_value": 1250000, "duped_value": 1250000 },
-  { "name": "Fire", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Galactic Carbon", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Black Ice", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "Earthquake", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "Manga", "cash_value": 50000, "duped_value": 50000 },
-  { "name": "Money", "cash_value": 20000, "duped_value": 20000 },
-  { "name": "Tiger", "cash_value": 15000, "duped_value": 15000 },
-  { "name": "Wooden Toy", "cash_value": 15000, "duped_value": 15000 },
-  { "name": "Aurora", "cash_value": 5000, "duped_value": 5000 },
-  { "name": "Aquatic", "cash_value": null, "duped_value": null },
-  { "name": "Camo", "cash_value": null, "duped_value": null },
-  { "name": "Candy Cane", "cash_value": null, "duped_value": null },
-  { "name": "Diamond", "cash_value": null, "duped_value": null },
-  { "name": "Donut", "cash_value": null, "duped_value": null },
-  { "name": "Camo Radar", "cash_value": null, "duped_value": null },
-  { "name": "Rainbow", "cash_value": null, "duped_value": null },
-  { "name": "Scorch", "cash_value": null, "duped_value": null },
-  { "name": "Zebra", "cash_value": null, "duped_value": null }
+  { 
+    "name": "Drip", 
+    "clean_value": "13000000", 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Snowstorm", 
+    "clean_value": 4000000, 
+    "duped_value": 4000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Flaming", 
+    "clean_value": 1750000, 
+    "duped_value": 1750000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Circuit Board", 
+    "clean_value": 1500000, 
+    "duped_value": 1500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Digital Confetti", 
+    "clean_value": 1500000, 
+    "duped_value": 1500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "White Marble", 
+    "clean_value": 1250000, 
+    "duped_value": 1250000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Fire", 
+    "clean_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Galactic Carbon", 
+    "clean_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Black Ice", 
+    "clean_value": 500000, 
+    "duped_value": 500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Earthquake", 
+    "clean_value": 500000, 
+    "duped_value": 500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Manga", 
+    "clean_value": 50000, 
+    "duped_value": 50000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Money", 
+    "clean_value": 20000, 
+    "duped_value": 20000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Tiger", 
+    "clean_value": 15000, 
+    "duped_value": 15000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Wooden Toy", 
+    "clean_value": 15000, 
+    "duped_value": 15000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Aurora", 
+    "clean_value": 5000, 
+    "duped_value": 5000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Aquatic", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Camo", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Candy Cane", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Diamond", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Donut", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Camo Radar", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Rainbow", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Scorch", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Zebra", 
+    "clean_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  }
 ];
-
 const hyperchromeData = [
   { "name": "HyperShift", "cash_value": 355000000, "duped_value": 312000000 },
   { "name": "HyperShift Level 4", "cash_value": 254000000, "duped_value": 254000000 },
