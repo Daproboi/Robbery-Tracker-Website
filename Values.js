@@ -321,6 +321,7 @@ const weaponSkinData = [
     "original_price": "" 
   }
 ];
+
 const hyperchromeData = [
   { "name": "HyperShift", "cash_value": 355000000, "duped_value": 312000000 },
   { "name": "HyperShift Level 4", "cash_value": 254000000, "duped_value": 254000000 },
