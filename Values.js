@@ -131,7 +131,7 @@ const weaponSkinData = [
   { 
     "name": "Drip", 
     "clean_value": 13000000, 
-    "duped_value": N/A, 
+    "duped_value": "N/A", // Fixed: Added quotes here
     "demand": "Close to none", 
     "trend": "Stable", 
     "original_price": "N/A" 
