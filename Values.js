@@ -130,15 +130,15 @@ const vehicleData = [
 const weaponSkinData = [
   { 
     "name": "Drip", 
-    "clean_value": 13000000, 
-    "duped_value": "N/A", // Fixed: Added quotes here
+    "cash_value": 13000000, // Changed back from clean_value
+    "duped_value": "N/A", 
     "demand": "Close to none", 
     "trend": "Stable", 
     "original_price": "N/A" 
   },
   { 
     "name": "Snowstorm", 
-    "clean_value": 4000000, 
+    "cash_value": 4000000, 
     "duped_value": 4000000, 
     "demand": "", 
     "trend": "", 
@@ -146,7 +146,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Flaming", 
-    "clean_value": 1750000, 
+    "cash_value": 1750000, 
     "duped_value": 1750000, 
     "demand": "", 
     "trend": "", 
@@ -154,7 +154,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Circuit Board", 
-    "clean_value": 1500000, 
+    "cash_value": 1500000, 
     "duped_value": 1500000, 
     "demand": "", 
     "trend": "", 
@@ -162,7 +162,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Digital Confetti", 
-    "clean_value": 1500000, 
+    "cash_value": 1500000, 
     "duped_value": 1500000, 
     "demand": "", 
     "trend": "", 
@@ -170,7 +170,7 @@ const weaponSkinData = [
   },
   { 
     "name": "White Marble", 
-    "clean_value": 1250000, 
+    "cash_value": 1250000, 
     "duped_value": 1250000, 
     "demand": "", 
     "trend": "", 
@@ -178,7 +178,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Fire", 
-    "clean_value": 1000000, 
+    "cash_value": 1000000, 
     "duped_value": 1000000, 
     "demand": "", 
     "trend": "", 
@@ -186,7 +186,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Galactic Carbon", 
-    "clean_value": 1000000, 
+    "cash_value": 1000000, 
     "duped_value": 1000000, 
     "demand": "", 
     "trend": "", 
@@ -194,7 +194,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Black Ice", 
-    "clean_value": 500000, 
+    "cash_value": 500000, 
     "duped_value": 500000, 
     "demand": "", 
     "trend": "", 
@@ -202,7 +202,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Earthquake", 
-    "clean_value": 500000, 
+    "cash_value": 500000, 
     "duped_value": 500000, 
     "demand": "", 
     "trend": "", 
@@ -210,7 +210,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Manga", 
-    "clean_value": 50000, 
+    "cash_value": 50000, 
     "duped_value": 50000, 
     "demand": "", 
     "trend": "", 
@@ -218,7 +218,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Money", 
-    "clean_value": 20000, 
+    "cash_value": 20000, 
     "duped_value": 20000, 
     "demand": "", 
     "trend": "", 
@@ -226,7 +226,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Tiger", 
-    "clean_value": 15000, 
+    "cash_value": 15000, 
     "duped_value": 15000, 
     "demand": "", 
     "trend": "", 
@@ -234,7 +234,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Wooden Toy", 
-    "clean_value": 15000, 
+    "cash_value": 15000, 
     "duped_value": 15000, 
     "demand": "", 
     "trend": "", 
@@ -242,7 +242,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Aurora", 
-    "clean_value": 5000, 
+    "cash_value": 5000, 
     "duped_value": 5000, 
     "demand": "", 
     "trend": "", 
@@ -250,7 +250,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Aquatic", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -258,7 +258,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Camo", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -266,7 +266,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Candy Cane", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -274,7 +274,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Diamond", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -282,7 +282,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Donut", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -290,7 +290,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Camo Radar", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -298,7 +298,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Rainbow", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -306,7 +306,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Scorch", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
@@ -314,7 +314,7 @@ const weaponSkinData = [
   },
   { 
     "name": "Zebra", 
-    "clean_value": null, 
+    "cash_value": null, 
     "duped_value": null, 
     "demand": "", 
     "trend": "", 
