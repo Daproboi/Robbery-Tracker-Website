@@ -660,33 +660,224 @@ const hyperchromeData = [
     "original_price": "Free" 
   }
 ];
+
 const driftData = [
-  { "name": "Blue Fire", "cash_value": 23000000, "duped_value": 23000000 },
-  { "name": "Gradient Pixel", "cash_value": 9000000, "duped_value": 9000000 },
-  { "name": "Spark", "cash_value": 3000000, "duped_value": 3000000 },
-  { "name": "Aurora", "cash_value": 2000000, "duped_value": 2000000 },
-  { "name": "Brickset", "cash_value": 2000000, "duped_value": 2000000 },
-  { "name": "Ocean Water", "cash_value": 1500000, "duped_value": 1500000 },
-  { "name": "Ice Spike", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Neo-Static", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Bloxxer", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "Nemesis", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "OG Fuel", "cash_value": 750000, "duped_value": 750000 },
-  { "name": "Shooting Star", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "PixelCoin", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "Jungle Vine", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "Lightning", "cash_value": 400000, "duped_value": 400000 },
-  { "name": "Flamethrower", "cash_value": 300000, "duped_value": 300000 },
-  { "name": "Synth", "cash_value": 250000, "duped_value": 250000 },
-  { "name": "SubSpace", "cash_value": 150000, "duped_value": 150000 },
-  { "name": "Cosmic", "cash_value": 120000, "duped_value": 120000 },
-  { "name": "Magic Purple", "cash_value": 100000, "duped_value": 100000 },
-  { "name": "Pixel", "cash_value": 75000, "duped_value": 75000 },
-  { "name": "Bubble Wand", "cash_value": 45000, "duped_value": 45000 },
-  { "name": "Cartoon", "cash_value": 35000, "duped_value": 35000 },
-  { "name": "Melons", "cash_value": 25000, "duped_value": 25000 },
-  { "name": "Performance", "cash_value": 25000, "duped_value": 25000 },
-  { "name": "Bananas", "cash_value": 10000, "duped_value": 10000 }
+  { 
+    "name": "Blue Fire", 
+    "cash_value": 18000000, 
+    "duped_value": "N/A", 
+    "demand": "Decent", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "Gradient Pixel", 
+    "cash_value": 8000000, 
+    "duped_value": "N/A", 
+    "demand": "Decent", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "Spark", 
+    "cash_value": 3000000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Aurora", 
+    "cash_value": 2000000, 
+    "duped_value": "N/A", 
+    "demand": "Medium", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "Brickset", 
+    "cash_value": 1500000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "$16.99 USD" 
+  },
+  { 
+    "name": "Ocean Water", 
+    "cash_value": 1500000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Ice Spike", 
+    "cash_value": 1000000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Neo-Static", 
+    "cash_value": 1000000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Bloxxer", 
+    "cash_value": 1000000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Nemesis", 
+    "cash_value": 1000000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Unknown", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Dark Matter", 
+    "cash_value": 1000000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "Free"
+  },
+  { 
+    "name": "OG Fuel", 
+    "cash_value": 750000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "Shooting Star", 
+    "cash_value": 500000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "PixelCoin", 
+    "cash_value": 500000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "Jungle Vine", 
+    "cash_value": 750000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Lightning", 
+    "cash_value": 400000, 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 400000 
+  },
+  { 
+    "name": "Flamethrower", 
+    "cash_value": 300000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": 300000 
+  },
+  { 
+    "name": "Synth", 
+    "cash_value": 250000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "SubSpace", 
+    "cash_value": 150000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Unknown", 
+    "original_price": "N/A" 
+  },
+  { 
+    "name": "Cosmic", 
+    "cash_value": 120000, 
+    "duped_value": "N/A", 
+    "demand": "Close To None", 
+    "trend": "Stable", 
+    "original_price": 5000 
+  },
+  { 
+    "name": "Magic Purple", 
+    "cash_value": 100000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Pixel", 
+    "cash_value": 75000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Bubble Wand", 
+    "cash_value": 45000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Cartoon", 
+    "cash_value": 35000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Melons", 
+    "cash_value": 25000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Performance", 
+    "cash_value": 25000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  },
+  { 
+    "name": "Bananas", 
+    "cash_value": 10000, 
+    "duped_value": "N/A", 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "" 
+  }
 ];
 
 const furnitureData = [
