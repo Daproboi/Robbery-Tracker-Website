@@ -130,7 +130,7 @@ const vehicleData = [
 const weaponSkinData = [
   { 
     "name": "Drip", 
-    "cash_value": 13000000, // Changed back from clean_value
+    "cash_value": "13000000", 
     "duped_value": "N/A", 
     "demand": "Close to none", 
     "trend": "Stable", 
