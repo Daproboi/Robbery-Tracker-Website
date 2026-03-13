@@ -219,106 +219,106 @@ const weaponSkinData = [
   { 
     "name": "Money", 
     "cash_value": 20000, 
-    "duped_value": 20000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value":"N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 20000 
   },
   { 
     "name": "Tiger", 
     "cash_value": 15000, 
-    "duped_value": 15000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 15000 
   },
   { 
     "name": "Wooden Toy", 
     "cash_value": 15000, 
-    "duped_value": 15000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 15000 
   },
   { 
     "name": "Aurora", 
     "cash_value": 5000, 
-    "duped_value": 5000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Unkown", 
+    "trend": "Stable", 
+    "original_price": 5000
   },
   { 
     "name": "Aquatic", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 50000 
   },
   { 
     "name": "Camo", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 30000 
   },
   { 
     "name": "Candy Cane", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 15000
   },
   { 
     "name": "Diamond", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 10000 
   },
   { 
     "name": "Donut", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 20000 
   },
   { 
     "name": "Camo Radar", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 20000 
   },
   { 
     "name": "Rainbow", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 5000 
   },
   { 
     "name": "Scorch", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 10000 
   },
   { 
     "name": "Zebra", 
-    "cash_value": null, 
-    "duped_value": null, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": "N/A", 
+    "duped_value": "N/A", 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 20000
   }
 ];
 
