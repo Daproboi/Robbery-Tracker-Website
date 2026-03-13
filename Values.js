@@ -323,50 +323,343 @@ const weaponSkinData = [
 ];
 
 const hyperchromeData = [
-  { "name": "HyperShift", "cash_value": 355000000, "duped_value": 312000000 },
-  { "name": "HyperShift Level 4", "cash_value": 254000000, "duped_value": 254000000 },
-  { "name": "HyperDiamond Level 5", "cash_value": 70000000, "duped_value": 60000000 },
-  { "name": "HyperBlue Level 5", "cash_value": 61000000, "duped_value": 50000000 },
-  { "name": "HyperPink Level 5", "cash_value": 58000000, "duped_value": 51000000 },
-  { "name": "HyperBlue Level 4", "cash_value": 54000000, "duped_value": 54000000 },
-  { "name": "HyperDiamond Level 4", "cash_value": 47000000, "duped_value": 47000000 },
-  { "name": "HyperRed Level 5", "cash_value": 45000000, "duped_value": 39000000 },
-  { "name": "HyperPurple Level 5", "cash_value": 43000000, "duped_value": 40000000 },
-  { "name": "HyperPink Level 4", "cash_value": 42000000, "duped_value": 42000000 },
-  { "name": "HyperOrange Level 5", "cash_value": 34000000, "duped_value": 31500000 },
-  { "name": "HyperPurple Level 4", "cash_value": 32000000, "duped_value": 32000000 },
-  { "name": "HyperRed Level 4", "cash_value": 26000000, "duped_value": 26000000 },
-  { "name": "HyperGreen Level 5", "cash_value": 25000000, "duped_value": 23000000 },
-  { "name": "HyperBlue Level 3", "cash_value": 21000000, "duped_value": 21000000 },
-  { "name": "HyperOrange Level 4", "cash_value": 20000000, "duped_value": 20000000 },
-  { "name": "HyperYellow Level 5", "cash_value": 20000000, "duped_value": 18000000 },
-  { "name": "HyperGreen Level 4", "cash_value": 19000000, "duped_value": 19000000 },
-  { "name": "HyperDiamond Level 3", "cash_value": 17500000, "duped_value": 17500000 },
-  { "name": "HyperYellow Level 4", "cash_value": 14000000, "duped_value": 14000000 },
-  { "name": "HyperPink Level 3", "cash_value": 12000000, "duped_value": 12000000 },
-  { "name": "HyperPurple Level 3", "cash_value": 10000000, "duped_value": 10000000 },
-  { "name": "HyperRed Level 3", "cash_value": 6000000, "duped_value": 6000000 },
-  { "name": "HyperBlue Level 2", "cash_value": 4000000, "duped_value": 4000000 },
-  { "name": "HyperOrange Level 3", "cash_value": 4000000, "duped_value": 4000000 },
-  { "name": "HyperDiamond Level 2", "cash_value": 3500000, "duped_value": 3500000 },
-  { "name": "HyperGreen Level 3", "cash_value": 3500000, "duped_value": 3500000 },
-  { "name": "HyperYellow Level 3", "cash_value": 3000000, "duped_value": 3000000 },
-  { "name": "HyperPink Level 2", "cash_value": 1250000, "duped_value": 1250000 },
-  { "name": "HyperGreen Level 2", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "HyperOrange Level 2", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "HyperPurple Level 2", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "HyperRed Level 2", "cash_value": 1000000, "duped_value": 1000000 },
-  { "name": "HyperYellow Level 2", "cash_value": 500000, "duped_value": 500000 },
-  { "name": "HyperBlue Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperDiamond Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperGreen Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperOrange Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperPink Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperPurple Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperRed Level 1", "cash_value": null, "duped_value": null },
-  { "name": "HyperYellow Level 1", "cash_value": null, "duped_value": null }
+  { 
+    "name": "HyperShift", 
+    "cash_value": 352000000, 
+    "duped_value": 312500000, 
+    "demand": "Medium", 
+    "trend": "Stable", 
+    "original_price": "Free"
+  },
+  { 
+    "name": "HyperShift Level 4", 
+    "cash_value": 245000000, 
+    "duped_value": "N/A", 
+    "demand": "Very Low", 
+    "trend": "Stable", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperDiamond Level 5", 
+    "cash_value": 70000000, 
+    "duped_value": 60000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperBlue Level 5", 
+    "cash_value": 61000000, 
+    "duped_value": 50000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPink Level 5", 
+    "cash_value": 58000000, 
+    "duped_value": 51000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperBlue Level 4", 
+    "cash_value": 54000000, 
+    "duped_value": 54000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperDiamond Level 4", 
+    "cash_value": 47000000, 
+    "duped_value": 47000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperRed Level 5", 
+    "cash_value": 45000000, 
+    "duped_value": 39000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPurple Level 5", 
+    "cash_value": 43000000, 
+    "duped_value": 40000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPink Level 4", 
+    "cash_value": 42000000, 
+    "duped_value": 42000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperOrange Level 5", 
+    "cash_value": 34000000, 
+    "duped_value": 31500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPurple Level 4", 
+    "cash_value": 32000000, 
+    "duped_value": 32000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperRed Level 4", 
+    "cash_value": 26000000, 
+    "duped_value": 26000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperGreen Level 5", 
+    "cash_value": 25000000, 
+    "duped_value": 23000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperBlue Level 3", 
+    "cash_value": 21000000, 
+    "duped_value": 21000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperOrange Level 4", 
+    "cash_value": 20000000, 
+    "duped_value": 20000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperYellow Level 5", 
+    "cash_value": 20000000, 
+    "duped_value": 18000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperGreen Level 4", 
+    "cash_value": 19000000, 
+    "duped_value": 19000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperDiamond Level 3", 
+    "cash_value": 17500000, 
+    "duped_value": 17500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperYellow Level 4", 
+    "cash_value": 14000000, 
+    "duped_value": 14000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPink Level 3", 
+    "cash_value": 12000000, 
+    "duped_value": 12000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPurple Level 3", 
+    "cash_value": 10000000, 
+    "duped_value": 10000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperRed Level 3", 
+    "cash_value": 6000000, 
+    "duped_value": 6000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperBlue Level 2", 
+    "cash_value": 4000000, 
+    "duped_value": 4000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperOrange Level 3", 
+    "cash_value": 4000000, 
+    "duped_value": 4000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperDiamond Level 2", 
+    "cash_value": 3500000, 
+    "duped_value": 3500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperGreen Level 3", 
+    "cash_value": 3500000, 
+    "duped_value": 3500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperYellow Level 3", 
+    "cash_value": 3000000, 
+    "duped_value": 3000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPink Level 2", 
+    "cash_value": 1250000, 
+    "duped_value": 1250000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperGreen Level 2", 
+    "cash_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperOrange Level 2", 
+    "cash_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPurple Level 2", 
+    "cash_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperRed Level 2", 
+    "cash_value": 1000000, 
+    "duped_value": 1000000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperYellow Level 2", 
+    "cash_value": 500000, 
+    "duped_value": 500000, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperBlue Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperDiamond Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperGreen Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperOrange Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPink Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperPurple Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperRed Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  },
+  { 
+    "name": "HyperYellow Level 1", 
+    "cash_value": null, 
+    "duped_value": null, 
+    "demand": "", 
+    "trend": "", 
+    "original_price": "Free" 
+  }
 ];
-
 const driftData = [
   { "name": "Blue Fire", "cash_value": 23000000, "duped_value": 23000000 },
   { "name": "Gradient Pixel", "cash_value": 9000000, "duped_value": 9000000 },
