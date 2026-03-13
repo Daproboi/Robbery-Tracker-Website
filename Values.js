@@ -138,67 +138,67 @@ const weaponSkinData = [
   },
   { 
     "name": "Snowstorm", 
-    "cash_value": 4000000, 
-    "duped_value": 4000000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": 3000000, 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Flaming", 
-    "cash_value": 1750000, 
-    "duped_value": 1750000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "cash_value": 1500000, 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Circuit Board", 
     "cash_value": 1500000, 
-    "duped_value": 1500000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Digital Confetti", 
     "cash_value": 1500000, 
-    "duped_value": 1500000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "White Marble", 
     "cash_value": 1250000, 
-    "duped_value": 1250000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Fire", 
     "cash_value": 1000000, 
-    "duped_value": 1000000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Galactic Carbon", 
     "cash_value": 1000000, 
-    "duped_value": 1000000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "N/A" 
   },
   { 
     "name": "Black Ice", 
     "cash_value": 500000, 
-    "duped_value": 500000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "duped_value": "N/A", 
+    "demand": "Close to none", 
+    "trend": "Stable", 
+    "original_price": "Free" 
   },
   { 
     "name": "Earthquake", 
@@ -212,9 +212,9 @@ const weaponSkinData = [
     "name": "Manga", 
     "cash_value": 50000, 
     "duped_value": 50000, 
-    "demand": "", 
-    "trend": "", 
-    "original_price": "" 
+    "demand": "Unknown", 
+    "trend": "Stable", 
+    "original_price": 50000 
   },
   { 
     "name": "Money", 
