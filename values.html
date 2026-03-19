@@ -250,17 +250,29 @@
         let filteredItems = [];
 
         // 1. Fetch live data on load
+        <script>
+        // Data variables
+        let db = {}; 
+        let currentCategory = 'all';
+        // ... other variables ...
+
+        // REPLACE THIS ENTIRE FUNCTION BELOW:
         async function init() {
             try {
+                const proxy = "https://corsproxy.io/?";
+                const itemsUrl = encodeURIComponent('https://api.jbvalues.com/v1/items');
+                const dataUrl = encodeURIComponent('https://api.jbvalues.com/v1/itemdata');
+
                 const [itemsRes, dataRes] = await Promise.all([
-                    fetch('https://api.jbvalues.com/v1/items'),
-                    fetch('https://api.jbvalues.com/v1/itemdata')
+                    fetch(proxy + itemsUrl),
+                    fetch(proxy + dataUrl)
                 ]);
+
+                if (!itemsRes.ok || !dataRes.ok) throw new Error("API Response not OK");
 
                 const items = await itemsRes.json();
                 const itemData = await dataRes.json();
 
-                // 2. Organize items into categories
                 items.forEach(item => {
                     const category = item.category || 'Other';
                     if (!db[category]) db[category] = [];
@@ -276,6 +288,31 @@
                         demand: details.demand || 'Normal'
                     });
                 });
+
+                const fContainer = document.getElementById('filters');
+                Object.keys(db).sort().forEach(category => {
+                    const btn = document.createElement('div');
+                    btn.className = 'f-btn';
+                    btn.innerText = category;
+                    btn.onclick = () => setCat(category, btn);
+                    fContainer.appendChild(btn);
+                });
+
+                updateData();
+
+            } catch (error) {
+                console.error("API Load Error:", error);
+                document.getElementById('grid').innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <p class="text-red-500 font-bold mb-2">Failed to load market data.</p>
+                        <p class="text-dim text-sm">The API might be down or blocking the connection. Try refreshing in a moment.</p>
+                    </div>`;
+            }
+        }
+        // STOP REPLACING HERE
+
+        function setCat(cat, el) {
+            // ... leave the rest of the file alone ...
 
                 // 3. Render filter buttons dynamically
                 const fContainer = document.getElementById('filters');
