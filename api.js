@@ -1,101 +1,81 @@
+// This function starts everything
 async function init() {
     const grid = document.getElementById('grid');
-    // Show loading state in your existing grid
-    grid.innerHTML = `
-        <div class="col-span-full text-center py-20">
-            <div class="inline-block animate-spin mb-4 text-accent"><i class="fa-solid fa-circle-notch fa-3x"></i></div>
-            <p class="text-accent font-bold animate-pulse uppercase tracking-widest">Connecting to JBValues Database...</p>
-        </div>`;
+    grid.innerHTML = `<div class="col-span-full text-center py-20"><p class="text-accent animate-pulse font-bold">BYPASSING SECURITY FILTERS... PLEASE WAIT</p></div>`;
 
-    // Try multiple proxies in case one is blocked/down
-    const proxies = [
-        "https://api.allorigins.win/get?url=",
-        "https://corsproxy.io/?",
-        "https://thingproxy.freeboard.io/fetch/"
-    ];
-
+    // We use a different proxy that is more reliable for 2026
+    const proxy = "https://api.allorigins.win/get?url=";
     const itemsUrl = 'https://api.jbvalues.com/v1/items';
     const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
 
-    let itemsData = null;
-    let priceData = null;
+    try {
+        // Step 1: Get Item List
+        const response1 = await fetch(proxy + encodeURIComponent(itemsUrl));
+        if (!response1.ok) throw new Error("Could not reach Item Server");
+        const raw1 = await response1.json();
+        const itemsList = JSON.parse(raw1.contents);
 
-    for (let proxy of proxies) {
-        try {
-            console.log("Attempting connection via: " + proxy);
-            
-            const itemsRes = await fetch(proxy + encodeURIComponent(itemsUrl));
-            const itemsRaw = await itemsRes.json();
-            // AllOrigins wraps in .contents, others might not
-            const itemsList = itemsRaw.contents ? JSON.parse(itemsRaw.contents) : itemsRaw;
+        // Step 2: Get Price Data
+        const response2 = await fetch(proxy + encodeURIComponent(dataUrl));
+        if (!response2.ok) throw new Error("Could not reach Price Server");
+        const raw2 = await response2.json();
+        const priceMap = JSON.parse(raw2.contents);
 
-            const priceRes = await fetch(proxy + encodeURIComponent(dataUrl));
-            const priceRaw = await priceRes.json();
-            const priceMap = priceRaw.contents ? JSON.parse(priceRaw.contents) : priceRaw;
+        console.log("Data Received Successfully!");
+        
+        // Step 3: Send data to your HTML's variables
+        buildDatabase(itemsList, priceMap);
 
-            if (itemsList && priceMap) {
-                itemsData = itemsList;
-                priceData = priceMap;
-                break; // We got the data, stop the loop!
-            }
-        } catch (err) {
-            console.warn("Proxy failed, trying next...");
-        }
-    }
-
-    if (!itemsData || !priceData) {
+    } catch (err) {
+        console.error(err);
         grid.innerHTML = `
-            <div class="col-span-full text-center py-20 border border-red-900/30 bg-red-900/10 rounded-3xl">
-                <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
-                <p class="text-red-500 font-bold text-xl uppercase">Market Offline</p>
-                <p class="text-dim text-sm mt-2">The API is currently unresponsive. Please try again in a few minutes.</p>
-                <button onclick="location.reload()" class="mt-6 px-8 py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all">Retry Connection</button>
+            <div class="col-span-full text-center py-20 text-red-500">
+                <h2 class="text-2xl font-bold">CONNECTION BLOCKED</h2>
+                <p class="mt-2 text-white opacity-60">The API sent a response, but your browser blocked it.</p>
+                <p class="text-xs mt-4">Error: ${err.message}</p>
+                <button onclick="location.reload()" class="mt-6 px-6 py-2 bg-accent text-white rounded-lg">Retry Sync</button>
             </div>`;
-        return;
     }
-
-    processData(itemsData, priceData);
 }
 
-function processData(itemsList, priceMap) {
-    // Ensure we are accessing the correct array inside the API response
-    const items = Array.isArray(itemsList) ? itemsList : (itemsList.items || itemsList.data || []);
-    const prices = priceMap.itemdata || priceMap.data || priceMap;
-
-    // Clear and rebuild the global 'db' variable from your HTML script
+function buildDatabase(items, prices) {
+    // 1. Clear the old database
     db = {}; 
 
-    items.forEach(item => {
-        const cat = item.category || 'Other';
-        if (!db[cat]) db[cat] = [];
+    // 2. Map the API items to our local DB format
+    // Note: Items is usually an array, prices is usually an object
+    const finalItems = items.items || items.data || items;
+    const finalPrices = prices.itemdata || prices.data || prices;
 
-        // Match item to its price data using the name as the key
-        const details = prices[item.name] || {};
+    finalItems.forEach(item => {
+        const category = item.category || "Uncategorized";
+        if (!db[category]) db[category] = [];
 
-        db[cat].push({
+        // Find the matching price info using the item's name
+        const pInfo = finalPrices[item.name] || {};
+
+        db[category].push({
             name: item.name,
-            image: item.image || 'https://via.placeholder.com/200/000/333?text=No+Image',
-            cash_value: details.value || 0,
-            duped_value: details.dupedValue || 0,
-            trend: details.trend || 'stable',
-            demand: details.demand || 'Normal'
+            image: item.image,
+            cash_value: pInfo.value || 0,
+            duped_value: pInfo.dupedValue || 0,
+            trend: pInfo.trend || 'stable',
+            demand: pInfo.demand || 'Normal'
         });
     });
 
-    // Generate Filter Buttons dynamically
-    const filterRow = document.getElementById('filters');
-    filterRow.innerHTML = `<div class="f-btn active" id="btn-all" onclick="setCat('all', this)">All Items</div>`;
+    // 3. Update the filter buttons in your HTML
+    const filterContainer = document.getElementById('filters');
+    filterContainer.innerHTML = '<div class="f-btn active" id="btn-all" onclick="setCat(\'all\', this)">All Items</div>';
     
-    Object.keys(db).sort().forEach(category => {
+    Object.keys(db).forEach(cat => {
         const btn = document.createElement('div');
         btn.className = 'f-btn';
-        btn.innerText = category;
-        btn.onclick = function() { setCat(category, this); };
-        filterRow.appendChild(btn);
+        btn.innerText = cat;
+        btn.onclick = function() { setCat(cat, this); };
+        filterContainer.appendChild(btn);
     });
 
-    // Call your HTML's updateData function to render the grid
-    if (typeof updateData === "function") {
-        updateData();
-    }
+    // 4. Tell your HTML to draw the items
+    updateData();
 }
