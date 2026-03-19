@@ -212,7 +212,7 @@
         <div class="search-section">
             <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="resetAndRender()">
             <div class="filter-row" id="filters">
-                <div class="f-btn active" onclick="setCat('all', this)">All Items</div>
+                <div class="f-btn active" id="btn-all" onclick="setCat('all', this)">All Items</div>
             </div>
         </div>
 
@@ -241,24 +241,58 @@
         <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
     </footer>
 
-    <script src="Values.js"></script>
     <script>
+        // Data variables
+        let db = {}; 
         let currentCategory = 'all';
         let currentPage = 1;
         const itemsPerPage = 15; 
         let filteredItems = [];
 
-        function init() {
-            if (typeof db === 'undefined') return;
-            const fContainer = document.getElementById('filters');
-            Object.keys(db).forEach(category => {
-                const btn = document.createElement('div');
-                btn.className = 'f-btn';
-                btn.innerText = category;
-                btn.onclick = () => setCat(category, btn);
-                fContainer.appendChild(btn);
-            });
-            updateData();
+        // 1. Fetch live data on load
+        async function init() {
+            try {
+                const [itemsRes, dataRes] = await Promise.all([
+                    fetch('https://api.jbvalues.com/v1/items'),
+                    fetch('https://api.jbvalues.com/v1/itemdata')
+                ]);
+
+                const items = await itemsRes.json();
+                const itemData = await dataRes.json();
+
+                // 2. Organize items into categories
+                items.forEach(item => {
+                    const category = item.category || 'Other';
+                    if (!db[category]) db[category] = [];
+                    
+                    const details = itemData[item.name] || {};
+                    
+                    db[category].push({
+                        name: item.name,
+                        image: item.image,
+                        cash_value: details.value || 0,
+                        duped_value: details.dupedValue || 0,
+                        trend: details.trend || 'stable',
+                        demand: details.demand || 'Normal'
+                    });
+                });
+
+                // 3. Render filter buttons dynamically
+                const fContainer = document.getElementById('filters');
+                Object.keys(db).sort().forEach(category => {
+                    const btn = document.createElement('div');
+                    btn.className = 'f-btn';
+                    btn.innerText = category;
+                    btn.onclick = () => setCat(category, btn);
+                    fContainer.appendChild(btn);
+                });
+
+                updateData();
+
+            } catch (error) {
+                console.error("API Load Error:", error);
+                document.getElementById('grid').innerHTML = `<p class="col-span-full text-center py-20 text-red-500 font-bold">Failed to load market data. Please refresh.</p>`;
+            }
         }
 
         function setCat(cat, el) {
@@ -274,8 +308,10 @@
         }
 
         function updateData() {
+            if (!db) return;
             const query = document.getElementById('search').value.toLowerCase();
             filteredItems = [];
+            
             for (let category in db) {
                 if (currentCategory !== 'all' && category !== currentCategory) continue;
                 db[category].forEach(item => {
@@ -284,6 +320,7 @@
                     }
                 });
             }
+            
             filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
@@ -293,31 +330,37 @@
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
-            grid.innerHTML = paginatedItems.map((i, idx) => {
-                const trend = (i.trend || 'stable').toLowerCase();
-                const dupedVal = i.duped_value || Math.floor((i.cash_value || 0) * 0.7);
-                return `
-                <div class="item-card" onclick="openModal(${startIndex + idx})">
-                    <div class="img-container">
-                        <div class="trend-badge trend-${trend}">${trend}</div>
-                        <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
-                    </div>
-                    <div class="card-content">
-                        <span class="item-cat">${i.cat}</span>
-                        <h3>${i.name}</h3>
-                        <div class="data-list">
-                            <div class="data-item">
-                                <span class="d-label">Clean Value</span>
-                                <span class="d-val val-clean">$${(i.cash_value || 0).toLocaleString()}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="d-label">Est. Duped</span>
-                                <span class="d-val val-duped">$${dupedVal.toLocaleString()}</span>
+            if (paginatedItems.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center py-20 text-dim">No items found matching your search.</p>`;
+            } else {
+                grid.innerHTML = paginatedItems.map((i, idx) => {
+                    const trend = (i.trend || 'stable').toLowerCase();
+                    const cleanVal = (i.cash_value || 0).toLocaleString();
+                    const dupedVal = (i.duped_value || Math.floor((i.cash_value || 0) * 0.7)).toLocaleString();
+                    
+                    return `
+                    <div class="item-card" onclick="openModal(${startIndex + idx})">
+                        <div class="img-container">
+                            <div class="trend-badge trend-${trend}">${trend}</div>
+                            <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
+                        </div>
+                        <div class="card-content">
+                            <span class="item-cat">${i.cat}</span>
+                            <h3>${i.name}</h3>
+                            <div class="data-list">
+                                <div class="data-item">
+                                    <span class="d-label">Clean Value</span>
+                                    <span class="d-val val-clean">$${cleanVal}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="d-label">Est. Duped</span>
+                                    <span class="d-val val-duped">$${dupedVal}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`;
-            }).join('');
+                    </div>`;
+                }).join('');
+            }
 
             const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
             document.getElementById('pageDisplay').innerText = `Page ${currentPage} of ${totalPages}`;
