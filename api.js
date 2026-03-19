@@ -1,30 +1,75 @@
-async function getLiveValues() {
+// api.js
+
+async function init() {
     try {
-        // 1. Fetch the items and the data at the same time
-        const [itemsResponse, dataResponse] = await Promise.all([
-            fetch('https://api.jbvalues.com/v1/items'),
-            fetch('https://api.jbvalues.com/v1/itemdata')
+        console.log("Attempting to fetch live values...");
+        
+        // Using a proxy to prevent "Failed to load" (CORS) errors
+        const proxy = "https://corsproxy.io/?";
+        const itemsUrl = encodeURIComponent('https://api.jbvalues.com/v1/items');
+        const dataUrl = encodeURIComponent('https://api.jbvalues.com/v1/itemdata');
+
+        const [itemsRes, dataRes] = await Promise.all([
+            fetch(proxy + itemsUrl),
+            fetch(proxy + dataUrl)
         ]);
 
-        const items = await itemsResponse.json();
-        const itemData = await dataResponse.json();
+        if (!itemsRes.ok) throw new Error("Could not reach JB API");
 
-        // 2. Combine them into a format your calculator understands
-        // This maps the API data to match your old "cash_value" style
-        const formattedData = items.map(item => {
+        const itemsRaw = await itemsRes.json();
+        const itemDataRaw = await dataRes.json();
+
+        // Safety check: Extract the list if it's hidden inside a ".data" property
+        const items = Array.isArray(itemsRaw) ? itemsRaw : (itemsRaw.data || []);
+        const itemData = itemDataRaw.data || itemDataRaw;
+
+        if (items.length === 0) {
+            console.error("API returned success, but the item list was empty.");
+            return;
+        }
+
+        // Reset our database object
+        db = {}; 
+
+        items.forEach(item => {
+            const category = item.category || 'Other';
+            if (!db[category]) db[category] = [];
+            
+            // Link the item name to the price data
             const details = itemData[item.name] || {};
-            return {
+            
+            db[category].push({
                 name: item.name,
-                cash_value: details.value || 0,
-                duped_value: details.dupedValue || details.value || 0,
                 image: item.image,
-                category: item.category
-            };
+                cash_value: details.value || 0,
+                duped_value: details.dupedValue || 0,
+                trend: details.trend || 'stable',
+                demand: details.demand || 'Normal'
+            });
         });
 
-        return formattedData;
+        // Update the Filter Buttons in the HTML
+        const fContainer = document.getElementById('filters');
+        if (fContainer) {
+            fContainer.innerHTML = '<div class="f-btn active" id="btn-all" onclick="setCat(\'all\', this)">All Items</div>';
+            Object.keys(db).sort().forEach(category => {
+                const btn = document.createElement('div');
+                btn.className = 'f-btn';
+                btn.innerText = category;
+                btn.onclick = () => setCat(category, btn);
+                fContainer.appendChild(btn);
+            });
+        }
+
+        // Tell the HTML to show the items
+        updateData();
+        console.log("Market data loaded successfully!");
+
     } catch (error) {
-        console.error("Could not load live values:", error);
-        return []; // Return empty list if API fails
+        console.error("Detailed API Error:", error);
+        const grid = document.getElementById('grid');
+        if (grid) {
+            grid.innerHTML = `<p class="col-span-full text-center py-20 text-red-500 font-bold">Error: ${error.message}. Please refresh.</p>`;
+        }
     }
 }
