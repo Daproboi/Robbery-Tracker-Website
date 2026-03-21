@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Robbery Sniper</title>
+    <title>Jailbreak Hub | Live Server Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -20,40 +20,19 @@
     
     <style>
         :root {
-            /* Kept your exact background colors */
-            --bg: #030508; 
-            --surface: #0a0c10;
-            
-            /* NEW: Deep, tactical glassmorphism */
-            --card: rgba(12, 15, 23, 0.85); 
-            --card-hover: rgba(18, 23, 35, 0.95);
-            
-            /* NEW: Cyber-Neon Accents */
-            --border: rgba(36, 98, 205, 0.25); 
-            --border-light: rgba(0, 240, 255, 0.15);
-            --accent: #2462cd; 
-            --accent-glow: #00f0ff; 
-            
-            --green: #00ff88; /* Toxic Hacker Green */
-            --orange: #ff9900; /* Warning Orange */
-            --red: #ff003c; /* Danger Red */
-            
-            --text-main: #ffffff; 
-            --text-dim: #8899b0;
-            --muted: rgba(0, 240, 255, 0.04); 
-            --muted-hover: rgba(0, 240, 255, 0.08);
+            --bg: #030508; --surface: #0a0c10;
+            --card: rgba(12, 15, 23, 0.85); --card-hover: rgba(18, 23, 35, 0.95);
+            --border: rgba(36, 98, 205, 0.25); --border-light: rgba(0, 240, 255, 0.15);
+            --accent: #2462cd; --accent-glow: #00f0ff; 
+            --green: #00ff88; --orange: #ff9900; --red: #ff003c; 
+            --text-main: #ffffff; --text-dim: #8899b0;
+            --muted: rgba(0, 240, 255, 0.04); --muted-hover: rgba(0, 240, 255, 0.08);
         }
-
         * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); margin: 0; padding: 0; }
-        
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); 
             padding-top: 100px; overflow-x: hidden; 
-            /* NEW: Subtle grid pattern in the background for a tactical map feel */
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(36, 98, 205, 0.15) 0%, transparent 60%),
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-image: radial-gradient(circle at 50% 0%, rgba(36, 98, 205, 0.15) 0%, transparent 60%), linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
             background-size: 100% 100%, 40px 40px, 40px 40px;
             min-height: 100vh; display: flex; flex-direction: column;
         }
@@ -68,28 +47,24 @@
 
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; flex: 1; width: 100%; }
 
-        .header-area { margin-bottom: 20px; text-align: center; }
-        .header-area h1 { font-family: 'JetBrains Mono', monospace; font-size: 3.5rem; margin: 0; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; }
+        .header-area { margin-bottom: 16px; text-align: center; }
+        .header-area h1 { font-family: 'JetBrains Mono', monospace; font-size: 3.2rem; margin: 0; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; }
         .header-area p { color: var(--text-dim); margin-top: 5px; font-size: 1rem; font-weight: 600; letter-spacing: 1px; }
         
-        /* --- TACTICAL HUD (Intro Dashboard) --- */
         .sniper-dashboard {
-            background: linear-gradient(135deg, rgba(36, 98, 205, 0.1), rgba(10, 12, 16, 0.95));
-            border: 1px solid var(--border); 
-            border-left: 4px solid var(--accent); /* Thick accent edge */
-            border-radius: 8px; /* Sharper corners */
-            padding: 24px; margin-bottom: 24px; 
+            background: linear-gradient(to right, rgba(36, 98, 205, 0.15), rgba(10, 12, 16, 0.95));
+            border: 1px solid var(--border-light); border-radius: 1rem; 
+            padding: 24px; margin-bottom: 16px; 
             box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(36, 98, 205, 0.05);
-            backdrop-filter: blur(20px);
-            cursor: crosshair; 
+            backdrop-filter: blur(20px); cursor: default; 
         }
-        .sniper-dashboard:hover { border-left-color: var(--accent-glow); box-shadow: 0 10px 40px -10px rgba(0, 240, 255, 0.15); }
+        .sniper-dashboard:hover { border-color: rgba(36, 98, 205, 0.4); box-shadow: 0 20px 40px -10px rgba(36, 98, 205, 0.25); transform: translateY(-4px) scale(1.01); }
         
         .dashboard-header { margin-bottom: 16px; }
-        .dashboard-header h1 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: var(--accent-glow); }
-        .dashboard-header p { color: var(--text-dim); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+        .dashboard-header h1 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: var(--accent-glow); }
+        .dashboard-header p { color: var(--text-dim); font-size: 0.9rem; font-family: 'JetBrains Mono', monospace; }
         
-        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
         
         .stat-panel {
             background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05);
@@ -99,19 +74,20 @@
         .stat-panel:hover { border-top-color: var(--accent-glow); background: rgba(36, 98, 205, 0.05); }
         .stat-label { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 1px; }
         .stat-label svg { width: 12px; height: 12px; color: var(--accent-glow); }
-        .stat-val { font-size: 1.6rem; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; }
+        .stat-val { font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; }
+        #statUpdated { font-size: 1.5rem !important; color: #ffffff !important; }
 
-        /* --- GAMING FILTER SWITCHES --- */
         .filter-box {
-            background: transparent; /* Removed the bulky box completely! */
-            padding: 0; margin-bottom: 30px; display: flex; flex-direction: column; gap: 12px;
+            background: rgba(17, 20, 26, 0.4); border: 1px solid var(--border-light);
+            border-radius: 1rem; padding: 16px; margin-bottom: 16px; 
+            backdrop-filter: blur(16px); display: flex; flex-direction: column; gap: 10px;
         }
-        .filter-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .filter-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
         
         .filter-btn {
             background: rgba(10, 14, 23, 0.8); border: 1px solid var(--border);
-            color: var(--text-dim); font-size: 0.75rem; font-weight: 700; 
-            padding: 8px 18px; border-radius: 4px; cursor: pointer; 
+            color: var(--text-dim); font-size: 0.8rem; font-weight: 700; 
+            padding: 6px 14px; border-radius: 4px; cursor: pointer; 
             font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.5);
         }
@@ -124,7 +100,21 @@
         #clearFiltersBtn { display: none; align-items: center; justify-content: center; gap: 6px; background: rgba(255, 0, 60, 0.1); border-color: var(--red); color: var(--red); }
         #clearFiltersBtn:hover { background: var(--red); color: #000; box-shadow: 0 0 15px rgba(255, 0, 60, 0.5); }
         
-        /* --- CYBER-GLASS SERVER CARDS --- */
+        /* --- WIDE BOUNTY SLIDER & MARKERS --- */
+        .bounty-slider-wrapper { 
+            display: none; width: 100%; flex-direction: column; gap: 8px; 
+            opacity: 0; animation: fadeIn 0.4s ease forwards; 
+            padding: 16px 20px; background: rgba(0,0,0,0.4); 
+            border: 1px solid var(--border); border-radius: 6px; margin-top: 8px;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .bounty-slider-wrapper.active { display: flex; }
+        .bounty-slider-header { display: flex; justify-content: space-between; align-items: center; width: 100%; color: var(--text-dim); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;}
+        .bounty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.1); outline: none; cursor: pointer; }
+        .bounty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #000; border: 3px solid var(--accent-glow); cursor: ew-resize; box-shadow: 0 0 15px rgba(0, 240, 255, 0.8); }
+        .slider-markers { display: flex; justify-content: space-between; width: 100%; color: var(--text-dim); font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; padding: 0 5px; }
+
+        /* --- THE MASONRY GRID & CARDS --- */
         .tracker-grid { column-count: 4; column-gap: 24px; padding-bottom: 100px; }
         @media (max-width: 1200px) { .tracker-grid { column-count: 3; } }
         @media (max-width: 900px) { .tracker-grid { column-count: 2; } }
@@ -132,7 +122,7 @@
         
         .server-card {
             background: var(--card); border: 1px solid var(--border);
-            border-top: 3px solid var(--accent); /* Tactical Top Line */
+            border-top: 3px solid var(--accent);
             border-radius: 6px; padding: 24px 20px 20px;
             display: flex; flex-direction: column; gap: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -140,9 +130,20 @@
         }
         .server-card:hover { border-top-color: var(--accent-glow); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15); transform: translateY(-2px); }
 
+        /* --- BOUNTY MODE (FULL WIDTH) CARD STYLING --- */
+        .server-card.bounty-mode-card { border-top-color: var(--green); background: rgba(5, 8, 12, 0.95); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0, 255, 136, 0.05); }
+        .server-card.bounty-mode-card:hover { border-top-color: var(--green); box-shadow: 0 20px 50px rgba(0, 255, 136, 0.15); }
+        .bounty-wide-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 16px; flex-wrap: wrap; gap: 16px; }
+        .bw-left { display: flex; flex-direction: column; gap: 4px; }
+        .bw-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+        .bw-total { font-size: 2.2rem; color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 900; text-shadow: 0 0 15px rgba(0, 255, 136, 0.4); display: flex; align-items: center; gap: 8px; }
+        .bw-total svg { width: 36px; height: 36px; stroke-width: 3; filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); }
+        .bw-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        .bw-stats { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .bounty-wide-players { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; width: 100%; }
+
         .robbery-list { display: flex; flex-direction: column; gap: 16px; }
         
-        /* NEW: Neon Line Tracing for Robbery Items! */
         .robbery-item { 
             display: flex; flex-direction: column; gap: 6px; 
             padding-left: 12px; border-left: 2px solid rgba(255,255,255,0.1); 
@@ -167,18 +168,16 @@
         .map-img { 
             width: 100%; height: auto; display: block; border-radius: 4px; 
             background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); cursor: zoom-in; 
-            filter: grayscale(20%) contrast(1.2); /* Makes the map look like a drone feed! */
+            filter: grayscale(20%) contrast(1.2); 
         }
         .map-img:hover { border-color: var(--accent-glow); filter: grayscale(0%) contrast(1.2); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
 
         .divider { border-top: 1px dashed rgba(255,255,255,0.1); margin: 0; }
 
-        .server-bounty-banner {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
-        }
-        .sb-label { color: var(--text-dim); font-weight: 700; letter-spacing: 1px; }
-        .sb-val { color: var(--green); font-weight: 900; font-size: 1.1rem; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+        /* --- FIXED TOTAL BOUNTY ALIGNMENT --- */
+        .server-bounty-banner { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 12px; }
+        .sb-label { color: var(--text-dim); font-weight: 800; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; line-height: 1.2; max-width: 100px; letter-spacing: 1px; display: inline-block; }
+        .sb-val { color: var(--green); font-weight: 900; font-size: 1.4rem; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
 
         .bounty-box {
             display: flex; align-items: center; gap: 12px; padding: 12px;
@@ -197,15 +196,12 @@
         .bounty-stats { color: var(--text-dim); font-size: 0.75rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
         .bounty-chevron { color: var(--accent-glow); font-size: 14px; flex-shrink: 0; }
 
-        /* --- THE CYBERPUNK JOIN BUTTON --- */
         .btn-join {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; height: 40px; 
             background: linear-gradient(90deg, #1d4ed8, #00f0ff); color: #000; 
             font-size: 0.85rem; font-weight: 900; font-family: 'JetBrains Mono', monospace;
             text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border: none; cursor: pointer;
-            
-            /* The incredible angled cut-off corners effect! */
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
         .btn-join:hover { background: linear-gradient(90deg, #2563eb, #ffffff); box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); transform: scale(1.02); }
@@ -246,21 +242,13 @@
         .modal-large-img { width: 100%; height: auto; max-height: 75vh; object-fit: contain; display: block; filter: contrast(1.2); }
         .modal-player-card { background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 12px; display: flex; gap: 12px; transition: border-color 0.2s; }
         .modal-player-card:hover { border-left-color: var(--accent-glow); background: rgba(0, 240, 255, 0.05); }
-        .modal-player-avatar { width: 44px; height: 44px; border-radius: 4px; background: #111; border: 1px solid var(--border); flex-shrink: 0; }
+        .modal-player-avatar { width: 44px; height: 44px; border-radius: 4px; background: #111; border: 1px solid var(--accent); flex-shrink: 0; }
         .modal-player-info { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
         .modal-player-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
         .modal-player-name { font-weight: 800; color: #fff; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'JetBrains Mono', monospace;}
         .modal-player-bounty { color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 0.95rem; flex-shrink: 0; text-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
         .inventory-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
         .inv-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
-
-        /* --- RESTORED BOUNTY SLIDER --- */
-        .bounty-slider-wrapper { display: flex; align-items: center; gap: 10px; opacity: 0; max-width: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-15px); }
-        .bounty-slider-wrapper.active { opacity: 1; max-width: 250px; transform: translateX(0); margin-left: 5px; }
-        .bounty-slider { -webkit-appearance: none; appearance: none; width: 120px; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.1); outline: none; cursor: pointer; }
-        .bounty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #000; border: 2.5px solid var(--accent-glow); cursor: ew-resize; box-shadow: 0 0 10px rgba(0, 240, 255, 0.8); }
-        .bounty-slider-val { color: var(--accent-glow); font-size: 0.85rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; width: 45px; text-shadow: 0 0 5px rgba(0, 240, 255, 0.5); }
-        #statUpdated { font-size: 1.5rem !important; }
     </style>
 </head>
 <body>
@@ -268,7 +256,7 @@
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
         <div class="nav-links">
             <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            <div class="nav-item"><a href="tracker.html" class="nav-link" style="color: var(--accent); font-weight: 800;">Tracker</a></div>
+            <div class="nav-item"><a href="tracker.html" class="nav-link" style="color: var(--accent-glow); font-weight: 800; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);">Tracker</a></div>
             <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
         </div>
     </nav>
@@ -277,8 +265,8 @@
         <!-- THE NEW INTRO DASHBOARD -->
         <div class="sniper-dashboard">
             <div class="dashboard-header">
-                <h1>Robbery Tracker</h1>
-                <p>Find Roblox Jailbreak servers with open robberies and airdrops in real time.</p>
+                <h1>Robbery Sniper</h1>
+                <p>Find Roblox Jailbreak servers with open targets in real time.</p>
             </div>
             <div class="dashboard-stats">
                 <div class="stat-panel">
@@ -286,11 +274,11 @@
                     <span class="stat-val" id="statServers">0</span>
                 </div>
                 <div class="stat-panel">
-                    <span class="stat-label"><i class="fa-solid fa-gem"></i> Open Robberies</span>
+                    <span class="stat-label"><i class="fa-solid fa-crosshairs"></i> Open Robberies</span>
                     <span class="stat-val" id="statRobberies" style="color: var(--green);">0</span>
                 </div>
                 <div class="stat-panel">
-                    <span class="stat-label"><i class="fa-regular fa-clock"></i> Last Updated</span>
+                    <span class="stat-label"><i class="fa-solid fa-clock-rotate-left"></i> Last Updated</span>
                     <span class="stat-val live-timer" id="statUpdated" data-time="0">Syncing...</span>
                 </div>
             </div>
@@ -298,9 +286,8 @@
 
         <!-- THE TACTICAL MULTI-FILTER BOX -->
         <div class="filter-box" id="filterBar">
-            
             <!-- First Row: Airdrops -->
-            <div class="filter-row">
+            <div class="filter-row" style="margin-bottom: 25px;">
                 <button class="filter-btn" data-filter="Airdrop">Airdrops</button>
                 <button class="filter-btn" data-filter="Brown Airdrop">Brown</button>
                 <button class="filter-btn" data-filter="Blue Airdrop">Blue</button>
@@ -308,8 +295,8 @@
             </div>
             
             <!-- The Permanent Gap & Dynamic Clear Button Row -->
-            <div class="filter-row" style="height: 38px; align-items: center; justify-content: center;">
-                <button class="filter-btn" id="clearFiltersBtn" style="display: none;"><i class="fa-solid fa-xmark"></i> Clear</button>
+            <div class="filter-row" style="min-height: 40px; align-items: center; justify-content: center; margin-bottom: 5px;">
+                <button class="filter-btn" id="clearFiltersBtn"><i class="fa-solid fa-xmark"></i> Clear</button>
             </div>
             
             <!-- Second Row: Main Robberies -->
@@ -326,17 +313,28 @@
                 <button class="filter-btn" data-filter="Tomb">Tomb</button>
             </div>
 
-            <!-- Third Row: Double Bank, Bounty & Dynamic Slider -->
+            <!-- Third Row: Double Bank & Bounty -->
             <div class="filter-row">
                 <button class="filter-btn" data-filter="Double Bank">Double Bank</button>
                 <button class="filter-btn" id="bountyFilterBtn" data-filter="Bounty">Bounty</button>
-                <div class="bounty-slider-wrapper" id="bountySliderWrapper">
-                    <input type="range" min="10" max="100" step="5" value="10" class="bounty-slider" id="bountySlider">
-                    <span class="bounty-slider-val" id="bountySliderVal">10k+</span>
+            </div>
+
+            <!-- THE FULL WIDTH BOUNTY SLIDER -->
+            <div class="bounty-slider-wrapper" id="bountySliderWrapper">
+                <div class="bounty-slider-header">
+                    <span>Total Server Bounty Filter</span>
+                    <span id="bountySliderVal" style="color: var(--accent-glow); font-size: 1rem; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);">10k+</span>
+                </div>
+                <input type="range" min="10" max="200" step="5" value="10" class="bounty-slider" id="bountySlider">
+                <div class="slider-markers">
+                    <span>10k</span>
+                    <span>50k</span>
+                    <span>100k</span>
+                    <span>150k</span>
+                    <span>200k+</span>
                 </div>
             </div>
-            
-        </div> <!-- THIS IS THE MISSING TAG! MAKE SURE IT IS HERE! -->
+        </div> 
 
         <div id="grid" class="tracker-grid">
             <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Establishing Uplink...</div>
@@ -350,9 +348,7 @@
                 <div class="modal-title" id="modalTitle">${svgDollar} Total Server Bounty · $0</div>
                 <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Player cards get injected here -->
-            </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
@@ -388,8 +384,6 @@
         document.querySelectorAll('.filter-btn:not(#clearFiltersBtn)').forEach(btn => {
             btn.addEventListener('click', function() {
                 const filterName = this.getAttribute('data-filter');
-                
-                // Toggle Filter
                 if (activeFilters.has(filterName)) {
                     activeFilters.delete(filterName);
                     this.classList.remove('active');
@@ -398,15 +392,10 @@
                     this.classList.add('active');
                 }
                 
-                // Show/Hide "Remove All" button
                 const clearBtn = document.getElementById('clearFiltersBtn');
-                if (activeFilters.size > 0) {
-                    clearBtn.style.display = 'inline-flex';
-                } else {
-                    clearBtn.style.display = 'none';
-                }
+                if (activeFilters.size > 0) clearBtn.style.display = 'inline-flex';
+                else clearBtn.style.display = 'none';
 
-                // Show/Hide Bounty Slider
                 const sliderWrapper = document.getElementById('bountySliderWrapper');
                 if (activeFilters.has('Bounty')) sliderWrapper.classList.add('active');
                 else sliderWrapper.classList.remove('active');
@@ -415,11 +404,10 @@
             });
         });
 
-        // "Remove All Filters" Logic (Now safely closes the slider too!)
         document.getElementById('clearFiltersBtn').addEventListener('click', function() {
             activeFilters.clear();
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('bountySliderWrapper').classList.remove('active'); // NEW FIX
+            document.getElementById('bountySliderWrapper').classList.remove('active'); 
             this.style.display = 'none';
             renderGrid();
         });
@@ -429,22 +417,19 @@
             minimumBounty = parseInt(this.value) * 1000;
             document.getElementById('bountySliderVal').innerText = this.value + 'k+';
             
-            // NEW: Calculates the percentage and paints the slider bar blue!
-            const min = 10; const max = 100;
+            const min = 10; const max = 200;
             const percentage = ((this.value - min) / (max - min)) * 100;
-            this.style.background = `linear-gradient(to right, var(--accent) ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
+            this.style.background = `linear-gradient(to right, var(--accent-glow) ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
             
-            renderGrid(); // Instantly update the grid as they slide!
+            renderGrid(); 
         });
 
         // === BOUNTY MODAL FUNCTIONS ===
         function openModal(jobId) {
             const srv = cachedServers[jobId];
             if (!srv || !srv.bountyPlayer || !srv.bountyPlayer.extra) return;
-            
             let fullListStr = srv.bountyPlayer.extra.find(e => e.name === "FullBountyList");
             if (!fullListStr) return;
-
             let allBounties = new Array();
             try { allBounties = JSON.parse(fullListStr.value); } catch(e) { return; }
 
@@ -456,7 +441,7 @@
 
             allBounties.forEach(player => {
                 let pAmt = player.Bounty ? "$" + parseInt(player.Bounty).toLocaleString() : "$0";
-                let avatarUrl = player.AvatarUrl;
+                let avatarUrl = player.AvatarUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${player.UserId}&width=150&height=150&format=png`;
                 
                 let invHTML = "";
                 if (player.Inventory && player.Inventory !== "") {
@@ -471,23 +456,19 @@
 
                 modalBody.innerHTML += `
                     <div class="modal-player-card">
-                        <img src="${avatarUrl}" class="modal-player-avatar" alt="Avatar" onerror="this.src='https://tr.rbxcdn.com/38c6edcb50633730ff4cf39df885e835/150/150/AvatarHeadshot/Png'">
+                        <img src="${avatarUrl}" class="modal-player-avatar" alt="" onerror="this.src='https://tr.rbxcdn.com/38c6edcb50633730ff4cf39df885e835/150/150/AvatarHeadshot/Png'">
                         <div class="modal-player-info">
                             <div class="modal-player-top">
                                 <span class="modal-player-name">${player.Name}</span>
                                 <span class="modal-player-bounty">${pAmt}</span>
                             </div>
-                            <div class="inventory-pills">
-                                ${invHTML}
-                            </div>
+                            <div class="inventory-pills">${invHTML}</div>
                         </div>
                     </div>
                 `;
             });
-
             document.getElementById('bountyModal').classList.add('active');
         }
-
         function closeModal() { document.getElementById('bountyModal').classList.remove('active'); }
 
         // === IMAGE MODAL FUNCTIONS ===
@@ -498,20 +479,16 @@
             document.getElementById('imageModalSrc').src = imgSrc;
             document.getElementById('imageModal').classList.add('active');
         }
-
         function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); }
 
         function updateLiveTimers() {
             document.querySelectorAll('.live-timer').forEach(el => {
                 const dateStr = el.getAttribute('data-time');
                 if (!dateStr || dateStr === "0") return;
-                
                 const date = new Date(dateStr); 
                 if (isNaN(date.getTime())) return; 
-                
                 let seconds = Math.floor((new Date() - date) / 1000);
                 if (seconds < 0) seconds = 0; 
-                
                 if (seconds < 60) el.innerText = `${seconds}s ago`;
                 else if (seconds < 3600) el.innerText = `${Math.floor(seconds / 60)}m ${seconds % 60}s ago`;
                 else el.innerText = `${Math.floor(seconds / 3600)}h ago`;
@@ -534,18 +511,15 @@
                 rawData.forEach(item => {
                     const jid = item.jobId;
                     if (!jid) return;
-                    
                     if (!cachedServers[jid]) {
                         cachedServers[jid] = {
                             jobId: jid, robberies:[], bountyPlayer: null,
                             totalBounty: 0, crims: 0, police: 0, players: item.players || "N/A", lastUpdate: item.createdAt || 0
                         };
                     }
-                    
                     if (new Date(item.createdAt || 0) > new Date(cachedServers[jid].lastUpdate)) {
                         cachedServers[jid].lastUpdate = item.createdAt;
                     }
-                    
                     if (item.name === "High Bounty Server") {
                         cachedServers[jid].totalBounty = item.totalBounty || 0;
                         cachedServers[jid].crims = item.crims || 0;
@@ -556,11 +530,8 @@
                         if (item.totalBounty) cachedServers[jid].totalBounty = item.totalBounty;
                         if (item.crims) cachedServers[jid].crims = item.crims;
                         if (item.police) cachedServers[jid].police = item.police;
-                    } 
-                    else {
+                    } else {
                         cachedServers[jid].robberies.push(item);
-                        
-                        // Strict Counter: ONLY tallies real robberies that are open (No Airdrops/Bounties)
                         if (!item.name.includes("Airdrop") &&["Open", "Double Bank Active", "Falling", "Dropped", "Unopened"].includes(item.status)) {
                             totalOpenRobberies++;
                         }
@@ -572,24 +543,20 @@
 
                 renderGrid();
             } catch (err) {
-                console.error(err);
                 document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red);">Tracker Offline.</div>';
             }
         }
 
         function renderGrid() {
             const grid = document.getElementById('grid');
-            
             grid.innerHTML = ''; 
             
             let serverList = Object.values(cachedServers);
             serverList.sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate));
 
-            // Filtering Logic
             if (activeFilters.size > 0) {
                 serverList = serverList.filter(srv => {
                     let srvCopy = { ...srv, robberies:[...srv.robberies], bountyPlayer: srv.bountyPlayer };
-                    
                     if (activeFilters.size > 0) {
                         srvCopy.robberies = srvCopy.robberies.filter(r => {
                             return Array.from(activeFilters).some(f => {
@@ -599,15 +566,11 @@
                                 return r.name === f; 
                             });
                         });
-                        
-                        // Check if Bounty is active AND slider threshold is met
                         if (!activeFilters.has("Bounty") || (srvCopy.totalBounty < minimumBounty)) {
                             srvCopy.bountyPlayer = null;
                         }
                     }
-                    
                     if (srvCopy.robberies.length === 0 && !srvCopy.bountyPlayer) return false;
-                    
                     srv.displayRobberies = srvCopy.robberies;
                     srv.displayBountyPlayer = srvCopy.bountyPlayer;
                     return true;
@@ -620,30 +583,25 @@
             }
 
             if (serverList.length === 0) {
-                grid.innerHTML = '<div class="loading">No Active Robberies found</div>';
+                grid.innerHTML = '<div class="loading">No Active Targets Found</div>';
                 return;
             }
 
-            // === NEW JAVASCRIPT MASONRY ENGINE ===
-            // 1. Figure out how many columns we need based on screen size
-            let numCols = 4;
-            if (window.innerWidth <= 600) numCols = 1;
-            else if (window.innerWidth <= 900) numCols = 2;
-            else if (window.innerWidth <= 1200) numCols = 3;
-
-            // 2. Create the invisible columns
-            const colDivs =[];
-            for (let i = 0; i < numCols; i++) {
-                const col = document.createElement('div');
-                col.className = 'grid-column';
-                colDivs.push(col);
-                grid.appendChild(col);
+            // === MASSIVE UPGRADE: DYNAMIC LAYOUT BASED ON BOUNTY MODE ===
+            let isBountyMode = activeFilters.has("Bounty");
+            
+            if (isBountyMode) {
+                grid.style.columnCount = "1";
+            } else {
+                if (window.innerWidth <= 600) grid.style.columnCount = "1";
+                else if (window.innerWidth <= 900) grid.style.columnCount = "2";
+                else if (window.innerWidth <= 1200) grid.style.columnCount = "3";
+                else grid.style.columnCount = "4";
             }
 
-            // 3. Deal the cards out left-to-right into the columns!
             serverList.forEach((srv, index) => {
                 const card = document.createElement('div');
-                card.className = 'server-card';
+                card.className = isBountyMode ? 'server-card bounty-mode-card' : 'server-card';
                 
                 let robberiesHTML = "";
                 if (srv.displayRobberies.length > 0) {
@@ -673,7 +631,7 @@
                                 <div class="sub-data" style="align-items: flex-start;">
                                     <span class="sub-label" style="margin-top: 2px;">Game Time:</span>
                                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                                        <span style="color: #fff; font-weight: 700; font-size: 1rem;">${rob.gameTime || "Unknown"}</span>
+                                        <span style="color: #fff; font-weight: 700; font-size: 1rem; font-family: 'JetBrains Mono';">${rob.gameTime || "Unknown"}</span>
                                         <span style="color: #fff; font-weight: 800; font-size: 0.75rem;">(WILL OPEN SOON)</span>
                                     </div>
                                 </div>`;
@@ -716,32 +674,78 @@
 
                 if (srv.displayBountyPlayer && srv.displayBountyPlayer.name !== "High Bounty Server") {
                     let b = srv.displayBountyPlayer;
-                    
-                    // FIXED: Directly use the image the backend saved, no broken fallbacks!
-                    let avatarSrc = (b.image && b.image.startsWith("http")) ? b.image : "";
-                    
-                    let bountyAmount = b.bounty ? "$" + parseInt(b.bounty).toLocaleString() : "Unknown";
+                    let totalServerBounty = srv.totalBounty ? parseInt(srv.totalBounty).toLocaleString() : "0";
                     let pCount = srv.players ? srv.players.split(" ")[0] : "?";
 
-                    playerHTML = `
-                        <div class="divider"></div>
-                        <div class="server-bounty-banner">
-                            <span class="sb-label">Total Server Bounty:</span>
-                            <span class="sb-val">$${parseInt(srv.totalBounty).toLocaleString()}</span>
-                        </div>
-                        <div class="bounty-box" onclick="openModal('${srv.jobId}')">
-                            <div class="bounty-left">
-                                <!-- FIXED: Removed the dead onerror loop completely! -->
-                                <img src="${avatarSrc}" class="bounty-avatar" alt="">
-                                <div class="bounty-info">
-                                    <div class="bounty-name">${svgDollar} <span>${b.name}</span></div>
-                                    <div class="bounty-stats">${bountyAmount} <span style="margin: 0 6px; opacity: 0.5;">•</span> ${pCount} players</div>
+                    if (isBountyMode) {
+                        let allBounties = new Array();
+                        if (b.extra) {
+                            let fl = b.extra.find(e => e.name === "FullBountyList");
+                            if (fl) { try { allBounties = JSON.parse(fl.value); } catch(e) {} }
+                        }
+                        
+                        let playersGridHTML = "";
+                        allBounties.forEach(p => {
+                            let pAmt = p.Bounty ? "$" + parseInt(p.Bounty).toLocaleString() : "$0";
+                            let aUrl = p.AvatarUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${p.UserId}&width=150&height=150&format=png`;
+                            let iHTML = "";
+                            if (p.Inventory) {
+                                p.Inventory.split(",").forEach(it => { if(it.trim()!=="") iHTML += `<span class="inv-pill">${it.trim()}</span>`; });
+                            } else iHTML = `<span class="text-xs text-muted-foreground italic">No tracked items</span>`;
+
+                            playersGridHTML += `
+                                <div class="modal-player-card">
+                                    <img src="${aUrl}" class="modal-player-avatar" alt="Avatar">
+                                    <div class="modal-player-info">
+                                        <div class="modal-player-top">
+                                            <span class="modal-player-name">${p.Name}</span>
+                                            <span class="modal-player-bounty">${pAmt}</span>
+                                        </div>
+                                        <div class="inventory-pills">${iHTML}</div>
+                                    </div>
+                                </div>`;
+                        });
+
+                        playerHTML = `
+                            ${srv.displayRobberies.length > 0 ? `<div class="divider"></div>` : ``}
+                            <div class="bounty-wide-header">
+                                <div class="bw-left">
+                                    <span class="bw-label">Total Server Bounty</span>
+                                    <span class="bw-total">${svgDollar} $${totalServerBounty}</span>
+                                </div>
+                                <div class="bw-right">
+                                    <div class="bw-stats"><span>${allBounties.length} Bounties</span> <span>•</span> <span>${srv.police || 0} Cops</span></div>
+                                    <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Total Players: ${pCount} / 30</span>
                                 </div>
                             </div>
-                            <i class="fa-solid fa-chevron-right bounty-chevron"></i>
-                        </div>
-                    `;
-                    footerStats = `<span>Criminals: ${srv.crims || 0} <span style="margin: 0 6px; opacity: 0.5;">•</span> Police: ${srv.police || 0}</span>`;
+                            <div class="bounty-wide-players">
+                                ${playersGridHTML}
+                            </div>
+                        `;
+                    } else {
+                        let avatarSrc = b.image || `https://www.roblox.com/headshot-thumbnail/image?userId=${b.userId || 1}&width=150&height=150&format=png`;
+                        let bountyAmount = b.bounty ? "$" + parseInt(b.bounty).toLocaleString() : "Unknown";
+                        let dividerLine = (srv.displayRobberies.length > 0) ? `<div class="divider"></div>` : ``;
+
+                        playerHTML = `
+                            ${dividerLine}
+                            <div class="server-bounty-banner">
+                                <span class="sb-label">Total Server<br>Bounty:</span>
+                                <span class="sb-val">$${totalServerBounty}</span>
+                            </div>
+                            <div class="bounty-box" onclick="openModal('${srv.jobId}')">
+                                <div class="bounty-left">
+                                    <img src="${avatarSrc}" class="bounty-avatar" alt="Target" onerror="this.src='https://tr.rbxcdn.com/38c6edcb50633730ff4cf39df885e835/420/420/AvatarHeadshot/Png'">
+                                    <div class="bounty-info">
+                                        <div class="bounty-name">${svgDollar} <span>${b.name}</span></div>
+                                        <div class="bounty-stats">${bountyAmount} <span style="margin: 0 6px; opacity: 0.5;">•</span> ${pCount} players</div>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right bounty-chevron"></i>
+                            </div>
+                        `;
+                    }
+                    footerStats = `<span>Crims: ${srv.crims || 0} <span style="margin: 0 6px; opacity: 0.5;">•</span> Cops: ${srv.police || 0}</span>`;
                 }
 
                 card.innerHTML = `
@@ -756,19 +760,15 @@
                     </div>
                 `;
                 
-                // Deal the card into the correct column (Left-to-Right)!
-                colDivs[index % numCols].appendChild(card);
+                grid.appendChild(card);
             });
             
             updateLiveTimers();
         }
 
+        window.addEventListener('resize', () => { if (Object.keys(cachedServers).length > 0) renderGrid(); });
         fetchRobberies();
         setInterval(fetchRobberies, 10000);
-        // Re-renders the grid perfectly if the user resizes their screen
-        window.addEventListener('resize', () => {
-            if (Object.keys(cachedServers).length > 0) renderGrid();
-        });
     </script>
 </body>
 </html>
