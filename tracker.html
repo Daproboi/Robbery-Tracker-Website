@@ -114,22 +114,38 @@
         .bounty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #000; border: 3px solid var(--accent-glow); cursor: ew-resize; box-shadow: 0 0 15px rgba(0, 240, 255, 0.8); }
         .slider-markers { display: flex; justify-content: space-between; width: 100%; color: var(--text-dim); font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; padding: 0 5px; }
 
-        /* --- THE MASONRY GRID & CARDS --- */
-        .tracker-grid { column-count: 4; column-gap: 24px; padding-bottom: 100px; }
-        @media (max-width: 1200px) { .tracker-grid { column-count: 3; } }
-        @media (max-width: 900px) { .tracker-grid { column-count: 2; } }
-        @media (max-width: 600px) { .tracker-grid { column-count: 1; } }
+        /* --- THE HOLY GRAIL MASONRY GRID --- */
+        .tracker-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 24px; 
+            padding-bottom: 100px; 
+            align-items: start; /* Columns align to the top */
+        }
         
+        /* Instant Full-Width switch for Bounty Mode */
+        .tracker-grid.bounty-active { grid-template-columns: 1fr !important; }
+
+        @media (max-width: 1200px) { .tracker-grid:not(.bounty-active) { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .tracker-grid:not(.bounty-active) { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .tracker-grid { grid-template-columns: 1fr; } }
+        
+        /* The invisible columns that handle the perfect gaps! */
+        .grid-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
         .server-card {
             background: var(--card); border: 1px solid var(--border);
-            border-top: 3px solid var(--accent);
-            border-radius: 6px; padding: 24px 20px 20px;
-            display: flex; flex-direction: column; gap: 16px;
+            border-top: 3px solid var(--accent); border-radius: 6px; 
+            padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            break-inside: avoid; margin-bottom: 24px; position: relative;
+            position: relative;
         }
         .server-card:hover { border-top-color: var(--accent-glow); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15); transform: translateY(-2px); }
-
         /* --- BOUNTY MODE (FULL WIDTH) CARD STYLING --- */
         .server-card.bounty-mode-card { border-top-color: var(--green); background: rgba(5, 8, 12, 0.95); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0, 255, 136, 0.05); }
         .server-card.bounty-mode-card:hover { border-top-color: var(--green); box-shadow: 0 20px 50px rgba(0, 255, 136, 0.15); }
@@ -152,8 +168,23 @@
         .robbery-item:hover { border-left-color: var(--accent-glow); background: linear-gradient(90deg, rgba(0, 240, 255, 0.05), transparent); }
         
         .robbery-header { display: flex; align-items: center; justify-content: space-between; }
-        .robbery-name { font-weight: 800; font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
+        .robbery-name { font-weight: 800; font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }  
         
+        /* --- NEW: TACTICAL ICONS --- */
+        .robbery-header-left { display: flex; align-items: center; gap: 12px; }
+        .robbery-icon-box {
+            width: 28px; height: 28px; border-radius: 6px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; flex-shrink: 0;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-dim);
+            transition: all 0.3s ease;
+        }
+        .icon-open { background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); color: var(--green); box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+        .icon-progress { background: rgba(255, 153, 0, 0.1); border-color: rgba(255, 153, 0, 0.3); color: var(--orange); box-shadow: 0 0 10px rgba(255, 153, 0, 0.2); }
+        .icon-closed { background: rgba(255, 0, 60, 0.1); border-color: rgba(255, 0, 60, 0.3); color: var(--red); box-shadow: 0 0 10px rgba(255, 0, 60, 0.2); }
+        
+        .filter-btn i { margin-right: 6px; opacity: 0.8; } 
+         
         .status-text { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
         .text-green { color: var(--green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
         .text-orange { color: var(--orange); text-shadow: 0 0 8px rgba(255, 153, 0, 0.4); }
@@ -171,6 +202,14 @@
             filter: grayscale(20%) contrast(1.2); 
         }
         .map-img:hover { border-color: var(--accent-glow); filter: grayscale(0%) contrast(1.2); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+
+        /* NEW: Stops the map from becoming gigantic in Full-Width Bounty Mode! */
+        .bounty-mode-card .map-img {
+            max-height: 250px; /* Locks the map to a reasonable height */
+            width: auto; /* Prevents it from stretching to the edges */
+            margin: 0 auto; /* Perfectly centers the map inside the giant card */
+            object-fit: contain;
+        }
 
         .divider { border-top: 1px dashed rgba(255,255,255,0.1); margin: 0; }
 
@@ -219,7 +258,7 @@
         .footer-time svg { width: 14px; height: 14px; }
         .live-timer { font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 800; }
 
-        .loading { text-align: center; color: var(--text-dim); font-size: 1.2rem; margin-top: 50px; font-weight: 700; column-span: all; width: 100%; display: block; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 2px; }
+        .loading { text-align: center; color: var(--text-dim); font-size: 1.2rem; margin-top: 50px; font-weight: 700; grid-column: 1 / -1; width: 100%; display: block; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 2px; }
         
         footer { background: var(--surface); border-top: 1px solid var(--border); padding: 40px 20px; text-align: center; margin-top: auto; }
         .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 5px; letter-spacing: -1px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace;}
@@ -288,10 +327,10 @@
         <div class="filter-box" id="filterBar">
             <!-- First Row: Airdrops -->
             <div class="filter-row" style="margin-bottom: 25px;">
-                <button class="filter-btn" data-filter="Airdrop">Airdrops</button>
-                <button class="filter-btn" data-filter="Brown Airdrop">Brown</button>
-                <button class="filter-btn" data-filter="Blue Airdrop">Blue</button>
-                <button class="filter-btn" data-filter="Red Airdrop">Red</button>
+                <button class="filter-btn" data-filter="Airdrop"><i class="fa-solid fa-parachute-box"></i> Airdrops</button>
+                <button class="filter-btn" data-filter="Brown Airdrop"><i class="fa-solid fa-circle" style="color: #8B4513;"></i> Brown</button>
+                <button class="filter-btn" data-filter="Blue Airdrop"><i class="fa-solid fa-circle" style="color: #3b82f6;"></i> Blue</button>
+                <button class="filter-btn" data-filter="Red Airdrop"><i class="fa-solid fa-circle" style="color: #ef4444;"></i> Red</button>
             </div>
             
             <!-- The Permanent Gap & Dynamic Clear Button Row -->
@@ -301,22 +340,22 @@
             
             <!-- Second Row: Main Robberies -->
             <div class="filter-row">
-                <button class="filter-btn" data-filter="Jewelry Store">Jewelry Store</button>
-                <button class="filter-btn" data-filter="Bank">Bank</button>
-                <button class="filter-btn" data-filter="Bank Truck">Bank Truck</button>
-                <button class="filter-btn" data-filter="Power Plant">Power Plant</button>
-                <button class="filter-btn" data-filter="Casino">Casino</button>
-                <button class="filter-btn" data-filter="Cargo Plane">Cargo Plane</button>
-                <button class="filter-btn" data-filter="Cargo Train">Cargo Train</button>
-                <button class="filter-btn" data-filter="Museum">Museum</button>
-                <button class="filter-btn" data-filter="Mansion">Mansion</button>
-                <button class="filter-btn" data-filter="Tomb">Tomb</button>
+                <button class="filter-btn" data-filter="Jewelry Store"><i class="fa-solid fa-gem"></i> Jewelry Store</button>
+                <button class="filter-btn" data-filter="Bank"><i class="fa-solid fa-building-columns"></i> Bank</button>
+                <button class="filter-btn" data-filter="Bank Truck"><i class="fa-solid fa-truck"></i> Bank Truck</button>
+                <button class="filter-btn" data-filter="Power Plant"><i class="fa-solid fa-bolt"></i> Power Plant</button>
+                <button class="filter-btn" data-filter="Casino"><i class="fa-solid fa-dice"></i> Casino</button>
+                <button class="filter-btn" data-filter="Cargo Plane"><i class="fa-solid fa-plane"></i> Cargo Plane</button>
+                <button class="filter-btn" data-filter="Cargo Train"><i class="fa-solid fa-train"></i> Cargo Train</button>
+                <button class="filter-btn" data-filter="Museum"><i class="fa-solid fa-building-columns"></i> Museum</button>
+                <button class="filter-btn" data-filter="Mansion"><i class="fa-solid fa-house-chimney"></i> Mansion</button>
+                <button class="filter-btn" data-filter="Tomb"><i class="fa-solid fa-skull"></i> Tomb</button>
             </div>
 
             <!-- Third Row: Double Bank & Bounty -->
             <div class="filter-row">
-                <button class="filter-btn" data-filter="Double Bank">Double Bank</button>
-                <button class="filter-btn" id="bountyFilterBtn" data-filter="Bounty">Bounty</button>
+                <button class="filter-btn" data-filter="Double Bank"><i class="fa-solid fa-vault"></i> Double Bank</button>
+                <button class="filter-btn" id="bountyFilterBtn" data-filter="Bounty"><i class="fa-solid fa-sack-dollar"></i> Bounty</button>
             </div>
 
             <!-- THE FULL WIDTH BOUNTY SLIDER -->
@@ -327,14 +366,10 @@
                 </div>
                 <input type="range" min="10" max="200" step="5" value="10" class="bounty-slider" id="bountySlider">
                 <div class="slider-markers">
-                    <span>10k</span>
-                    <span>50k</span>
-                    <span>100k</span>
-                    <span>150k</span>
-                    <span>200k+</span>
+                    <span>10k</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span>
                 </div>
             </div>
-        </div> 
+        </div>
 
         <div id="grid" class="tracker-grid">
             <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Establishing Uplink...</div>
@@ -532,7 +567,8 @@
                         if (item.police) cachedServers[jid].police = item.police;
                     } else {
                         cachedServers[jid].robberies.push(item);
-                        if (!item.name.includes("Airdrop") &&["Open", "Double Bank Active", "Falling", "Dropped", "Unopened"].includes(item.status)) {
+                        // NEW STRICT COUNTER: Counts Open AND In Robbery. Ignores Airdrops completely!
+                        if (!item.name.includes("Airdrop") && ["Open", "Double Bank Active", "In Robbery", "In Progress"].includes(item.status)) {
                             totalOpenRobberies++;
                         }
                     }
@@ -554,6 +590,7 @@
             let serverList = Object.values(cachedServers);
             serverList.sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate));
 
+            // Filtering Logic
             if (activeFilters.size > 0) {
                 serverList = serverList.filter(srv => {
                     let srvCopy = { ...srv, robberies:[...srv.robberies], bountyPlayer: srv.bountyPlayer };
@@ -583,22 +620,34 @@
             }
 
             if (serverList.length === 0) {
-                grid.innerHTML = '<div class="loading">No Active Targets Found</div>';
+                grid.innerHTML = '<div class="loading">No Active Robberies found</div>';
                 return;
             }
 
-            // === MASSIVE UPGRADE: DYNAMIC LAYOUT BASED ON BOUNTY MODE ===
+            // === THE JAVASCRIPT MASONRY ENGINE ===
             let isBountyMode = activeFilters.has("Bounty");
-            
             if (isBountyMode) {
-                grid.style.columnCount = "1";
+                grid.classList.add('bounty-active');
             } else {
-                if (window.innerWidth <= 600) grid.style.columnCount = "1";
-                else if (window.innerWidth <= 900) grid.style.columnCount = "2";
-                else if (window.innerWidth <= 1200) grid.style.columnCount = "3";
-                else grid.style.columnCount = "4";
+                grid.classList.remove('bounty-active');
             }
 
+            // 1. Calculate how many columns the screen can fit
+            let numCols = 4;
+            if (isBountyMode || window.innerWidth <= 600) numCols = 1;
+            else if (window.innerWidth <= 900) numCols = 2;
+            else if (window.innerWidth <= 1200) numCols = 3;
+
+            // 2. Create the invisible vertical columns
+            const colDivs =[];
+            for (let i = 0; i < numCols; i++) {
+                const col = document.createElement('div');
+                col.className = 'grid-column';
+                colDivs.push(col);
+                grid.appendChild(col);
+            }
+
+            // 3. Deal the cards left-to-right into the columns!
             serverList.forEach((srv, index) => {
                 const card = document.createElement('div');
                 card.className = isBountyMode ? 'server-card bounty-mode-card' : 'server-card';
@@ -609,49 +658,57 @@
                     srv.displayRobberies.forEach((rob, idx) => {
                         const status = rob.status || "Unknown";
                         let statusColor = "text-red";
-                        if (["Open", "Falling", "Dropped", "Double Bank Active", "Unopened"].includes(status)) statusColor = "text-green";
-                        else if (["In Robbery", "In Progress"].includes(status)) statusColor = "text-orange";
+                        let iconColorClass = "icon-closed"; 
+                        
+                        // FIX: Added "Active" so Double Bank lights up Green!
+                        if (["Open", "Falling", "Dropped", "Double Bank Active", "Active", "Unopened"].includes(status)) {
+                            statusColor = "text-green";
+                            iconColorClass = "icon-open";
+                        }
+                        else if (["In Robbery", "In Progress"].includes(status)) {
+                            statusColor = "text-orange";
+                            iconColorClass = "icon-progress";
+                        }
                         
                         let displayName = rob.name;
+                        
+                        let iconName = "fa-crosshairs";
+                        let lowName = displayName.toLowerCase();
+                        
+                        // FIX: Replaced standard bank with a heavy vault for Double Bank!
+                        if (lowName.includes("double bank")) iconName = "fa-vault";
+                        else if (lowName.includes("bank") || lowName.includes("crater")) iconName = "fa-building-columns";
+                        if (lowName.includes("jewelry")) iconName = "fa-gem";
+                        if (lowName.includes("museum")) iconName = "fa-building-columns";
+                        if (lowName.includes("power")) iconName = "fa-bolt";
+                        if (lowName.includes("casino")) iconName = "fa-dice";
+                        if (lowName.includes("train")) iconName = "fa-train";
+                        if (lowName.includes("plane")) iconName = "fa-plane";
+                        if (lowName.includes("mansion")) iconName = "fa-house-chimney";
+                        if (lowName.includes("tomb")) iconName = "fa-skull";
+                        if (lowName.includes("truck")) iconName = "fa-truck";
+                        if (lowName.includes("airdrop")) iconName = "fa-parachute-box";
+
                         let subDataHTML = "";
                         
                         if (rob.name.includes("Double Bank")) {
                             displayName = "Double Bank Active";
-                            subDataHTML += `
-                                <div class="sub-data">
-                                    <span class="sub-label">Rising Bank:</span>
-                                    <span class="text-green font-bold">Open</span>
-                                </div>
-                                <div class="sub-data">
-                                    <span class="sub-label">Crater Bank:</span>
-                                    <span class="text-green font-bold">Open</span>
-                                </div>`;
+                            subDataHTML += `<div class="sub-data"><span class="sub-label">Rising Bank:</span><span class="text-green font-bold">Open</span></div><div class="sub-data"><span class="sub-label">Crater Bank:</span><span class="text-green font-bold">Open</span></div>`;
                         } else if (rob.name === "Mansion" && status === "Closed") {
-                            subDataHTML += `
-                                <div class="sub-data" style="align-items: flex-start;">
-                                    <span class="sub-label" style="margin-top: 2px;">Game Time:</span>
-                                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                                        <span style="color: #fff; font-weight: 700; font-size: 1rem; font-family: 'JetBrains Mono';">${rob.gameTime || "Unknown"}</span>
-                                        <span style="color: #fff; font-weight: 800; font-size: 0.75rem;">(WILL OPEN SOON)</span>
-                                    </div>
-                                </div>`;
+                            subDataHTML += `<div class="sub-data" style="align-items: flex-start;"><span class="sub-label" style="margin-top: 2px;">Game Time:</span><div style="display: flex; flex-direction: column; align-items: flex-end;"><span style="color: #fff; font-weight: 700; font-size: 1rem; font-family: 'JetBrains Mono';">${rob.gameTime || "Unknown"}</span><span style="color: #fff; font-weight: 800; font-size: 0.75rem;">(WILL OPEN SOON)</span></div></div>`;
                         } else {
                             if (rob.extra && Array.isArray(rob.extra)) {
                                 rob.extra.forEach(ex => {
                                     let valText = ex.value.replace(/\*/g, '');
                                     let valClass = ex.name.includes("Code") ? "sub-val highlight" : "sub-val";
                                     let labelText = ex.name.includes("Code") ? "Casino Code:" : ex.name + ":";
-                                    if (ex.name !== "FullBountyList") {
-                                        subDataHTML += `<div class="sub-data"><span class="sub-label">${labelText}</span><span class="${valClass}">${valText}</span></div>`;
-                                    }
+                                    if (ex.name !== "FullBountyList") subDataHTML += `<div class="sub-data"><span class="sub-label">${labelText}</span><span class="${valClass}">${valText}</span></div>`;
                                 });
                             }
                         }
 
                         let mapHTML = "";
-                        if (rob.image && rob.image.startsWith("http")) {
-                            mapHTML = `<div class="map-block"><img src="${rob.image}" class="map-img" alt="Map Location" onclick="openImageModal('${rob.image}')"></div>`;
-                        }
+                        if (rob.image && rob.image.startsWith("http")) mapHTML = `<div class="map-block"><img src="${rob.image}" class="map-img" alt="Map Location" onclick="openImageModal('${rob.image}')"></div>`;
                         
                         if (idx > 0) robberiesHTML += `<div class="divider"></div>`;
                         let statusPillHTML = !rob.name.includes("Double Bank") ? `<span class="status-text ${statusColor}">${status}</span>` : "";
@@ -659,7 +716,12 @@
                         robberiesHTML += `
                             <div class="robbery-item">
                                 <div class="robbery-header">
-                                    <span class="robbery-name">${displayName}</span>
+                                    <div class="robbery-header-left">
+                                        <div class="robbery-icon-box ${iconColorClass}">
+                                            <i class="fa-solid ${iconName}"></i>
+                                        </div>
+                                        <span class="robbery-name">${displayName}</span>
+                                    </div>
                                     ${statusPillHTML}
                                 </div>
                                 ${subDataHTML}
@@ -711,7 +773,7 @@
                             <div class="bounty-wide-header">
                                 <div class="bw-left">
                                     <span class="bw-label">Total Server Bounty</span>
-                                    <span class="bw-total">${svgDollar} $${totalServerBounty}</span>
+                                    <span class="bw-total"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" style="filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); stroke-width: 3;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> $${totalServerBounty}</span>
                                 </div>
                                 <div class="bw-right">
                                     <div class="bw-stats"><span>${allBounties.length} Bounties</span> <span>•</span> <span>${srv.police || 0} Cops</span></div>
@@ -723,7 +785,7 @@
                             </div>
                         `;
                     } else {
-                        let avatarSrc = b.image || `https://www.roblox.com/headshot-thumbnail/image?userId=${b.userId || 1}&width=150&height=150&format=png`;
+                        let avatarSrc = (b.image && b.image.startsWith("http")) ? b.image : "";
                         let bountyAmount = b.bounty ? "$" + parseInt(b.bounty).toLocaleString() : "Unknown";
                         let dividerLine = (srv.displayRobberies.length > 0) ? `<div class="divider"></div>` : ``;
 
@@ -735,7 +797,7 @@
                             </div>
                             <div class="bounty-box" onclick="openModal('${srv.jobId}')">
                                 <div class="bounty-left">
-                                    <img src="${avatarSrc}" class="bounty-avatar" alt="Target" onerror="this.src='https://tr.rbxcdn.com/38c6edcb50633730ff4cf39df885e835/420/420/AvatarHeadshot/Png'">
+                                    <img src="${avatarSrc}" class="bounty-avatar" alt="">
                                     <div class="bounty-info">
                                         <div class="bounty-name">${svgDollar} <span>${b.name}</span></div>
                                         <div class="bounty-stats">${bountyAmount} <span style="margin: 0 6px; opacity: 0.5;">•</span> ${pCount} players</div>
@@ -745,7 +807,7 @@
                             </div>
                         `;
                     }
-                    footerStats = `<span>Crims: ${srv.crims || 0} <span style="margin: 0 6px; opacity: 0.5;">•</span> Cops: ${srv.police || 0}</span>`;
+                    footerStats = `<span>Criminals: ${srv.crims || 0} <span style="margin: 0 6px; opacity: 0.5;">•</span> Police: ${srv.police || 0}</span>`;
                 }
 
                 card.innerHTML = `
@@ -760,7 +822,8 @@
                     </div>
                 `;
                 
-                grid.appendChild(card);
+                // 4. Place the fully built card into the correct column!
+                colDivs[index % numCols].appendChild(card);
             });
             
             updateLiveTimers();
@@ -769,6 +832,10 @@
         window.addEventListener('resize', () => { if (Object.keys(cachedServers).length > 0) renderGrid(); });
         fetchRobberies();
         setInterval(fetchRobberies, 10000);
+        // Instantly reshuffles the grid perfectly if the user resizes their screen!
+        window.addEventListener('resize', () => {
+            if (Object.keys(cachedServers).length > 0) renderGrid();
+        });
     </script>
 </body>
 </html>
