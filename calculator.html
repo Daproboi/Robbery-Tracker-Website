@@ -192,39 +192,7 @@
 </head>
 <body>
 
-    <nav class="nav-top">
-        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="mobile-toggle" id="mobileToggle">
-            <span></span><span></span><span></span>
-        </div>
-        <div class="nav-links" id="navLinks">
-            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            <div class="nav-item">
-                <a class="nav-link">Seasons <div class="live-dot"></div> ▼</a>
-                <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">Season Contracts <span>XP Tracker Live</span></a>
-                    <a href="prizes.html" class="drop-link">Season Rewards <span>Level 1-10 Prizes</span></a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a class="nav-link" style="color: #fff;">Values ▼</a>
-                <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
-                </div>
-            </div>
-            <div class="nav-item">
-                <a class="nav-link">Community ▼</a>
-                <div class="dropdown">
-                    <a href="vip.html" class="drop-link">Private Servers</a>
-                    <a href="testimonials.html" class="drop-link">Testimonials</a>
-                </div>
-            </div>
-            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
-            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
-            <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <div class="container">
         <div style="margin-bottom: 20px; display: flex; justify-content: center;">
@@ -284,18 +252,7 @@
         <div class="picker-results" id="pResults"></div>
     </div>
 
-    <footer>
-        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        <div class="footer-links">
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="privacy.html">Privacy Policy</a>
-        </div>
-        <div class="legal">
-            <strong>Trading Disclaimer:</strong> Values are community-sourced estimates. Trading involves risk. We are not responsible for any trade losses. Jailbreak Hub is not affiliated with Badimo or Roblox.
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script src="Values.js"></script>
     <script>
@@ -465,5 +422,6 @@
 
         window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePicker(); });
     </script>
+    <script src="loader.js"></script>
 </body>
 </html>
