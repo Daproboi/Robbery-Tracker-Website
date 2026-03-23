@@ -291,14 +291,7 @@
     </style>
 </head>
 <body>
-    <nav class="nav-top">
-        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="nav-links">
-            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            <div class="nav-item"><a href="tracker.html" class="nav-link" style="color: var(--accent-glow); font-weight: 800; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);">Tracker</a></div>
-            <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <div class="container">
         <!-- THE NEW INTRO DASHBOARD -->
@@ -400,10 +393,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-        <div class="legal">Not affiliated with Roblox or Badimo. Status data relies on server availability.</div>
-    </footer>
+    <div id="footer-container"></div>
 
     <script>
         const API_URL = "https://jb-tracker-api.vercel.app/getRobberies";
@@ -837,5 +827,6 @@
             if (Object.keys(cachedServers).length > 0) renderGrid();
         });
     </script>
+    <script src="loader.js"></script>
 </body>
 </html>
