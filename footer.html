@@ -1,29 +1,45 @@
 <style>
+/* --- MASTER FOOTER STYLES --- */
 .site-footer {
-    background: #06080d; border-top: 1px solid rgba(255,255,255,0.05);
-    padding: 60px 20px; text-align: center; margin-top: auto;
-    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    background: linear-gradient(to top, #030508, #0a0c10); 
+    border-top: 1px solid rgba(0, 240, 255, 0.1);
+    padding: 60px 20px 40px; text-align: center; margin-top: auto;
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.f-brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; color: #fff; }
-.f-brand span { color: #00f0ff; }
-.f-credits { color: #94a3b8; font-size: 0.95rem; font-weight: 500; margin-top: 5px;}
-.f-credits strong { color: #fff; }
 
-.f-links { display: flex; justify-content: center; gap: 30px; margin: 15px 0; flex-wrap: wrap; }
-.f-links a { color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
-.f-links a:hover { color: #00f0ff; }
+.f-brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; color: #fff; font-family: 'JetBrains Mono', monospace;}
+.f-brand span { color: #00f0ff; text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+
+.f-credits { color: #94a3b8; font-size: 0.95rem; font-weight: 500; margin-top: 5px;}
+.f-credits strong { color: #fff; font-weight: 800; }
+
+.f-links { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 10px 0; }
+.f-links a { 
+    color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 800; 
+    text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;
+    display: flex; align-items: center; gap: 8px; opacity: 0.8;
+}
+.f-links a i { font-size: 1rem; color: #2462cd; transition: all 0.2s; }
+.f-links a:hover { color: #00f0ff; opacity: 1; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+.f-links a:hover i { color: #00f0ff; }
 
 .f-support-btn { 
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); 
-    padding: 12px 24px; border-radius: 8px; font-weight: 800; color: #fff; 
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px; 
-    transition: all 0.2s; font-size: 0.9rem; margin-bottom: 20px;
+    background: rgba(36, 98, 205, 0.15); border: 1px solid rgba(0, 240, 255, 0.3); 
+    padding: 12px 28px; border-radius: 8px; font-weight: 800; color: #fff; 
+    text-decoration: none; display: inline-flex; align-items: center; gap: 10px; 
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-size: 0.95rem; 
+    box-shadow: 0 0 15px rgba(36, 98, 205, 0.2); text-transform: uppercase; letter-spacing: 1px;
 }
-.f-support-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+.f-support-btn:hover { background: #2462cd; border-color: #00f0ff; box-shadow: 0 10px 25px rgba(0, 240, 255, 0.4); transform: translateY(-3px); }
 
 .f-legal { font-size: 0.75rem; color: #475569; max-width: 800px; line-height: 1.6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.f-copy { color: #334155; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+.f-copy { color: #334155; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; font-family: 'JetBrains Mono', monospace;}
+
+@media (max-width: 600px) {
+    .f-links { flex-direction: column; gap: 15px; }
+    .f-brand { font-size: 1.8rem; }
+}
 </style>
 
 <footer class="site-footer">
@@ -33,15 +49,15 @@
     </div>
     
     <div class="f-links">
-        <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-        <a href="terms.html">Terms of Service</a>
-        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://discord.gg/pp4dXmFJnr" target="_blank"><i class="fa-brands fa-discord"></i> Discord Server</a>
+        <a href="terms.html"><i class="fa-solid fa-file-contract"></i> Terms of Service</a>
+        <a href="privacy.html"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
     </div>
     
-    <a href="support.html" class="f-support-btn">☕ Support Us</a>
+    <a href="support.html" class="f-support-btn">☕ Support The Project</a>
     
     <div>
         <div class="f-legal">Disclaimer: Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners. Not affiliated with Badimo.</div>
-        <div class="f-copy">&copy; 2026 JAILBREAK HUB.</div>
+        <div class="f-copy">&copy; 2026 JAILBREAK HUB</div>
     </div>
 </footer>
