@@ -1,14 +1,47 @@
-<footer>
-  <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-  <div class="footer-credits">Developed &amp; Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-  <div class="footer-links">
-    <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-    <a href="terms.html">Terms of Service</a>
-    <a href="privacy.html">Privacy Policy</a>
-  </div>
-  <a href="support.html" class="support-btn-footer">☕ Support Us</a>
-  <div class="legal">
-    Disclaimer: Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners. Not affiliated with Badimo.
-  </div>
-  <p style="margin-top: 10px; color: var(--border); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;">&copy; 2026 JAILBREAK HUB.</p>
+<style>
+.site-footer {
+    background: #06080d; border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 60px 20px; text-align: center; margin-top: auto;
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.f-brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; color: #fff; }
+.f-brand span { color: #00f0ff; }
+.f-credits { color: #94a3b8; font-size: 0.95rem; font-weight: 500; margin-top: 5px;}
+.f-credits strong { color: #fff; }
+
+.f-links { display: flex; justify-content: center; gap: 30px; margin: 15px 0; flex-wrap: wrap; }
+.f-links a { color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+.f-links a:hover { color: #00f0ff; }
+
+.f-support-btn { 
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); 
+    padding: 12px 24px; border-radius: 8px; font-weight: 800; color: #fff; 
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px; 
+    transition: all 0.2s; font-size: 0.9rem; margin-bottom: 20px;
+}
+.f-support-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+
+.f-legal { font-size: 0.75rem; color: #475569; max-width: 800px; line-height: 1.6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.f-copy { color: #334155; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+</style>
+
+<footer class="site-footer">
+    <div>
+        <div class="f-brand">JAILBREAK<span>HUB</span></div>
+        <div class="f-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
+    </div>
+    
+    <div class="f-links">
+        <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+    </div>
+    
+    <a href="support.html" class="f-support-btn">☕ Support Us</a>
+    
+    <div>
+        <div class="f-legal">Disclaimer: Jailbreak Hub is an independent community resource. Roblox and Jailbreak are trademarks of their respective owners. Not affiliated with Badimo.</div>
+        <div class="f-copy">&copy; 2026 JAILBREAK HUB.</div>
+    </div>
 </footer>
