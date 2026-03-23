@@ -6,10 +6,9 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (navRes.ok) {
             document.getElementById("navbar-container").innerHTML = await navRes.text();
             
-            // --- FIX 1: Auto-Highlight the Current Page! ---
-            // This gives the pill background to the page you are currently on.
+            // --- Auto-Highlight the Current Page! ---
             let currentPath = window.location.pathname.split('/').pop();
-            if (currentPath === "" || currentPath === "/") currentPath = "index.html"; // Defaults to Home
+            if (currentPath === "" || currentPath === "/") currentPath = "index.html"; 
 
             document.querySelectorAll('.nav-link').forEach(link => {
                 if (link.getAttribute('href') === currentPath) {
@@ -17,11 +16,29 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- FIX 2: Activate the Theme Button! ---
+            // --- Activate the Theme Button ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
                     document.body.classList.toggle('light-mode');
+                });
+            }
+
+            // --- Activate Mobile Hamburger Menu ---
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    const icon = menuToggle.querySelector('i');
+                    if (navLinks.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-xmark');
+                    } else {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
                 });
             }
         }
