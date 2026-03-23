@@ -171,36 +171,7 @@
 </head>
 <body>
 
-    <nav class="nav-top">
-        <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        <div class="mobile-toggle" id="mobileMenuOpen">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        <div class="nav-links" id="navLinks">
-            <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-            <div class="nav-item"><span class="nav-link">Seasons ▼</span>
-                <div class="dropdown">
-                    <a href="contracts.html" class="drop-link">Season Contracts</a>
-                    <a href="prizes.html" class="drop-link">Season Rewards</a>
-                </div>
-            </div>
-            <div class="nav-item"><span class="nav-link" style="color: #fff;">Values ▼</span>
-                <div class="dropdown">
-                    <a href="values.html" class="drop-link">Value List</a>
-                    <a href="calculator.html" class="drop-link">Value Calculator</a>
-                </div>
-            </div>
-            <div class="nav-item"><span class="nav-link">Community ▼</span>
-                <div class="dropdown">
-                    <a href="vip.html" class="drop-link">Private Servers</a>
-                    <a href="testimonials.html" class="drop-link">Testimonials & Team</a>
-                </div>
-            </div>
-            <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
-            <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
-            <div class="nav-item"><a href="changelogs.html" class="nav-link">Changelogs</a></div>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <div class="container">
         <h1 class="text-3xl font-black italic uppercase mb-8">Market Database</h1>
@@ -225,16 +196,7 @@
         <div class="modal-container" id="modalContent"></div>
     </div>
 
-    <footer>
-        <div class="footer-brand">JAILBREAK<span>HUB</span></div>
-        <div class="footer-credits">Developed & Designed by <strong>Daproboi</strong> and <strong>Plug™</strong></div>
-        <div class="footer-links">
-            <a href="https://discord.gg/pp4dXmFJnr" target="_blank">Discord</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="privacy.html">Privacy Policy</a>
-        </div>
-        <p style="margin-top: 40px; color: var(--border); font-size: 0.7rem;">&copy; 2026 Jailbreak Hub. Not affiliated with Roblox or Badimo.</p>
-    </footer>
+    <div id="footer-container"></div>
 
     <script src="api.js"></script>
 
@@ -370,5 +332,6 @@
         // START THE API FETCH
         window.onload = init;
     </script>
+    <script src="loader.js"></script>
 </body>
 </html>
