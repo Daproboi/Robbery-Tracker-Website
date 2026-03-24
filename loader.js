@@ -1,12 +1,22 @@
+// --- THEME MEMORY ENGINE (Runs instantly before the page fully loads!) ---
+if (localStorage.getItem('jailbreakHubTheme') === 'light') {
+    document.body.classList.add('light-mode');
+}
+
 document.addEventListener("DOMContentLoaded", async function() {
     
+    // --- SMOOTH CROSSFADE ENGINE ---
+    // This tells the browser to softly melt all colors over 0.8 seconds instead of snapping!
+    const fadeStyle = document.createElement('style');
+    fadeStyle.innerHTML = `* { transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease, background-image 0.8s ease; }`;
+    document.head.appendChild(fadeStyle);
+
     // 1. LOAD THE NAVBAR
     try {
         const navRes = await fetch("navbar.html");
         if (navRes.ok) {
             document.getElementById("navbar-container").innerHTML = await navRes.text();
             
-            // --- Auto-Highlight the Current Page! ---
             let currentPath = window.location.pathname.split('/').pop();
             if (currentPath === "" || currentPath === "/") currentPath = "index.html"; 
 
@@ -16,50 +26,21 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- THEME BUTTON: THE 1-SECOND WAVE ANIMATION ---
+            // --- THEME BUTTON LOGIC (Saves your choice forever!) ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
-                    const isLight = document.body.classList.contains('light-mode');
+                    document.body.classList.toggle('light-mode');
                     
-                    // 1. Create the hardware-accelerated circle in the bottom right corner
-                    const wave = document.createElement('div');
-                    wave.style.position = 'fixed';
-                    wave.style.bottom = '-50px';
-                    wave.style.right = '-50px';
-                    wave.style.width = '100px';
-                    wave.style.height = '100px';
-                    wave.style.borderRadius = '50%';
-                    // Sets the color of the wave to match the theme we are switching to!
-                    wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
-                    wave.style.zIndex = '9999999'; // Forces it on top of the navbar and footer
-                    wave.style.pointerEvents = 'none';
-                    wave.style.willChange = 'transform'; // Tells iPads/Phones to use the GPU for zero lag!
-                    
-                    // Set up the smooth 1-second curve animation
-                    wave.style.transform = 'scale(0) translateZ(0)';
-                    wave.style.transition = 'transform 1s cubic-bezier(0.25, 1, 0.3, 1)';
-                    
-                    document.body.appendChild(wave);
-                    
-                    // 2. Trigger the massive expansion to cover the screen
-                    requestAnimationFrame(() => {
-                        wave.style.transform = 'scale(50) translateZ(0)'; // Grows to 5000px wide!
-                    });
-                    
-                    // 3. Exactly 1 second later (when the screen is covered), secretly flip the colors and melt the wave away
-                    setTimeout(() => {
-                        document.body.classList.toggle('light-mode');
-                        wave.style.transition = 'opacity 0.4s ease';
-                        wave.style.opacity = '0';
-                        
-                        // Delete the invisible circle from memory to save RAM
-                        setTimeout(() => wave.remove(), 400);
-                    }, 1000);
+                    // Save the user's choice to their browser's memory!
+                    if (document.body.classList.contains('light-mode')) {
+                        localStorage.setItem('jailbreakHubTheme', 'light');
+                    } else {
+                        localStorage.setItem('jailbreakHubTheme', 'dark');
+                    }
                 });
             }
 
-            // --- Activate Mobile Hamburger Menu ---
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             
@@ -77,9 +58,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 });
             }
         }
-    } catch(e) { 
-        console.error("Failed to load navbar", e); 
-    }
+    } catch(e) { console.error("Failed to load navbar", e); }
 
     // 2. LOAD THE FOOTER
     try {
@@ -87,7 +66,5 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (footRes.ok) {
             document.getElementById("footer-container").innerHTML = await footRes.text();
         }
-    } catch(e) { 
-        console.error("Failed to load footer", e); 
-    }
+    } catch(e) { console.error("Failed to load footer", e); }
 });
