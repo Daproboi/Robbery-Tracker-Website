@@ -6,9 +6,13 @@ if (localStorage.getItem('jailbreakHubTheme') === 'light') {
 document.addEventListener("DOMContentLoaded", async function() {
     
     // --- BUTTERY SMOOTH COLOR TRANSITIONS ---
-    // This makes all text, borders, and shadows elegantly fade colors over 1 second while the wave expands behind them!
+    // Forces the entire page (Cards, Text, Buttons) to float above the wave (z-index: 10)
+    // while melting their colors over exactly 0.8 seconds!
     const fadeStyle = document.createElement('style');
-    fadeStyle.innerHTML = `* { transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease, background-image 0.8s ease; }`;
+    fadeStyle.innerHTML = `
+        * { transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease; }
+        .container { position: relative; z-index: 10; } 
+    `;
     document.head.appendChild(fadeStyle);
 
     // 1. LOAD THE NAVBAR
@@ -17,7 +21,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (navRes.ok) {
             document.getElementById("navbar-container").innerHTML = await navRes.text();
             
-            // Auto-Highlight the Current Page
             let currentPath = window.location.pathname.split('/').pop();
             if (currentPath === "" || currentPath === "/") currentPath = "index.html"; 
 
@@ -27,13 +30,13 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- THE FIXED BACKGROUND WAVE ANIMATION ---
+            // --- THE VISIBLE BACKGROUND WAVE ANIMATION ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
                     const isLight = document.body.classList.contains('light-mode');
                     
-                    // Create the hardware-accelerated circle
+                    // Create the hardware-accelerated wave
                     const wave = document.createElement('div');
                     wave.style.position = 'fixed';
                     wave.style.bottom = '-50px';
@@ -42,11 +45,11 @@ document.addEventListener("DOMContentLoaded", async function() {
                     wave.style.height = '100px';
                     wave.style.borderRadius = '50%';
                     
-                    // Set color based on what theme we are switching TO
+                    // The color the wave will expand into
                     wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
                     
-                    // CRITICAL FIX: Sending the wave to the absolute BACKGROUND!
-                    wave.style.zIndex = '-1'; 
+                    // FIXED: z-index 0 puts it perfectly behind your cards, but in front of the background!
+                    wave.style.zIndex = '0'; 
                     wave.style.pointerEvents = 'none';
                     wave.style.willChange = 'transform'; 
                     
@@ -58,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     
                     // Trigger the massive background expansion
                     requestAnimationFrame(() => {
-                        wave.style.transform = 'scale(50) translateZ(0)'; // Grows to 5000px wide!
+                        wave.style.transform = 'scale(50) translateZ(0)'; 
                     });
                     
                     // Instantly trigger the text and borders to start smoothly changing colors on top of the wave!
@@ -71,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                         localStorage.setItem('jailbreakHubTheme', 'dark');
                     }
                     
-                    // Clean up the wave from the device memory exactly 1 second later when it finishes
+                    // Clean up the wave from memory exactly 1 second later when it finishes
                     setTimeout(() => {
                         wave.style.transition = 'opacity 0.4s ease';
                         wave.style.opacity = '0';
