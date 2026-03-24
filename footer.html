@@ -1,11 +1,12 @@
 <style>
 /* --- MASTER FOOTER STYLES --- */
 .site-footer {
-    background: linear-gradient(to top, #030508, #0a0c10); 
-    border-top: 1px solid rgba(0, 240, 255, 0.1);
+    background-color: var(--surface); /* FIXED: Solid color can be animated instantly! */
+    border-top: 1px solid var(--border);
     padding: 60px 20px 40px; text-align: center; margin-top: auto;
     display: flex; flex-direction: column; align-items: center; gap: 24px;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    position: relative; z-index: 10; /* Forces it to sit above the wave */
 }
 
 .f-brand { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; color: #fff; font-family: 'JetBrains Mono', monospace;}
@@ -39,20 +40,7 @@
 @media (max-width: 600px) {
     .f-links { flex-direction: column; gap: 15px; }
     .f-brand { font-size: 1.8rem; }
-}
-/* --- LIGHT MODE FOOTER FIX --- */
-body.light-mode .site-footer { background: linear-gradient(to top, #f1f5f9, #ffffff); border-top-color: rgba(0,0,0,0.1); }
-body.light-mode .f-brand { color: #0f172a; }
-body.light-mode .f-brand span { color: var(--accent); text-shadow: none; }
-body.light-mode .f-credits { color: #475569; }
-body.light-mode .f-credits strong { color: #0f172a; }
-body.light-mode .f-links a { color: #475569; opacity: 1; }
-body.light-mode .f-links a:hover { color: var(--accent); text-shadow: none; }
-body.light-mode .f-links a i { color: var(--accent); }
-body.light-mode .f-support-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: #0f172a; box-shadow: none; }
-body.light-mode .f-support-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-body.light-mode .f-legal { color: #64748b; }
-body.light-mode .f-copy { color: #475569; }    
+}  
 </style>
 
 <footer class="site-footer">
