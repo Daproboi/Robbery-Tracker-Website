@@ -16,11 +16,46 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- Activate the Theme Button ---
+            // --- THEME BUTTON: THE 1-SECOND WAVE ANIMATION ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
-                    document.body.classList.toggle('light-mode');
+                    const isLight = document.body.classList.contains('light-mode');
+                    
+                    // 1. Create the hardware-accelerated circle in the bottom right corner
+                    const wave = document.createElement('div');
+                    wave.style.position = 'fixed';
+                    wave.style.bottom = '-50px';
+                    wave.style.right = '-50px';
+                    wave.style.width = '100px';
+                    wave.style.height = '100px';
+                    wave.style.borderRadius = '50%';
+                    // Sets the color of the wave to match the theme we are switching to!
+                    wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
+                    wave.style.zIndex = '9999999'; // Forces it on top of the navbar and footer
+                    wave.style.pointerEvents = 'none';
+                    wave.style.willChange = 'transform'; // Tells iPads/Phones to use the GPU for zero lag!
+                    
+                    // Set up the smooth 1-second curve animation
+                    wave.style.transform = 'scale(0) translateZ(0)';
+                    wave.style.transition = 'transform 1s cubic-bezier(0.25, 1, 0.3, 1)';
+                    
+                    document.body.appendChild(wave);
+                    
+                    // 2. Trigger the massive expansion to cover the screen
+                    requestAnimationFrame(() => {
+                        wave.style.transform = 'scale(50) translateZ(0)'; // Grows to 5000px wide!
+                    });
+                    
+                    // 3. Exactly 1 second later (when the screen is covered), secretly flip the colors and melt the wave away
+                    setTimeout(() => {
+                        document.body.classList.toggle('light-mode');
+                        wave.style.transition = 'opacity 0.4s ease';
+                        wave.style.opacity = '0';
+                        
+                        // Delete the invisible circle from memory to save RAM
+                        setTimeout(() => wave.remove(), 400);
+                    }, 1000);
                 });
             }
 
