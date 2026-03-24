@@ -40,6 +40,19 @@
     .f-links { flex-direction: column; gap: 15px; }
     .f-brand { font-size: 1.8rem; }
 }
+/* --- LIGHT MODE FOOTER FIX --- */
+body.light-mode .site-footer { background: linear-gradient(to top, #f1f5f9, #ffffff); border-top-color: rgba(0,0,0,0.1); }
+body.light-mode .f-brand { color: #0f172a; }
+body.light-mode .f-brand span { color: var(--accent); text-shadow: none; }
+body.light-mode .f-credits { color: #475569; }
+body.light-mode .f-credits strong { color: #0f172a; }
+body.light-mode .f-links a { color: #475569; opacity: 1; }
+body.light-mode .f-links a:hover { color: var(--accent); text-shadow: none; }
+body.light-mode .f-links a i { color: var(--accent); }
+body.light-mode .f-support-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: #0f172a; box-shadow: none; }
+body.light-mode .f-support-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+body.light-mode .f-legal { color: #64748b; }
+body.light-mode .f-copy { color: #475569; }    
 </style>
 
 <footer class="site-footer">
