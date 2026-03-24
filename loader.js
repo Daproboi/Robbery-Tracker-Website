@@ -5,10 +5,14 @@ if (localStorage.getItem('jailbreakHubTheme') === 'light') {
 
 document.addEventListener("DOMContentLoaded", async function() {
     
-    // DELETED: The 0.8s CSS color-fade delay! The website will now snap colors instantly!
-    // We only force the content to sit above the wave (z-index 10)
+    // --- THE 1.5 SECOND MELTING ENGINE ---
+    // This perfectly synchronizes all text and card colors to melt into their new theme
+    // at the exact same 1.5s speed that the wave expands behind them!
     const fixStyle = document.createElement('style');
-    fixStyle.innerHTML = `.container { position: relative; z-index: 10; }`;
+    fixStyle.innerHTML = `
+        * { transition: background-color 1.5s ease-out, color 1.5s ease-out, border-color 1.5s ease-out, box-shadow 1.5s ease-out; }
+        .container { position: relative; z-index: 10; } 
+    `;
     document.head.appendChild(fixStyle);
 
     // 1. LOAD THE NAVBAR
@@ -26,12 +30,13 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- THE ZERO-DELAY BACKGROUND WAVE ANIMATION ---
+            // --- THE VISIBLE BACKGROUND WAVE ANIMATION ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
                     const isLight = document.body.classList.contains('light-mode');
                     
+                    // Create the hardware-accelerated wave
                     const wave = document.createElement('div');
                     wave.style.position = 'fixed';
                     wave.style.bottom = '-50px';
@@ -40,12 +45,15 @@ document.addEventListener("DOMContentLoaded", async function() {
                     wave.style.height = '100px';
                     wave.style.borderRadius = '50%';
                     
+                    // The color the wave will expand into
                     wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
-                    wave.style.zIndex = '0'; // Puts it perfectly behind your cards!
+                    
+                    // Puts the wave perfectly behind the glass cards and glass footer!
+                    wave.style.zIndex = '0'; 
                     wave.style.pointerEvents = 'none';
                     wave.style.willChange = 'transform'; 
                     
-                    // Setup the smooth curve animation, slowed down to 1.5 seconds!
+                    // Setup the smooth 1.5-second curve animation
                     wave.style.transform = 'scale(0) translateZ(0)';
                     wave.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.3, 1)';
                     
@@ -56,19 +64,17 @@ document.addEventListener("DOMContentLoaded", async function() {
                         wave.style.transform = 'scale(50) translateZ(0)'; 
                     });
                     
-                    // We wait exactly 0.2 seconds for the wave to cover enough of the screen, 
-                    // then we INSTANTLY snap the text/footer colors with zero delay!
-                    setTimeout(() => {
-                        document.body.classList.toggle('light-mode');
-                        
-                        if (document.body.classList.contains('light-mode')) {
-                            localStorage.setItem('jailbreakHubTheme', 'light');
-                        } else {
-                            localStorage.setItem('jailbreakHubTheme', 'dark');
-                        }
-                    }, 200);
+                    // NEW: Instantly trigger the 1.5s CSS color-melt to perfectly match the wave!
+                    document.body.classList.toggle('light-mode');
                     
-                    // Clean up the wave from memory exactly 1.5 seconds later
+                    // Save the user's choice to their browser's memory
+                    if (document.body.classList.contains('light-mode')) {
+                        localStorage.setItem('jailbreakHubTheme', 'light');
+                    } else {
+                        localStorage.setItem('jailbreakHubTheme', 'dark');
+                    }
+                    
+                    // Clean up the wave from memory exactly 1.5 seconds later when it finishes
                     setTimeout(() => {
                         wave.style.transition = 'opacity 0.4s ease';
                         wave.style.opacity = '0';
