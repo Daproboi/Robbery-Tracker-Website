@@ -1,18 +1,19 @@
-// --- THEME MEMORY ENGINE (Runs instantly before the page fully loads!) ---
+// --- THEME MEMORY ENGINE ---
 if (localStorage.getItem('jailbreakHubTheme') === 'light') {
     document.body.classList.add('light-mode');
 }
 
+// Lock to prevent double-click glitches!
+let isAnimating = false;
+
 document.addEventListener("DOMContentLoaded", async function() {
     
-    // --- THE ULTIMATE GLOBAL CSS INJECTOR ---
+    // --- THE ULTRA-AGGRESSIVE GLOBAL CSS INJECTOR ---
     const globalStyle = document.createElement('style');
     globalStyle.innerHTML = `
-        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be on top of everything! */
+        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be on top! */
         #navbar-container { position: relative; z-index: 99999 !important; }
         #footer-container { position: relative; z-index: 10 !important; }
-        
-        /* Puts all page content above the wave, but safely below the navbar */
         body > div:not(#navbar-container):not(#footer-container), section, main { position: relative; z-index: 10; }
         
         /* 2. GLOBAL LIGHT MODE VARIABLES */
@@ -34,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             --muted-hover: rgba(0, 0, 0, 0.1) !important;
             --invert: 1 !important;
             
-            /* FORCE overrides any hardcoded dark gradients on other pages! */
             background-color: var(--bg) !important;
             background-image: none !important; 
         }
@@ -42,16 +42,35 @@ document.addEventListener("DOMContentLoaded", async function() {
         /* 3. Force all text to turn dark in light mode */
         body.light-mode, body.light-mode * { color: var(--text-main); }
         
-        /* 4. Force stubborn dark boxes on other pages (Changelogs, Values, etc) to turn light! */
-        body.light-mode section, body.light-mode .box, body.light-mode .panel, body.light-mode .card, body.light-mode .changelog-box, body.light-mode .value-card {
+        /* 4. ULTRA-AGGRESSIVE OVERRIDE FOR OTHER PAGES (Calculator, Values, Pity, Changelogs) */
+        /* This hunts down ANY dark background, dropdown, input, or Tailwind class and forces it Light! */
+        body.light-mode section, body.light-mode .box, body.light-mode .panel, body.light-mode .card, 
+        body.light-mode input, body.light-mode select, body.light-mode textarea,
+        body.light-mode .dropdown, body.light-mode .dropdown-content, body.light-mode .dropdown-menu,
+        body.light-mode .modal, body.light-mode .modal-content, body.light-mode .search-input,
+        body.light-mode[class*="bg-black"], body.light-mode [class*="bg-gray-"], 
+        body.light-mode [class*="bg-slate-"], body.light-mode [class*="bg-zinc-"],
+        body.light-mode[class*="bg-gradient"], body.light-mode .bg-muted, body.light-mode .bg-card {
+            background: var(--card) !important;
             background-color: var(--card) !important;
             border-color: var(--border) !important;
+            color: var(--text-main) !important;
         }
 
-        /* 5. Protect specific colored elements from turning dark */
-        body.light-mode .text-green, body.light-mode .sb-val { color: var(--green) !important; }
-        body.light-mode .text-orange { color: var(--orange) !important; }
-        body.light-mode .text-red { color: var(--red) !important; }
+        /* Forces inputs and dropdown text to be readable */
+        body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: var(--text-dim) !important; }
+        body.light-mode option { background-color: var(--surface) !important; color: var(--text-main) !important; }
+
+        /* Remove glowing text shadows in Light Mode (fixes the weird 0% Pity text!) */
+        body.light-mode h1, body.light-mode h2, body.light-mode .text-4xl, body.light-mode .text-5xl, body.light-mode .text-6xl {
+            text-shadow: none !important;
+            color: var(--accent) !important;
+        }
+
+        /* 5. Protect specific colored elements */
+        body.light-mode .text-green, body.light-mode .sb-val { color: var(--green) !important; text-shadow: none !important;}
+        body.light-mode .text-orange { color: var(--orange) !important; text-shadow: none !important;}
+        body.light-mode .text-red { color: var(--red) !important; text-shadow: none !important;}
         body.light-mode .bounty-name, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
         body.light-mode .nav-logo span { color: var(--accent) !important; text-shadow: none !important; }
         
@@ -67,7 +86,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode .f-support-btn:hover { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
         
         /* 7. REMOVE FADE DELAYS - INSTANT SNAP ONLY! */
-        /* (We exclude the .theme-wave so it keeps its 1.5s speed!) */
         *:not(.theme-wave) { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important; }
     `;
     document.head.appendChild(globalStyle);
@@ -91,10 +109,14 @@ document.addEventListener("DOMContentLoaded", async function() {
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
+                    // Prevent double-click glitch
+                    if (isAnimating) return;
+                    isAnimating = true;
+
                     const isLight = document.body.classList.contains('light-mode');
                     
                     const wave = document.createElement('div');
-                    wave.className = 'theme-wave'; // Identifies the wave so it doesn't get sped up!
+                    wave.className = 'theme-wave'; 
                     wave.style.position = 'fixed';
                     wave.style.bottom = '-50px';
                     wave.style.right = '-50px';
@@ -102,19 +124,20 @@ document.addEventListener("DOMContentLoaded", async function() {
                     wave.style.height = '100px';
                     wave.style.borderRadius = '50%';
                     wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
-                    wave.style.zIndex = '0'; // Stays strictly behind cards and text!
+                    wave.style.zIndex = '0'; 
                     wave.style.pointerEvents = 'none';
                     wave.style.willChange = 'transform'; 
                     
-                    // FIXED: Properly set to 1.5 seconds!
+                    // Setup initial state
                     wave.style.transform = 'scale(0) translateZ(0)';
-                    wave.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.3, 1)';
-                    
                     document.body.appendChild(wave);
                     
-                    requestAnimationFrame(() => {
-                        wave.style.transform = 'scale(50) translateZ(0)'; 
-                    });
+                    // CRITICAL BROWSER FIX: Force Reflow to prevent the animation from skipping!
+                    wave.getBoundingClientRect();
+                    
+                    // Start the 1.5s animation
+                    wave.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.3, 1)';
+                    wave.style.transform = 'scale(50) translateZ(0)'; 
                     
                     // INSTANT COLOR SNAP
                     document.body.classList.toggle('light-mode');
@@ -128,8 +151,11 @@ document.addEventListener("DOMContentLoaded", async function() {
                     setTimeout(() => {
                         wave.style.transition = 'opacity 0.4s ease';
                         wave.style.opacity = '0';
-                        setTimeout(() => wave.remove(), 400);
-                    }, 1500); // Waits exactly 1.5 seconds before fading out
+                        setTimeout(() => {
+                            wave.remove();
+                            isAnimating = false; // Unlock button after cleanup
+                        }, 400);
+                    }, 1500); 
                 });
             }
 
