@@ -3,12 +3,15 @@ if (localStorage.getItem('jailbreakHubTheme') === 'light') {
     document.body.classList.add('light-mode');
 }
 
+// Lock to prevent clicking the theme button while the wave is running!
+let isAnimating = false;
+
 document.addEventListener("DOMContentLoaded", async function() {
     
     // --- THE ULTIMATE GLOBAL CSS INJECTOR ---
     const globalStyle = document.createElement('style');
     globalStyle.innerHTML = `
-        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be on top! */
+        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be top! */
         #navbar-container { position: relative; z-index: 99999 !important; }
         #footer-container { position: relative; z-index: 10 !important; }
         body > div:not(#navbar-container):not(#footer-container), section, main { position: relative; z-index: 10; }
@@ -36,16 +39,14 @@ document.addEventListener("DOMContentLoaded", async function() {
             background-image: none !important; 
         }
 
-        /* 3. Make backgrounds transparent so the wave is ALWAYS visible behind them! */
-        body, main, section, .min-h-screen, .w-full {
-            background-color: transparent !important; 
-        }
-
-        /* 4. Force all text to turn dark in light mode */
+        /* 3. Force all text to turn dark in light mode */
         body.light-mode, body.light-mode * { color: var(--text-main); }
         
-        /* 5. THE ULTIMATE OVERRIDE FOR OTHER PAGES (Calculator, Values, Pity, Changelogs) */
-        /* This aggressively hunts down ANY dark background, dropdown, input, or Tailwind class and forces it Light! */
+        /* 4. EXPLICIT OVERRIDES FOR CALCULATOR & CHANGELOG PAGES */
+        /* Hunts down the stubborn boxes and destroys their dark gradients! */
+        body.light-mode .log-card, body.light-mode #pickerOverlay, 
+        body.light-mode .mega-picker-card, body.light-mode .search-giant, 
+        body.light-mode .add-box, body.light-mode .result-panel,
         body.light-mode section, body.light-mode .box, body.light-mode .panel, body.light-mode .card, 
         body.light-mode input, body.light-mode select, body.light-mode textarea,
         body.light-mode .dropdown, body.light-mode .dropdown-content, body.light-mode .dropdown-menu,
@@ -55,27 +56,31 @@ document.addEventListener("DOMContentLoaded", async function() {
             background-color: var(--card) !important;
             border-color: var(--border) !important;
             color: var(--text-main) !important;
-            background-image: none !important; /* Kills the stubborn dark gradients! */
+            background-image: none !important; 
         }
+        
+        /* Specific transparent fix for the massive Calculator Overlay! */
+        body.light-mode #pickerOverlay { background: rgba(248, 250, 252, 0.95) !important; }
 
         /* Forces inputs and dropdown text to be readable */
         body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: var(--text-dim) !important; }
         body.light-mode option { background-color: var(--surface) !important; color: var(--text-main) !important; }
 
-        /* Remove glowing text shadows in Light Mode */
-        body.light-mode h1, body.light-mode h2, body.light-mode .text-4xl, body.light-mode .text-5xl, body.light-mode .text-6xl {
+        /* Remove glowing text shadows on Titles in Light Mode */
+        body.light-mode h1, body.light-mode h2, body.light-mode .text-4xl, body.light-mode .text-5xl, body.light-mode .text-6xl,
+        body.light-mode .log-title, body.light-mode .log-section-title, body.light-mode .card-name, body.light-mode .status-big {
             text-shadow: none !important;
             color: var(--accent) !important;
         }
 
-        /* 6. Protect specific colored elements from turning dark */
+        /* 5. Protect specific colored elements */
         body.light-mode .text-green, body.light-mode .sb-val { color: var(--green) !important; text-shadow: none !important;}
         body.light-mode .text-orange { color: var(--orange) !important; text-shadow: none !important;}
         body.light-mode .text-red { color: var(--red) !important; text-shadow: none !important;}
         body.light-mode .bounty-name, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
         body.light-mode .nav-logo span { color: var(--accent) !important; text-shadow: none !important; }
         
-        /* 7. PERFECT FOOTER LIGHT MODE FIX */
+        /* 6. PERFECT FOOTER LIGHT MODE FIX */
         body.light-mode .site-footer { background: #f8fafc !important; border-top-color: rgba(0,0,0,0.1) !important; }
         body.light-mode .f-brand { color: #0f172a !important; }
         body.light-mode .f-brand span { color: var(--accent) !important; text-shadow: none !important; }
@@ -86,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode .f-support-btn { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: #0f172a !important; box-shadow: none !important; }
         body.light-mode .f-support-btn:hover { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
         
-        /* 8. INSTANT COLOR SNAP ONLY! No lag! */
+        /* 7. REMOVE FADE DELAYS - INSTANT SNAP ONLY! */
         *:not(.theme-wave) { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important; }
     `;
     document.head.appendChild(globalStyle);
@@ -106,10 +111,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- SPAMMABLE THEME BUTTON LOGIC WITH VISIBLE WAVE ---
+            // --- SPAMMABLE THEME BUTTON WITH LOCK ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', () => {
+                    // Safety Lock: Stops you from clicking until the wave is totally gone!
+                    if (isAnimating) return;
+                    isAnimating = true;
+
                     const isLight = document.body.classList.contains('light-mode');
                     
                     const wave = document.createElement('div');
@@ -121,20 +130,22 @@ document.addEventListener("DOMContentLoaded", async function() {
                     wave.style.height = '100px';
                     wave.style.borderRadius = '50%';
                     wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
-                    wave.style.zIndex = '0'; // Puts it exactly behind cards/text!
+                    wave.style.zIndex = '0'; 
                     wave.style.pointerEvents = 'none';
                     wave.style.willChange = 'transform'; 
                     
+                    // Setup initial state
                     wave.style.transform = 'scale(0) translateZ(0)';
                     document.body.appendChild(wave);
                     
                     // Force the browser to register the wave before animating
                     wave.getBoundingClientRect();
                     
-                    wave.style.transition = 'transform 1s cubic-bezier(0.25, 1, 0.3, 1)';
+                    // Start the 1.5s animation
+                    wave.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.3, 1)';
                     wave.style.transform = 'scale(50) translateZ(0)'; 
                     
-                    // Instant color snap
+                    // INSTANT COLOR SNAP
                     document.body.classList.toggle('light-mode');
                     
                     if (document.body.classList.contains('light-mode')) {
@@ -143,11 +154,15 @@ document.addEventListener("DOMContentLoaded", async function() {
                         localStorage.setItem('jailbreakHubTheme', 'dark');
                     }
                     
+                    // The 1.5s cleanup timer! Once it finishes, it deletes the wave and UNLOCKS the button!
                     setTimeout(() => {
                         wave.style.transition = 'opacity 0.4s ease';
                         wave.style.opacity = '0';
-                        setTimeout(() => wave.remove(), 400);
-                    }, 1000); 
+                        setTimeout(() => {
+                            wave.remove();
+                            isAnimating = false; // Wave is dead, unlock the button!
+                        }, 400);
+                    }, 1500); 
                 });
             }
 
