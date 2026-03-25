@@ -1,9 +1,9 @@
-// --- THEME MEMORY ENGINE ---
+// --- THEME MEMORY ENGINE (Runs instantly before the page fully loads!) ---
 if (localStorage.getItem('jailbreakHubTheme') === 'light') {
     document.body.classList.add('light-mode');
 }
 
-// Lock to prevent clicking the theme button while the wave is running!
+// Lock to prevent button spamming while the transition runs!
 let isAnimating = false;
 
 document.addEventListener("DOMContentLoaded", async function() {
@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be top! */
         #navbar-container { position: relative; z-index: 99999 !important; }
         #footer-container { position: relative; z-index: 10 !important; }
-        body > div:not(#navbar-container):not(#footer-container), section, main { position: relative; z-index: 10; }
         
         /* 2. GLOBAL LIGHT MODE VARIABLES */
         body.light-mode {   
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode, body.light-mode * { color: var(--text-main); }
         
         /* 4. EXPLICIT OVERRIDES FOR CALCULATOR & CHANGELOG PAGES */
-        /* Hunts down the stubborn boxes and destroys their dark gradients! */
         body.light-mode .log-card, body.light-mode #pickerOverlay, 
         body.light-mode .mega-picker-card, body.light-mode .search-giant, 
         body.light-mode .add-box, body.light-mode .result-panel,
@@ -59,14 +57,10 @@ document.addEventListener("DOMContentLoaded", async function() {
             background-image: none !important; 
         }
         
-        /* Specific transparent fix for the massive Calculator Overlay! */
         body.light-mode #pickerOverlay { background: rgba(248, 250, 252, 0.95) !important; }
-
-        /* Forces inputs and dropdown text to be readable */
         body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: var(--text-dim) !important; }
         body.light-mode option { background-color: var(--surface) !important; color: var(--text-main) !important; }
 
-        /* Remove glowing text shadows on Titles in Light Mode */
         body.light-mode h1, body.light-mode h2, body.light-mode .text-4xl, body.light-mode .text-5xl, body.light-mode .text-6xl,
         body.light-mode .log-title, body.light-mode .log-section-title, body.light-mode .card-name, body.light-mode .status-big {
             text-shadow: none !important;
@@ -91,8 +85,12 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode .f-support-btn { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: #0f172a !important; box-shadow: none !important; }
         body.light-mode .f-support-btn:hover { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
         
-        /* 7. REMOVE FADE DELAYS - INSTANT SNAP ONLY! */
-        *:not(.theme-wave) { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important; }
+        /* 7. NATIVE BROWSER VIEW TRANSITION SETTINGS */
+        /* Stops default animations so the custom circular wipe works! */
+        ::view-transition-old(root), ::view-transition-new(root) {
+            animation: none;
+            mix-blend-mode: normal;
+        }
     `;
     document.head.appendChild(globalStyle);
 
@@ -111,58 +109,56 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- SPAMMABLE THEME BUTTON WITH LOCK ---
+            // --- THE NATIVE "VIEW TRANSITIONS API" THEME TOGGLE ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
-                themeBtn.addEventListener('click', () => {
-                    // Safety Lock: Stops you from clicking until the wave is totally gone!
+                themeBtn.addEventListener('click', (event) => {
                     if (isAnimating) return;
+                    
+                    const isDark = !document.body.classList.contains('light-mode');
+
+                    // Fallback for older browsers (Safely flips colors instantly if API is not supported)
+                    if (!document.startViewTransition) {
+                        document.body.classList.toggle('light-mode');
+                        localStorage.setItem('jailbreakHubTheme', isDark ? 'light' : 'dark');
+                        return;
+                    }
+
                     isAnimating = true;
 
-                    const isLight = document.body.classList.contains('light-mode');
-                    
-                    const wave = document.createElement('div');
-                    wave.className = 'theme-wave'; 
-                    wave.style.position = 'fixed';
-                    wave.style.bottom = '-50px';
-                    wave.style.right = '-50px';
-                    wave.style.width = '100px';
-                    wave.style.height = '100px';
-                    wave.style.borderRadius = '50%';
-                    wave.style.backgroundColor = isLight ? '#030508' : '#f8fafc'; 
-                    wave.style.zIndex = '0'; 
-                    wave.style.pointerEvents = 'none';
-                    wave.style.willChange = 'transform'; 
-                    
-                    // Setup initial state
-                    wave.style.transform = 'scale(0) translateZ(0)';
-                    document.body.appendChild(wave);
-                    
-                    // Force the browser to register the wave before animating
-                    wave.getBoundingClientRect();
-                    
-                    // Start the 1.5s animation
-                    wave.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.3, 1)';
-                    wave.style.transform = 'scale(50) translateZ(0)'; 
-                    
-                    // INSTANT COLOR SNAP
-                    document.body.classList.toggle('light-mode');
-                    
-                    if (document.body.classList.contains('light-mode')) {
-                        localStorage.setItem('jailbreakHubTheme', 'light');
-                    } else {
-                        localStorage.setItem('jailbreakHubTheme', 'dark');
-                    }
-                    
-                    // The 1.5s cleanup timer! Once it finishes, it deletes the wave and UNLOCKS the button!
-                    setTimeout(() => {
-                        wave.style.transition = 'opacity 0.4s ease';
-                        wave.style.opacity = '0';
-                        setTimeout(() => {
-                            wave.remove();
-                            isAnimating = false; // Wave is dead, unlock the button!
-                        }, 400);
-                    }, 1500); 
+                    // Start the stunning native browser transition!
+                    const transition = document.startViewTransition(() => {
+                        document.body.classList.toggle('light-mode');
+                        localStorage.setItem('jailbreakHubTheme', isDark ? 'light' : 'dark');
+                    });
+
+                    // Draw the perfectly smooth circular mask radiating from the exact click location!
+                    transition.ready.then(() => {
+                        const x = event.clientX;
+                        const y = event.clientY;
+                        
+                        // Calculate how big the circle needs to be to reach the farthest corner of the screen
+                        const endRadius = Math.hypot(
+                            Math.max(x, innerWidth - x),
+                            Math.max(y, innerHeight - y)
+                        );
+
+                        document.documentElement.animate(
+                            {
+                                clipPath:[
+                                    `circle(0px at ${x}px ${y}px)`,
+                                    `circle(${endRadius}px at ${x}px ${y}px)`
+                                ]
+                            },
+                            {
+                                duration: 1000, // 1 Full Second
+                                easing: 'ease-out',
+                                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+                            }
+                        );
+
+                        setTimeout(() => { isAnimating = false; }, 1000);
+                    });
                 });
             }
 
