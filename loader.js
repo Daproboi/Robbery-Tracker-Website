@@ -139,8 +139,8 @@ document.addEventListener("DOMContentLoaded", async function() {
                         
                         // Calculate how big the circle needs to be to reach the farthest corner of the screen
                         const endRadius = Math.hypot(
-                            Math.max(x, innerWidth - x),
-                            Math.max(y, innerHeight - y)
+                            Math.max(x, window.innerWidth - x),
+                            Math.max(y, window.innerHeight - y)
                         );
 
                         document.documentElement.animate(
@@ -151,13 +151,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                                 ]
                             },
                             {
-                                duration: 1000, // 1 Full Second
-                                easing: 'ease-out',
-                                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+                                duration: 600, // Reduced to 600ms to completely eliminate lag!
+                                easing: 'ease-in-out',
+                                // FIXED: Forces the wave to explode outward in BOTH directions!
+                                pseudoElement: '::view-transition-new(root)' 
                             }
                         );
 
-                        setTimeout(() => { isAnimating = false; }, 1000);
+                        setTimeout(() => { isAnimating = false; }, 600);
                     });
                 });
             }
