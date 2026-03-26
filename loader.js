@@ -11,9 +11,16 @@ document.addEventListener("DOMContentLoaded", async function() {
     // --- THE ULTIMATE GLOBAL CSS INJECTOR ---
     const globalStyle = document.createElement('style');
     globalStyle.innerHTML = `
-        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be top! */
+        /* 1. Z-INDEX FIX & MOBILE PERFORMANCE: Forces Navbar to ALWAYS be top! */
         #navbar-container { position: relative; z-index: 99999 !important; }
         #footer-container { position: relative; z-index: 10 !important; }
+        body > div:not(#navbar-container):not(#footer-container), section, main { position: relative; z-index: 10; }
+        
+        /* NEW: Deletes the ugly blue tap highlight on mobile phones! */
+        * { -webkit-tap-highlight-color: transparent; }
+        
+        /* NEW: Forces mobile devices to use hardware acceleration, removing all animation lag! */
+        body { -webkit-font-smoothing: antialiased; backface-visibility: hidden; }
         
         /* 2. GLOBAL LIGHT MODE VARIABLES */
         body.light-mode {   
