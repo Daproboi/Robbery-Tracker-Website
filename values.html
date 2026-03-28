@@ -441,10 +441,10 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
-        <div class="modal-container" id="modalContent"></div>
-    </div>
+    <div class="modal-overlay" id="modalOverlay" style="display: none;">
+            <div class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+            <div class="modal-container" id="modalContent"></div>
+        </div>
 
     <div id="footer-container"></div>
 
@@ -457,8 +457,7 @@
             return String(text)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+                .replace(/>/g, '&gt;');
         }
 
         function escapeAttr(text) {
@@ -558,42 +557,69 @@
 
         function getDemandText(demand) {
             if (!demand) return 'Normal';
-            return demand;
+            const d = demand.toLowerCase();
+            if (d.includes('high')) return 'High Demand';
+            if (d.includes('very high')) return 'Very High Demand';
+            if (d.includes('medium')) return 'Medium Demand';
+            if (d.includes('decent')) return 'Decent Demand';
+            if (d.includes('low')) return 'Low Demand';
+            if (d.includes('very low')) return 'Very Low Demand';
+            if (d.includes('close to none')) return 'Close to None';
+            return 'Normal';
         }
 
-        let db = {}; 
         let currentCategory = 'all';
         let currentPage = 1;
         const itemsPerPage = 12; 
+        let allItems = [];
         let filteredItems = [];
+
+        async function initializeData() {
+            try {
+                // Wait for the db to be loaded by api.js
+                if (typeof db === 'undefined' || Object.keys(db).length === 0) {
+                    // Wait a bit and try again
+                    setTimeout(initializeData, 100);
+                    return;
+                }
+                
+                // Convert db object to flat array
+                allItems = [];
+                for (const category in db) {
+                    if (Array.isArray(db[category])) {
+                        allItems = allItems.concat(db[category]);
+                    }
+                }
+                filteredItems = [...allItems];
+                updateData();
+                
+            } catch (error) {
+                console.error('Error initializing data:', error);
+                // Fallback to Values.js if API fails
+                setTimeout(initializeData, 1000);
+            }
+        }
 
         function setCat(cat, el) {
             currentCategory = cat;
             document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            resetAndRender();
-        }
-
-        function resetAndRender() {
-            currentPage = 1;
             updateData();
         }
 
         function updateData() {
-            if (!db || Object.keys(db).length === 0) return;
-            const query = document.getElementById('search').value.toLowerCase();
-            filteredItems = [];
-            
-            for (let category in db) {
-                if (currentCategory !== 'all' && category !== currentCategory) continue;
-                db[category].forEach(item => {
-                    if (item.name.toLowerCase().includes(query)) {
-                        filteredItems.push({...item, cat: category});
-                    }
-                });
+            if (!allItems || allItems.length === 0) {
+                document.getElementById('grid').innerHTML = '<div class="loading-message">Loading items...</div>';
+                return;
             }
+
+            const query = document.getElementById('search').value.toLowerCase();
+            filteredItems = allItems.filter(item => {
+                const matchesSearch = !query || item.name.toLowerCase().includes(query) || item.cat.toLowerCase().includes(query);
+                const matchesCategory = currentCategory === 'all' || item.cat.toLowerCase() === currentCategory.toLowerCase();
+                return matchesSearch && matchesCategory;
+            });
             
-            filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
 
@@ -718,8 +744,15 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // START THE API FETCH
-        window.onload = init;
+        // Initialize data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+        });
+
+        // Re-initialize data when API loads (api.js calls this)
+        window.addEventListener('dbLoaded', function() {
+            initializeData();
+        });
     </script>
     <script src="loader.js"></script>
 </body>
