@@ -615,7 +615,7 @@
                     const originalPrice = i.original_price && i.original_price !== 'N/A' ? i.original_price : null;
                     
                     return `
-                    <a href="item.html?name=${encodeURIComponent(i.name)}&category=${encodeURIComponent(i.cat)}" class="item-card" style="text-decoration: none; color: inherit;">
+                    <a href="${i.name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim()}.html" class="item-card" style="text-decoration: none; color: inherit;">
                         <div class="img-container">
                             <div class="trend-badge trend-${trend}">${trend}</div>
                             ${demandText !== 'Normal' ? `<div class="demand-indicator ${demandClass}">${demandText}</div>` : ''}
