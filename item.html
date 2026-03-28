@@ -10,33 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
-        body.light-mode {     
-            --bg: #f8fafc !important;    
-            --surface: rgba(255, 255, 255, 0.8) !important;    
-            --card: rgba(241, 245, 249, 0.8) !important;    
-            --card-hover: rgba(255, 255, 255, 0.95) !important;
-            --border: rgba(0, 0, 0, 0.08) !important;    
-            --border-light: rgba(0, 0, 0, 0.15) !important;
-            --accent: #005bb5 !important;    
-            --accent-glow: #005bb5 !important;    
-            --green: #00b35f !important;    
-            --orange: #d97706 !important;
-            --red: #dc2626 !important;
-            --text-main: #0f172a !important;    
-            --text-dim: #475569 !important;    
-            --muted: rgba(0, 0, 0, 0.05) !important;
-            --muted-hover: rgba(0, 0, 0, 0.1) !important;
-            --invert: 1 !important;
-        }
-        /* Forces hardcoded white text to flip dark when light mode is active */
-        body.light-mode * { color: var(--text-main); }
-        body.light-mode .text-green { color: var(--green) !important; }
-        body.light-mode .text-orange { color: var(--orange) !important; }
-        body.light-mode .text-red { color: var(--red) !important; }
-        body.light-mode .bounty-name, body.light-mode .sb-val, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
-        /* --------------------------------------- */
-
+        
         :root {
             --bg: #030508;
             --surface: #0a0c10;
