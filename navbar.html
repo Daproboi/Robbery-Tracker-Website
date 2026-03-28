@@ -1,130 +1,156 @@
 <style>
-/* --- BULLETPROOF NAVBAR CSS (Immune to External CSS/Tailwind) --- */
-#jailbreak-nav-master {
+/* --- GLOBAL LIGHT MODE FIX --- */
+/* Because this is in navbar.html, it now applies to ALL 13 pages! */
+body.light-mode {   
+    --bg: #f8fafc;   
+    --surface: rgba(255, 255, 255, 0.8);   
+    --card: rgba(241, 245, 249, 0.8);   
+    --card-hover: rgba(255, 255, 255, 0.95);
+    --border: rgba(0, 0, 0, 0.08);   
+    --border-light: rgba(0, 0, 0, 0.15);
+    --accent: #005bb5;   
+    --accent-glow: #005bb5;   
+    --green: #00b35f;   
+    --orange: #d97706;
+    --red: #dc2626;
+    --text-main: #0f172a;   
+    --text-dim: #475569;   
+    --muted: rgba(0, 0, 0, 0.05);
+    --muted-hover: rgba(0, 0, 0, 0.1);
+}
+
+/* --- MASTER NAVBAR STYLES --- */
+.nav-pill-wrapper {
     position: fixed; top: 20px; left: 0; right: 0; 
-    display: flex; justify-content: center; z-index: 99999;
+    display: flex; justify-content: center; z-index: 9999;
     pointer-events: none; 
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
-    box-sizing: border-box !important;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-#jailbreak-nav-master * {
-    box-sizing: border-box !important;
-    margin: 0; padding: 0;
-    line-height: normal;
+.nav-pill {
+    background: rgba(10, 14, 23, 0.85); 
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px; padding: 0 15px 0 25px;
+    height: 64px; display: flex; align-items: center; justify-content: space-between;
+    width: 95%; max-width: 1400px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(36, 98, 205, 0.2);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    pointer-events: auto; transition: all 0.3s ease;
+    .nav-pill {
+    background: #06080c; border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 100px; padding: 0 15px 0 25px;
+    height: 64px; display: flex; align-items: center; justify-content: space-between;
+    width: 95%; max-width: 1400px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(36, 98, 205, 0.2);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    pointer-events: auto; transition: all 0.3s ease;
+    gap: 20px; 
+}
 }
 
-#jailbreak-nav-master .nav-pill {
-    background: #06080c !important; 
-    border: 1px solid rgba(255,255,255,0.05) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 100px !important; padding: 0 15px 0 25px !important;
-    height: 64px !important; display: flex !important; align-items: center !important; justify-content: space-between !important;
-    width: 95% !important; max-width: 1400px !important; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(36, 98, 205, 0.2) !important;
-    backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
-    pointer-events: auto !important; transition: all 0.3s ease !important;
-    gap: 20px !important;
+/* Light mode overrides for the pill itself so it turns white! */
+body.light-mode .nav-pill { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+body.light-mode .nav-logo { color: #000; }
+body.light-mode .nav-logo span { color: var(--accent); text-shadow: none; }
+body.light-mode .nav-link { color: #475569; }
+body.light-mode .nav-link:hover { color: #000; background: rgba(0,0,0,0.05); }
+body.light-mode .nav-item:hover .nav-link, body.light-mode .nav-link.active-page { color: #fff; background: var(--accent); box-shadow: none; border: none; }
+body.light-mode .theme-toggle { color: #000; border-color: rgba(0,0,0,0.1); }
+body.light-mode .theme-toggle:hover { background: rgba(0,0,0,0.05); border-color: var(--accent); }
+
+.nav-logo { font-weight: 900; font-size: 1.5rem; text-decoration: none; color: #fff; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+.nav-logo span { color: #00f0ff; text-shadow: 0 0 15px rgba(0, 240, 255, 0.5); }
+
+.nav-links { display: flex; align-items: center; gap: 4px; margin: 0 auto; transition: all 0.3s ease; }
+.nav-item { position: relative; display: flex; align-items: center; height: 64px; }
+
+.nav-link { 
+    text-decoration: none; color: #94a3b8; font-size: 0.85rem; font-weight: 700; 
+    text-transform: uppercase; letter-spacing: 1px; cursor: pointer; 
+    padding: 10px 16px; border-radius: 100px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover { color: #fff; background: rgba(0, 240, 255, 0.05); }
+
+/* Active Page Glow */
+.nav-item:hover .nav-link, .nav-link.active-page { 
+    color: #fff; background: rgba(36, 98, 205, 0.3); 
+    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2); border: 1px solid rgba(0, 240, 255, 0.3);
 }
 
-/* Light Mode Overrides */
-body.light-mode #jailbreak-nav-master .nav-pill { background: rgba(255,255,255,0.95) !important; border-color: rgba(0,0,0,0.1) !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; }
-body.light-mode #jailbreak-nav-master .nav-logo { color: #000 !important; }
-body.light-mode #jailbreak-nav-master .nav-logo span { color: var(--accent, #2462cd) !important; text-shadow: none !important; }
-body.light-mode #jailbreak-nav-master .nav-link { color: #475569 !important; background: transparent !important; box-shadow: none !important; border: none !important; }
-body.light-mode #jailbreak-nav-master .nav-link:hover { color: #000 !important; background: rgba(0,0,0,0.05) !important; }
-body.light-mode #jailbreak-nav-master .nav-item:hover .nav-link, body.light-mode #jailbreak-nav-master .nav-link.active-page { color: #fff !important; background: var(--accent, #2462cd) !important; }
-body.light-mode #jailbreak-nav-master .theme-toggle { color: #000 !important; border-color: rgba(0,0,0,0.1) !important; background: rgba(0,0,0,0.03) !important;}
-body.light-mode #jailbreak-nav-master .theme-toggle:hover { background: rgba(0,0,0,0.08) !important; border-color: var(--accent, #2462cd) !important; }
-
-#jailbreak-nav-master .nav-logo { font-weight: 900 !important; font-size: 1.5rem !important; text-decoration: none !important; color: #fff !important; letter-spacing: -1px !important; text-transform: uppercase !important; display: flex !important; align-items: center !important; gap: 4px !important; }
-#jailbreak-nav-master .nav-logo span { color: #00f0ff !important; text-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important; }
-
-#jailbreak-nav-master .nav-links { display: flex !important; align-items: center !important; gap: 4px !important; margin: 0 auto !important; transition: all 0.3s ease !important; flex-direction: row !important; position: static !important; background: transparent !important; width: auto !important; padding: 0 !important; box-shadow: none !important; border: none !important; opacity: 1 !important;}
-#jailbreak-nav-master .nav-item { position: relative !important; display: flex !important; align-items: center !important; height: 64px !important; }
-
-#jailbreak-nav-master .nav-link { 
-    text-decoration: none !important; color: #94a3b8 !important; font-size: 0.85rem !important; font-weight: 700 !important; 
-    text-transform: uppercase !important; letter-spacing: 1px !important; cursor: pointer !important; 
-    padding: 10px 16px !important; border-radius: 100px !important; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    background: transparent !important; border: none !important; box-shadow: none !important;
+/* Beautiful Dropdowns */
+.dropdown {
+    position: absolute; top: 75px; left: 50%; transform: translateX(-50%) translateY(10px) scale(0.95);
+    background: rgba(10, 14, 23, 0.95); border: 1px solid rgba(0, 240, 255, 0.15);
+    border-radius: 16px; min-width: 220px; padding: 12px;
+    opacity: 0; pointer-events: none; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 20px rgba(36, 98, 205, 0.2);
+    backdrop-filter: blur(25px); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-#jailbreak-nav-master .nav-link:hover { color: #fff !important; background: rgba(0, 240, 255, 0.05) !important; }
+body.light-mode .dropdown { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+.dropdown::before { content: ""; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; }
+.nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
 
-#jailbreak-nav-master .nav-item:hover .nav-link, #jailbreak-nav-master .nav-link.active-page { 
-    color: #fff !important; background: rgba(36, 98, 205, 0.3) !important; 
-    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2) !important; border: 1px solid rgba(0, 240, 255, 0.3) !important;
+.drop-link { 
+    display: flex; flex-direction: column; padding: 12px 16px; color: #94a3b8; 
+    text-decoration: none; font-size: 0.85rem; font-weight: 700; 
+    border-radius: 10px; margin-bottom: 4px; transition: all 0.2s;
 }
+.drop-link:hover { background: rgba(36, 98, 205, 0.15); color: #fff; padding-left: 20px; border-left: 2px solid #00f0ff; }
+body.light-mode .drop-link { color: #475569; }
+body.light-mode .drop-link:hover { background: rgba(0,0,0,0.05); color: #000; border-left-color: var(--accent); }
 
-#jailbreak-nav-master .dropdown {
-    position: absolute !important; top: 64px !important; left: 50% !important; transform: translateX(-50%) translateY(10px) scale(0.95) !important;
-    background: rgba(10, 14, 23, 0.95) !important; border: 1px solid rgba(0, 240, 255, 0.15) !important;
-    border-radius: 16px !important; min-width: 220px !important; padding: 12px !important;
-    opacity: 0 !important; pointer-events: none !important; display: block !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 20px rgba(36, 98, 205, 0.2) !important;
-    backdrop-filter: blur(25px) !important; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* Right Side Actions */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.theme-toggle {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #fff;
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1rem; 
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
-body.light-mode #jailbreak-nav-master .dropdown { background: rgba(255,255,255,0.95) !important; border-color: rgba(0,0,0,0.1) !important; box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important; }
-#jailbreak-nav-master .dropdown::before { content: "" !important; position: absolute !important; top: -20px !important; left: 0 !important; width: 100% !important; height: 20px !important; }
-#jailbreak-nav-master .nav-item:hover .dropdown { opacity: 1 !important; pointer-events: auto !important; transform: translateX(-50%) translateY(0) scale(1) !important; }
+.theme-toggle:hover { background: rgba(255,255,255,0.1); border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); transform: rotate(15deg); }
 
-#jailbreak-nav-master .drop-link { 
-    display: flex !important; flex-direction: column !important; padding: 12px 16px !important; color: #94a3b8 !important; 
-    text-decoration: none !important; font-size: 0.85rem !important; font-weight: 700 !important; 
-    border-radius: 10px !important; margin-bottom: 4px !important; transition: all 0.2s !important;
-    background: transparent !important; border: none !important; border-left: 2px solid transparent !important;
+.mobile-toggle {
+    display: none; background: transparent; border: none; color: #fff;
+    font-size: 1.5rem; cursor: pointer; width: 40px; height: 40px;
 }
-#jailbreak-nav-master .drop-link:hover { background: rgba(36, 98, 205, 0.15) !important; color: #fff !important; padding-left: 20px !important; border-left-color: #00f0ff !important; }
-body.light-mode #jailbreak-nav-master .drop-link { color: #475569 !important; }
-body.light-mode #jailbreak-nav-master .drop-link:hover { background: rgba(0,0,0,0.05) !important; color: #000 !important; border-left-color: var(--accent, #2462cd) !important; }
+body.light-mode .mobile-toggle { color: #000; }
 
-#jailbreak-nav-master .nav-actions { display: flex !important; align-items: center !important; gap: 10px !important; }
-
-#jailbreak-nav-master .theme-toggle {
-    background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #fff !important;
-    width: 40px !important; height: 40px !important; border-radius: 50% !important; cursor: pointer !important; font-size: 1rem !important; 
-    display: flex !important; align-items: center !important; justify-content: center !important; transition: all 0.2s !important; font-family: 'Plus Jakarta Sans', sans-serif !important; box-shadow: none !important;
-}
-#jailbreak-nav-master .theme-toggle:hover { background: rgba(255,255,255,0.1) !important; border-color: #00f0ff !important; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3) !important; transform: rotate(15deg) !important; }
-
-#jailbreak-nav-master .mobile-toggle {
-    display: none !important; background: transparent !important; border: none !important; color: #fff !important;
-    font-size: 1.5rem !important; cursor: pointer !important; width: 40px !important; height: 40px !important; box-shadow: none !important;
-}
-body.light-mode #jailbreak-nav-master .mobile-toggle { color: #000 !important; }
-
+/* --- MOBILE & TABLET RESPONSIVENESS --- */
 @media (max-width: 1100px) {
-    #jailbreak-nav-master .nav-link { padding: 10px 10px !important; font-size: 0.75rem !important; }
-    #jailbreak-nav-master .nav-pill { padding: 0 15px !important; gap: 10px !important;}
+    .nav-link { padding: 10px 10px; font-size: 0.75rem; }
+    .nav-pill { padding: 0 15px; }
 }
 
 @media (max-width: 900px) {
-    #jailbreak-nav-master .mobile-toggle { display: flex !important; align-items: center !important; justify-content: center !important; }
-    #jailbreak-nav-master .nav-links {
-        position: absolute !important; top: 80px !important; right: 0 !important; 
-        background: rgba(10, 14, 23, 0.95) !important; border: 1px solid rgba(0, 240, 255, 0.15) !important;
-        border-radius: 16px !important; padding: 20px !important; flex-direction: column !important; width: 260px !important;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.9) !important; backdrop-filter: blur(25px) !important;
-        opacity: 0 !important; pointer-events: none !important; transform: translateY(-10px) !important;
+    .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+    .nav-links {
+        position: absolute; top: 80px; right: 0; 
+        background: rgba(10, 14, 23, 0.95); border: 1px solid rgba(0, 240, 255, 0.15);
+        border-radius: 16px; padding: 20px; flex-direction: column; width: 260px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.9); backdrop-filter: blur(25px);
+        opacity: 0; pointer-events: none; transform: translateY(-10px);
     }
-    body.light-mode #jailbreak-nav-master .nav-links { background: rgba(255,255,255,0.95) !important; border-color: rgba(0,0,0,0.1) !important; box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important; }
-    #jailbreak-nav-master .nav-links.active { opacity: 1 !important; pointer-events: auto !important; transform: translateY(0) !important; }
-    #jailbreak-nav-master .nav-item { width: 100% !important; height: auto !important; flex-direction: column !important; align-items: flex-start !important; }
-    #jailbreak-nav-master .nav-link { width: 100% !important; padding: 12px 16px !important; text-align: left !important; }
-    #jailbreak-nav-master .dropdown {
-        position: static !important; transform: none !important; opacity: 1 !important; pointer-events: auto !important; 
-        box-shadow: none !important; border: none !important; background: transparent !important; padding: 5px 0 5px 15px !important; 
-        min-width: 100% !important; display: none !important; 
+    body.light-mode .nav-links { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.1); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+    .nav-links.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-item { width: 100%; height: auto; flex-direction: column; align-items: flex-start; }
+    .nav-link { width: 100%; padding: 12px 16px; text-align: left; }
+    .dropdown {
+        position: static; transform: none; opacity: 1; pointer-events: auto; 
+        box-shadow: none; border: none; background: transparent; padding: 5px 0 5px 15px; 
+        min-width: 100%; display: none; 
     }
-    #jailbreak-nav-master .nav-item:hover .dropdown { display: block !important; }
+    .nav-item:hover .dropdown { display: block; }
 }
 </style>
 
-<div id="jailbreak-nav-master" class="nav-pill-wrapper">
+<div class="nav-pill-wrapper">
     <nav class="nav-pill">
+        <!-- Clickable Logo perfectly links to the Home Page! -->
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
-        
+
         <div class="nav-links" id="navLinks">
+            <!-- FIXED: Home link completely removed to save space! -->
             <div class="nav-item">
                 <a class="nav-link">Seasons ▼</a>
                 <div class="dropdown">
@@ -152,6 +178,7 @@ body.light-mode #jailbreak-nav-master .mobile-toggle { color: #000 !important; }
         </div>
 
         <div class="nav-actions">
+            <!-- Theme Toggle Button -->
             <button class="theme-toggle" id="themeBtn" title="Toggle Theme">🌓</button>
             <button class="mobile-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
         </div>
