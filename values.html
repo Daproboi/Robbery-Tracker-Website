@@ -420,8 +420,63 @@
     </style>
 </head>
 <body>
-
-    <div id="navbar-container"></div>
+    <nav class="nav-top">
+        <a href="index.html" class="nav-logo">Jailbreak<span>Hub</span></a>
+        <div class="nav-links">
+            <div class="nav-item">
+                <span class="nav-link">Database</span>
+                <div class="dropdown">
+                    <a href="values.html" class="drop-link">
+                        <i class="fa-solid fa-database"></i>
+                        Market Database
+                    </a>
+                    <a href="calculator.html" class="drop-link">
+                        <i class="fa-solid fa-calculator"></i>
+                        Value Calculator
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Tools</span>
+                <div class="dropdown">
+                    <a href="tracker.html" class="drop-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        Value Tracker
+                    </a>
+                    <a href="converter.html" class="drop-link">
+                        <i class="fa-solid fa-exchange-alt"></i>
+                        Value Converter
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <span class="nav-link">Support</span>
+                <div class="dropdown">
+                    <a href="support.html" class="drop-link">
+                        <i class="fa-solid fa-headset"></i>
+                        Contact Support
+                    </a>
+                    <a href="terms.html" class="drop-link">
+                        <i class="fa-solid fa-file-contract"></i>
+                        Terms of Service
+                    </a>
+                    <a href="privacy.html" class="drop-link">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        Privacy Policy
+                    </a>
+                </div>
+            </div>
+            <div class="nav-item">
+                <a href="https://discord.gg/jailbreakhub" target="_blank" class="nav-link">
+                    <i class="fa-brands fa-discord"></i>
+                    Discord
+                </a>
+            </div>
+        </div>
+        <div class="mobile-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </nav>
 
     <div class="container">
         <h1 class="text-3xl font-black italic uppercase mb-8">Market Database</h1>
@@ -446,7 +501,18 @@
         <div class="modal-container" id="modalContent"></div>
     </div>
 
-    <div id="footer-container"></div>
+    <footer>
+        <div class="footer-brand">Jailbreak<span>Hub</span></div>
+        <p class="footer-credits">© 2024 Jailbreak Hub. All rights reserved. Not affiliated with Roblox Corporation.</p>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="values.html">Market Database</a>
+            <a href="calculator.html">Calculator</a>
+            <a href="support.html">Support</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+    </footer>
 
     <script src="api.js"></script>
 
