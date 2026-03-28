@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Live Server Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            if (jobId) {
+                const launchUri = `roblox://experiences/start?placeId=606849621&gameInstanceId=${jobId}`;
+                window.location.href = launchUri;
+            }
+        });
+    </script>
+    
+    <style>
+
+        /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
+        body.light-mode {   
+            --bg: #f8fafc !important;   
+            --surface: rgba(255, 255, 255, 0.8) !important;   
+            --card: rgba(241, 245, 249, 0.8) !important;   
+            --card-hover: rgba(255, 255, 255, 0.95) !important;
+            --border: rgba(0, 0, 0, 0.08) !important;   
+            --border-light: rgba(0, 0, 0, 0.15) !important;
+            --accent: #005bb5 !important;   
+            --accent-glow: #005bb5 !important;   
+            --green: #00b35f !important;   
+            --orange: #d97706 !important;
+            --red: #dc2626 !important;
+            --text-main: #0f172a !important;   
+            --text-dim: #475569 !important;   
+            --muted: rgba(0, 0, 0, 0.05) !important;
+            --muted-hover: rgba(0, 0, 0, 0.1) !important;
+            --invert: 1 !important;
+        }
+        /* Forces hardcoded white text to flip dark when light mode is active */
+        body.light-mode * { color: var(--text-main); }
+        body.light-mode .text-green { color: var(--green) !important; }
+        body.light-mode .text-orange { color: var(--orange) !important; }
+        body.light-mode .text-red { color: var(--red) !important; }
+        body.light-mode .bounty-name, body.light-mode .sb-val, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
+        /* --------------------------------------- */
+
+        :root {
+            --bg: #030508; --surface: #0a0c10;
+            --card: rgba(12, 15, 23, 0.85); --card-hover: rgba(18, 23, 35, 0.95);
+            --border: rgba(36, 98, 205, 0.25); --border-light: rgba(0, 240, 255, 0.15);
+            --accent: #2462cd; --accent-glow: #00f0ff; 
+            --green: #00ff88; --orange: #ff9900; --red: #ff003c; 
+            --text-main: #ffffff; --text-dim: #8899b0;
+            --muted: rgba(0, 240, 255, 0.04); --muted-hover: rgba(0, 240, 255, 0.08);
+            
+            /* Gradient variables so light mode can override them! */
+            --grad-top: rgba(36, 98, 205, 0.15);
+            --grad-bot: var(--bg);
+        }
+        
+        /* THEME OVERRIDES FOR TRACKER PAGE */
+        body.light-mode {
+            --grad-top: rgba(36, 98, 205, 0.05);
+            --grad-bot: var(--bg);
+            --card: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.1);
+            --border-light: rgba(0, 0, 0, 0.05);
+        }
+
+        * { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text-main); 
+            padding-top: 100px; overflow-x: hidden; 
+            
+            /* FIXED GRADIENT: Uses dynamic variables now! */
+            background-image: 
+                radial-gradient(circle at 50% 0%, var(--grad-top) 0%, transparent 60%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+
+        /* --- Global Structural CSS --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; flex: 1; width: 100%; }
+
+        .header-area { margin-bottom: 16px; text-align: center; }
+        .header-area h1 { font-family: 'JetBrains Mono', monospace; font-size: 3.2rem; margin: 0; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; color: var(--text-main); }
+        .header-area p { color: var(--text-dim); margin-top: 5px; font-size: 1rem; font-weight: 600; letter-spacing: 1px; }
+        
+        .sniper-dashboard {
+            background: linear-gradient(135deg, rgba(36, 98, 205, 0.1), var(--surface));
+            border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px; 
+            padding: 24px; margin-bottom: 24px; 
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(36, 98, 205, 0.05);
+            backdrop-filter: blur(20px); cursor: default; 
+        }
+        body.light-mode .sniper-dashboard { box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1); }
+        .sniper-dashboard:hover { border-left-color: var(--accent-glow); box-shadow: 0 10px 40px -10px rgba(0, 240, 255, 0.15); }
+        .dashboard-header { margin-bottom: 16px; }
+        .dashboard-header h1 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: var(--accent-glow); }
+        .dashboard-header p { color: var(--text-dim); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+        .stat-panel { background: var(--muted); border: 1px solid var(--border-light); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; border-top: 2px solid transparent; transition: border-top-color 0.3s; }
+        .stat-panel:hover { border-top-color: var(--accent-glow); background: var(--muted-hover); }
+        .stat-label { font-size: 0.75rem; color: var(--text-dim); font-weight: 700; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-label svg { width: 12px; height: 12px; color: var(--accent-glow); }
+        .stat-val { font-size: 1.6rem; font-weight: 800; color: var(--text-main); font-family: 'JetBrains Mono', monospace; }
+        #statUpdated { font-size: 1.5rem !important; color: var(--text-main) !important; }
+
+        .filter-box { background: transparent; padding: 0; margin-bottom: 40px; display: flex; flex-direction: column; gap: 12px; }
+        .filter-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-dim); font-size: 0.75rem; font-weight: 700; padding: 8px 18px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .filter-btn:hover { background: var(--muted-hover); border-color: var(--accent-glow); color: var(--text-main); }
+        .filter-btn.active { background: var(--accent); border-color: var(--accent-glow); color: #fff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        
+        #clearFiltersBtn { display: none; align-items: center; justify-content: center; gap: 6px; background: rgba(255, 0, 60, 0.1); border-color: var(--red); color: var(--red); }
+        #clearFiltersBtn:hover { background: var(--red); color: #fff; box-shadow: 0 0 15px rgba(255, 0, 60, 0.5); }
+
+        .bounty-slider-wrapper { display: none; width: 100%; max-width: 600px; margin: 15px auto 0; flex-direction: column; gap: 12px; opacity: 0; animation: fadeIn 0.4s ease forwards; padding: 15px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .bounty-slider-wrapper.active { display: flex; }
+        .bounty-slider-header { display: flex; justify-content: space-between; align-items: center; width: 100%; color: var(--text-dim); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;}
+        .bounty-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 999px; background: var(--border); outline: none; cursor: pointer; }
+        .bounty-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent-glow); cursor: ew-resize; box-shadow: 0 0 15px rgba(0, 240, 255, 0.8); }
+        .slider-markers { display: flex; justify-content: space-between; width: 100%; color: var(--text-dim); font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; padding: 0 5px; }
+
+        .tracker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-bottom: 100px; align-items: start; }
+        @media (max-width: 1200px) { .tracker-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .tracker-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .tracker-grid { grid-template-columns: 1fr; } }
+        .grid-column { display: flex; flex-direction: column; gap: 24px; width: 100%; }
+
+        .server-card { background: var(--card); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); position: relative; }
+        .server-card:hover { border-top-color: var(--accent-glow); box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15); transform: translateY(-2px); }
+
+        .server-card.bounty-mode-card { border-top-color: var(--green); box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(0, 255, 136, 0.05); }
+        .server-card.bounty-mode-card:hover { border-top-color: var(--green); box-shadow: 0 20px 50px rgba(0, 255, 136, 0.15); }
+        .bounty-wide-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed var(--border-light); padding-bottom: 16px; margin-bottom: 8px; flex-wrap: wrap; gap: 16px; }
+        .bw-left { display: flex; flex-direction: column; gap: 4px; }
+        .bw-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+        .bw-total { font-size: 2.2rem; color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 900; text-shadow: 0 0 15px rgba(0, 255, 136, 0.4); display: flex; align-items: center; gap: 8px; }
+        .bw-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        .bw-stats { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .bounty-wide-players { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; width: 100%; }
+        
+        .modal-player-card { background: var(--muted); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 12px; display: flex; gap: 12px; transition: border-color 0.2s; }
+        .modal-player-card:hover { border-left-color: var(--accent-glow); background: var(--muted-hover); }
+        .modal-player-avatar { width: 44px; height: 44px; border-radius: 4px; background: var(--surface); border: 1px solid var(--accent); flex-shrink: 0; }
+        .modal-player-info { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+        .modal-player-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+        .modal-player-name { font-weight: 800; color: var(--text-main); font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'JetBrains Mono', monospace;}
+        .modal-player-bounty { color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 0.95rem; flex-shrink: 0; text-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
+        .inventory-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .inv-pill { background: var(--surface); border: 1px solid var(--border); padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+
+        .robbery-list { display: flex; flex-direction: column; gap: 16px; }
+        .robbery-item { display: flex; flex-direction: column; gap: 6px; padding-left: 12px; border-left: 2px solid var(--border-light); transition: border-color 0.3s; }
+        .robbery-item:hover { border-left-color: var(--accent-glow); background: linear-gradient(90deg, var(--muted-hover), transparent); }
+        .robbery-header { display: flex; align-items: center; justify-content: space-between; }
+        .robbery-header-left { display: flex; align-items: center; gap: 12px; }
+        .robbery-icon-box { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; background: var(--muted); border: 1px solid var(--border); color: var(--text-dim); transition: all 0.3s ease; }
+        .icon-open { background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.3); color: var(--green); box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+        .icon-progress { background: rgba(255, 153, 0, 0.1); border-color: rgba(255, 153, 0, 0.3); color: var(--orange); box-shadow: 0 0 10px rgba(255, 153, 0, 0.2); }
+        .icon-closed { background: rgba(255, 0, 60, 0.1); border-color: rgba(255, 0, 60, 0.3); color: var(--red); box-shadow: 0 0 10px rgba(255, 0, 60, 0.2); }
+        
+        .robbery-name { font-weight: 800; font-size: 1.05rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px; }
+        .status-text { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-family: 'JetBrains Mono', monospace; }
+        .text-green { color: var(--green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
+        .text-orange { color: var(--orange); text-shadow: 0 0 8px rgba(255, 153, 0, 0.4); }
+        .text-red { color: var(--red); text-shadow: 0 0 8px rgba(255, 0, 60, 0.4); }
+        
+        .sub-data { display: flex; justify-content: space-between; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
+        .sub-label { color: var(--text-dim); }
+        .sub-val { font-weight: 600; color: var(--text-main); }
+        .sub-val.highlight { color: var(--accent-glow); font-weight: 800; text-shadow: 0 0 5px rgba(0, 240, 255, 0.4); }
+
+        .map-block { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .map-img { width: 100%; height: auto; display: block; border-radius: 4px; background: var(--surface); border: 1px solid var(--border-light); cursor: zoom-in; filter: grayscale(20%) contrast(1.2); }
+        .map-img:hover { border-color: var(--accent-glow); filter: grayscale(0%) contrast(1.2); box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
+        .bounty-mode-card .map-img { max-height: 250px; width: auto; margin: 0 auto; object-fit: contain; }
+
+        .divider { border-top: 1px dashed var(--border-light); margin: 0; }
+
+        .server-bounty-banner { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--muted); border-radius: 6px; margin-bottom: 12px; }
+        .sb-label { color: var(--text-dim); font-weight: 800; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; line-height: 1.2; max-width: 100px; letter-spacing: 1px; display: inline-block; }
+        .sb-val { color: var(--green); font-weight: 900; font-size: 1.4rem; font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+
+        .bounty-box { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 4px; background: var(--muted); border: 1px solid var(--border-light); cursor: pointer; justify-content: space-between; }
+        .bounty-box:hover { background: var(--muted-hover); border-color: var(--accent-glow); }
+        .bounty-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+        .bounty-avatar { width: 38px; height: 38px; border-radius: 4px; background: var(--surface); border: 1px solid var(--accent); flex-shrink: 0; }
+        .bounty-info { display: flex; flex-direction: column; font-size: 0.85rem; min-width: 0; flex: 1; }
+        .bounty-name { display: flex; align-items: center; gap: 6px; font-weight: 800; color: var(--text-main); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'JetBrains Mono', monospace;}
+        .bounty-name span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bounty-name svg { width: 14px; height: 14px; color: var(--green); flex-shrink: 0; }
+        .bounty-stats { color: var(--text-dim); font-size: 0.75rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+        .bounty-chevron { color: var(--accent-glow); font-size: 14px; flex-shrink: 0; }
+
+        .btn-join { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 40px; background: linear-gradient(90deg, #1d4ed8, #00f0ff); color: #000; font-size: 0.85rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border: none; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); margin-top: auto; }
+        .btn-join:hover { background: linear-gradient(90deg, #2563eb, #ffffff); box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); transform: scale(1.02); }
+        .btn-join svg { width: 16px; height: 16px; color: #000; }
+
+        .server-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px dashed var(--border-light); font-size: 0.75rem; color: var(--text-dim); font-weight: 700; gap: 12px; flex-wrap: wrap; text-transform: uppercase; letter-spacing: 0.5px; }
+        .footer-group { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
+        .footer-time { display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; color: var(--accent-glow); }
+        .footer-time svg { width: 14px; height: 14px; }
+        .live-timer { font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 800; color: var(--text-main); }
+
+        .loading { text-align: center; color: var(--text-dim); font-size: 1.2rem; margin-top: 50px; font-weight: 700; grid-column: 1 / -1; width: 100%; display: block; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- MODAL STYLES --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--surface); border: 1px solid var(--border-light); border-radius: 4px; width: 90%; max-width: 450px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0, 240, 255, 0.2); transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        #imgModalContent { max-width: 800px; width: 95%; max-height: 90vh; }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); }
+        .modal-title { font-weight: 900; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+        .modal-title svg { color: var(--green); width: 18px; height: 18px; }
+        .btn-close { background: none; border: none; color: var(--red); font-size: 1.2rem; cursor: pointer; transition: transform 0.2s; }
+        .btn-close:hover { color: #ff003c; transform: scale(1.2); }
+        .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .modal-img-body { padding: 0; background: var(--bg); border-radius: 0 0 4px 4px; display: flex; justify-content: center; overflow: hidden; }
+        .modal-large-img { width: 100%; height: auto; max-height: 75vh; object-fit: contain; display: block; filter: contrast(1.2); }
+        .modal-player-card { background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 12px; display: flex; gap: 12px; transition: border-color 0.2s; }
+        .modal-player-card:hover { border-left-color: var(--accent-glow); background: rgba(0, 240, 255, 0.05); }
+        .modal-player-avatar { width: 44px; height: 44px; border-radius: 4px; background: #111; border: 1px solid var(--accent); flex-shrink: 0; }
+        .modal-player-info { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+        .modal-player-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+        .modal-player-name { font-weight: 800; color: #fff; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'JetBrains Mono', monospace;}
+        .modal-player-bounty { color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 0.95rem; flex-shrink: 0; text-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
+        .inventory-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .inv-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="container">
+        <!-- THE NEW INTRO DASHBOARD -->
+        <div class="sniper-dashboard">
+            <div class="dashboard-header">
+                <h1>Robbery Tracker</h1>
+                <p>Find Roblox Jailbreak servers with open robberies and airdrops in real time.</p>
+            </div>
+            <div class="dashboard-stats">
+                <div class="stat-panel">
+                    <span class="stat-label"><i class="fa-solid fa-server"></i> Tracked Servers</span>
+                    <span class="stat-val" id="statServers">0</span>
+                </div>
+                <div class="stat-panel">
+                    <span class="stat-label"><i class="fa-solid fa-crosshairs"></i> Open Robberies</span>
+                    <span class="stat-val" id="statRobberies" style="color: var(--green);">0</span>
+                </div>
+                <div class="stat-panel">
+                    <span class="stat-label"><i class="fa-solid fa-clock-rotate-left"></i> Last Updated</span>
+                    <span class="stat-val live-timer" id="statUpdated" data-time="0">Syncing...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE TACTICAL MULTI-FILTER BOX -->
+        <div class="filter-box" id="filterBar">
+            <!-- First Row: Airdrops -->
+            <div class="filter-row" style="margin-bottom: 25px;">
+                <button class="filter-btn" data-filter="Airdrop"><i class="fa-solid fa-parachute-box"></i> Airdrops</button>
+                <button class="filter-btn" data-filter="Brown Airdrop"><i class="fa-solid fa-circle" style="color: #8B4513;"></i> Brown</button>
+                <button class="filter-btn" data-filter="Blue Airdrop"><i class="fa-solid fa-circle" style="color: #3b82f6;"></i> Blue</button>
+                <button class="filter-btn" data-filter="Red Airdrop"><i class="fa-solid fa-circle" style="color: #ef4444;"></i> Red</button>
+            </div>
+            
+            <!-- The Permanent Gap & Dynamic Clear Button Row -->
+            <div class="filter-row" style="min-height: 40px; align-items: center; justify-content: center; margin-bottom: 5px;">
+                <button class="filter-btn" id="clearFiltersBtn"><i class="fa-solid fa-xmark"></i> Clear</button>
+            </div>
+            
+            <!-- Second Row: Main Robberies -->
+            <div class="filter-row">
+                <button class="filter-btn" data-filter="Jewelry Store"><i class="fa-solid fa-gem"></i> Jewelry Store</button>
+                <button class="filter-btn" data-filter="Bank"><i class="fa-solid fa-building-columns"></i> Bank</button>
+                <button class="filter-btn" data-filter="Bank Truck"><i class="fa-solid fa-truck"></i> Bank Truck</button>
+                <button class="filter-btn" data-filter="Power Plant"><i class="fa-solid fa-bolt"></i> Power Plant</button>
+                <button class="filter-btn" data-filter="Casino"><i class="fa-solid fa-dice"></i> Casino</button>
+                <button class="filter-btn" data-filter="Cargo Plane"><i class="fa-solid fa-plane"></i> Cargo Plane</button>
+                <button class="filter-btn" data-filter="Cargo Train"><i class="fa-solid fa-train"></i> Cargo Train</button>
+                <button class="filter-btn" data-filter="Museum"><i class="fa-solid fa-building-columns"></i> Museum</button>
+                <button class="filter-btn" data-filter="Mansion"><i class="fa-solid fa-house-chimney"></i> Mansion</button>
+                <button class="filter-btn" data-filter="Tomb"><i class="fa-solid fa-skull"></i> Tomb</button>
+            </div>
+
+            <!-- Third Row: Double Bank & Bounty -->
+            <div class="filter-row">
+                <button class="filter-btn" data-filter="Double Bank"><i class="fa-solid fa-vault"></i> Double Bank</button>
+                <button class="filter-btn" id="bountyFilterBtn" data-filter="Bounty"><i class="fa-solid fa-sack-dollar"></i> Bounty</button>
+            </div>
+
+            <!-- THE FULL WIDTH BOUNTY SLIDER -->
+            <div class="bounty-slider-wrapper" id="bountySliderWrapper">
+                <div class="bounty-slider-header">
+                    <span>Total Server Bounty Filter</span>
+                    <span id="bountySliderVal" style="color: var(--accent-glow); font-size: 1rem; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);">10k+</span>
+                </div>
+                <input type="range" min="10" max="200" step="5" value="10" class="bounty-slider" id="bountySlider">
+                <div class="slider-markers">
+                    <span>10k</span><span>50k</span><span>100k</span><span>150k</span><span>200k+</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="grid" class="tracker-grid">
+            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Establishing Uplink...</div>
+        </div>
+    </div>
+
+    <!-- The Bounties Modal -->
+    <div id="bountyModal" class="modal-overlay" onclick="if(event.target===this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">${svgDollar} Total Server Bounty · $0</div>
+                <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- The Image Modal -->
+    <div id="imageModal" class="modal-overlay" onclick="if(event.target===this) closeImageModal()">
+        <div class="modal-content" id="imgModalContent">
+            <div class="modal-header">
+                <div class="modal-title" id="imageModalTitle" style="color: var(--text-dim);">Location: Unknown</div>
+                <button class="btn-close" onclick="closeImageModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body modal-img-body">
+                <img id="imageModalSrc" src="" class="modal-large-img" alt="Map Preview">
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script>
+        const API_URL = "https://jb-tracker-api.vercel.app/getRobberies";
+        let cachedServers = {}; 
+        let activeFilters = new Set();
+        let timeOfLastFetch = null;
+        
+        const svgDollar = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`;
+        const svgLink = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>`;
+        const svgClock = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+
+        // === MULTI-SELECT FILTER LOGIC ===
+        document.querySelectorAll('.filter-btn:not(#clearFiltersBtn)').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterName = this.getAttribute('data-filter');
+                if (activeFilters.has(filterName)) {
+                    activeFilters.delete(filterName);
+                    this.classList.remove('active');
+                } else {
+                    activeFilters.add(filterName);
+                    this.classList.add('active');
+                }
+                
+                const clearBtn = document.getElementById('clearFiltersBtn');
+                if (activeFilters.size > 0) clearBtn.style.display = 'inline-flex';
+                else clearBtn.style.display = 'none';
+
+                const sliderWrapper = document.getElementById('bountySliderWrapper');
+                if (activeFilters.has('Bounty')) sliderWrapper.classList.add('active');
+                else sliderWrapper.classList.remove('active');
+                
+                renderGrid();
+            });
+        });
+
+        document.getElementById('clearFiltersBtn').addEventListener('click', function() {
+            activeFilters.clear();
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('bountySliderWrapper').classList.remove('active'); 
+            this.style.display = 'none';
+            renderGrid();
+        });
+        
+        let minimumBounty = 10000;
+        document.getElementById('bountySlider').addEventListener('input', function() {
+            minimumBounty = parseInt(this.value) * 1000;
+            document.getElementById('bountySliderVal').innerText = this.value + 'k+';
+            
+            const min = 10; const max = 200;
+            const percentage = ((this.value - min) / (max - min)) * 100;
+            this.style.background = `linear-gradient(to right, var(--accent-glow) ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
+            
+            renderGrid(); 
+        });
+
+        // === BOUNTY MODAL FUNCTIONS ===
+        function openModal(jobId) {
+            const srv = cachedServers[jobId];
+            if (!srv || !srv.bountyPlayer || !srv.bountyPlayer.extra) return;
+            let fullListStr = srv.bountyPlayer.extra.find(e => e.name === "FullBountyList");
+            if (!fullListStr) return;
+            let allBounties = new Array();
+            try { allBounties = JSON.parse(fullListStr.value); } catch(e) { return; }
+
+            const totalBounty = srv.totalBounty ? parseInt(srv.totalBounty).toLocaleString() : "0";
+            document.getElementById('modalTitle').innerHTML = `${svgDollar} Total Server Bounty · $${totalBounty}`;
+            
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = ''; 
+
+            allBounties.forEach(player => {
+                let pAmt = player.Bounty ? "$" + parseInt(player.Bounty).toLocaleString() : "$0";
+                let avatarUrl = player.AvatarUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${player.UserId}&width=150&height=150&format=png`;
+                
+                let invHTML = "";
+                if (player.Inventory && player.Inventory !== "") {
+                    let items = player.Inventory.split(",");
+                    items.forEach(item => {
+                        let iName = item.trim();
+                        if (iName !== "") invHTML += `<span class="inv-pill">${iName}</span>`;
+                    });
+                } else {
+                    invHTML = `<span class="text-xs text-muted-foreground italic">No tracked items</span>`;
+                }
+
+                modalBody.innerHTML += `
+                    <div class="modal-player-card">
+                        <img src="${avatarUrl}" class="modal-player-avatar" alt="" onerror="this.src='https://tr.rbxcdn.com/38c6edcb50633730ff4cf39df885e835/150/150/AvatarHeadshot/Png'">
+                        <div class="modal-player-info">
+                            <div class="modal-player-top">
+                                <span class="modal-player-name">${player.Name}</span>
+                                <span class="modal-player-bounty">${pAmt}</span>
+                            </div>
+                            <div class="inventory-pills">${invHTML}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('bountyModal').classList.add('active');
+        }
+        function closeModal() { document.getElementById('bountyModal').classList.remove('active'); }
+
+        // === IMAGE MODAL FUNCTIONS ===
+        function openImageModal(imgSrc) {
+            let gridId = "Unknown";
+            try { gridId = imgSrc.split('/').pop().replace('.png', ''); } catch(e) {}
+            document.getElementById('imageModalTitle').innerText = `Location: ${gridId}`;
+            document.getElementById('imageModalSrc').src = imgSrc;
+            document.getElementById('imageModal').classList.add('active');
+        }
+        function closeImageModal() { document.getElementById('imageModal').classList.remove('active'); }
+
+        function updateLiveTimers() {
+            document.querySelectorAll('.live-timer').forEach(el => {
+                const dateStr = el.getAttribute('data-time');
+                if (!dateStr || dateStr === "0") return;
+                const date = new Date(dateStr); 
+                if (isNaN(date.getTime())) return; 
+                let seconds = Math.floor((new Date() - date) / 1000);
+                if (seconds < 0) seconds = 0; 
+                if (seconds < 60) el.innerText = `${seconds}s ago`;
+                else if (seconds < 3600) el.innerText = `${Math.floor(seconds / 60)}m ${seconds % 60}s ago`;
+                else el.innerText = `${Math.floor(seconds / 3600)}h ago`;
+            });
+        }
+        setInterval(updateLiveTimers, 1000);
+
+        async function fetchRobberies() {
+            try {
+                const response = await fetch(API_URL, { method: 'GET', mode: 'cors', credentials: 'omit', headers: { 'Accept': 'application/json' } });
+                if (!response.ok) throw new Error("API Connection Failed");
+                const rawData = await response.json();
+                
+                timeOfLastFetch = new Date().toISOString();
+                document.getElementById('statUpdated').setAttribute('data-time', timeOfLastFetch);
+                
+                cachedServers = {};
+                let totalOpenRobberies = 0; 
+
+                rawData.forEach(item => {
+                    const jid = item.jobId;
+                    if (!jid) return;
+                    if (!cachedServers[jid]) {
+                        cachedServers[jid] = {
+                            jobId: jid, robberies:[], bountyPlayer: null,
+                            totalBounty: 0, crims: 0, police: 0, players: item.players || "N/A", lastUpdate: item.createdAt || 0
+                        };
+                    }
+                    if (new Date(item.createdAt || 0) > new Date(cachedServers[jid].lastUpdate)) {
+                        cachedServers[jid].lastUpdate = item.createdAt;
+                    }
+                    if (item.name === "High Bounty Server") {
+                        cachedServers[jid].totalBounty = item.totalBounty || 0;
+                        cachedServers[jid].crims = item.crims || 0;
+                        cachedServers[jid].police = item.police || 0;
+                    } 
+                    else if (item.status === "Active" && !item.name.includes("Bank") && !item.name.includes("Jewelry") && !item.name.includes("Casino") && !item.name.includes("Museum") && !item.name.includes("Plant") && !item.name.includes("Train") && !item.name.includes("Plane") && !item.name.includes("Tomb") && !item.name.includes("Mansion") && !item.name.includes("Airdrop")) {
+                        cachedServers[jid].bountyPlayer = item;
+                        if (item.totalBounty) cachedServers[jid].totalBounty = item.totalBounty;
+                        if (item.crims) cachedServers[jid].crims = item.crims;
+                        if (item.police) cachedServers[jid].police = item.police;
+                    } else {
+                        cachedServers[jid].robberies.push(item);
+                        // NEW STRICT COUNTER: Counts Open AND In Robbery. Ignores Airdrops completely!
+                        if (!item.name.includes("Airdrop") && ["Open", "Double Bank Active", "In Robbery", "In Progress"].includes(item.status)) {
+                            totalOpenRobberies++;
+                        }
+                    }
+                });
+
+                document.getElementById('statServers').innerText = Object.keys(cachedServers).length;
+                document.getElementById('statRobberies').innerText = totalOpenRobberies;
+
+                renderGrid();
+            } catch (err) {
+                document.getElementById('grid').innerHTML = '<div class="loading" style="color: var(--red);">Tracker Offline.</div>';
+            }
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = ''; 
+            
+            let serverList = Object.values(cachedServers);
+            serverList.sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate));
+
+            // Filtering Logic
+            if (activeFilters.size > 0) {
+                serverList = serverList.filter(srv => {
+                    let srvCopy = { ...srv, robberies:[...srv.robberies], bountyPlayer: srv.bountyPlayer };
+                    if (activeFilters.size > 0) {
+                        srvCopy.robberies = srvCopy.robberies.filter(r => {
+                            return Array.from(activeFilters).some(f => {
+                                if (f === "Bank") return r.name.includes("Rising Bank") || r.name.includes("Crater Bank");
+                                if (f === "Double Bank") return r.name.includes("Double Bank");
+                                if (f === "Airdrop") return r.name.includes("Airdrop");
+                                return r.name === f; 
+                            });
+                        });
+                        if (!activeFilters.has("Bounty") || (srvCopy.totalBounty < minimumBounty)) {
+                            srvCopy.bountyPlayer = null;
+                        }
+                    }
+                    if (srvCopy.robberies.length === 0 && !srvCopy.bountyPlayer) return false;
+                    srv.displayRobberies = srvCopy.robberies;
+                    srv.displayBountyPlayer = srvCopy.bountyPlayer;
+                    return true;
+                });
+            } else {
+                serverList.forEach(srv => {
+                    srv.displayRobberies = srv.robberies;
+                    srv.displayBountyPlayer = srv.bountyPlayer;
+                });
+            }
+
+            if (serverList.length === 0) {
+                grid.innerHTML = '<div class="loading">No Active Robberies found</div>';
+                return;
+            }
+
+            // === THE JAVASCRIPT MASONRY ENGINE ===
+            let isBountyMode = activeFilters.has("Bounty");
+            if (isBountyMode) {
+                grid.classList.add('bounty-active');
+            } else {
+                grid.classList.remove('bounty-active');
+            }
+
+            // 1. Calculate how many columns the screen can fit
+            let numCols = 4;
+            if (isBountyMode || window.innerWidth <= 600) numCols = 1;
+            else if (window.innerWidth <= 900) numCols = 2;
+            else if (window.innerWidth <= 1200) numCols = 3;
+
+            // 2. Create the invisible vertical columns
+            const colDivs =[];
+            for (let i = 0; i < numCols; i++) {
+                const col = document.createElement('div');
+                col.className = 'grid-column';
+                colDivs.push(col);
+                grid.appendChild(col);
+            }
+
+            // 3. Deal the cards left-to-right into the columns!
+            serverList.forEach((srv, index) => {
+                const card = document.createElement('div');
+                card.className = isBountyMode ? 'server-card bounty-mode-card' : 'server-card';
+                
+                let robberiesHTML = "";
+                if (srv.displayRobberies.length > 0) {
+                    robberiesHTML += '<div class="robbery-list">';
+                    srv.displayRobberies.forEach((rob, idx) => {
+                        const status = rob.status || "Unknown";
+                        let statusColor = "text-red";
+                        let iconColorClass = "icon-closed"; 
+                        
+                        // FIX: Added "Active" so Double Bank lights up Green!
+                        if (["Open", "Falling", "Dropped", "Double Bank Active", "Active", "Unopened"].includes(status)) {
+                            statusColor = "text-green";
+                            iconColorClass = "icon-open";
+                        }
+                        else if (["In Robbery", "In Progress"].includes(status)) {
+                            statusColor = "text-orange";
+                            iconColorClass = "icon-progress";
+                        }
+                        
+                        let displayName = rob.name;
+                        
+                        let iconName = "fa-crosshairs";
+                        let lowName = displayName.toLowerCase();
+                        
+                        // FIX: Replaced standard bank with a heavy vault for Double Bank!
+                        if (lowName.includes("double bank")) iconName = "fa-vault";
+                        else if (lowName.includes("bank") || lowName.includes("crater")) iconName = "fa-building-columns";
+                        if (lowName.includes("jewelry")) iconName = "fa-gem";
+                        if (lowName.includes("museum")) iconName = "fa-building-columns";
+                        if (lowName.includes("power")) iconName = "fa-bolt";
+                        if (lowName.includes("casino")) iconName = "fa-dice";
+                        if (lowName.includes("train")) iconName = "fa-train";
+                        if (lowName.includes("plane")) iconName = "fa-plane";
+                        if (lowName.includes("mansion")) iconName = "fa-house-chimney";
+                        if (lowName.includes("tomb")) iconName = "fa-skull";
+                        if (lowName.includes("truck")) iconName = "fa-truck";
+                        if (lowName.includes("airdrop")) iconName = "fa-parachute-box";
+
+                        let subDataHTML = "";
+                        
+                        if (rob.name.includes("Double Bank")) {
+                            displayName = "Double Bank Active";
+                            subDataHTML += `<div class="sub-data"><span class="sub-label">Rising Bank:</span><span class="text-green font-bold">Open</span></div><div class="sub-data"><span class="sub-label">Crater Bank:</span><span class="text-green font-bold">Open</span></div>`;
+                        } else if (rob.name === "Mansion" && status === "Closed") {
+                            subDataHTML += `<div class="sub-data" style="align-items: flex-start;"><span class="sub-label" style="margin-top: 2px;">Game Time:</span><div style="display: flex; flex-direction: column; align-items: flex-end;"><span style="color: #fff; font-weight: 700; font-size: 1rem; font-family: 'JetBrains Mono';">${rob.gameTime || "Unknown"}</span><span style="color: #fff; font-weight: 800; font-size: 0.75rem;">(WILL OPEN SOON)</span></div></div>`;
+                        } else {
+                            if (rob.extra && Array.isArray(rob.extra)) {
+                                rob.extra.forEach(ex => {
+                                    let valText = ex.value.replace(/\*/g, '');
+                                    let valClass = ex.name.includes("Code") ? "sub-val highlight" : "sub-val";
+                                    let labelText = ex.name.includes("Code") ? "Casino Code:" : ex.name + ":";
+                                    if (ex.name !== "FullBountyList") subDataHTML += `<div class="sub-data"><span class="sub-label">${labelText}</span><span class="${valClass}">${valText}</span></div>`;
+                                });
+                            }
+                        }
+
+                        let mapHTML = "";
+                        if (rob.image && rob.image.startsWith("http")) mapHTML = `<div class="map-block"><img src="${rob.image}" class="map-img" alt="Map Location" onclick="openImageModal('${rob.image}')"></div>`;
+                        
+                        if (idx > 0) robberiesHTML += `<div class="divider"></div>`;
+                        let statusPillHTML = !rob.name.includes("Double Bank") ? `<span class="status-text ${statusColor}">${status}</span>` : "";
+
+                        robberiesHTML += `
+                            <div class="robbery-item">
+                                <div class="robbery-header">
+                                    <div class="robbery-header-left">
+                                        <div class="robbery-icon-box ${iconColorClass}">
+                                            <i class="fa-solid ${iconName}"></i>
+                                        </div>
+                                        <span class="robbery-name">${displayName}</span>
+                                    </div>
+                                    ${statusPillHTML}
+                                </div>
+                                ${subDataHTML}
+                                ${mapHTML}
+                            </div>`;
+                    });
+                    robberiesHTML += '</div>';
+                }
+
+                let playerHTML = "";
+                let footerStats = `<span>Players: ${srv.players ? srv.players.split(" ")[0] : "?"} / 30</span>`;
+
+                if (srv.displayBountyPlayer && srv.displayBountyPlayer.name !== "High Bounty Server") {
+                    let b = srv.displayBountyPlayer;
+                    let totalServerBounty = srv.totalBounty ? parseInt(srv.totalBounty).toLocaleString() : "0";
+                    let pCount = srv.players ? srv.players.split(" ")[0] : "?";
+
+                    if (isBountyMode) {
+                        let allBounties = new Array();
+                        if (b.extra) {
+                            let fl = b.extra.find(e => e.name === "FullBountyList");
+                            if (fl) { try { allBounties = JSON.parse(fl.value); } catch(e) {} }
+                        }
+                        
+                        let playersGridHTML = "";
+                        allBounties.forEach(p => {
+                            let pAmt = p.Bounty ? "$" + parseInt(p.Bounty).toLocaleString() : "$0";
+                            let aUrl = p.AvatarUrl || `https://www.roblox.com/headshot-thumbnail/image?userId=${p.UserId}&width=150&height=150&format=png`;
+                            let iHTML = "";
+                            if (p.Inventory) {
+                                p.Inventory.split(",").forEach(it => { if(it.trim()!=="") iHTML += `<span class="inv-pill">${it.trim()}</span>`; });
+                            } else iHTML = `<span class="text-xs text-muted-foreground italic">No tracked items</span>`;
+
+                            playersGridHTML += `
+                                <div class="modal-player-card">
+                                    <img src="${aUrl}" class="modal-player-avatar" alt="Avatar">
+                                    <div class="modal-player-info">
+                                        <div class="modal-player-top">
+                                            <span class="modal-player-name">${p.Name}</span>
+                                            <span class="modal-player-bounty">${pAmt}</span>
+                                        </div>
+                                        <div class="inventory-pills">${iHTML}</div>
+                                    </div>
+                                </div>`;
+                        });
+
+                        playerHTML = `
+                            ${srv.displayRobberies.length > 0 ? `<div class="divider"></div>` : ``}
+                            <div class="bounty-wide-header">
+                                <div class="bw-left">
+                                    <span class="bw-label">Total Server Bounty</span>
+                                    <span class="bw-total"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" style="filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5)); stroke-width: 3;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> $${totalServerBounty}</span>
+                                </div>
+                                <div class="bw-right">
+                                    <div class="bw-stats"><span>${allBounties.length} Bounties</span> <span>•</span> <span>${srv.police || 0} Cops</span></div>
+                                    <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Total Players: ${pCount} / 30</span>
+                                </div>
+                            </div>
+                            <div class="bounty-wide-players">
+                                ${playersGridHTML}
+                            </div>
+                        `;
+                    } else {
+                        let avatarSrc = (b.image && b.image.startsWith("http")) ? b.image : "";
+                        let bountyAmount = b.bounty ? "$" + parseInt(b.bounty).toLocaleString() : "Unknown";
+                        let dividerLine = (srv.displayRobberies.length > 0) ? `<div class="divider"></div>` : ``;
+
+                        playerHTML = `
+                            ${dividerLine}
+                            <div class="server-bounty-banner">
+                                <span class="sb-label">Total Server<br>Bounty:</span>
+                                <span class="sb-val">$${totalServerBounty}</span>
+                            </div>
+                            <div class="bounty-box" onclick="openModal('${srv.jobId}')">
+                                <div class="bounty-left">
+                                    <img src="${avatarSrc}" class="bounty-avatar" alt="">
+                                    <div class="bounty-info">
+                                        <div class="bounty-name">${svgDollar} <span>${b.name}</span></div>
+                                        <div class="bounty-stats">${bountyAmount} <span style="margin: 0 6px; opacity: 0.5;">•</span> ${pCount} players</div>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-chevron-right bounty-chevron"></i>
+                            </div>
+                        `;
+                    }
+                    footerStats = `<span>Criminals: ${srv.crims || 0} <span style="margin: 0 6px; opacity: 0.5;">•</span> Police: ${srv.police || 0}</span>`;
+                }
+
+                card.innerHTML = `
+                    ${robberiesHTML}
+                    ${playerHTML}
+                    <a href="roblox://experiences/start?placeId=606849621&gameInstanceId=${srv.jobId}" class="btn-join">
+                        ${svgLink} Join Game
+                    </a>
+                    <div class="server-footer">
+                        <div class="footer-group">${footerStats}</div>
+                        <div class="footer-time">${svgClock} <span class="live-timer" data-time="${srv.lastUpdate}">Calculating...</span></div>
+                    </div>
+                `;
+                
+                // 4. Place the fully built card into the correct column!
+                colDivs[index % numCols].appendChild(card);
+            });
+            
+            updateLiveTimers();
+        }
+
+        window.addEventListener('resize', () => { if (Object.keys(cachedServers).length > 0) renderGrid(); });
+        fetchRobberies();
+        setInterval(fetchRobberies, 10000);
+        // Instantly reshuffles the grid perfectly if the user resizes their screen!
+        window.addEventListener('resize', () => {
+            if (Object.keys(cachedServers).length > 0) renderGrid();
+        });
+    </script>
+    <script src="loader.js"></script>
+</body>
+</html>
