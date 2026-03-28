@@ -615,6 +615,7 @@
 
         function setCat(cat, el) {
             currentCategory = cat;
+            currentPage = 1; // Reset to page 1 when changing category
             document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
             updateData();
@@ -626,6 +627,7 @@
                 return;
             }
 
+            currentPage = 1; // Reset to page 1 when searching/filtering
             const query = document.getElementById('search').value.toLowerCase();
             filteredItems = allItems.filter(item => {
                 const matchesSearch = !query || item.name.toLowerCase().includes(query) || item.cat.toLowerCase().includes(query);
@@ -753,7 +755,13 @@
         }
 
         function changePage(step) {
+            const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
             currentPage += step;
+            
+            // Ensure currentPage stays within bounds
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            
             render();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
