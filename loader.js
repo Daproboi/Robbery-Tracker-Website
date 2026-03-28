@@ -1,9 +1,9 @@
-// --- THEME MEMORY ENGINE (Runs instantly before the page fully loads!) ---
+// --- THEME MEMORY ENGINE ---
 if (localStorage.getItem('jailbreakHubTheme') === 'light') {
     document.body.classList.add('light-mode');
 }
 
-// Lock to prevent button spamming while the transition runs!
+// Lock to prevent button spamming while the wave runs
 let isAnimating = false;
 
 document.addEventListener("DOMContentLoaded", async function() {
@@ -11,25 +11,19 @@ document.addEventListener("DOMContentLoaded", async function() {
     // --- THE ULTIMATE GLOBAL CSS INJECTOR ---
     const globalStyle = document.createElement('style');
     globalStyle.innerHTML = `
-        /* 1. Z-INDEX FIX & MOBILE PERFORMANCE: Forces Navbar to ALWAYS be top! */
+        /* 1. Z-INDEX FIX: Forces Navbar to ALWAYS be on top! */
         #navbar-container { position: relative; z-index: 99999 !important; }
         #footer-container { position: relative; z-index: 10 !important; }
         body > div:not(#navbar-container):not(#footer-container), section, main { position: relative; z-index: 10; }
         
-        /* NEW: Deletes the ugly blue tap highlight on mobile phones! */
-        * { -webkit-tap-highlight-color: transparent; }
-        
-        /* NEW: Forces mobile devices to use hardware acceleration, removing all animation lag! */
-        body { -webkit-font-smoothing: antialiased; backface-visibility: hidden; }
-        
-        /* 2. GLOBAL LIGHT MODE VARIABLES */
+        /* 2. GLOBAL LIGHT MODE VARIABLES (Fixed for Crisp Boundaries!) */
         body.light-mode {   
-            --bg: #f8fafc !important;   
-            --surface: rgba(255, 255, 255, 0.8) !important;   
-            --card: rgba(241, 245, 249, 0.8) !important;   
-            --card-hover: rgba(255, 255, 255, 0.95) !important;
-            --border: rgba(0, 0, 0, 0.1) !important;   
-            --border-light: rgba(0, 0, 0, 0.15) !important;
+            --bg: #f3f4f6 !important; /* Slightly darker background so pure white cards POP out! */
+            --surface: #ffffff !important;   
+            --card: #ffffff !important;   
+            --card-hover: #f8fafc !important;
+            --border: rgba(0, 0, 0, 0.18) !important; /* Darker, clearly visible borders */
+            --border-light: rgba(0, 0, 0, 0.1) !important;
             --accent: #005bb5 !important;   
             --accent-glow: #005bb5 !important;   
             --green: #00b35f !important;   
@@ -37,8 +31,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             --red: #dc2626 !important;
             --text-main: #0f172a !important;   
             --text-dim: #475569 !important;   
-            --muted: rgba(0, 0, 0, 0.05) !important;
-            --muted-hover: rgba(0, 0, 0, 0.1) !important;
+            --muted: #f1f5f9 !important; /* Solid light grey for boxes/pills */
+            --muted-hover: #e2e8f0 !important;
             --invert: 1 !important;
             
             background-color: var(--bg) !important;
@@ -48,34 +42,26 @@ document.addEventListener("DOMContentLoaded", async function() {
         /* 3. Force all text to turn dark in light mode */
         body.light-mode, body.light-mode * { color: var(--text-main); }
         
-        /* 4. EXPLICIT OVERRIDES FOR CALCULATOR & CHANGELOG PAGES */
-        body.light-mode .log-card, body.light-mode #pickerOverlay, 
-        body.light-mode .mega-picker-card, body.light-mode .search-giant, 
-        body.light-mode .add-box, body.light-mode .result-panel,
+        /* 4. THE BOUNDARY FIX: Forces visible borders and soft shadows on all cards/boxes! */
         body.light-mode section, body.light-mode [class*="card"], body.light-mode [class*="box"], 
         body.light-mode [class*="panel"], body.light-mode input, body.light-mode select, 
         body.light-mode textarea, body.light-mode [class*="dropdown"], body.light-mode .modal, 
-                
-        /* Forces the inner "Clean Value" and "Est Duped" boxes to turn white too! */
-        body.light-mode [class*="item"], body.light-mode[class*="stat"], body.light-mode [class*="price"], body.light-mode[class*="val"] {
-            background-color: transparent !important;
-            background-image: none !important;
-            color: var(--text-main) !important;
-        }
-        body.light-mode .dropdown, body.light-mode .dropdown-content, body.light-mode .dropdown-menu,
-        body.light-mode .modal, body.light-mode .modal-content, body.light-mode .search-input,
-        body.light-mode[class*="bg-"] {
-            background: var(--card) !important;
+        body.light-mode[class*="bg-"], body.light-mode .inv-pill {
             background-color: var(--card) !important;
-            border-color: var(--border) !important;
+            border: 1px solid var(--border) !important; /* Forces the outline to appear */
             color: var(--text-main) !important;
             background-image: none !important; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important; /* Makes boxes physically separate from the background */
         }
         
-        body.light-mode #pickerOverlay { background: rgba(248, 250, 252, 0.95) !important; }
+        /* Specific transparent fix for the massive Calculator Overlay! */
+        body.light-mode #pickerOverlay { background: rgba(248, 250, 252, 0.95) !important; backdrop-filter: blur(10px) !important; }
+
+        /* Forces inputs and dropdown text to be readable */
         body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: var(--text-dim) !important; }
         body.light-mode option { background-color: var(--surface) !important; color: var(--text-main) !important; }
 
+        /* Remove glowing text shadows on Titles in Light Mode */
         body.light-mode h1, body.light-mode h2, body.light-mode .text-4xl, body.light-mode .text-5xl, body.light-mode .text-6xl,
         body.light-mode .log-title, body.light-mode .log-section-title, body.light-mode .card-name, body.light-mode .status-big {
             text-shadow: none !important;
@@ -90,22 +76,19 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode .nav-logo span { color: var(--accent) !important; text-shadow: none !important; }
         
         /* 6. PERFECT FOOTER LIGHT MODE FIX */
-        body.light-mode .site-footer { background: #f8fafc !important; border-top-color: rgba(0,0,0,0.1) !important; }
+        body.light-mode .site-footer { background: #ffffff !important; border-top: 1px solid var(--border) !important; }
         body.light-mode .f-brand { color: #0f172a !important; }
         body.light-mode .f-brand span { color: var(--accent) !important; text-shadow: none !important; }
         body.light-mode .f-credits, body.light-mode .f-legal, body.light-mode .f-copy { color: #475569 !important; }
         body.light-mode .f-credits strong { color: #0f172a !important; }
         body.light-mode .f-links a { color: #475569 !important; opacity: 1 !important; }
         body.light-mode .f-links a:hover { color: var(--accent) !important; }
-        body.light-mode .f-support-btn { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: #0f172a !important; box-shadow: none !important; }
+        body.light-mode .f-support-btn { background: rgba(0,0,0,0.05) !important; border-color: var(--border) !important; color: #0f172a !important; box-shadow: none !important; }
         body.light-mode .f-support-btn:hover { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
         
-        /* 7. NATIVE BROWSER VIEW TRANSITION SETTINGS */
-        /* Stops default animations so the custom circular wipe works! */
-        ::view-transition-old(root), ::view-transition-new(root) {
-            animation: none;
-            mix-blend-mode: normal;
-        }
+        /* 7. NATIVE BROWSER VIEW TRANSITION (Required for the flawless circle wave!) */
+        ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+        *:not(.theme-wave) { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important; }
     `;
     document.head.appendChild(globalStyle);
 
@@ -124,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
-            // --- THE NATIVE "VIEW TRANSITIONS API" THEME TOGGLE ---
+            // --- THE NATIVE VIEW TRANSITION API (Flawless Wave in BOTH directions!) ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
                 themeBtn.addEventListener('click', (event) => {
@@ -132,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     
                     const isDark = !document.body.classList.contains('light-mode');
 
-                    // Fallback for older browsers (Safely flips colors instantly if API is not supported)
+                    // Fallback for extremely old browsers that don't support the new API
                     if (!document.startViewTransition) {
                         document.body.classList.toggle('light-mode');
                         localStorage.setItem('jailbreakHubTheme', isDark ? 'light' : 'dark');
@@ -141,21 +124,20 @@ document.addEventListener("DOMContentLoaded", async function() {
 
                     isAnimating = true;
 
-                    // Start the stunning native browser transition!
+                    // Takes a high-speed screenshot and prepares the new colors in the background
                     const transition = document.startViewTransition(() => {
                         document.body.classList.toggle('light-mode');
                         localStorage.setItem('jailbreakHubTheme', isDark ? 'light' : 'dark');
                     });
 
-                    // Draw the perfectly smooth circular mask radiating from the exact click location!
+                    // Instructs the Graphics Card to wipe the new colors in a perfect circle!
                     transition.ready.then(() => {
-                        const x = event.clientX;
-                        const y = event.clientY;
+                        const x = event.clientX || window.innerWidth / 2;
+                        const y = event.clientY || window.innerHeight / 2;
                         
-                        // Calculate how big the circle needs to be to reach the farthest corner of the screen
                         const endRadius = Math.hypot(
-                            Math.max(x, innerWidth - x),
-                            Math.max(y, innerHeight - y)
+                            Math.max(x, window.innerWidth - x),
+                            Math.max(y, window.innerHeight - y)
                         );
 
                         document.documentElement.animate(
@@ -166,13 +148,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                                 ]
                             },
                             {
-                                duration: 1000, // 1 Full Second
-                                easing: 'ease-out',
-                                pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+                                duration: 800, // Perfect 0.8s speed
+                                easing: 'ease-in-out',
+                                pseudoElement: '::view-transition-new(root)' // Fixes the Light-to-Dark glitch!
                             }
                         );
 
-                        setTimeout(() => { isAnimating = false; }, 1000);
+                        // Unlocks the button right when the animation finishes
+                        setTimeout(() => { isAnimating = false; }, 800);
                     });
                 });
             }
