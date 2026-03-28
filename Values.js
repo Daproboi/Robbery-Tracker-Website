@@ -1169,7 +1169,8 @@ const tireStyleData = [
 
 
 // CRITICAL: This connects your data to the HTML page. Every category is now here.
-const db = {
+// var allows jbvalues API (api.js buildDatabase) to replace db on pages that load both.
+var db = {
     "Vehicles": vehicleData,
     "Weapon Skins": weaponSkinData,
     "Hyperchromes": hyperchromeData,
