@@ -481,15 +481,8 @@
 
                 const items = await response.json();
                 
-                // Filter to only include value-related items
-                const valueCategories = ['Vehicles', 'Weapon Skins', 'Hyperchromes', 'Textures', 'Drifts', 'Furniture', 'Horns', 'Rims', 'Spoilers', 'Tire Stickers', 'Tire Styles'];
-                const filteredItems = items.filter(item => {
-                    const category = listCategoryLabel(item.section, item.category);
-                    return valueCategories.includes(category);
-                });
-                
-                // Find the specific item in filtered items
-                const item = filteredItems.find(i => 
+                // Find the specific item in all items
+                const item = items.find(i => 
                     (i.displayName && i.displayName.toLowerCase() === itemName.toLowerCase()) ||
                     (i.name && i.name.toLowerCase() === itemName.toLowerCase())
                 );
