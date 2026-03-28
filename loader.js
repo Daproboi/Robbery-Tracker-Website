@@ -52,8 +52,16 @@ document.addEventListener("DOMContentLoaded", async function() {
         body.light-mode .log-card, body.light-mode #pickerOverlay, 
         body.light-mode .mega-picker-card, body.light-mode .search-giant, 
         body.light-mode .add-box, body.light-mode .result-panel,
-        body.light-mode section, body.light-mode .box, body.light-mode .panel, body.light-mode .card, 
-        body.light-mode input, body.light-mode select, body.light-mode textarea,
+        body.light-mode section, body.light-mode [class*="card"], body.light-mode [class*="box"], 
+        body.light-mode [class*="panel"], body.light-mode input, body.light-mode select, 
+        body.light-mode textarea, body.light-mode [class*="dropdown"], body.light-mode .modal, 
+                
+        /* Forces the inner "Clean Value" and "Est Duped" boxes to turn white too! */
+        body.light-mode [class*="item"], body.light-mode[class*="stat"], body.light-mode [class*="price"], body.light-mode[class*="val"] {
+            background-color: transparent !important;
+            background-image: none !important;
+            color: var(--text-main) !important;
+        }
         body.light-mode .dropdown, body.light-mode .dropdown-content, body.light-mode .dropdown-menu,
         body.light-mode .modal, body.light-mode .modal-content, body.light-mode .search-input,
         body.light-mode[class*="bg-"] {
