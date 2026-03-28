@@ -470,24 +470,18 @@
                 return;
             }
 
-            // Load database first
-            if (typeof loadDb === 'function') {
-                loadDb().then(() => {
+            // Wait for database to be loaded
+            const checkDb = () => {
+                if (window.db && Object.keys(window.db).length > 0) {
+                    db = window.db;
                     findAndDisplayItem(itemName, itemCategory);
-                }).catch(() => {
-                    showError();
-                });
-            } else {
-                // Fallback for when api.js is not available
-                setTimeout(() => {
-                    if (window.db && Object.keys(window.db).length > 0) {
-                        db = window.db;
-                        findAndDisplayItem(itemName, itemCategory);
-                    } else {
-                        showError();
-                    }
-                }, 1000);
-            }
+                } else {
+                    // If database not loaded yet, wait and check again
+                    setTimeout(checkDb, 100);
+                }
+            };
+
+            checkDb();
         }
 
         function findAndDisplayItem(itemName, itemCategory) {
@@ -617,7 +611,19 @@
         }
 
         // Load item details when page loads
-        window.onload = loadItemDetails;
+        window.onload = function() {
+            // Initialize database loading first
+            if (typeof init === 'function') {
+                init().then(() => {
+                    loadItemDetails();
+                }).catch(() => {
+                    showError();
+                });
+            } else {
+                // Fallback - wait for database to be loaded by other means
+                loadItemDetails();
+            }
+        };
     </script>
     <script src="loader.js"></script>
 </body>
