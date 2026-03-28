@@ -358,6 +358,7 @@
     <script src="api.js"></script>
     <script>
         const ITEM_IMG_PLACEHOLDER = 'https://via.placeholder.com/400/0a0c10/64748b?text=%3F';
+        let currentItem = null;
 
         function escapeHtml(text) {
             return String(text)
@@ -365,6 +366,15 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
+        }
+
+        function escapeAttr(text) {
+            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+        }
+
+        function jbValuesImgFallback(img) {
+            img.onerror = null;
+            img.src = ITEM_IMG_PLACEHOLDER;
         }
 
         function humanizeApiKey(path) {
@@ -460,8 +470,23 @@
             }
         }
 
-        let db = {};
-        let currentItem = null;
+        function buildModalApiTableHtml(record) {
+            if (!record || typeof record !== 'object') {
+                return '<p class="modal-desc">No API record stored for this item.</p>';
+            }
+            const clone = JSON.parse(JSON.stringify(record));
+            delete clone.description;
+            const rows = flattenApiObject(clone);
+            if (!rows.length) {
+                return '<p class="modal-desc">No API fields to display.</p>';
+            }
+            return rows.map(r => `
+                <div class="modal-api-row">
+                    <span class="modal-api-k">${escapeHtml(r.label)}</span>
+                    <span class="modal-api-v">${escapeHtml(r.value)}</span>
+                </div>
+            `).join('');
+        }
 
         function loadItemDetails() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -478,27 +503,38 @@
         }
 
         function findAndDisplayItem(itemName, itemCategory) {
-            if (window.db) {
-                db = window.db;
-            }
-
             let foundItem = null;
             
+            // Use the Values.js data structure
+            const categoryMap = {
+                'Vehicles': vehicleData,
+                'Weapon Skins': weaponSkinData,
+                'Hyperchromes': hyperchromeData,
+                'Textures': driftData,
+                'Furniture': furnitureData,
+                'Horns': hornData,
+                'Rims': rimData,
+                'Spoilers': spoilerData,
+                'Tire Stickers': tireStickerData,
+                'Tire Styles': tireStyleData
+            };
+
             // Search in the specific category first
-            if (db[itemCategory]) {
-                foundItem = db[itemCategory].find(item => 
+            const categoryData = categoryMap[itemCategory];
+            if (categoryData) {
+                foundItem = categoryData.find(item => 
                     item.name.toLowerCase() === itemName.toLowerCase()
                 );
             }
 
             // If not found, search all categories
             if (!foundItem) {
-                for (let category in db) {
-                    const item = db[category].find(item => 
+                for (const [catName, catData] of Object.entries(categoryMap)) {
+                    const item = catData.find(item => 
                         item.name.toLowerCase() === itemName.toLowerCase()
                     );
                     if (item) {
-                        foundItem = {...item, cat: category};
+                        foundItem = {...item, cat: catName};
                         break;
                     }
                 }
@@ -604,19 +640,7 @@
         }
 
         // Load item details when page loads
-        window.onload = function() {
-            // Initialize database loading first
-            if (typeof init === 'function') {
-                init().then(() => {
-                    loadItemDetails();
-                }).catch(() => {
-                    showError();
-                });
-            } else {
-                // Fallback - wait for database to be loaded by other means
-                loadItemDetails();
-            }
-        };
+        window.onload = loadItemDetails;
     </script>
     <script src="loader.js"></script>
 </body>
