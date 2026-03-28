@@ -426,7 +426,7 @@
     <div class="container">
         <h1 class="text-3xl font-black italic uppercase mb-8">Market Database</h1>
         <div class="search-section">
-            <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="resetAndRender()">
+            <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="updateData()">
             <div class="filter-row" id="filters">
                 <div class="f-btn active" id="btn-all" onclick="setCat('all', this)">All Items</div>
             </div>
@@ -573,12 +573,21 @@
         const itemsPerPage = 12; 
         let allItems = [];
         let filteredItems = [];
+        let initRetryCount = 0;
+        const MAX_RETRIES = 50;
 
         async function initializeData() {
             try {
+                // Prevent infinite recursion
+                if (initRetryCount >= MAX_RETRIES) {
+                    console.error('Max retries reached. Failed to initialize data.');
+                    document.getElementById('grid').innerHTML = '<div class="grid-empty error-banner"><p class="error-title">Failed to load data</p><p class="error-detail">Please refresh the page</p></div>';
+                    return;
+                }
+                
                 // Wait for the db to be loaded by api.js
                 if (typeof db === 'undefined' || Object.keys(db).length === 0) {
-                    // Wait a bit and try again
+                    initRetryCount++;
                     setTimeout(initializeData, 100);
                     return;
                 }
@@ -595,8 +604,12 @@
                 
             } catch (error) {
                 console.error('Error initializing data:', error);
-                // Fallback to Values.js if API fails
-                setTimeout(initializeData, 1000);
+                initRetryCount++;
+                if (initRetryCount < MAX_RETRIES) {
+                    setTimeout(initializeData, 1000);
+                } else {
+                    document.getElementById('grid').innerHTML = '<div class="grid-empty error-banner"><p class="error-title">Failed to load data</p><p class="error-detail">Please refresh the page</p></div>';
+                }
             }
         }
 
@@ -620,6 +633,7 @@
                 return matchesSearch && matchesCategory;
             });
             
+            filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
         }
 
@@ -746,11 +760,6 @@
 
         // Initialize data when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            initializeData();
-        });
-
-        // Re-initialize data when API loads (api.js calls this)
-        window.addEventListener('dbLoaded', function() {
             initializeData();
         });
     </script>

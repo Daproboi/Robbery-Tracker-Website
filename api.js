@@ -138,6 +138,7 @@ function buildDatabase(rows) {
             duped_value: duped,
             trend: trendRaw,
             demand,
+            cat,
             apiRecord
         });
     });
