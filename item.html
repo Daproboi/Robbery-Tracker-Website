@@ -278,6 +278,8 @@
             Back to Market Database
         </a>
 
+        <div id="grid" style="display: none;"></div>
+
         <div id="loadingState" class="loading-state">
             <div class="loading-spinner"></div>
             <p>Loading item details...</p>
@@ -352,6 +354,7 @@
 
     <div id="footer-container"></div>
 
+    <script src="Values.js"></script>
     <script src="api.js"></script>
     <script>
         const ITEM_IMG_PLACEHOLDER = 'https://via.placeholder.com/400/0a0c10/64748b?text=%3F';
@@ -470,18 +473,8 @@
                 return;
             }
 
-            // Wait for database to be loaded
-            const checkDb = () => {
-                if (window.db && Object.keys(window.db).length > 0) {
-                    db = window.db;
-                    findAndDisplayItem(itemName, itemCategory);
-                } else {
-                    // If database not loaded yet, wait and check again
-                    setTimeout(checkDb, 100);
-                }
-            };
-
-            checkDb();
+            // Use Values.js data directly
+            findAndDisplayItem(itemName, itemCategory);
         }
 
         function findAndDisplayItem(itemName, itemCategory) {
