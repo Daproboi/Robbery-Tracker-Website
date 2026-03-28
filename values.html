@@ -10,22 +10,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-
         /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
-        body.light-mode {   
-            --bg: #f8fafc !important;   
-            --surface: rgba(255, 255, 255, 0.8) !important;   
-            --card: rgba(241, 245, 249, 0.8) !important;   
+        body.light-mode {     
+            --bg: #f8fafc !important;    
+            --surface: rgba(255, 255, 255, 0.8) !important;    
+            --card: rgba(241, 245, 249, 0.8) !important;    
             --card-hover: rgba(255, 255, 255, 0.95) !important;
-            --border: rgba(0, 0, 0, 0.08) !important;   
+            --border: rgba(0, 0, 0, 0.08) !important;    
             --border-light: rgba(0, 0, 0, 0.15) !important;
-            --accent: #005bb5 !important;   
-            --accent-glow: #005bb5 !important;   
-            --green: #00b35f !important;   
+            --accent: #005bb5 !important;    
+            --accent-glow: #005bb5 !important;    
+            --green: #00b35f !important;    
             --orange: #d97706 !important;
             --red: #dc2626 !important;
-            --text-main: #0f172a !important;   
-            --text-dim: #475569 !important;   
+            --text-main: #0f172a !important;    
+            --text-dim: #475569 !important;    
             --muted: rgba(0, 0, 0, 0.05) !important;
             --muted-hover: rgba(0, 0, 0, 0.1) !important;
             --invert: 1 !important;
@@ -115,57 +114,148 @@
 
         .items-grid {
             display: grid; 
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px; padding-bottom: 50px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px; padding-bottom: 50px;
         }
 
         @media (max-width: 1400px) { .items-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 900px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .items-grid { grid-template-columns: 1fr; } }
 
         .item-card {
-            background: var(--card); border: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--card) 0%, rgba(17, 20, 26, 0.8) 100%); 
+            border: 1px solid var(--border);
             border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;
-            cursor: pointer;
+            cursor: pointer; position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        .item-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .item-card:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
         .img-container {
-            width: 100%; height: 180px; background: #000;
+            width: 100%; height: 200px; background: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
             display: flex; align-items: center; justify-content: center;
             border-bottom: 1px solid var(--border); position: relative;
+            overflow: hidden;
         }
-        .img-large { width: 85%; height: 85%; object-fit: contain; }
+        .img-large { width: 90%; height: 90%; object-fit: contain; transition: transform 0.3s ease; }
+        .item-card:hover .img-large { transform: scale(1.1); }
 
         .trend-badge {
             position: absolute; top: 12px; right: 12px;
-            padding: 4px 10px; border-radius: 6px; font-size: 0.6rem;
+            padding: 6px 12px; border-radius: 8px; font-size: 0.6rem;
             font-weight: 900; text-transform: uppercase; border: 1px solid;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .trend-rising { background: rgba(0, 255, 136, 0.1); color: var(--green); border-color: var(--green); }
-        .trend-falling { background: rgba(255, 68, 68, 0.1); color: var(--red); border-color: var(--red); }
-        .trend-stable { background: rgba(148, 163, 184, 0.1); color: var(--text-dim); border-color: var(--border); }
+        .trend-rising { 
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 255, 136, 0.1) 100%); 
+            color: var(--green); 
+            border-color: var(--green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        .trend-falling { 
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2) 0%, rgba(255, 68, 68, 0.1) 100%); 
+            color: var(--red); 
+            border-color: var(--red);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+        }
+        .trend-stable { 
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(148, 163, 184, 0.1) 100%); 
+            color: var(--text-dim); 
+            border-color: var(--border);
+        }
 
-        .card-content { padding: 15px; }
-        .item-cat { color: var(--accent); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block;}
-        .card-content h3 { margin: 0 0 10px 0; font-size: 1rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .item-cat { 
+            color: var(--accent); 
+            font-size: 0.65rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            margin-bottom: 6px; 
+            display: block;
+            letter-spacing: 0.05em;
+        }
+        .card-content h3 { 
+            margin: 0 0 16px 0; 
+            font-size: 1.1rem; 
+            font-weight: 800; 
+            line-height: 1.2;
+            min-height: 2.4rem;
+            display: flex;
+            align-items: center;
+        }
 
-        .data-list { display: flex; flex-direction: column; gap: 6px; }
+        .data-list { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
         .data-item {
             display: flex; justify-content: space-between;
-            padding: 8px; background: rgba(0,0,0,0.2); border-radius: 8px;
+            align-items: center;
+            padding: 10px 12px; 
+            background: rgba(0,0,0,0.3); 
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
         }
-        .d-label { font-size: 0.6rem; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
-        .d-val { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 0.85rem; }
+        .data-item:hover {
+            background: rgba(0,0,0,0.5);
+            transform: translateX(2px);
+        }
+        .d-label { 
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em;
+        }
+        .d-val { 
+            font-family: 'JetBrains Mono'; 
+            font-weight: 700; 
+            font-size: 0.9rem;
+            text-shadow: 0 0 10px currentColor;
+        }
         
-        .val-clean { color: var(--green); }
-        .val-duped { color: var(--orange); }
+        .val-clean { 
+            color: var(--green); 
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
+        .val-duped { 
+            color: var(--orange); 
+            text-shadow: 0 0 8px rgba(255, 165, 0, 0.5);
+        }
+        .demand-indicator {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-dim);
+            backdrop-filter: blur(5px);
+        }
+        .demand-high { color: var(--green); }
+        .demand-medium { color: var(--orange); }
+        .demand-low { color: var(--red); }
+        .original-price {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+            font-style: italic;
+        }
 
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(3, 5, 8, 0.95); 
             z-index: 10000; display: none; overflow-y: auto; padding: 40px 20px;
             backdrop-filter: blur(10px);
         }
-        .modal-container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; position: relative; align-items: center; min-height: 80vh; }
+        .modal-container { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.15fr); gap: 40px; position: relative; align-items: start; min-height: auto; }
         .modal-close { position: fixed; top: 30px; right: 40px; font-size: 2rem; cursor: pointer; color: var(--text-dim); z-index: 10001; }
         
         .modal-img-big { width: 100%; border-radius: 24px; background: #000; border: 1px solid var(--border); aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -195,6 +285,138 @@
             .modal-container { grid-template-columns: 1fr; padding-top: 60px; }
             .modal-img-big { aspect-ratio: 16/10; }
         }
+
+        .items-grid > .grid-empty {
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+        .loading-banner .loading-text {
+            color: var(--accent);
+            font-weight: 800;
+            margin: 0;
+            animation: values-pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes values-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+        .error-banner .error-title {
+            color: var(--red);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 0 0 0.5rem;
+        }
+        .error-banner .error-detail {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin: 0 0 1rem;
+            word-break: break-word;
+        }
+        .reconnect-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .grid-empty.no-results .no-results-text {
+            color: var(--text-dim);
+            margin: 0;
+            font-weight: 600;
+        }
+        .pagination #pageDisplay {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 8rem;
+            text-align: center;
+        }
+        .modal-right .modal-title {
+            margin: 0 0 1.25rem;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            line-height: 1.1;
+            word-break: break-word;
+            hyphens: auto;
+            color: var(--text-main);
+        }
+        body.light-mode .search-bar {
+            background: var(--card) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border) !important;
+        }
+        body.light-mode .page-btn {
+            color: var(--text-main) !important;
+        }
+
+        .modal-right {
+            max-height: min(88vh, 900px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+        }
+        .modal-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-dim);
+            margin: 1.75rem 0 0.75rem;
+        }
+        .modal-section-title:first-child {
+            margin-top: 0;
+        }
+        .modal-desc-block {
+            margin-top: 0.5rem;
+        }
+        .modal-desc {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin: 0;
+            font-size: 0.88rem;
+        }
+        .modal-api-table {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.15);
+        }
+        .modal-api-row {
+            display: grid;
+            grid-template-columns: minmax(120px, 0.95fr) minmax(0, 1.25fr);
+            gap: 12px 16px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.72rem;
+            align-items: start;
+        }
+        .modal-api-row:last-child { border-bottom: none; }
+        .modal-api-k {
+            color: var(--text-dim);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .modal-api-v {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-main);
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        body.light-mode .modal-api-table {
+            background: rgba(0, 0, 0, 0.035);
+        }
     </style>
 </head>
 <body>
@@ -204,7 +426,7 @@
     <div class="container">
         <h1 class="text-3xl font-black italic uppercase mb-8">Market Database</h1>
         <div class="search-section">
-            <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="updateData()">
+            <input type="text" id="search" class="search-bar" placeholder="Search items (e.g. Torpedo, Celsior)..." oninput="resetAndRender()">
             <div class="filter-row" id="filters">
                 <div class="f-btn active" id="btn-all" onclick="setCat('all', this)">All Items</div>
             </div>
@@ -219,10 +441,10 @@
         </div>
     </div>
 
-<div class="modal-overlay" id="modalOverlay" style="display: none;">
-            <div class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
-            <div class="modal-container" id="modalContent"></div>
-        </div>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></div>
+        <div class="modal-container" id="modalContent"></div>
+    </div>
 
     <div id="footer-container"></div>
 
@@ -235,7 +457,8 @@
             return String(text)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         function escapeAttr(text) {
@@ -335,83 +558,40 @@
 
         function getDemandText(demand) {
             if (!demand) return 'Normal';
-            const d = demand.toLowerCase();
-            if (d.includes('high')) return 'High Demand';
-            if (d.includes('very high')) return 'Very High Demand';
-            if (d.includes('medium')) return 'Medium Demand';
-            if (d.includes('decent')) return 'Decent Demand';
-            if (d.includes('low')) return 'Low Demand';
-            if (d.includes('very low')) return 'Very Low Demand';
-            if (d.includes('close to none')) return 'Close to None';
-            return 'Normal';
+            return demand;
         }
 
+        let db = {}; 
         let currentCategory = 'all';
         let currentPage = 1;
         const itemsPerPage = 12; 
-        let allItems = [];
         let filteredItems = [];
-        let initRetryCount = 0;
-        const MAX_RETRIES = 50;
-
-        async function initializeData() {
-            try {
-                // Prevent infinite recursion
-                if (initRetryCount >= MAX_RETRIES) {
-                    console.error('Max retries reached. Failed to initialize data.');
-                    document.getElementById('grid').innerHTML = '<div class="grid-empty error-banner"><p class="error-title">Failed to load data</p><p class="error-detail">Please refresh the page</p></div>';
-                    return;
-                }
-                
-                // Wait for the db to be loaded by api.js
-                if (typeof db === 'undefined' || Object.keys(db).length === 0) {
-                    initRetryCount++;
-                    setTimeout(initializeData, 100);
-                    return;
-                }
-                
-                // Convert db object to flat array
-                allItems = [];
-                for (const category in db) {
-                    if (Array.isArray(db[category])) {
-                        allItems = allItems.concat(db[category]);
-                    }
-                }
-                filteredItems = [...allItems];
-                updateData();
-                
-            } catch (error) {
-                console.error('Error initializing data:', error);
-                initRetryCount++;
-                if (initRetryCount < MAX_RETRIES) {
-                    setTimeout(initializeData, 1000);
-                } else {
-                    document.getElementById('grid').innerHTML = '<div class="grid-empty error-banner"><p class="error-title">Failed to load data</p><p class="error-detail">Please refresh the page</p></div>';
-                }
-            }
-        }
 
         function setCat(cat, el) {
             currentCategory = cat;
-            currentPage = 1; // Reset to page 1 when changing category
             document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
+            resetAndRender();
+        }
+
+        function resetAndRender() {
+            currentPage = 1;
             updateData();
         }
 
         function updateData() {
-            if (!allItems || allItems.length === 0) {
-                document.getElementById('grid').innerHTML = '<div class="loading-message">Loading items...</div>';
-                return;
-            }
-
-            currentPage = 1; // Reset to page 1 when searching/filtering
+            if (!db || Object.keys(db).length === 0) return;
             const query = document.getElementById('search').value.toLowerCase();
-            filteredItems = allItems.filter(item => {
-                const matchesSearch = !query || item.name.toLowerCase().includes(query) || item.cat.toLowerCase().includes(query);
-                const matchesCategory = currentCategory === 'all' || item.cat.toLowerCase() === currentCategory.toLowerCase();
-                return matchesSearch && matchesCategory;
-            });
+            filteredItems = [];
+            
+            for (let category in db) {
+                if (currentCategory !== 'all' && category !== currentCategory) continue;
+                db[category].forEach(item => {
+                    if (item.name.toLowerCase().includes(query)) {
+                        filteredItems.push({...item, cat: category});
+                    }
+                });
+            }
             
             filteredItems.sort((a, b) => (b.cash_value || 0) - (a.cash_value || 0));
             render();
@@ -423,22 +603,27 @@
             const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
             if (paginatedItems.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center py-20 text-slate-500">No items found matching your search.</p>`;
+                grid.innerHTML = `<div class="grid-empty no-results"><p class="no-results-text">No items found matching your search.</p></div>`;
             } else {
                 grid.innerHTML = paginatedItems.map((i, idx) => {
                     const trend = (i.trend || 'stable').toLowerCase();
                     const cleanVal = (i.cash_value || 0).toLocaleString();
                     const dupedVal = (i.duped_value || 0).toLocaleString();
+                    const imgSrc = (i.image && String(i.image).trim()) ? i.image : ITEM_IMG_PLACEHOLDER;
+                    const demandClass = getDemandClass(i.demand);
+                    const demandText = getDemandText(i.demand);
+                    const originalPrice = i.original_price && i.original_price !== 'N/A' ? i.original_price : null;
                     
                     return `
-                    <div class="item-card" onclick="openModal(${startIndex + idx})">
+                    <a href="item.html?name=${encodeURIComponent(i.name)}" class="item-card" style="text-decoration: none; color: inherit;">
                         <div class="img-container">
                             <div class="trend-badge trend-${trend}">${trend}</div>
-                            <img src="${i.image}" class="img-large" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
+                            ${demandText !== 'Normal' ? `<div class="demand-indicator ${demandClass}">${demandText}</div>` : ''}
+                            <img src="${escapeAttr(imgSrc)}" class="img-large" alt="" onerror="jbValuesImgFallback(this)">
                         </div>
                         <div class="card-content">
-                            <span class="item-cat">${i.cat}</span>
-                            <h3>${i.name}</h3>
+                            <span class="item-cat">${escapeHtml(i.cat)}</span>
+                            <h3>${escapeHtml(i.name)}</h3>
                             <div class="data-list">
                                 <div class="data-item">
                                     <span class="d-label">Clean Value</span>
@@ -448,9 +633,14 @@
                                     <span class="d-label">Est. Duped</span>
                                     <span class="d-val val-duped">$${dupedVal}</span>
                                 </div>
+                                ${originalPrice ? `
+                                <div class="data-item">
+                                    <span class="d-label">Original</span>
+                                    <span class="d-val" style="color: var(--text-dim);">${originalPrice}</span>
+                                </div>` : ''}
                             </div>
                         </div>
-                    </div>`;
+                    </a>`;
                 }).join('');
             }
 
@@ -466,15 +656,26 @@
             const clean = (i.cash_value || 0).toLocaleString();
             const duped = (i.duped_value || 0).toLocaleString();
 
+            const modalImg = (i.image && String(i.image).trim()) ? i.image : ITEM_IMG_PLACEHOLDER;
+            const rec = i.apiRecord;
+            const descRaw = rec && rec.description ? String(rec.description).trim() : '';
+            const descBlock = descRaw
+                ? `<div class="modal-desc-block"><h3 class="modal-section-title">Description</h3><p class="modal-desc">${escapeHtml(descRaw)}</p></div>`
+                : '';
+            const apiTableInner = buildModalApiTableHtml(rec);
+            const demandText = getDemandText(i.demand);
+            const originalPrice = i.original_price && i.original_price !== 'N/A' ? i.original_price : null;
+
             document.getElementById('modalContent').innerHTML = `
                 <div class="modal-left">
                     <div class="modal-img-big">
-                        <img src="${i.image}" onerror="this.src='https://via.placeholder.com/200/000/333?text=?'">
+                        <img src="${escapeAttr(modalImg)}" alt="" onerror="jbValuesImgFallback(this)">
                     </div>
                 </div>
                 <div class="modal-right">
-                    <span class="item-cat" style="font-size: 0.8rem">${i.cat}</span>
-                    <h2 class="text-5xl font-black mb-6 uppercase italic">${i.name}</h2>
+                    <span class="item-cat" style="font-size: 0.8rem">${escapeHtml(i.cat)}</span>
+                    <h2 class="modal-title">${escapeHtml(i.name)}</h2>
+                    <h3 class="modal-section-title" style="margin-top:0">Summary</h3>
                     <div class="detail-grid">
                         <div class="detail-box">
                             <span class="detail-label">Clean Value</span>
@@ -490,9 +691,17 @@
                         </div>
                         <div class="detail-box">
                             <span class="detail-label">Demand</span>
-                            <span class="detail-value">${i.demand || 'Normal'}</span>
+                            <span class="detail-value">${escapeHtml(demandText)}</span>
                         </div>
+                        ${originalPrice ? `
+                        <div class="detail-box">
+                            <span class="detail-label">Original Price</span>
+                            <span class="detail-value">${escapeHtml(originalPrice)}</span>
+                        </div>` : ''}
                     </div>
+                    ${descBlock}
+                    <h3 class="modal-section-title">Full API record</h3>
+                    <div class="modal-api-table">${apiTableInner}</div>
                 </div>`;
             document.getElementById('modalOverlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -504,21 +713,13 @@
         }
 
         function changePage(step) {
-            const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
             currentPage += step;
-            
-            // Ensure currentPage stays within bounds
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-            
             render();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize data when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeData();
-        });
+        // START THE API FETCH
+        window.onload = init;
     </script>
     <script src="loader.js"></script>
 </body>
