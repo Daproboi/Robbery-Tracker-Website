@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Jailbreak Hub | Loading...</title>
+    <title>Jailbreak Hub | HyperShift</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend/js/adsbygoogle.js?client=ca-pub-4156751217830729"
      crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
@@ -106,25 +106,6 @@
             color: var(--accent); 
             transform: translateX(-4px);
         }
-
-        .loading-state {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 400px; gap: 20px;
-        }
-        .loading-spinner {
-            width: 50px; height: 50px; border: 3px solid var(--border);
-            border-top: 3px solid var(--accent); border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .error-state {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 400px; gap: 20px; text-align: center;
-        }
-        .error-icon { font-size: 3rem; color: var(--red); }
-        .error-title { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
-        .error-message { color: var(--text-dim); max-width: 400px; }
 
         .item-detail-container {
             display: grid; 
@@ -324,113 +305,97 @@
             Back to Market Database
         </a>
 
-        <div id="loadingState" class="loading-state">
-            <div class="loading-spinner"></div>
-            <p>Loading item details...</p>
-        </div>
-
-        <div id="errorState" class="error-state" style="display: none;">
-            <i class="fa-solid fa-exclamation-triangle error-icon"></i>
-            <h2 class="error-title">Item Not Found</h2>
-            <p class="error-message">The requested item could not be found or an error occurred.</p>
-        </div>
-
-        <div id="itemContent" style="display: none;">
-            <div class="item-detail-container">
-                <div class="item-image-section">
-                    <div class="trend-badge-large" id="trendBadge">STABLE</div>
-                    <div class="item-image-wrapper">
-                        <img id="itemImage" class="item-image" src="https://via.placeholder.com/400/0a0c10/64748b?text=%3F" alt="">
-                    </div>
-                </div>
-
-                <div class="item-info-section">
-                    <div class="item-header">
-                        <div class="item-category" id="itemCategory">LOADING...</div>
-                        <h1 class="item-name" id="itemName">Loading...</h1>
-                        <p class="item-description" id="itemDescription">Loading...</p>
-                    </div>
-
-                    <div class="values-grid">
-                        <div class="value-box">
-                            <div class="value-label">Clean Value</div>
-                            <div class="value-amount value-clean" id="cleanValue">$0</div>
-                        </div>
-                        <div class="value-box">
-                            <div class="value-label">Duped Value</div>
-                            <div class="value-amount value-duped" id="dupedValue">$0</div>
-                        </div>
-                        <div class="value-box" id="originalPriceBox" style="display: none;">
-                            <div class="value-label">Original Price</div>
-                            <div class="value-amount value-original" id="originalPrice">$0</div>
-                        </div>
-                    </div>
-
-                    <div class="meta-grid">
-                        <div class="meta-box">
-                            <div class="meta-label">Demand</div>
-                            <div class="meta-value" id="demandValue">Normal</div>
-                        </div>
-                        <div class="meta-box">
-                            <div class="meta-label">Trend</div>
-                            <div class="meta-value" id="trendValue">Stable</div>
-                        </div>
-                        <div class="meta-box">
-                            <div class="meta-label">Category</div>
-                            <div class="meta-value" id="categoryValue">Unknown</div>
-                        </div>
-                        <div class="meta-box">
-                            <div class="meta-label">Last Updated</div>
-                            <div class="meta-value" id="lastUpdated">Unknown</div>
-                        </div>
-                    </div>
+        <div class="item-detail-container">
+            <div class="item-image-section">
+                <div class="trend-badge-large trend-stable">STABLE</div>
+                <div class="item-image-wrapper">
+                    <img src="https://via.placeholder.com/400/0a0c10/64748b?text=%3F" class="item-image" alt="HyperShift">
                 </div>
             </div>
 
-            <div class="chart-section">
-                <h2 class="section-title">Value Trends</h2>
-                <div class="chart-controls">
-                    <button class="chart-btn active" data-chart="value" onclick="switchChart('value', this)">
-                        <i class="fa-solid fa-chart-line"></i>
-                        Clean Value
-                    </button>
-                    <button class="chart-btn" data-chart="duped" onclick="switchChart('duped', this)">
-                        <i class="fa-solid fa-chart-area"></i>
-                        Duped Value
-                    </button>
-                    <button class="chart-btn" data-chart="demand" onclick="switchChart('demand', this)">
-                        <i class="fa-solid fa-chart-bar"></i>
-                        Demand Level
-                    </button>
+            <div class="item-info-section">
+                <div class="item-header">
+                    <div class="item-category">HYPERCHROMES</div>
+                    <h1 class="item-name">HyperShift</h1>
+                    <p class="item-description">Hypershift is a rainbow hyperchrome which you only get if you own all lvl5 hyperchromes in your inventory. If you at any point lose any of your hyperchromes, your shift dissapears (you can get it back if you regain the lost hyperchrome)</p>
                 </div>
-                <div class="chart-container">
-                    <canvas id="valueChart" width="400" height="200"></canvas>
-                    <div class="chart-loading" id="chartLoading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading historical data...</p>
+
+                <div class="values-grid">
+                    <div class="value-box">
+                        <div class="value-label">Clean Value</div>
+                        <div class="value-amount value-clean">$329,000,000</div>
                     </div>
-                    <div class="chart-error" id="chartError" style="display: none;">
-                        <i class="fa-solid fa-exclamation-triangle"></i>
-                        <p>Unable to load historical data</p>
+                    <div class="value-box">
+                        <div class="value-label">Duped Value</div>
+                        <div class="value-amount value-duped">$299,000,000</div>
+                    </div>
+                    
+                </div>
+
+                <div class="meta-grid">
+                    <div class="meta-box">
+                        <div class="meta-label">Demand</div>
+                        <div class="meta-value ">Normal</div>
+                    </div>
+                    <div class="meta-box">
+                        <div class="meta-label">Trend</div>
+                        <div class="meta-value">Stable</div>
+                    </div>
+                    <div class="meta-box">
+                        <div class="meta-label">Category</div>
+                        <div class="meta-value">Hyperchromes</div>
+                    </div>
+                    <div class="meta-box">
+                        <div class="meta-label">Last Updated</div>
+                        <div class="meta-value">Unknown</div>
                     </div>
                 </div>
-                <div class="chart-info">
-                    <div class="info-item">
-                        <span class="info-label">Current Value:</span>
-                        <span class="info-value" id="currentValue">$0</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">24h Change:</span>
-                        <span class="info-value change-positive" id="change24h">+0.0%</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">7d Change:</span>
-                        <span class="info-value change-negative" id="change7d">-0.0%</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Last Updated:</span>
-                        <span class="info-value" id="lastChartUpdate">Unknown</span>
-                    </div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <h2 class="section-title">Value Trends</h2>
+            <div class="chart-controls">
+                <button class="chart-btn active" data-chart="value" onclick="switchChart('value', this)">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Clean Value
+                </button>
+                <button class="chart-btn" data-chart="duped" onclick="switchChart('duped', this)">
+                    <i class="fa-solid fa-chart-area"></i>
+                    Duped Value
+                </button>
+                <button class="chart-btn" data-chart="demand" onclick="switchChart('demand', this)">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    Demand Level
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="valueChart" width="400" height="200"></canvas>
+                <div class="chart-loading" id="chartLoading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading historical data...</p>
+                </div>
+                <div class="chart-error" id="chartError" style="display: none;">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    <p>Unable to load historical data</p>
+                </div>
+            </div>
+            <div class="chart-info">
+                <div class="info-item">
+                    <span class="info-label">Current Value:</span>
+                    <span class="info-value" id="currentValue">$329,000,000</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">24h Change:</span>
+                    <span class="info-value change-positive" id="change24h">+2.3%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">7d Change:</span>
+                    <span class="info-value change-negative" id="change7d">-1.2%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Last Updated:</span>
+                    <span class="info-value" id="lastChartUpdate">Unknown</span>
                 </div>
             </div>
         </div>
@@ -448,126 +413,13 @@
             demand: [],
             labels: []
         };
-        let currentItemData = null;
 
-        // Get URL parameters
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
-
-        // Initialize page
+        // Initialize chart on page load
         document.addEventListener('DOMContentLoaded', function() {
-            loadItemData();
+            loadHistoricalData();
         });
 
-        async function loadItemData() {
-            const itemName = getUrlParameter('name');
-            const itemCategory = getUrlParameter('category');
-
-            if (!itemName) {
-                showError();
-                return;
-            }
-
-            try {
-                // Load all items from API
-                const response = await fetch('https://api.jbvalues.com/v1/itemdata');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch item data');
-                }
-
-                const items = await response.json();
-                
-                // Filter to only include value-related items
-                const valueCategories = ['Vehicles', 'Weapon Skins', 'Hyperchromes', 'Textures', 'Drifts', 'Furniture', 'Horns', 'Rims', 'Spoilers', 'Tire Stickers', 'Tire Styles'];
-                const filteredItems = items.filter(item => {
-                    const category = listCategoryLabel(item.section, item.category);
-                    return valueCategories.includes(category);
-                });
-                
-                // Find the specific item in filtered items
-                const item = filteredItems.find(i => 
-                    (i.displayName && i.displayName.toLowerCase() === itemName.toLowerCase()) ||
-                    (i.name && i.name.toLowerCase() === itemName.toLowerCase())
-                );
-
-                if (!item) {
-                    showError();
-                    return;
-                }
-
-                currentItemData = item;
-                displayItem(item);
-                loadHistoricalData(itemName);
-
-            } catch (error) {
-                console.error('Error loading item data:', error);
-                showError();
-            }
-        }
-
-        function displayItem(item) {
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('errorState').style.display = 'none';
-            document.getElementById('itemContent').style.display = 'block';
-
-            // Update page title
-            document.getElementById('pageTitle').textContent = `Jailbreak Hub | ${item.displayName || item.name}`;
-
-            // Basic info
-            const category = listCategoryLabel(item.section, item.category);
-            document.getElementById('itemCategory').textContent = category.toUpperCase();
-            document.getElementById('itemName').textContent = item.displayName || item.name;
-            document.getElementById('itemDescription').textContent = item.description || 'No description available for this item.';
-
-            // Image
-            const imageUrl = item.robloxImage ? 
-                `https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=${item.robloxImage}` : 
-                (item.image || 'https://via.placeholder.com/400/0a0c10/64748b?text=%3F');
-            document.getElementById('itemImage').src = imageUrl;
-
-            // Values
-            const cleanValue = (item.value || 0).toLocaleString();
-            const dupedValue = (item.dupedValue || 0).toLocaleString();
-            document.getElementById('cleanValue').textContent = `$${cleanValue}`;
-            document.getElementById('dupedValue').textContent = `$${dupedValue}`;
-
-            // Original price
-            if (item.originalPrice && item.originalPrice !== 'N/A') {
-                document.getElementById('originalPriceBox').style.display = 'block';
-                document.getElementById('originalPrice').textContent = item.originalPrice;
-            } else {
-                document.getElementById('originalPriceBox').style.display = 'none';
-            }
-
-            // Trend
-            const trend = normalizeTrend(item.trend || 'stable');
-            const trendClass = getTrendClass(trend);
-            const trendBadge = document.getElementById('trendBadge');
-            trendBadge.textContent = trend.toUpperCase();
-            trendBadge.className = `trend-badge-large ${trendClass}`;
-            document.getElementById('trendValue').textContent = trend.charAt(0).toUpperCase() + trend.slice(1);
-
-            // Demand
-            const demand = item.demand || 'Normal';
-            const demandClass = getDemandClass(demand);
-            const demandElement = document.getElementById('demandValue');
-            demandElement.textContent = demand;
-            demandElement.className = `meta-value ${demandClass}`;
-
-            // Category
-            document.getElementById('categoryValue').textContent = category;
-
-            // Last updated
-            const lastUpdated = formatDate(item.lastUpdated) || 'Unknown';
-            document.getElementById('lastUpdated').textContent = lastUpdated;
-            document.getElementById('lastChartUpdate').textContent = lastUpdated;
-        }
-
-        async function loadHistoricalData(itemName) {
+        async function loadHistoricalData() {
             try {
                 // Show loading state
                 document.getElementById('chartLoading').style.display = 'flex';
@@ -575,7 +427,8 @@
                 document.getElementById('chartError').style.display = 'none';
 
                 // Fetch historical data from API
-                const response = await fetch(`https://api.jbvalues.com/v1/history?item=${encodeURIComponent(itemName)}`);
+                const itemName = 'HyperShift';
+                const response = await fetch('https://api.jbvalues.com/v1/history?item=' + encodeURIComponent(itemName));
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch historical data');
@@ -625,8 +478,8 @@
             const dupedValues = [];
             const demands = [];
             
-            const baseValue = currentItemData ? (currentItemData.value || 1000000) : 1000000;
-            const baseDuped = currentItemData ? (currentItemData.dupedValue || 500000) : 500000;
+            const baseValue = 329000000;
+            const baseDuped = 299000000;
             
             for (let i = days - 1; i >= 0; i--) {
                 const date = new Date();
@@ -829,72 +682,6 @@
                 change24hEl.className = 'info-value';
                 change7dEl.textContent = 'Stable';
                 change7dEl.className = 'info-value';
-            }
-        }
-
-        function showError() {
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('errorState').style.display = 'block';
-            document.getElementById('itemContent').style.display = 'none';
-        }
-
-        // Utility functions
-        function listCategoryLabel(section, fallbackCategory) {
-            const raw = (section || fallbackCategory || 'Other').trim();
-            const labels = {
-                Vehicle: 'Vehicles',
-                'Weapon Skin': 'Weapon Skins',
-                Color: 'Hyperchromes',
-                Texture: 'Textures',
-                Drift: 'Drifts',
-                Furniture: 'Furniture',
-                Horn: 'Horns',
-                Rim: 'Rims',
-                Spoiler: 'Spoilers',
-                'Tire Sticker': 'Tire Stickers',
-                'Tire Style': 'Tire Styles',
-            };
-            return labels[raw] || raw;
-        }
-
-        function normalizeTrend(trend) {
-            const s = String(trend || 'stable').toLowerCase();
-            if (/rise|climb|^\s*up\s*$|moon/.test(s)) return 'rising';
-            if (/fall|drop|declin|down|crash/.test(s)) return 'falling';
-            return 'stable';
-        }
-
-        function getDemandClass(demand) {
-            if (!demand) return '';
-            const d = demand.toLowerCase();
-            if (d.includes('high') || d.includes('very high')) return 'demand-high';
-            if (d.includes('medium') || d.includes('decent')) return 'demand-medium';
-            if (d.includes('low') || d.includes('very low') || d.includes('close to none')) return 'demand-low';
-            return '';
-        }
-
-        function getTrendClass(trend) {
-            if (!trend) return 'trend-stable';
-            const t = trend.toLowerCase();
-            if (t.includes('rising') || t.includes('up')) return 'trend-rising';
-            if (t.includes('falling') || t.includes('down')) return 'trend-falling';
-            return 'trend-stable';
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'Unknown';
-            try {
-                const date = new Date(dateString);
-                if (isNaN(date.getTime())) return 'Unknown';
-                return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            } catch (e) {
-                return 'Unknown';
             }
         }
 
