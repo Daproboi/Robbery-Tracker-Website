@@ -1,19 +1,27 @@
+async function loadJbValuesDatabase() {
+    const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
+    const rows = await fetchJbValuesJson(dataUrl);
+    if (!Array.isArray(rows) || rows.length === 0) {
+        throw new Error('API returned no items');
+    }
+    buildDatabase(rows);
+}
+
 async function init() {
     const grid = document.getElementById('grid');
-    grid.innerHTML = `<div class="col-span-full text-center py-20"><p style="color: #0070f3;" class="animate-pulse font-bold">ESTABLISHING SECURE LINK...</p></div>`;
+    if (!grid) return;
 
-    const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
+    grid.innerHTML = `<div class="grid-empty loading-banner"><p class="loading-text">ESTABLISHING SECURE LINK...</p></div>`;
 
     try {
-        const rows = await fetchJbValuesJson(dataUrl);
-        buildDatabase(rows);
+        await loadJbValuesDatabase();
     } catch (err) {
         console.error("Fetch Error:", err);
         grid.innerHTML = `
-            <div class="col-span-full text-center py-20 text-red-500">
-                <p class="font-bold uppercase">Database Connection Refused</p>
-                <p class="text-xs text-white opacity-50 mt-2">Error: ${err.message}</p>
-                <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs">Try Reconnecting</button>
+            <div class="grid-empty error-banner">
+                <p class="error-title">Database Connection Refused</p>
+                <p class="error-detail">Error: ${String(err.message).replace(/</g, '&lt;')}</p>
+                <button type="button" onclick="location.reload()" class="reconnect-btn">Try Reconnecting</button>
             </div>`;
     }
 }
@@ -62,25 +70,50 @@ function unwrapItemsArray(data) {
     return [];
 }
 
-function buildDatabase(rows) {
-    db = {};
+function listCategoryLabel(section, fallbackCategory) {
+    const raw = (section || fallbackCategory || 'Other').trim();
+    const labels = {
+        Vehicle: 'Vehicles',
+        'Weapon Skin': 'Weapon Skins',
+        Color: 'Hyperchromes',
+        Texture: 'Textures',
+        Drift: 'Drifts',
+        Furniture: 'Furniture',
+        Horn: 'Horns',
+        Rim: 'Rims',
+        Spoiler: 'Spoilers',
+        'Tire Sticker': 'Tire Stickers',
+        'Tire Style': 'Tire Styles',
+    };
+    return labels[raw] || raw;
+}
 
+function normalizeTrend(t) {
+    const s = String(t || 'stable').toLowerCase();
+    if (/rise|climb|^\s*up\s*$|moon/.test(s)) return 'rising';
+    if (/fall|drop|declin|down|crash/.test(s)) return 'falling';
+    return 'stable';
+}
+
+function buildDatabase(rows) {
     if (!Array.isArray(rows) || rows.length === 0) {
         console.error('API Error: items list missing or empty', rows);
         return;
     }
 
+    db = {};
+
     rows.forEach(item => {
         const name = item.displayName || item.name;
         if (!name) return;
 
-        const cat = item.section || item.category || 'Other';
+        const cat = listCategoryLabel(item.section, item.category);
         if (!db[cat]) db[cat] = [];
 
         const details = item.details || {};
         const cash = typeof item.value === 'number' ? item.value : 0;
         const duped = typeof item.dupedValue === 'number' ? item.dupedValue : 0;
-        const trendRaw = item.trend || details.trend || 'stable';
+        const trendRaw = normalizeTrend(item.trend || details.trend || 'stable');
 
         let demand = details.demand ?? item.demand;
         if (typeof demand === 'number') demand = String(demand);
@@ -91,13 +124,21 @@ function buildDatabase(rows) {
             ? `https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=${imgId}`
             : (item.image || '');
 
+        let apiRecord;
+        try {
+            apiRecord = JSON.parse(JSON.stringify(item));
+        } catch (e) {
+            apiRecord = null;
+        }
+
         db[cat].push({
             name,
             image,
             cash_value: cash,
             duped_value: duped,
-            trend: String(trendRaw).toLowerCase(),
-            demand
+            trend: trendRaw,
+            demand,
+            apiRecord
         });
     });
 
@@ -113,5 +154,7 @@ function buildDatabase(rows) {
         });
     }
 
-    updateData();
+    if (typeof updateData === 'function') {
+        updateData();
+    }
 }
