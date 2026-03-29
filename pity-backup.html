@@ -296,3 +296,127 @@
                     <i class="fas fa-check-circle" style="color: var(--green); font-size: 2rem; margin-bottom: 8px;"></i>
                     <div>GUARANTEED DROP WINDOW ACTIVE</div>
                 </div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-title">
+                    <i class="fas fa-info-circle"></i>
+                    System Information
+                </div>
+                <div class="info-content">
+                    <p><strong>Public Servers:</strong> Pity resets every 24 hours. Use robberies since your last HyperChrome drop.</p>
+                    <p><strong>Small/VIP Servers:</strong> Pity persists across server restarts. Use total robberies completed.</p>
+                    <p><strong>Important:</strong> Small servers require <span>50% fewer robberies</span> for guaranteed drops.</p>
+                    <p><strong>Thresholds:</strong> Level 1: 179/90, Level 2: 378/189, Level 3: 608/304, Level 4: 696/348, Level 5: 1068/534 robberies (Public/Small).</p>
+                    <p><strong>How Pity Works:</strong> Each failed robbery increases your chance. Reach 100% pity for guaranteed HyperChrome drop.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="dashboard-title">Chrome <span style="color: var(--accent);">Market Values</span></div>
+            <div class="dashboard-subtitle">Live values from current trade data and market analysis</div>
+            
+            <div class="dashboard-grid" id="valuesGrid">
+                <!-- Values will be loaded dynamically from API -->
+            </div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">
+                <i class="fas fa-info-circle"></i>
+                System Information
+            </div>
+            <div class="info-content">
+                <p><strong>Public Servers:</strong> Pity resets every 24 hours. Use robberies since your last HyperChrome drop.</p>
+                <p><strong>Small/VIP Servers:</strong> Pity persists across server restarts. Use total robberies completed.</p>
+                <p><strong>Important:</strong> Small servers require <span>50% fewer robberies</span> for guaranteed drops.</p>
+                <p><strong>Thresholds:</strong> Level 1: 179/90, Level 2: 378/189, Level 3: 608/304, Level 4: 696/348, Level 5: 1068/534 robberies (Public/Small).</p>
+                <p><strong>How Pity Works:</strong> Each failed robbery increases your chance. Reach 100% pity for guaranteed HyperChrome drop.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>   
+
+    <script> 
+        // Logic from PROJECT_CODE_DUMP.txt [cite: 30028, 30033]
+        const PUBLIC_THRESHOLDS = [179, 378, 608, 696, 1068];
+        const SMALL_THRESHOLDS = [90, 189, 304, 348, 534];
+        
+        let currentServer = 'public';
+
+        function setServer(type) {
+            currentServer = type;
+            document.getElementById('btnPublic').classList.toggle('active', type === 'public');
+            document.getElementById('btnSmall').classList.toggle('active', type === 'small');
+            runCalc('rolls');
+        }
+
+        function runCalc(source) { 
+            const index = parseInt(document.getElementById('pityRate').value);
+            const target = currentServer === 'public' ? PUBLIC_THRESHOLDS[index] : SMALL_THRESHOLDS[index];
+            
+            const rollInput = document.getElementById('userRolls'); 
+            const percentInput = document.getElementById('userPercent'); 
+            const pityOut = document.getElementById('pityOut'); 
+            const barFill = document.getElementById('barFill'); 
+            const statusBox = document.getElementById('rollsLeft'); 
+            const subStatus = document.getElementById('subStatus');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressStatus = document.getElementById('progressStatus');
+
+            let rolls = 0, displayPerc = 0; 
+
+            if (source === 'rolls') { 
+                rolls = parseInt(rollInput.value) || 0; 
+                displayPerc = (rolls / target) * 100; 
+                percentInput.value = displayPerc > 0 ? displayPerc.toFixed(1) : ""; 
+            } else { 
+                const percent = parseFloat(percentInput.value) || 0; 
+                rolls = Math.round((percent / 100) * target); 
+                rollInput.value = rolls > 0 ? rolls : ""; 
+                displayPerc = percent; 
+            } 
+
+            const clampedPerc = Math.min(displayPerc, 100); 
+            pityOut.innerText = clampedPerc.toFixed(1) + "%"; 
+            barFill.style.width = clampedPerc + "%"; 
+            progressPercentage.innerText = clampedPerc.toFixed(1) + "%";
+            
+            const remaining = target - rolls; 
+            statusBox.innerText = remaining > 0 ? remaining : "0"; 
+            subStatus.innerText = `Target: ${target} robberies`;
+
+            // Show guaranteed status when 100% reached
+            if (clampedPerc >= 100) {
+                progressStatus.style.display = 'block';
+                statusBox.style.color = 'var(--green)';
+            } else {
+                progressStatus.style.display = 'none';
+                statusBox.style.color = 'var(--text-main)';
+            }
+        } 
+
+           
+        const canvas = document.getElementById('cashCanvas'), ctx = canvas.getContext('2d');   
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } 
+        resize(); window.addEventListener('resize', resize); 
+        
+        const cashChars = ['$', '💵', '💰', '💸'], fontSize = 16; 
+        let columns = Math.floor(canvas.width / fontSize), drops = Array(columns).fill(1); 
+        function draw() { 
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            ctx.fillStyle = '#00ff88'; ctx.font = fontSize + 'px monospace'; 
+            for (let i = 0; i < drops.length; i++) { 
+                ctx.fillText(cashChars[Math.floor(Math.random() * cashChars.length)], i * fontSize, drops[i] * fontSize); 
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; 
+                drops[i]++; 
+            } 
+        } 
+        setInterval(draw, 50); 
+    </script>   
+    <script src="loader.js"></script>
+</body>   
+</html>
