@@ -427,6 +427,9 @@ footer {
 </section>
 <div id="footer-container"></div>
 
+<!-- Debug Status -->
+<div id="loginStatus" style="position: fixed; top: 5px; left: 5px; background: red; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; z-index: 99999; font-family: monospace;">Checking...</div>
+
 <!-- User Profile Button (Fixed Position) -->
 <div id="userProfileFixed" style="display: none; position: fixed; top: 80px; right: 20px; z-index: 10000;">
     <div onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border-radius: 100px; background: rgba(88, 101, 242, 0.9); border: 1px solid rgba(88, 101, 242, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
@@ -517,41 +520,49 @@ document.addEventListener('click', function(e) {
 
 // Check login status and show profile button
 async function checkLoginAndShowProfile() {
+    const statusDiv = document.getElementById('loginStatus');
     console.log('Checking login status...');
+    
     const sessionToken = localStorage.getItem('sessionToken');
     console.log('Session token:', sessionToken ? 'found' : 'not found');
     
-    if (sessionToken) {
-        try {
-            const response = await fetch(`/api/check-session?token=${sessionToken}`);
-            const data = await response.json();
-            console.log('Session check response:', data);
+    if (!sessionToken) {
+        statusDiv.textContent = 'Not logged in';
+        statusDiv.style.background = 'orange';
+        return;
+    }
+    
+    statusDiv.textContent = 'Token: ' + sessionToken.substring(0, 8) + '...';
+    
+    try {
+        const response = await fetch(`/api/check-session?token=${sessionToken}`);
+        const data = await response.json();
+        console.log('Session check response:', data);
+        
+        if (data.valid) {
+            statusDiv.textContent = 'Logged in: ' + data.user.username;
+            statusDiv.style.background = 'green';
             
-            if (data.valid) {
-                // Show fixed profile button
-                const profileDiv = document.getElementById('userProfileFixed');
-                profileDiv.style.display = 'block';
-                document.getElementById('userNameFixed').textContent = data.user.username;
-                document.getElementById('userAvatarFixed').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
-                console.log('Profile button shown for:', data.user.username);
-                
-                // Show admin link only for admins
-                if (data.user.isAdmin) {
-                    document.getElementById('adminLinkFixed').style.display = 'block';
-                    console.log('Admin link shown');
-                }
-            } else {
-                console.log('Session invalid');
-                localStorage.removeItem('sessionToken');
+            // Show fixed profile button
+            const profileDiv = document.getElementById('userProfileFixed');
+            profileDiv.style.display = 'block';
+            document.getElementById('userNameFixed').textContent = data.user.username;
+            document.getElementById('userAvatarFixed').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+            
+            // Show admin link only for admins
+            if (data.user.isAdmin) {
+                document.getElementById('adminLinkFixed').style.display = 'block';
+                statusDiv.textContent += ' (ADMIN)';
             }
-        } catch (err) {
-            console.error('Login check failed:', err);
+        } else {
+            statusDiv.textContent = 'Session invalid';
+            statusDiv.style.background = 'red';
+            localStorage.removeItem('sessionToken');
         }
-    } else {
-        console.log('No session token, showing login button');
-        // Show login button if not logged in
-        const loginBtn = document.getElementById('loginBtn');
-        if (loginBtn) loginBtn.style.display = 'inline-flex';
+    } catch (err) {
+        statusDiv.textContent = 'Error: ' + err.message;
+        statusDiv.style.background = 'red';
+        console.error('Login check failed:', err);
     }
 }
 
