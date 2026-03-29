@@ -72,12 +72,57 @@
                 const adminLink = document.getElementById('adminLink');
                 
                 if (userName) userName.textContent = user.username;
-                if (userAvatar) userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}.png`;
+                
+                // Fix avatar URL - use Discord CDN with fallback
+                if (userAvatar) {
+                    const avatarUrl = user.id ? 
+                        `https://cdn.discordapp.com/avatars/${user.id}.png` : 
+                        'https://cdn.discordapp.com/embed/avatars/0.png';
+                    userAvatar.src = avatarUrl;
+                    userAvatar.onerror = function() {
+                        this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                    };
+                }
+                
                 if (adminLink && user.isAdmin) {
                     adminLink.style.display = 'block';
                 }
+                
+                // Also update fixed profile button if it exists
+                updateFixedProfileButton(user);
+            } else {
+                // If navbar not loaded yet, try fixed button
+                updateFixedProfileButton(user);
             }
         }, 500);
+    }
+    
+    // Update fixed profile button (fallback for pages without navbar)
+    function updateFixedProfileButton(user) {
+        const profileFixed = document.getElementById('userProfileFixed');
+        if (profileFixed) {
+            profileFixed.style.display = 'block';
+            
+            const userNameFixed = document.getElementById('userNameFixed');
+            const userAvatarFixed = document.getElementById('userAvatarFixed');
+            const adminLinkFixed = document.getElementById('adminLinkFixed');
+            
+            if (userNameFixed) userNameFixed.textContent = user.username;
+            
+            if (userAvatarFixed) {
+                const avatarUrl = user.id ? 
+                    `https://cdn.discordapp.com/avatars/${user.id}.png` : 
+                    'https://cdn.discordapp.com/embed/avatars/0.png';
+                userAvatarFixed.src = avatarUrl;
+                userAvatarFixed.onerror = function() {
+                    this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                };
+            }
+            
+            if (adminLinkFixed && user.isAdmin) {
+                adminLinkFixed.style.display = 'block';
+            }
+        }
     }
     
     // Run check immediately

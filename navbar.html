@@ -233,6 +233,7 @@ body.light-mode .mobile-toggle { color: #000; }
     // Logout function
     function logout() {
         localStorage.removeItem('sessionToken');
+        localStorage.removeItem('sessionTime');
         window.location.href = '/login.html';
     }
     
@@ -252,21 +253,34 @@ body.light-mode .mobile-toggle { color: #000; }
                 if (data.valid) {
                     currentUserData = data.user;
                     // Show user profile
-                    userProfile.style.display = 'block';
-                    loginBtn.style.display = 'none';
-                    loginNavItem.style.display = 'none';
+                    if (userProfile) userProfile.style.display = 'block';
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    if (loginNavItem) loginNavItem.style.display = 'none';
                     
                     // Set user data
-                    document.getElementById('userName').textContent = data.user.username;
-                    document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                    const userNameEl = document.getElementById('userName');
+                    const userAvatarEl = document.getElementById('userAvatar');
+                    
+                    if (userNameEl) userNameEl.textContent = data.user.username;
+                    if (userAvatarEl) {
+                        const avatarUrl = data.user.id ? 
+                            `https://cdn.discordapp.com/avatars/${data.user.id}.png` : 
+                            'https://cdn.discordapp.com/embed/avatars/0.png';
+                        userAvatarEl.src = avatarUrl;
+                        userAvatarEl.onerror = function() {
+                            this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                        };
+                    }
                     
                     // Show admin link if admin
                     if (data.user.isAdmin) {
-                        document.getElementById('adminLink').style.display = 'block';
+                        const adminLink = document.getElementById('adminLink');
+                        if (adminLink) adminLink.style.display = 'block';
                     }
                 } else {
                     // Invalid session
                     localStorage.removeItem('sessionToken');
+                    localStorage.removeItem('sessionTime');
                     showLoginButtons();
                 }
             } catch (err) {
@@ -283,9 +297,9 @@ body.light-mode .mobile-toggle { color: #000; }
         const loginBtn = document.getElementById('loginBtn');
         const loginNavItem = document.getElementById('loginNavItem');
         
-        userProfile.style.display = 'none';
-        loginBtn.style.display = 'inline-flex';
-        loginNavItem.style.display = 'block';
+        if (userProfile) userProfile.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'inline-flex';
+        if (loginNavItem) loginNavItem.style.display = 'block';
     }
     
     // Check login status on page load
