@@ -53,10 +53,8 @@ class AdvancedTradeCalculator {
 
     async loadItems() {
         try {
-            // Initialize the API first
-            if (typeof init === 'function') {
-                await init();
-            }
+            // Initialize the API directly since init() requires a grid element
+            await this.initializeAPI();
             
             // Wait for API to load items
             if (typeof db === 'undefined') {
@@ -100,6 +98,115 @@ class AdvancedTradeCalculator {
             console.error('Error loading items:', error);
             throw error;
         }
+    }
+
+    async initializeAPI() {
+        try {
+            // Load the database directly like the API does
+            const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
+            const rows = await this.fetchJbValuesJson(dataUrl);
+            
+            if (!Array.isArray(rows) || rows.length === 0) {
+                throw new Error('API returned no items');
+            }
+            
+            // Build the database using API's buildDatabase function
+            if (typeof buildDatabase === 'function') {
+                buildDatabase(rows);
+            } else {
+                // Fallback: build db manually
+                window.db = {};
+                rows.forEach(item => {
+                    const name = item.displayName || item.name;
+                    if (!name) return;
+
+                    const cat = this.listCategoryLabel(item.section, item.category);
+                    if (!window.db[cat]) window.db[cat] = [];
+
+                    const details = item.details || {};
+                    const cash = typeof item.value === 'number' ? item.value : 0;
+                    const duped = typeof item.dupedValue === 'number' ? item.dupedValue : 0;
+
+                    window.db[cat].push({
+                        name,
+                        image: (item.robloxImage && Number(item.robloxImage) > 0)
+                            ? `https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=${item.robloxImage}`
+                            : (item.image || ''),
+                        cash_value: cash,
+                        duped_value: duped,
+                        trend: item.trend || 'stable',
+                        demand: (details.demand ?? item.demand) || 'Normal'
+                    });
+                });
+            }
+            
+            console.log('API initialized successfully');
+        } catch (error) {
+            console.error('Failed to initialize API:', error);
+            throw error;
+        }
+    }
+
+    async fetchJbValuesJson(url) {
+        const parseBody = async (res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        };
+
+        try {
+            const data = await parseBody(await fetch(url));
+            return this.unwrapItemsArray(data);
+        } catch (firstErr) {
+            const firstMsg = firstErr instanceof Error ? firstErr.message : String(firstErr);
+            try {
+                const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+                const proxyRes = await fetch(proxy);
+                if (!proxyRes.ok) {
+                    throw new Error(`HTTP ${proxyRes.status}`);
+                }
+                const wrapped = await proxyRes.json();
+                if (wrapped.contents == null || wrapped.contents === '') {
+                    throw new Error('proxy returned empty contents');
+                }
+                const raw = typeof wrapped.contents === 'string'
+                    ? JSON.parse(wrapped.contents)
+                    : wrapped.contents;
+                return this.unwrapItemsArray(raw);
+            } catch (proxyErr) {
+                const proxyMsg = proxyErr instanceof Error ? proxyErr.message : String(proxyErr);
+                const combined = new Error(
+                    `Direct request failed (${firstMsg}). Proxy fallback failed (${proxyMsg}).`
+                );
+                combined.cause = { direct: firstErr, proxy: proxyErr };
+                throw combined;
+            }
+        }
+    }
+
+    unwrapItemsArray(data) {
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.itemdata)) return data.itemdata;
+        if (data && Array.isArray(data.items)) return data.items;
+        if (data && Array.isArray(data.data)) return data.data;
+        return [];
+    }
+
+    listCategoryLabel(section, fallbackCategory) {
+        const raw = (section || fallbackCategory || 'Other').trim();
+        const labels = {
+            Vehicle: 'Vehicles',
+            'Weapon Skin': 'Weapon Skins',
+            Color: 'Hyperchromes',
+            Texture: 'Textures',
+            Drift: 'Drifts',
+            Furniture: 'Furniture',
+            Horn: 'Horns',
+            Rim: 'Rims',
+            Spoiler: 'Spoilers',
+            'Tire Sticker': 'Tire Stickers',
+            'Tire Style': 'Tire Styles',
+        };
+        return labels[raw] || raw;
     }
 
     populateCategoryFilter() {
