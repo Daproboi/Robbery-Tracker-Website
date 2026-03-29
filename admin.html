@@ -357,6 +357,7 @@
         
         function logout() {
             localStorage.removeItem('sessionToken');
+            localStorage.removeItem('sessionTime');
             window.location.href = '/login.html';
         }
         
@@ -365,5 +366,6 @@
             checkAdminAuth();
         });
     </script>
+    <script src="auth-guard.js"></script>
 </body>
 </html>

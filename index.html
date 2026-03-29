@@ -427,9 +427,6 @@ footer {
 </section>
 <div id="footer-container"></div>
 
-<!-- Debug Status -->
-<div id="loginStatus" style="position: fixed; top: 5px; left: 5px; background: red; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; z-index: 99999; font-family: monospace;">Checking...</div>
-
 <!-- User Profile Button (Fixed Position) -->
 <div id="userProfileFixed" style="display: none; position: fixed; top: 80px; right: 20px; z-index: 10000;">
     <div onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border-radius: 100px; background: rgba(88, 101, 242, 0.9); border: 1px solid rgba(88, 101, 242, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
@@ -573,6 +570,7 @@ if (document.readyState === 'loading') {
     checkLoginAndShowProfile();
 }
 </script>
+<script src="auth-guard.js"></script>
     <script src="loader.js"></script>
 </body>
 </html>

@@ -171,13 +171,29 @@ app.get('/api/check-session', async (req, res) => {
             return res.status(401).json({ error: 'Invalid session' });
         }
         
+        // Check if session is older than 1 day
+        const ONE_DAY = 24 * 60 * 60 * 1000;
+        const lastLogin = new Date(user.lastLogin).getTime();
+        const now = Date.now();
+        
+        if (now - lastLogin > ONE_DAY) {
+            // Session expired
+            const users = await loadUsers();
+            if (users[user.discordId]) {
+                users[user.discordId].sessionToken = null;
+                await saveUsers(users);
+            }
+            return res.status(401).json({ error: 'Session expired' });
+        }
+        
         res.json({
             valid: true,
             user: {
                 id: user.discordId,
                 username: user.username,
                 isAdmin: Boolean(user.isAdmin)
-            }
+            },
+            lastLogin: user.lastLogin
         });
         
     } catch (error) {

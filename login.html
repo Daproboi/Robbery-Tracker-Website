@@ -165,11 +165,23 @@
         // Check if user is already logged in (session check via server)
         async function checkLoginStatus() {
             const sessionToken = localStorage.getItem('sessionToken');
+            const sessionTime = localStorage.getItem('sessionTime');
+            
+            // Check if session is older than 1 day
+            const ONE_DAY = 24 * 60 * 60 * 1000;
+            if (sessionTime && (Date.now() - parseInt(sessionTime)) > ONE_DAY) {
+                localStorage.removeItem('sessionToken');
+                localStorage.removeItem('sessionTime');
+                return;
+            }
+            
             if (sessionToken) {
                 try {
                     const response = await fetch(`/api/check-session?token=${sessionToken}`);
                     const data = await response.json();
                     if (data.valid) {
+                        // Update session time
+                        localStorage.setItem('sessionTime', Date.now().toString());
                         // Redirect based on user role
                         if (data.user.isAdmin) {
                             window.location.href = '/admin.html';
@@ -178,11 +190,22 @@
                         }
                     } else {
                         localStorage.removeItem('sessionToken');
+                        localStorage.removeItem('sessionTime');
                     }
                 } catch (err) {
                     console.error('Session check failed:', err);
                 }
             }
+        }
+        
+        // Handle Discord session token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionToken = urlParams.get('session');
+        if (sessionToken) {
+            localStorage.setItem('sessionToken', sessionToken);
+            localStorage.setItem('sessionTime', Date.now().toString());
+            // Remove token from URL for security
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
         
         // Initialize page
