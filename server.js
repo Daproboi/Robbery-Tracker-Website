@@ -1,5 +1,5 @@
 const express = require('express');
-const Database = require('better-sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
@@ -17,11 +17,11 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI || `http://localhost:${process.env.PORT || 3000}/auth/callback`;
 
-// SQLite Database
-const db = new Database('./users.db');
+// SQLite Database (async)
+const db = new sqlite3.Database('./users.db');
 
 // Create users table
-db.exec(`
+db.run(`
     CREATE TABLE IF NOT EXISTS users (
         discordId TEXT PRIMARY KEY,
         username TEXT NOT NULL,
@@ -34,75 +34,111 @@ db.exec(`
     )
 `);
 
-// Database helpers
+// Database helpers (async)
 const User = {
-    findOneAndUpdate: (filter, update, options) => {
+    findOneAndUpdate: async (filter, update) => {
         const { discordId } = filter;
-        const existing = db.prepare('SELECT * FROM users WHERE discordId = ?').get(discordId);
-        
-        if (existing) {
-            db.prepare(`
-                UPDATE users SET 
-                    username = ?, 
-                    discriminator = ?, 
-                    avatar = ?, 
-                    isAdmin = ?, 
-                    loginTime = ?, 
-                    lastLogin = ?, 
-                    sessionToken = ? 
-                WHERE discordId = ?
-            `).run(
-                update.username || existing.username,
-                update.discriminator || existing.discriminator,
-                update.avatar || existing.avatar,
-                update.isAdmin ? 1 : 0,
-                update.loginTime || existing.loginTime,
-                update.lastLogin || existing.lastLogin,
-                update.sessionToken || existing.sessionToken,
-                discordId
-            );
-        } else {
-            db.prepare(`
-                INSERT INTO users (discordId, username, discriminator, avatar, isAdmin, loginTime, lastLogin, sessionToken)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            `).run(
-                discordId,
-                update.username,
-                update.discriminator,
-                update.avatar,
-                update.isAdmin ? 1 : 0,
-                update.loginTime,
-                update.lastLogin,
-                update.sessionToken
-            );
-        }
-        
-        return db.prepare('SELECT * FROM users WHERE discordId = ?').get(discordId);
+        return new Promise((resolve, reject) => {
+            db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, existing) => {
+                if (err) return reject(err);
+                
+                if (existing) {
+                    db.run(`
+                        UPDATE users SET 
+                            username = ?, 
+                            discriminator = ?, 
+                            avatar = ?, 
+                            isAdmin = ?, 
+                            loginTime = ?, 
+                            lastLogin = ?, 
+                            sessionToken = ? 
+                        WHERE discordId = ?
+                    `, [
+                        update.username || existing.username,
+                        update.discriminator || existing.discriminator,
+                        update.avatar || existing.avatar,
+                        update.isAdmin ? 1 : 0,
+                        update.loginTime || existing.loginTime,
+                        update.lastLogin || existing.lastLogin,
+                        update.sessionToken || existing.sessionToken,
+                        discordId
+                    ], (err) => {
+                        if (err) return reject(err);
+                        db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, row) => {
+                            if (err) return reject(err);
+                            resolve(row);
+                        });
+                    });
+                } else {
+                    db.run(`
+                        INSERT INTO users (discordId, username, discriminator, avatar, isAdmin, loginTime, lastLogin, sessionToken)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    `, [
+                        discordId,
+                        update.username,
+                        update.discriminator,
+                        update.avatar,
+                        update.isAdmin ? 1 : 0,
+                        update.loginTime,
+                        update.lastLogin,
+                        update.sessionToken
+                    ], (err) => {
+                        if (err) return reject(err);
+                        db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, row) => {
+                            if (err) return reject(err);
+                            resolve(row);
+                        });
+                    });
+                }
+            });
+        });
     },
     
-    findOne: (filter) => {
-        if (filter.sessionToken) {
-            return db.prepare('SELECT * FROM users WHERE sessionToken = ?').get(filter.sessionToken);
-        }
-        if (filter.discordId) {
-            return db.prepare('SELECT * FROM users WHERE discordId = ?').get(filter.discordId);
-        }
-        return null;
+    findOne: async (filter) => {
+        return new Promise((resolve, reject) => {
+            if (filter.sessionToken) {
+                db.get('SELECT * FROM users WHERE sessionToken = ?', [filter.sessionToken], (err, row) => {
+                    if (err) return reject(err);
+                    resolve(row);
+                });
+            } else if (filter.discordId) {
+                db.get('SELECT * FROM users WHERE discordId = ?', [filter.discordId], (err, row) => {
+                    if (err) return reject(err);
+                    resolve(row);
+                });
+            } else {
+                resolve(null);
+            }
+        });
     },
     
-    find: (options = {}) => {
-        let query = 'SELECT * FROM users';
-        if (options.sort && options.sort.loginTime === -1) {
-            query += ' ORDER BY loginTime DESC';
-        }
-        return db.prepare(query).all();
+    find: async (options = {}) => {
+        return new Promise((resolve, reject) => {
+            let query = 'SELECT * FROM users';
+            if (options.sort && options.sort.loginTime === -1) {
+                query += ' ORDER BY loginTime DESC';
+            }
+            db.all(query, [], (err, rows) => {
+                if (err) return reject(err);
+                resolve(rows);
+            });
+        });
     },
     
-    countDocuments: (filter = {}) => {
-        if (filter.loginTime && filter.loginTime.$gte) {
-            return db.prepare('SELECT COUNT(*) as count FROM users WHERE loginTime >= ?').get(filter.loginTime.$gte).count;
-        }
-        return db.prepare('SELECT COUNT(*) as count FROM users').get().count;
+    countDocuments: async (filter = {}) => {
+        return new Promise((resolve, reject) => {
+            if (filter.loginTime && filter.loginTime.$gte) {
+                db.get('SELECT COUNT(*) as count FROM users WHERE loginTime >= ?', [filter.loginTime.$gte], (err, row) => {
+                    if (err) return reject(err);
+                    resolve(row.count);
+                });
+            } else {
+                db.get('SELECT COUNT(*) as count FROM users', [], (err, row) => {
+                    if (err) return reject(err);
+                    resolve(row.count);
+                });
+            }
+        });
     }
 };
 
@@ -193,7 +229,7 @@ app.get('/auth/callback', async (req, res) => {
 });
 
 // Session verification route
-app.get('/api/check-session', (req, res) => {
+app.get('/api/check-session', async (req, res) => {
     const { token } = req.query;
     
     if (!token) {
@@ -201,7 +237,7 @@ app.get('/api/check-session', (req, res) => {
     }
     
     try {
-        const user = User.findOne({ sessionToken: token });
+        const user = await User.findOne({ sessionToken: token });
         
         if (!user) {
             return res.status(401).json({ error: 'Invalid session' });
@@ -222,18 +258,18 @@ app.get('/api/check-session', (req, res) => {
 });
 
 // Admin API routes
-app.get('/api/users', (req, res) => {
+app.get('/api/users', async (req, res) => {
     try {
         const { token } = req.query;
         
         // Verify admin session
-        const adminUser = User.findOne({ sessionToken: token });
+        const adminUser = await User.findOne({ sessionToken: token });
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
         // Get all users from database
-        const users = User.find({}).sort({ loginTime: -1 });
+        const users = await User.find({}).sort({ loginTime: -1 });
         
         res.json({
             users: users.map(user => ({
@@ -253,14 +289,14 @@ app.get('/api/users', (req, res) => {
 });
 
 // Logout route
-app.get('/logout', (req, res) => {
+app.get('/logout', async (req, res) => {
     const { token } = req.query;
     
     if (token) {
         // Invalidate user session
-        const user = User.findOne({ sessionToken: token });
+        const user = await User.findOne({ sessionToken: token });
         if (user) {
-            db.prepare('UPDATE users SET sessionToken = NULL WHERE discordId = ?').run(user.discordId);
+            db.run('UPDATE users SET sessionToken = NULL WHERE discordId = ?', [user.discordId]);
         }
     }
     
@@ -268,12 +304,12 @@ app.get('/logout', (req, res) => {
 });
 
 // Statistics API
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', async (req, res) => {
     try {
         const { token } = req.query;
         
         // Verify admin session
-        const adminUser = User.findOne({ sessionToken: token });
+        const adminUser = await User.findOne({ sessionToken: token });
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).json({ error: 'Admin access required' });
         }
@@ -281,9 +317,19 @@ app.get('/api/stats', (req, res) => {
         const today = new Date().toISOString().split('T')[0];
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
         
-        const totalUsers = User.countDocuments();
-        const activeToday = db.prepare("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?").get(today + 'T00:00:00').count;
-        const newThisWeek = db.prepare("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?").get(weekAgo).count;
+        const totalUsers = await User.countDocuments();
+        const activeToday = await new Promise((resolve, reject) => {
+            db.get("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?", [today + 'T00:00:00'], (err, row) => {
+                if (err) return reject(err);
+                resolve(row.count);
+            });
+        });
+        const newThisWeek = await new Promise((resolve, reject) => {
+            db.get("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?", [weekAgo], (err, row) => {
+                if (err) return reject(err);
+                resolve(row.count);
+            });
+        });
         
         res.json({
             totalUsers,
