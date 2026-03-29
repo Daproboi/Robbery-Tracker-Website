@@ -1,6 +1,6 @@
 /**
- * HyperChrome Pity Calculator
- * Based on actual Jailbreak HyperChrome system (5 levels only)
+ * HyperChrome Pity Calculator - Simple & Smart
+ * Based on actual Jailbreak mechanics
  */
 
 class PityCalculator {
@@ -10,14 +10,14 @@ class PityCalculator {
         this.hyperchromesEarned = 0;
         this.lastDropAgo = 0;
         
-        // Actual HyperChrome pity system - 5 levels only
-        this.hyperChromeLevels = [
-            { level: 1, robberies: 250, probability: 0.01 },    // 250 robberies for 100% pity, ~1% base chance
-            { level: 2, robberies: 500, probability: 0.005 },   // 500 robberies for 100% pity, ~0.5% base chance
-            { level: 3, robberies: 750, probability: 0.002 },   // 750 robberies for 100% pity, ~0.2% base chance
-            { level: 4, robberies: 1000, probability: 0.001 },  // 1000 robberies for 100% pity, ~0.1% base chance
-            { level: 5, robberies: 1500, probability: 0.0005 }   // 1500 robberies for 100% pity, ~0.05% base chance
-        ];
+        // Simple pity thresholds - common sense approach
+        this.pityThresholds = {
+            1: { robberies: 250, chance: 1.0 },      // 1% chance at 250 robberies
+            2: { robberies: 500, chance: 0.5 },      // 0.5% chance at 500 robberies
+            3: { robberies: 750, chance: 0.2 },      // 0.2% chance at 750 robberies
+            4: { robberies: 1000, chance: 0.1 },     // 0.1% chance at 1000 robberies
+            5: { robberies: 1500, chance: 0.05 }     // 0.05% chance at 1500 robberies
+        };
         
         this.init();
     }
@@ -36,130 +36,122 @@ class PityCalculator {
                 e.target.classList.add('active');
                 this.serverType = e.target.dataset.server;
                 this.saveData();
+                // Auto-calculate when server changes
+                this.calculate();
             });
         });
 
-        // Input fields
-        document.getElementById('currentRobberies').addEventListener('input', (e) => {
-            this.currentRobberies = parseInt(e.target.value) || 0;
-            this.saveData();
-        });
-
-        document.getElementById('hyperchromesEarned').addEventListener('input', (e) => {
-            this.hyperchromesEarned = parseInt(e.target.value) || 0;
-            this.saveData();
-        });
-
-        document.getElementById('lastDropAgo').addEventListener('input', (e) => {
-            this.lastDropAgo = parseInt(e.target.value) || 0;
-            this.saveData();
+        // Auto-calculate on input changes
+        ['currentRobberies', 'hyperchromesEarned', 'lastDropAgo'].forEach(id => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                this[id] = parseInt(e.target.value) || 0;
+                this.saveData();
+                // Auto-calculate for better UX
+                this.calculate();
+            });
         });
     }
 
     calculate() {
+        // Get current pity based on server type
         const currentPity = this.getCurrentPity();
-        const currentLevel = this.getCurrentHyperChromeLevel();
-        const levelData = this.hyperChromeLevels[currentLevel - 1] || this.hyperChromeLevels[4]; // Default to level 5 if beyond
         
-        // Calculate pity percentage (progress toward guaranteed drop)
+        // Determine current level intelligently
+        const currentLevel = this.getCurrentLevel(currentPity);
+        const levelData = this.pityThresholds[currentLevel];
+        
+        // Calculate pity percentage (progress to guaranteed drop)
         const pityPercentage = Math.min((currentPity / levelData.robberies) * 100, 100);
         
-        // Calculate robberies needed for 100% pity
-        const robberiesToMaxPity = Math.max(levelData.robberies - currentPity, 0);
+        // Calculate robberies needed for guaranteed drop
+        const robberiesToGuaranteed = Math.max(levelData.robberies - currentPity, 0);
         
-        // Update results
-        document.getElementById('currentLevel').textContent = `Level ${currentLevel}`;
-        document.getElementById('dropChance').textContent = `${(levelData.probability * 100).toFixed(2)}%`;
-        document.getElementById('robberiesToNext').textContent = robberiesToMaxPity;
-        document.getElementById('totalProgress').textContent = `${pityPercentage.toFixed(1)}%`;
-
-        // Update progress bar
-        document.getElementById('progressBar').style.width = `${pityPercentage}%`;
-        document.getElementById('progressPercentage').textContent = `${pityPercentage.toFixed(1)}%`;
-
-        // Update result descriptions
-        document.querySelector('#currentLevel').nextElementSibling.textContent = `${levelData.robberies} robberies for 100% pity`;
-        document.querySelector('#dropChance').nextElementSibling.textContent = 'Base chance per robbery';
-        document.querySelector('#robberiesToNext').nextElementSibling.textContent = 'More robberies needed';
-        document.querySelector('#totalProgress').nextElementSibling.textContent = 'Pity progress';
-
-        // Show results
-        const resultsSection = document.getElementById('resultsSection');
-        resultsSection.classList.add('show');
-
-        // Highlight current level in table
+        // Calculate effective drop chance (base chance + pity bonus)
+        const effectiveChance = Math.min(levelData.chance + (pityPercentage * 0.01), 50);
+        
+        // Update UI with intelligent results
+        this.updateResults(currentLevel, levelData, pityPercentage, robberiesToGuaranteed, effectiveChance);
+        this.updateProgressBar(pityPercentage);
         this.highlightCurrentLevel(currentLevel);
-
-        // Scroll to results
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     getCurrentPity() {
         if (this.serverType === 'big') {
-            // Big servers reset pity every 24 hours
+            // Big servers: pity resets daily, use robberies since last drop
             return this.lastDropAgo;
         } else {
-            // Small servers maintain pity across restarts
-            // Estimate current pity based on robberies since last drop
-            return this.lastDropAgo || this.currentRobberies;
+            // Small servers: pity persists, use total robberies
+            return this.currentRobberies;
         }
     }
 
-    getCurrentHyperChromeLevel() {
-        // Determine current HyperChrome level based on hyperchromes earned
-        // This is simplified - in reality, each color has its own level
-        // For calculator purposes, we estimate average level
-        if (this.hyperchromesEarned === 0) return 1;
-        if (this.hyperchromesEarned <= 2) return 1;
-        if (this.hyperchromesEarned <= 5) return 2;
-        if (this.hyperchromesEarned <= 10) return 3;
-        if (this.hyperchromesEarned <= 15) return 4;
-        return 5;
+    getCurrentLevel(pity) {
+        // Simple level determination - find highest level reached
+        for (let level = 5; level >= 1; level--) {
+            if (pity >= this.pityThresholds[level].robberies) {
+                return level;
+            }
+        }
+        return 1; // Default to level 1
     }
 
-    calculateExpectedRobberies(baseProbability, currentPity, pityMultiplier) {
-        // Complex calculation considering both base chance and increasing pity
-        // This is a simplified version
-        const effectiveProbability = baseProbability + (currentPity / pityMultiplier) * 0.01; // Pity adds small chance increase
-        return Math.ceil(1 / Math.max(effectiveProbability, 0.0001));
+    updateResults(level, levelData, pityPercentage, robberiesToGuaranteed, effectiveChance) {
+        // Update result values
+        document.getElementById('currentLevel').textContent = `Level ${level}`;
+        document.getElementById('dropChance').textContent = `${effectiveChance.toFixed(1)}%`;
+        document.getElementById('robberiesToNext').textContent = robberiesToGuaranteed;
+        document.getElementById('totalProgress').textContent = `${pityPercentage.toFixed(1)}%`;
+
+        // Update descriptions intelligently
+        document.querySelector('#currentLevel').nextElementSibling.textContent = `${levelData.chance}% base chance`;
+        document.querySelector('#dropChance').nextElementSibling.textContent = robberiesToGuaranteed === 0 ? 'Guaranteed!' : 'Effective chance';
+        document.querySelector('#robberiesToNext').nextElementSibling.textContent = robberiesToGuaranteed === 0 ? 'Drop ready!' : 'To guarantee';
+        document.querySelector('#totalProgress').nextElementSibling.textContent = 'Pity progress';
+
+        // Show results section
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.classList.add('show');
     }
 
-    getCategory(probability) {
-        if (probability >= 0.001) return 'Common';
-        if (probability >= 0.0005) return 'Rare';
-        if (probability >= 0.0002) return 'Ultra Rare';
-        return 'Legendary';
-    }
-
-    getChanceBadgeClass(probability) {
-        if (probability >= 0.001) return 'low';
-        if (probability >= 0.0005) return 'medium';
-        if (probability >= 0.0002) return 'high';
-        return 'very-high';
+    updateProgressBar(percentage) {
+        document.getElementById('progressBar').style.width = `${percentage}%`;
+        document.getElementById('progressPercentage').textContent = `${percentage.toFixed(1)}%`;
     }
 
     populatePityTable() {
         const tbody = document.getElementById('pityTableBody');
-        tbody.innerHTML = this.hyperChromeLevels.map(level => `
-            <tr data-level="${level.level}">
-                <td>Level ${level.level}</td>
-                <td>${level.robberies.toLocaleString()}</td>
-                <td><span class="chance-badge ${this.getChanceBadgeClass(level.probability)}">${(level.probability * 100).toFixed(2)}%</span></td>
-                <td>${this.getCategory(level.probability)}</td>
+        tbody.innerHTML = Object.entries(this.pityThresholds).map(([level, data]) => `
+            <tr data-level="${level}">
+                <td>Level ${level}</td>
+                <td>${data.robberies.toLocaleString()}</td>
+                <td><span class="chance-badge ${this.getChanceBadgeClass(data.chance)}">${data.chance}%</span></td>
+                <td>${this.getCategory(data.chance)}</td>
             </tr>
         `).join('');
     }
 
     highlightCurrentLevel(level) {
-        // Remove all highlights
         document.querySelectorAll('.pity-table tr').forEach(tr => tr.classList.remove('highlight'));
-        
-        // Add highlight to current level
         const currentRow = document.querySelector(`.pity-table tr[data-level="${level}"]`);
         if (currentRow) {
             currentRow.classList.add('highlight');
             currentRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+    }
+
+    getCategory(chance) {
+        if (chance >= 1.0) return 'Common';
+        if (chance >= 0.5) return 'Uncommon';
+        if (chance >= 0.2) return 'Rare';
+        if (chance >= 0.1) return 'Very Rare';
+        return 'Legendary';
+    }
+
+    getChanceBadgeClass(chance) {
+        if (chance >= 1.0) return 'low';
+        if (chance >= 0.5) return 'medium';
+        if (chance >= 0.2) return 'high';
+        return 'very-high';
     }
 
     saveData() {
