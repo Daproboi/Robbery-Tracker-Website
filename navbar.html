@@ -185,6 +185,15 @@ body.light-mode .mobile-toggle { color: #000; }
         </div>
 
         <div class="nav-actions">
+            <!-- User Profile (shown when logged in) -->
+            <div id="userProfile" style="display: none; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 100px; background: rgba(88, 101, 242, 0.15); border: 1px solid rgba(88, 101, 242, 0.3);">
+                <img id="userAvatar" src="" alt="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                <span id="userName" style="font-size: 0.8rem; font-weight: 700; color: #fff;"></span>
+            </div>
+            <!-- Login Button (shown when not logged in) -->
+            <a href="login.html" id="loginBtn" style="display: none; text-decoration: none; color: #fff; font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 100px; background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.4);">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
             <!-- Theme Toggle Button -->
             <button class="theme-toggle" id="themeBtn" title="Toggle Theme">🌓</button>
             <button class="mobile-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
@@ -194,37 +203,60 @@ body.light-mode .mobile-toggle { color: #000; }
 
 <script>
     // Check if user is logged in
-    function checkLoginStatus() {
-        const user = localStorage.getItem('user');
+    async function checkLoginStatus() {
+        const sessionToken = localStorage.getItem('sessionToken');
+        const userProfile = document.getElementById('userProfile');
+        const loginBtn = document.getElementById('loginBtn');
         const loginNavItem = document.getElementById('loginNavItem');
         
-        if (user) {
-            const userData = JSON.parse(user);
-            // Hide login button for all logged in users
-            loginNavItem.style.display = 'none';
+        if (sessionToken) {
+            try {
+                // Verify session with server
+                const response = await fetch(`/api/check-session?token=${sessionToken}`);
+                const data = await response.json();
+                
+                if (data.valid) {
+                    // Show user profile
+                    userProfile.style.display = 'flex';
+                    loginBtn.style.display = 'none';
+                    loginNavItem.style.display = 'none';
+                    
+                    // Set user data
+                    document.getElementById('userName').textContent = data.user.username;
+                    document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                    
+                    // Click profile to go to admin if admin
+                    userProfile.onclick = () => {
+                        if (data.user.isAdmin) {
+                            window.location.href = '/admin.html';
+                        }
+                    };
+                } else {
+                    // Invalid session
+                    localStorage.removeItem('sessionToken');
+                    showLoginButtons();
+                }
+            } catch (err) {
+                console.error('Session check failed:', err);
+                showLoginButtons();
+            }
         } else {
-            // Show login button for non-logged in users
-            loginNavItem.style.display = 'block';
+            showLoginButtons();
         }
+    }
+    
+    function showLoginButtons() {
+        const userProfile = document.getElementById('userProfile');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginNavItem = document.getElementById('loginNavItem');
+        
+        userProfile.style.display = 'none';
+        loginBtn.style.display = 'inline-flex';
+        loginNavItem.style.display = 'block';
     }
     
     // Check login status on page load
     document.addEventListener('DOMContentLoaded', function() {
         checkLoginStatus();
     });
-    
-    // Update login status when user logs in/out
-    window.addEventListener('storage', function() {
-        checkLoginStatus();
-    });
-    
-    // Fallback: Make login button visible if no user after 1 second
-    setTimeout(() => {
-        const user = localStorage.getItem('user');
-        const loginNavItem = document.getElementById('loginNavItem');
-        
-        if (!user && loginNavItem) {
-            loginNavItem.style.display = 'block';
-        }
-    }, 1000);
 </script>
