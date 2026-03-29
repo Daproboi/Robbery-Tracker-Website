@@ -1,0 +1,513 @@
+/**
+ * Advanced Trade Calculator
+ * Professional trade analysis with real-time market data
+ */
+
+class AdvancedTradeCalculator {
+    constructor() {
+        this.yourItems = [];
+        this.theirItems = [];
+        this.currentSide = null;
+        this.allItems = [];
+        this.filteredItems = [];
+        this.selectedCategory = '';
+        this.searchTerm = '';
+        this.sortBy = 'value_desc';
+        
+        this.init();
+    }
+
+    async init() {
+        try {
+            await this.loadItems();
+            this.setupEventListeners();
+            this.updateUI();
+        } catch (error) {
+            console.error('Failed to initialize calculator:', error);
+            this.showError('Failed to load item database. Please refresh the page.');
+        }
+    }
+
+    async loadItems() {
+        try {
+            // Wait for API to load items
+            if (typeof db === 'undefined') {
+                await new Promise(resolve => {
+                    const checkDb = setInterval(() => {
+                        if (typeof db !== 'undefined') {
+                            clearInterval(checkDb);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            }
+
+            // Flatten all items from all categories
+            this.allItems = [];
+            for (const [category, items] of Object.entries(db)) {
+                items.forEach(item => {
+                    this.allItems.push({
+                        ...item,
+                        category: category,
+                        id: `${category}_${item.name.replace(/\s+/g, '_')}`
+                    });
+                });
+            }
+
+            this.populateCategoryFilter();
+            this.filteredItems = [...this.allItems];
+            
+        } catch (error) {
+            console.error('Error loading items:', error);
+            throw error;
+        }
+    }
+
+    populateCategoryFilter() {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const categories = [...new Set(this.allItems.map(item => item.category))];
+        
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+    }
+
+    setupEventListeners() {
+        // Search input
+        document.getElementById('itemSearch').addEventListener('input', (e) => {
+            this.searchTerm = e.target.value.toLowerCase();
+            this.filterAndSortItems();
+        });
+
+        // Category filter
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            this.selectedCategory = e.target.value;
+            this.filterAndSortItems();
+        });
+
+        // Sort filter
+        document.getElementById('sortFilter').addEventListener('change', (e) => {
+            this.sortBy = e.target.value;
+            this.filterAndSortItems();
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeItemPicker();
+            }
+        });
+
+        // Click outside modal to close
+        document.getElementById('itemPickerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'itemPickerModal') {
+                this.closeItemPicker();
+            }
+        });
+    }
+
+    filterAndSortItems() {
+        // Filter by search term
+        let filtered = this.allItems.filter(item => {
+            const matchesSearch = !this.searchTerm || 
+                item.name.toLowerCase().includes(this.searchTerm) ||
+                item.category.toLowerCase().includes(this.searchTerm);
+            
+            const matchesCategory = !this.selectedCategory || 
+                item.category === this.selectedCategory;
+            
+            return matchesSearch && matchesCategory;
+        });
+
+        // Sort items
+        filtered.sort((a, b) => {
+            switch (this.sortBy) {
+                case 'value_desc':
+                    return (b.cash_value || 0) - (a.cash_value || 0);
+                case 'value_asc':
+                    return (a.cash_value || 0) - (b.cash_value || 0);
+                case 'name_asc':
+                    return a.name.localeCompare(b.name);
+                case 'name_desc':
+                    return b.name.localeCompare(a.name);
+                default:
+                    return 0;
+            }
+        });
+
+        this.filteredItems = filtered;
+        this.renderModalItems();
+    }
+
+    renderModalItems() {
+        const container = document.getElementById('modalItemsGrid');
+        
+        if (this.filteredItems.length === 0) {
+            container.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+                    <p>No items found matching your criteria</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.filteredItems.map(item => `
+            <div class="modal-item-card" onclick="calculator.addItem('${item.id}')" data-item-id="${item.id}">
+                <div class="modal-item-image">
+                    <img src="${item.image || 'https://via.placeholder.com/120x120/333/666?text=?'}" 
+                         alt="${item.name}" 
+                         onerror="this.src='https://via.placeholder.com/120x120/333/666?text=?'">
+                </div>
+                <div class="modal-item-name">${item.name}</div>
+                <div class="modal-item-category">${item.category}</div>
+                <div class="modal-item-value">$${(item.cash_value || 0).toLocaleString()}</div>
+                <div class="modal-item-duped">Duped: $${(item.duped_value || 0).toLocaleString()}</div>
+            </div>
+        `).join('');
+    }
+
+    openItemPicker(side) {
+        this.currentSide = side;
+        document.getElementById('itemPickerModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Reset search and filters
+        document.getElementById('itemSearch').value = '';
+        document.getElementById('categoryFilter').value = '';
+        document.getElementById('sortFilter').value = 'value_desc';
+        
+        this.searchTerm = '';
+        this.selectedCategory = '';
+        this.sortBy = 'value_desc';
+        
+        this.filterAndSortItems();
+        
+        // Focus search input
+        setTimeout(() => {
+            document.getElementById('itemSearch').focus();
+        }, 100);
+    }
+
+    closeItemPicker() {
+        document.getElementById('itemPickerModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        this.currentSide = null;
+    }
+
+    addItem(itemId) {
+        const item = this.allItems.find(i => i.id === itemId);
+        if (!item) return;
+
+        const items = this.currentSide === 'your' ? this.yourItems : this.theirItems;
+        
+        // Check if item already exists
+        const exists = items.find(i => i.id === itemId);
+        if (exists) {
+            this.showNotification('Item already added to this side', 'warning');
+            return;
+        }
+
+        items.push({...item});
+        this.updateUI();
+        this.closeItemPicker();
+        this.showNotification(`Added ${item.name} to ${this.currentSide} side`, 'success');
+    }
+
+    removeItem(side, index) {
+        const items = side === 'your' ? this.yourItems : this.theirItems;
+        const removedItem = items[index];
+        items.splice(index, 1);
+        this.updateUI();
+        this.showNotification(`Removed ${removedItem.name} from ${side} side`, 'info');
+    }
+
+    swapSides() {
+        const temp = [...this.yourItems];
+        this.yourItems = [...this.theirItems];
+        this.theirItems = temp;
+        this.updateUI();
+        this.showNotification('Sides swapped', 'info');
+    }
+
+    clearAll() {
+        if (this.yourItems.length === 0 && this.theirItems.length === 0) {
+            this.showNotification('No items to clear', 'info');
+            return;
+        }
+
+        if (confirm('Are you sure you want to clear all items from both sides?')) {
+            this.yourItems = [];
+            this.theirItems = [];
+            this.updateUI();
+            this.showNotification('All items cleared', 'success');
+        }
+    }
+
+    calculateTotals() {
+        const yourTotal = this.yourItems.reduce((sum, item) => sum + (item.cash_value || 0), 0);
+        const theirTotal = this.theirItems.reduce((sum, item) => sum + (item.cash_value || 0), 0);
+        
+        return {
+            your: yourTotal,
+            their: theirTotal,
+            difference: yourTotal - theirTotal,
+            absoluteDifference: Math.abs(yourTotal - theirTotal),
+            total: yourTotal + theirTotal
+        };
+    }
+
+    updateUI() {
+        this.renderItems();
+        this.updateStats();
+        this.updateAnalysis();
+    }
+
+    renderItems() {
+        // Render your items
+        const yourContainer = document.getElementById('yourItems');
+        yourContainer.innerHTML = [
+            ...this.yourItems.map((item, index) => this.createItemCard(item, index, 'your')),
+            '<div class="add-item-btn" onclick="calculator.openItemPicker(\'your\')"><i class="fas fa-plus"></i>Add Item</div>'
+        ].join('');
+
+        // Render their items
+        const theirContainer = document.getElementById('theirItems');
+        theirContainer.innerHTML = [
+            ...this.theirItems.map((item, index) => this.createItemCard(item, index, 'their')),
+            '<div class="add-item-btn" onclick="calculator.openItemPicker(\'their\')"><i class="fas fa-plus"></i>Add Item</div>'
+        ].join('');
+    }
+
+    createItemCard(item, index, side) {
+        return `
+            <div class="item-card">
+                <button class="item-remove" onclick="calculator.removeItem('${side}', ${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="item-image">
+                    <img src="${item.image || 'https://via.placeholder.com/80x80/333/666?text=?'}" 
+                         alt="${item.name}" 
+                         onerror="this.src='https://via.placeholder.com/80x80/333/666?text=?'">
+                </div>
+                <div class="item-name">${item.name}</div>
+                <div class="item-value">$${(item.cash_value || 0).toLocaleString()}</div>
+                <div class="item-category">${item.category}</div>
+            </div>
+        `;
+    }
+
+    updateStats() {
+        const totals = this.calculateTotals();
+        
+        // Update values
+        document.getElementById('yourValue').textContent = `$${totals.your.toLocaleString()}`;
+        document.getElementById('theirValue').textContent = `$${totals.their.toLocaleString()}`;
+        document.getElementById('totalValue').textContent = `$${totals.total.toLocaleString()}`;
+        document.getElementById('tradeBalance').textContent = `$${totals.absoluteDifference.toLocaleString()}`;
+        
+        // Update item counts
+        const totalItems = this.yourItems.length + this.theirItems.length;
+        document.getElementById('totalItems').textContent = totalItems;
+        document.getElementById('itemBreakdown').textContent = `${this.yourItems.length} vs ${this.theirItems.length}`;
+        
+        // Update fairness score
+        const fairnessScore = totals.total > 0 ? Math.max(0, 100 - (totals.absoluteDifference / totals.total * 100)) : 100;
+        document.getElementById('fairnessScore').textContent = `${fairnessScore.toFixed(1)}%`;
+        
+        // Update change indicators
+        this.updateChangeIndicators(totals, fairnessScore);
+    }
+
+    updateChangeIndicators(totals, fairnessScore) {
+        const totalChangeEl = document.getElementById('totalChange');
+        const balanceStatusEl = document.getElementById('balanceStatus');
+        const fairnessStatusEl = document.getElementById('fairnessStatus');
+        
+        if (totals.total === 0) {
+            totalChangeEl.textContent = 'No items';
+            totalChangeEl.className = 'stat-change neutral';
+            balanceStatusEl.textContent = 'Fair Trade';
+            balanceStatusEl.className = 'stat-change neutral';
+        } else {
+            if (totals.difference > 0) {
+                totalChangeEl.textContent = `You're overpaying by $${totals.difference.toLocaleString()}`;
+                totalChangeEl.className = 'stat-change negative';
+                balanceStatusEl.textContent = 'You overpay';
+                balanceStatusEl.className = 'stat-change negative';
+            } else if (totals.difference < 0) {
+                totalChangeEl.textContent = `They're overpaying by $${Math.abs(totals.difference).toLocaleString()}`;
+                totalChangeEl.className = 'stat-change positive';
+                balanceStatusEl.textContent = 'They overpay';
+                balanceStatusEl.className = 'stat-change positive';
+            } else {
+                totalChangeEl.textContent = 'Perfectly balanced';
+                totalChangeEl.className = 'stat-change positive';
+                balanceStatusEl.textContent = 'Fair Trade';
+                balanceStatusEl.className = 'stat-change positive';
+            }
+        }
+        
+        // Update fairness status
+        if (fairnessScore >= 95) {
+            fairnessStatusEl.textContent = 'Perfect';
+            fairnessStatusEl.className = 'stat-change positive';
+        } else if (fairnessScore >= 85) {
+            fairnessStatusEl.textContent = 'Good';
+            fairnessStatusEl.className = 'stat-change positive';
+        } else if (fairnessScore >= 70) {
+            fairnessStatusEl.textContent = 'Fair';
+            fairnessStatusEl.className = 'stat-change neutral';
+        } else {
+            fairnessStatusEl.textContent = 'Unfair';
+            fairnessStatusEl.className = 'stat-change negative';
+        }
+    }
+
+    updateAnalysis() {
+        const totals = this.calculateTotals();
+        
+        // Value difference
+        const valueDiffEl = document.getElementById('valueDiff');
+        valueDiffEl.textContent = `$${totals.absoluteDifference.toLocaleString()}`;
+        
+        if (totals.difference > 0) {
+            valueDiffEl.className = 'analysis-value unfair';
+            valueDiffEl.textContent = `You lose $${totals.difference.toLocaleString()}`;
+        } else if (totals.difference < 0) {
+            valueDiffEl.className = 'analysis-value unfair';
+            valueDiffEl.textContent = `They lose $${Math.abs(totals.difference).toLocaleString()}`;
+        } else {
+            valueDiffEl.className = 'analysis-value fair';
+            valueDiffEl.textContent = 'Perfectly balanced';
+        }
+        
+        // Percentage difference
+        const percentDiff = totals.total > 0 ? (totals.absoluteDifference / totals.total * 100) : 0;
+        const percentDiffEl = document.getElementById('percentDiff');
+        percentDiffEl.textContent = `${percentDiff.toFixed(1)}%`;
+        percentDiffEl.className = percentDiff <= 10 ? 'analysis-value fair' : 'analysis-value unfair';
+        
+        // Recommendation
+        const recommendationEl = document.getElementById('recommendation');
+        if (totals.total === 0) {
+            recommendationEl.textContent = 'Add items to analyze';
+            recommendationEl.className = 'analysis-value neutral';
+        } else if (percentDiff <= 5) {
+            recommendationEl.textContent = 'Accept trade';
+            recommendationEl.className = 'analysis-value fair';
+        } else if (percentDiff <= 15) {
+            recommendationEl.textContent = 'Negotiate slightly';
+            recommendationEl.className = 'analysis-value neutral';
+        } else if (totals.difference > 0) {
+            recommendationEl.textContent = 'Ask for more';
+            recommendationEl.className = 'analysis-value unfair';
+        } else {
+            recommendationEl.textContent = 'Great deal for you';
+            recommendationEl.className = 'analysis-value fair';
+        }
+        
+        // Risk level
+        const riskEl = document.getElementById('riskLevel');
+        if (totals.total === 0) {
+            riskEl.textContent = 'None';
+            riskEl.className = 'analysis-value neutral';
+        } else if (percentDiff <= 5) {
+            riskEl.textContent = 'Low';
+            riskEl.className = 'analysis-value fair';
+        } else if (percentDiff <= 15) {
+            riskEl.textContent = 'Medium';
+            riskEl.className = 'analysis-value neutral';
+        } else {
+            riskEl.textContent = 'High';
+            riskEl.className = 'analysis-value unfair';
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        `;
+        
+        // Set color based on type
+        switch (type) {
+            case 'success':
+                notification.style.background = 'var(--success)';
+                notification.style.color = 'white';
+                break;
+            case 'warning':
+                notification.style.background = 'var(--warning)';
+                notification.style.color = 'white';
+                break;
+            case 'error':
+                notification.style.background = 'var(--danger)';
+                notification.style.color = 'white';
+                break;
+            default:
+                notification.style.background = 'var(--surface-elevated)';
+                notification.style.color = 'var(--text-primary)';
+                notification.style.border = '1px solid var(--border)';
+        }
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+
+    showError(message) {
+        this.showNotification(message, 'error');
+    }
+}
+
+// Global functions for onclick handlers
+let calculator;
+
+function openItemPicker(side) {
+    calculator.openItemPicker(side);
+}
+
+function closeItemPicker() {
+    calculator.closeItemPicker();
+}
+
+function swapSides() {
+    calculator.swapSides();
+}
+
+function clearAll() {
+    calculator.clearAll();
+}
+
+// Initialize calculator when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    calculator = new AdvancedTradeCalculator();
+});

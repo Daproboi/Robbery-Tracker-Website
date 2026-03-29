@@ -1,0 +1,401 @@
+/**
+ * Additional styles for Advanced Trade Calculator
+ * These can be imported or linked separately for better organization
+ */
+
+/* Enhanced animations and transitions */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 102, 255, 0.6);
+    }
+}
+
+/* Notification styles */
+.notification {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.notification-success {
+    border-left: 4px solid var(--success);
+}
+
+.notification-warning {
+    border-left: 4px solid var(--warning);
+}
+
+.notification-error {
+    border-left: 4px solid var(--danger);
+}
+
+.notification-info {
+    border-left: 4px solid var(--accent);
+}
+
+/* Enhanced item card hover effects */
+.item-card {
+    animation: slideInUp 0.3s ease-out;
+}
+
+.item-card:hover {
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* Modal enhancements */
+.modal-content {
+    animation: slideInUp 0.3s ease-out;
+}
+
+/* Loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, var(--surface-elevated) 25%, var(--surface) 50%, var(--surface-elevated) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 480px) {
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+        gap: 12px !important;
+    }
+    
+    .item-card {
+        padding: 8px !important;
+    }
+    
+    .item-image {
+        height: 60px !important;
+    }
+    
+    .item-name {
+        font-size: 0.625rem !important;
+    }
+    
+    .item-value {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border: rgba(255, 255, 255, 0.2);
+        --border-hover: rgba(255, 255, 255, 0.4);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .modal-overlay,
+    .vs-indicator,
+    .add-item-btn,
+    .item-remove {
+        display: none !important;
+    }
+    
+    .trade-container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 40px !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #0a0b0f;
+        --bg-secondary: #131418;
+        --text-primary: #ffffff;
+    }
+}
+
+/* Light mode support */
+body.light-mode {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --surface: #ffffff;
+    --surface-elevated: #f8f9fa;
+    --border: rgba(0, 0, 0, 0.1);
+    --border-hover: rgba(0, 0, 0, 0.2);
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+}
+
+body.light-mode .modal-overlay {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+body.light-mode .loading-spinner {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-top-color: var(--accent);
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Custom scrollbar */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+/* Focus styles for accessibility */
+.modal-item-card:focus,
+.item-card:focus,
+.action-btn:focus,
+.add-item-btn:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Search highlighting */
+.search-highlight {
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+/* Value badges */
+.value-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--gradient-accent);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 5;
+}
+
+.value-badge.high {
+    background: var(--gradient-warning);
+}
+
+.value-badge.legendary {
+    background: var(--gradient-danger);
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+    border: 1px solid var(--border);
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+}
+
+/* Progress indicators */
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-secondary);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Status indicators */
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-indicator.online {
+    background: var(--success);
+    box-shadow: 0 0 10px var(--success-glow);
+}
+
+.status-indicator.offline {
+    background: var(--danger);
+    box-shadow: 0 0 10px var(--danger-glow);
+}
+
+.status-indicator.pending {
+    background: var(--warning);
+    box-shadow: 0 0 10px var(--warning-glow);
+}
+
+/* Enhanced button states */
+.action-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.add-item-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Card stack effect */
+.card-stack {
+    position: relative;
+}
+
+.card-stack::before,
+.card-stack::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    z-index: -1;
+}
+
+.card-stack::before {
+    transform: translate(2px, 2px);
+}
+
+.card-stack::after {
+    transform: translate(4px, 4px);
+}
+
+/* Micro-interactions */
+.micro-bounce {
+    animation: microBounce 0.3s ease;
+}
+
+@keyframes microBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Loading states */
+.loading-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Error states */
+.error-state {
+    border-color: var(--danger) !important;
+    background: rgba(255, 71, 87, 0.1) !important;
+}
+
+/* Success states */
+.success-state {
+    border-color: var(--success) !important;
+    background: rgba(0, 212, 170, 0.1) !important;
+}
+
+/* Warning states */
+.warning-state {
+    border-color: var(--warning) !important;
+    background: rgba(255, 179, 71, 0.1) !important;
+}
