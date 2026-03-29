@@ -95,8 +95,8 @@
                     adminLink.style.display = 'block';
                 }
                 
-                // Setup click handler for profile dropdown
-                setupProfileDropdown();
+                // Setup click handlers
+                setupNavbarHandlers();
                 
                 // Also update fixed profile button if it exists
                 updateFixedProfileButton(user);

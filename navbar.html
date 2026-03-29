@@ -187,7 +187,7 @@ body.light-mode .mobile-toggle { color: #000; }
         <div class="nav-actions">
             <!-- User Profile (shown when logged in) -->
             <div id="userProfile" style="display: none; position: relative;">
-                <div onclick="toggleUserMenu()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 100px; background: rgba(88, 101, 242, 0.15); border: 1px solid rgba(88, 101, 242, 0.3);">
+                <div id="userProfileBtn" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 100px; background: rgba(88, 101, 242, 0.15); border: 1px solid rgba(88, 101, 242, 0.3);">
                     <img id="userAvatar" src="" alt="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
                     <span id="userName" style="font-size: 0.8rem; font-weight: 700; color: #fff;"></span>
                     <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: #fff;"></i>
@@ -196,7 +196,7 @@ body.light-mode .mobile-toggle { color: #000; }
                     <a href="admin.html" id="adminLink" style="display: none; padding: 10px 14px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; font-weight: 700; border-radius: 8px; margin-bottom: 4px;">
                         <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Admin Panel
                     </a>
-                    <a href="#" onclick="logout()" style="display: block; padding: 10px 14px; color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: 700; border-radius: 8px;">
+                    <a href="#" id="logoutLink" style="display: block; padding: 10px 14px; color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: 700; border-radius: 8px;">
                         <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>Logout
                     </a>
                 </div>
@@ -211,99 +211,3 @@ body.light-mode .mobile-toggle { color: #000; }
         </div>
     </nav>
 </div>
-
-<script>
-    let currentUserData = null;
-    
-    // Toggle user menu dropdown
-    function toggleUserMenu() {
-        const menu = document.getElementById('userMenu');
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        const userProfile = document.getElementById('userProfile');
-        const menu = document.getElementById('userMenu');
-        if (userProfile && !userProfile.contains(e.target)) {
-            menu.style.display = 'none';
-        }
-    });
-    
-    // Logout function
-    function logout() {
-        localStorage.removeItem('sessionToken');
-        localStorage.removeItem('sessionTime');
-        window.location.href = '/login.html';
-    }
-    
-    // Check if user is logged in
-    async function checkLoginStatus() {
-        const sessionToken = localStorage.getItem('sessionToken');
-        const userProfile = document.getElementById('userProfile');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginNavItem = document.getElementById('loginNavItem');
-        
-        if (sessionToken) {
-            try {
-                // Verify session with server
-                const response = await fetch(`/api/check-session?token=${sessionToken}`);
-                const data = await response.json();
-                
-                if (data.valid) {
-                    currentUserData = data.user;
-                    // Show user profile
-                    if (userProfile) userProfile.style.display = 'block';
-                    if (loginBtn) loginBtn.style.display = 'none';
-                    if (loginNavItem) loginNavItem.style.display = 'none';
-                    
-                    // Set user data
-                    const userNameEl = document.getElementById('userName');
-                    const userAvatarEl = document.getElementById('userAvatar');
-                    
-                    if (userNameEl) userNameEl.textContent = data.user.username;
-                    if (userAvatarEl) {
-                        const avatarUrl = data.user.id ? 
-                            `https://cdn.discordapp.com/avatars/${data.user.id}.png` : 
-                            'https://cdn.discordapp.com/embed/avatars/0.png';
-                        userAvatarEl.src = avatarUrl;
-                        userAvatarEl.onerror = function() {
-                            this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
-                        };
-                    }
-                    
-                    // Show admin link if admin
-                    if (data.user.isAdmin) {
-                        const adminLink = document.getElementById('adminLink');
-                        if (adminLink) adminLink.style.display = 'block';
-                    }
-                } else {
-                    // Invalid session
-                    localStorage.removeItem('sessionToken');
-                    localStorage.removeItem('sessionTime');
-                    showLoginButtons();
-                }
-            } catch (err) {
-                console.error('Session check failed:', err);
-                showLoginButtons();
-            }
-        } else {
-            showLoginButtons();
-        }
-    }
-    
-    function showLoginButtons() {
-        const userProfile = document.getElementById('userProfile');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginNavItem = document.getElementById('loginNavItem');
-        
-        if (userProfile) userProfile.style.display = 'none';
-        if (loginBtn) loginBtn.style.display = 'inline-flex';
-        if (loginNavItem) loginNavItem.style.display = 'block';
-    }
-    
-    // Check login status on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        checkLoginStatus();
-    });
-</script>
