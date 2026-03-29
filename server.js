@@ -177,7 +177,7 @@ app.get('/api/users', async (req, res) => {
 };
 
 // Logout route
-app.get('/logout', (req, res) => {
+app.get('/logout', async (req, res) => {
     const { token } = req.query;
     
     if (token) {
