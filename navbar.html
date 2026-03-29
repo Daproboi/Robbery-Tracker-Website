@@ -146,7 +146,7 @@ body.light-mode .mobile-toggle { color: #000; }
 
 <div class="nav-pill-wrapper">
     <nav class="nav-pill">
-        <!-- Clickable Logo perfectly links to the Home Page! -->
+        <!-- Clickable Logo perfectly links to Home Page! -->
         <a href="index.html" class="nav-logo">JAILBREAK<span>HUB</span></a>
 
         <div class="nav-links" id="navLinks">
@@ -176,6 +176,12 @@ body.light-mode .mobile-toggle { color: #000; }
             <div class="nav-item"><a href="pity.html" class="nav-link">Pity Calc</a></div>
             <div class="nav-item"><a href="tracker.html" class="nav-link">Tracker</a></div>
             <div class="nav-item"><a href="changelogs.html" class="nav-link">Change Logs</a></div>
+            <div class="nav-item" id="loginNavItem" style="display: none;">
+                <a href="login.html" class="nav-link">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </a>
+            </div>
         </div>
 
         <div class="nav-actions">
@@ -185,3 +191,30 @@ body.light-mode .mobile-toggle { color: #000; }
         </div>
     </nav>
 </div>
+
+<script>
+    // Check if user is logged in
+    function checkLoginStatus() {
+        const user = localStorage.getItem('user');
+        const loginNavItem = document.getElementById('loginNavItem');
+        
+        if (user) {
+            const userData = JSON.parse(user);
+            // Hide login button for all logged in users
+            loginNavItem.style.display = 'none';
+        } else {
+            // Show login button for non-logged in users
+            loginNavItem.style.display = 'block';
+        }
+    }
+    
+    // Check login status on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    
+    // Update login status when user logs in/out
+    window.addEventListener('storage', function() {
+        checkLoginStatus();
+    });
+</script>
