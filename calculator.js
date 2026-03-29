@@ -253,6 +253,11 @@ class AdvancedTradeCalculator {
                 this.closeItemPicker();
             }
         });
+
+        // Prevent modal content clicks from closing modal
+        document.querySelector('.modal-content').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     }
 
     filterAndSortItems() {

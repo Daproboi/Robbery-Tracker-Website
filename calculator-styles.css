@@ -69,8 +69,13 @@
 }
 
 /* Modal enhancements */
-.modal-content {
+.modal-overlay {
     animation: slideInUp 0.3s ease-out;
+}
+
+.modal-content {
+    overflow-y: auto;
+    max-height: 90vh;
 }
 
 /* Loading skeleton */
