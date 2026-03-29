@@ -255,22 +255,33 @@
         // Check if user is logged in and is admin
         async function checkAdminAuth() {
             const sessionToken = localStorage.getItem('sessionToken');
+            console.log('Session token:', sessionToken);
             
             if (!sessionToken) {
+                console.log('No session token, redirecting to login');
                 window.location.href = '/login.html';
                 return;
             }
             
             try {
+                console.log('Checking session with server...');
                 const response = await fetch(`/api/check-session?token=${sessionToken}`);
                 const data = await response.json();
+                console.log('Server response:', data);
                 
-                if (!data.valid || !data.user.isAdmin) {
-                    // Redirect non-admin users or invalid sessions
+                if (!data.valid) {
+                    console.log('Invalid session, redirecting to login');
+                    window.location.href = '/login.html';
+                    return;
+                }
+                
+                if (!data.user.isAdmin) {
+                    console.log('Not admin, redirecting to index');
                     window.location.href = '/index.html';
                     return;
                 }
                 
+                console.log('Admin access granted');
                 // Display user info
                 document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
                 document.getElementById('userName').textContent = data.user.username;
