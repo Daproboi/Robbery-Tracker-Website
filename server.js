@@ -1,5 +1,5 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs').promises;
 const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
@@ -17,128 +17,57 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI || `http://localhost:${process.env.PORT || 3000}/auth/callback`;
 
-// SQLite Database (async)
-const db = new sqlite3.Database('./users.db');
+// Simple JSON Database
+const DB_FILE = './users.json';
 
-// Create users table
-db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-        discordId TEXT PRIMARY KEY,
-        username TEXT NOT NULL,
-        discriminator TEXT,
-        avatar TEXT,
-        isAdmin INTEGER DEFAULT 0,
-        loginTime TEXT,
-        lastLogin TEXT,
-        sessionToken TEXT
-    )
-`);
+async function loadUsers() {
+    try {
+        const data = await fs.readFile(DB_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return {};
+    }
+}
 
-// Database helpers (async)
+async function saveUsers(users) {
+    await fs.writeFile(DB_FILE, JSON.stringify(users, null, 2));
+}
+
+// Database helpers
 const User = {
     findOneAndUpdate: async (filter, update) => {
+        const users = await loadUsers();
         const { discordId } = filter;
-        return new Promise((resolve, reject) => {
-            db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, existing) => {
-                if (err) return reject(err);
-                
-                if (existing) {
-                    db.run(`
-                        UPDATE users SET 
-                            username = ?, 
-                            discriminator = ?, 
-                            avatar = ?, 
-                            isAdmin = ?, 
-                            loginTime = ?, 
-                            lastLogin = ?, 
-                            sessionToken = ? 
-                        WHERE discordId = ?
-                    `, [
-                        update.username || existing.username,
-                        update.discriminator || existing.discriminator,
-                        update.avatar || existing.avatar,
-                        update.isAdmin ? 1 : 0,
-                        update.loginTime || existing.loginTime,
-                        update.lastLogin || existing.lastLogin,
-                        update.sessionToken || existing.sessionToken,
-                        discordId
-                    ], (err) => {
-                        if (err) return reject(err);
-                        db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, row) => {
-                            if (err) return reject(err);
-                            resolve(row);
-                        });
-                    });
-                } else {
-                    db.run(`
-                        INSERT INTO users (discordId, username, discriminator, avatar, isAdmin, loginTime, lastLogin, sessionToken)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    `, [
-                        discordId,
-                        update.username,
-                        update.discriminator,
-                        update.avatar,
-                        update.isAdmin ? 1 : 0,
-                        update.loginTime,
-                        update.lastLogin,
-                        update.sessionToken
-                    ], (err) => {
-                        if (err) return reject(err);
-                        db.get('SELECT * FROM users WHERE discordId = ?', [discordId], (err, row) => {
-                            if (err) return reject(err);
-                            resolve(row);
-                        });
-                    });
-                }
-            });
-        });
+        
+        users[discordId] = {
+            ...users[discordId],
+            ...update,
+            discordId
+        };
+        
+        await saveUsers(users);
+        return users[discordId];
     },
     
     findOne: async (filter) => {
-        return new Promise((resolve, reject) => {
-            if (filter.sessionToken) {
-                db.get('SELECT * FROM users WHERE sessionToken = ?', [filter.sessionToken], (err, row) => {
-                    if (err) return reject(err);
-                    resolve(row);
-                });
-            } else if (filter.discordId) {
-                db.get('SELECT * FROM users WHERE discordId = ?', [filter.discordId], (err, row) => {
-                    if (err) return reject(err);
-                    resolve(row);
-                });
-            } else {
-                resolve(null);
-            }
-        });
+        const users = await loadUsers();
+        if (filter.sessionToken) {
+            return Object.values(users).find(u => u.sessionToken === filter.sessionToken) || null;
+        }
+        if (filter.discordId) {
+            return users[filter.discordId] || null;
+        }
+        return null;
     },
     
-    find: async (options = {}) => {
-        return new Promise((resolve, reject) => {
-            let query = 'SELECT * FROM users';
-            if (options.sort && options.sort.loginTime === -1) {
-                query += ' ORDER BY loginTime DESC';
-            }
-            db.all(query, [], (err, rows) => {
-                if (err) return reject(err);
-                resolve(rows);
-            });
-        });
+    find: async () => {
+        const users = await loadUsers();
+        return Object.values(users).sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
     },
     
-    countDocuments: async (filter = {}) => {
-        return new Promise((resolve, reject) => {
-            if (filter.loginTime && filter.loginTime.$gte) {
-                db.get('SELECT COUNT(*) as count FROM users WHERE loginTime >= ?', [filter.loginTime.$gte], (err, row) => {
-                    if (err) return reject(err);
-                    resolve(row.count);
-                });
-            } else {
-                db.get('SELECT COUNT(*) as count FROM users', [], (err, row) => {
-                    if (err) return reject(err);
-                    resolve(row.count);
-                });
-            }
-        });
+    countDocuments: async () => {
+        const users = await loadUsers();
+        return Object.keys(users).length;
     }
 };
 
@@ -193,7 +122,7 @@ app.get('/auth/callback', async (req, res) => {
         
         // Check if user is admin
         const ADMINS = (process.env.ADMIN_DISCORD_IDS || '').split(',').filter(id => id.trim());
-        console.log('Discord user ID:', userData.id, 'Type:', typeof userData.id);
+        console.log('Discord user ID:', userData.id);
         console.log('Admin list:', ADMINS);
         const isAdmin = ADMINS.includes(userData.id);
         console.log('Is admin:', isAdmin);
@@ -203,20 +132,19 @@ app.get('/auth/callback', async (req, res) => {
             discordId: userData.id,
             username: userData.username,
             discriminator: userData.discriminator,
-            avatar: userData.avatar || `https://cdn.discordapp.com/avatars/${userData.id}.png`,
+            avatar: userData.avatar ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`,
             isAdmin: isAdmin,
             loginTime: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
-            sessionToken: require('crypto').randomBytes(32).toString('hex')
+            sessionToken: crypto.randomBytes(32).toString('hex')
         };
         
         await User.findOneAndUpdate(
             { discordId: userData.id },
-            userSession,
-            { upsert: true, new: true }
+            userSession
         );
         
-        console.log(`User ${userData.username} (${isAdmin ? 'Admin' : 'Member'}) logged in at ${new Date()}`);
+        console.log(`User ${userData.username} (${isAdmin ? 'Admin' : 'Member'}) logged in`);
         
         // Redirect with session token
         const redirectUrl = isAdmin ? '/admin.html' : '/index.html';
@@ -268,8 +196,7 @@ app.get('/api/users', async (req, res) => {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
-        // Get all users from database
-        const users = await User.find({}).sort({ loginTime: -1 });
+        const users = await User.find();
         
         res.json({
             users: users.map(user => ({
@@ -288,48 +215,22 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// Logout route
-app.get('/logout', async (req, res) => {
-    const { token } = req.query;
-    
-    if (token) {
-        // Invalidate user session
-        const user = await User.findOne({ sessionToken: token });
-        if (user) {
-            db.run('UPDATE users SET sessionToken = NULL WHERE discordId = ?', [user.discordId]);
-        }
-    }
-    
-    res.redirect('/login.html');
-});
-
 // Statistics API
 app.get('/api/stats', async (req, res) => {
     try {
         const { token } = req.query;
         
-        // Verify admin session
         const adminUser = await User.findOne({ sessionToken: token });
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
-        const today = new Date().toISOString().split('T')[0];
-        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-        
         const totalUsers = await User.countDocuments();
-        const activeToday = await new Promise((resolve, reject) => {
-            db.get("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?", [today + 'T00:00:00'], (err, row) => {
-                if (err) return reject(err);
-                resolve(row.count);
-            });
-        });
-        const newThisWeek = await new Promise((resolve, reject) => {
-            db.get("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?", [weekAgo], (err, row) => {
-                if (err) return reject(err);
-                resolve(row.count);
-            });
-        });
+        const today = new Date().toISOString().split('T')[0];
+        const users = await User.find();
+        const activeToday = users.filter(u => u.loginTime && u.loginTime.startsWith(today)).length;
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const newThisWeek = users.filter(u => u.loginTime && u.loginTime >= weekAgo).length;
         
         res.json({
             totalUsers,
@@ -340,6 +241,22 @@ app.get('/api/stats', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
+});
+
+// Logout route
+app.get('/logout', async (req, res) => {
+    const { token } = req.query;
+    
+    if (token) {
+        const user = await User.findOne({ sessionToken: token });
+        if (user) {
+            const users = await loadUsers();
+            users[user.discordId].sessionToken = null;
+            await saveUsers(users);
+        }
+    }
+    
+    res.redirect('/login.html');
 });
 
 // Serve static files
@@ -359,5 +276,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Discord Client ID: ${CLIENT_ID}`);
-    console.log(`Database: SQLite (users.db)`);
+    console.log(`Database: JSON file (users.json)`);
 });
