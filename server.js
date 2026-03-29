@@ -15,7 +15,7 @@ require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI || `http://localhost:${process.env.PORT || 3000}/auth/callback`;
+const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
 
 // Simple JSON Database
 const DB_FILE = './users.json';
