@@ -128,16 +128,36 @@ app.get('/auth/callback', async (req, res) => {
         console.log('Is admin:', isAdmin);
         
         // Create or update user in database
+        const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        
         const userSession = {
             discordId: userData.id,
             username: userData.username,
             discriminator: userData.discriminator,
             avatar: userData.avatar ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`,
             isAdmin: isAdmin,
+            isBanned: false,
+            bannedIPs: [],
             loginTime: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
-            sessionToken: crypto.randomBytes(32).toString('hex')
+            sessionToken: crypto.randomBytes(32).toString('hex'),
+            lastIP: clientIP
         };
+        
+        // Check if user or IP is banned
+        const users = await loadUsers();
+        const existingUser = users[userData.id];
+        
+        // Check for IP ban
+        for (const [id, user] of Object.entries(users)) {
+            if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
+                return res.status(403).send('This IP address has been banned.');
+            }
+        }
+        
+        if (existingUser && existingUser.isBanned) {
+            return res.status(403).send('Your account has been banned.');
+        }
         
         await User.findOneAndUpdate(
             { discordId: userData.id },
@@ -169,6 +189,11 @@ app.get('/api/check-session', async (req, res) => {
         
         if (!user) {
             return res.status(401).json({ error: 'Invalid session' });
+        }
+        
+        // Check if user is banned
+        if (user.isBanned) {
+            return res.status(403).json({ error: 'Account banned', banned: true });
         }
         
         // Check if session is older than 1 day
@@ -221,6 +246,10 @@ app.get('/api/users', async (req, res) => {
                 username: user.username,
                 avatar: user.avatar,
                 isAdmin: Boolean(user.isAdmin),
+                isBanned: Boolean(user.isBanned),
+                banReason: user.banReason,
+                bannedAt: user.bannedAt,
+                lastIP: user.lastIP,
                 loginTime: user.loginTime,
                 lastLogin: user.lastLogin
             })),

@@ -216,6 +216,47 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
+        
+        .banned-badge {
+            background: #dc2626;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .ban-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ban-btn:hover {
+            background: #b91c1c;
+        }
+        
+        .unban-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .unban-btn:hover {
+            background: #059669;
+        }
     </style>
 </head>
 <body>
@@ -259,15 +300,17 @@
         </div>
         
         <div class="users-section">
-            <h2 class="section-title">Logged In Users</h2>
+            <h2 class="section-title">Users</h2>
             <table class="users-table">
                 <thead>
                     <tr>
-                        <th>User</th>
+                        <th>Avatar</th>
+                        <th>Username</th>
                         <th>Discord ID</th>
                         <th>Role</th>
-                        <th>Login Time</th>
+                        <th>Last Login</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
@@ -327,7 +370,8 @@
                 if (data.users && data.users.length > 0) {
                     data.users.forEach(user => {
                         const row = document.createElement('tr');
-                        const loginDate = user.loginTime ? new Date(user.loginTime).toLocaleString() : 'Unknown';
+                        const loginDate = user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Unknown';
+                        const banReason = user.banReason ? ` - ${user.banReason}` : '';
                         
                         row.innerHTML = `
                             <td>
@@ -342,13 +386,21 @@
                             </td>
                             <td>${loginDate}</td>
                             <td>
-                                <span class="regular-badge">Online</span>
+                                ${user.isBanned ? `<span class="banned-badge">BANNED${banReason}</span>` : '<span class="regular-badge">Active</span>'}
+                            </td>
+                            <td>
+                                ${!user.isAdmin ? `
+                                    ${user.isBanned ? 
+                                        `<button onclick="unbanUser('${user.discordId}')" class="unban-btn">Unban</button>` :
+                                        `<button onclick="banUser('${user.discordId}', '${user.lastIP || ''}')" class="ban-btn">Ban</button>`
+                                    }
+                                ` : '-'}
                             </td>
                         `;
                         tableBody.appendChild(row);
                     });
                 } else {
-                    tableBody.innerHTML = '<tr><td colspan="6">No users found</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="7">No users found</td></tr>';
                 }
             } catch (err) {
                 console.error('Failed to load admin data:', err);
@@ -359,6 +411,66 @@
             localStorage.removeItem('sessionToken');
             localStorage.removeItem('sessionTime');
             window.location.href = '/login.html';
+        }
+        
+        async function banUser(discordId, userIP) {
+            const sessionToken = localStorage.getItem('sessionToken');
+            const reason = prompt('Enter ban reason:');
+            if (!reason) return;
+            
+            const banIP = confirm('Also ban this user\'s IP address?');
+            
+            try {
+                const response = await fetch('/api/ban', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: sessionToken,
+                        discordId: discordId,
+                        reason: reason,
+                        banIP: banIP
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message);
+                    loadAdminData(); // Refresh the list
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error('Ban failed:', err);
+                alert('Failed to ban user');
+            }
+        }
+        
+        async function unbanUser(discordId) {
+            const sessionToken = localStorage.getItem('sessionToken');
+            
+            if (!confirm('Are you sure you want to unban this user?')) return;
+            
+            try {
+                const response = await fetch('/api/unban', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: sessionToken,
+                        discordId: discordId
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message);
+                    loadAdminData(); // Refresh the list
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (err) {
+                console.error('Unban failed:', err);
+                alert('Failed to unban user');
+            }
         }
         
         // Initialize admin panel

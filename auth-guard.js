@@ -34,6 +34,15 @@
             const response = await fetch(`/api/check-session?token=${sessionToken}`);
             const data = await response.json();
             
+            if (data.banned) {
+                // User is banned - clear session and redirect to login
+                localStorage.removeItem('sessionToken');
+                localStorage.removeItem('sessionTime');
+                alert('Your account has been banned. Contact support for assistance.');
+                window.location.href = '/login.html';
+                return;
+            }
+            
             if (!data.valid) {
                 console.log('Invalid session, redirecting to login');
                 localStorage.removeItem('sessionToken');
