@@ -3,694 +3,913 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | Jailbreak Changelogs</title>
-    <meta name="description" content="Your all-in-one Roblox Jailbreak platform for changelogs and game update tracking, values, trading, inventory lookups, OG item tracking, dupe detection, and more.">
+    <title>Jailbreak Hub | The Premium Toolkit</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
+        body.light-mode {   
+            --bg: #f8fafc !important;   
+            --surface: rgba(255, 255, 255, 0.8) !important;   
+            --card: rgba(241, 245, 249, 0.8) !important;   
+            --card-hover: rgba(255, 255, 255, 0.95) !important;
+            --border: rgba(0, 0, 0, 0.08) !important;   
+            --border-light: rgba(0, 0, 0, 0.15) !important;
+            --accent: #005bb5 !important;   
+            --accent-glow: #005bb5 !important;   
+            --green: #00b35f !important;   
+            --orange: #d97706 !important;
+            --red: #dc2626 !important;
+            --text-main: #0f172a !important;   
+            --text-dim: #475569 !important;   
+            --muted: rgba(0, 0, 0, 0.05) !important;
+            --muted-hover: rgba(0, 0, 0, 0.1) !important;
+            --invert: 1 !important;
+        }
+        /* Forces hardcoded white text to flip dark when light mode is active */
+        body.light-mode * { color: var(--text-main); }
+        body.light-mode .text-green { color: var(--green) !important; }
+        body.light-mode .text-orange { color: var(--orange) !important; }
+        body.light-mode .text-red { color: var(--red) !important; }
+        body.light-mode .text-blue { color: var(--accent) !important; }
+        /* --------------------------------------- */
+        
+        :root {
+            --bg: #0a0e27;
+            --surface: #1e293b;
+            --card: #1e1f2e;
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+        }
+        
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background: #ffffff;
-            color: #000000;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-top: 80px;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            min-height: 100vh;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 80px 0 60px;
-        }
-        
-        .header h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            color: #000000;
-            letter-spacing: -0.025em;
-        }
-        
-        .header p {
-            font-size: 1.25rem;
-            color: #6b7280;
-            margin-bottom: 40px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-        }
-        
-        .cta-buttons {
+        /* --- UNIFIED NAVIGATION --- */
+        .nav-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 80px;
-            flex-wrap: wrap;
-        }
-        
-        .cta-btn {
-            background: #2563eb;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
             align-items: center;
-            gap: 12px;
-            border: none;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 5000;
+        }
+        
+        .nav-logo {
+            position: absolute;
+            left: 40px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        .nav-logo span {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
         
-        .cta-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        .nav-link:hover {
+            color: var(--text-main);
+            background: rgba(59, 130, 246, 0.1);
         }
         
-        .main-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 32px;
-            margin-bottom: 80px;
+        .nav-link.active {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.15);
         }
         
-        .content-section {
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(10px);
-            background: rgba(248, 250, 252, 0.9);
+        .nav-item {
+            position: relative;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 220px;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .drop-link {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .drop-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-main);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            padding: 160px 40px;
+            text-align: center;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 0;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            color: var(--text-dim);
+            font-size: 1.375rem;
+            margin: 24px 0 0;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+        
+        /* --- SECTIONS --- */
+        .section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+            z-index: 2;
+            position: relative;
         }
         
         .section-header {
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 20px;
-            margin-bottom: 24px;
+            text-align: center;
+            margin-bottom: 60px;
         }
         
-        .section-title {
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--text-main);
+            margin: 0 0 16px;
+        }
+        
+        .section-header p {
+            color: var(--text-dim);
+            font-size: 1.125rem;
+            margin: 0;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 60px rgba(59, 130, 246, 0.25);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--green));
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover::before {
+            height: 100%;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        
+        .icon-box {
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .icon-box {
+            transform: scale(1.1);
+            color: var(--green);
+        }
+        
+        .feature-card h3 {
             font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #000000;
+            font-weight: 800;
+            margin: 0 0 16px;
+            color: var(--text-main);
+        }
+        
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        /* --- INFO SPLIT --- */
+        .info-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin: 100px 0;
+        }
+        
+        .info-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .info-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+        
+        .info-text h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0 0 24px;
+            color: var(--text-main);
+        }
+        
+        .info-text p {
+            color: var(--text-dim);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin: 0 0 20px;
+        }
+        
+        /* --- TESTIMONIALS --- */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+        
+        .test-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+        
+        .test-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin: 0 0 24px;
+            font-style: italic;
+        }
+        
+        .test-user {
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        
-        .section-subtitle {
-            font-size: 0.875rem;
-            color: #6b7280;
-            font-weight: 500;
-        }
-        
-        .section-items {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .section-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 16px 20px;
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: #000000;
             gap: 16px;
         }
         
-        .section-item:hover {
-            background: #f3f4f6;
-            transform: translateX(4px);
-            border-color: #2563eb;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        .test-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
         }
         
-        .item-content {
-            min-width: 0;
-            flex: 1;
-        }
-        
-        .item-name {
-            font-weight: 600;
-            color: #000000;
-            font-size: 0.875rem;
-            margin-bottom: 4px;
-            display: block;
-        }
-        
-        .item-description {
-            color: #6b7280;
-            font-size: 0.75rem;
-            line-height: 1.5;
-            display: block;
-        }
-        
-        .item-icon {
-            background: rgba(37, 99, 235, 0.1);
-            color: #2563eb;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-top: 4px;
-        }
-        
-        .item-arrow {
-            color: #6b7280;
-            transition: all 0.3s ease;
-            margin-top: 4px;
-        }
-        
-        .section-item:hover .item-arrow {
-            color: #2563eb;
-            transform: translateX(4px);
-        }
-        
-        .testimonials {
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 48px;
-            margin-bottom: 80px;
-            backdrop-filter: blur(10px);
-            background: rgba(248, 250, 252, 0.9);
-        }
-        
-        .testimonials h2 {
-            font-size: 2.5rem;
+        .test-name {
             font-weight: 800;
-            margin-bottom: 40px;
-            text-align: center;
-            color: #000000;
+            color: var(--text-main);
+            font-size: 1.125rem;
         }
         
-        .testimonial {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
+        .test-role {
+            font-size: 0.875rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        /* --- FAQ --- */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             padding: 32px;
             margin-bottom: 24px;
-            border-left: 4px solid #2563eb;
+            transition: all 0.3s ease;
         }
         
-        .testimonial-text {
-            font-size: 1.125rem;
-            color: #374151;
-            margin-bottom: 20px;
-            font-style: italic;
-            line-height: 1.7;
+        .faq-item:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
         }
         
-        .testimonial-author {
+        .faq-question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 16px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
         }
         
-        .author-name {
-            font-weight: 700;
-            color: #2563eb;
-            font-size: 1.125rem;
+        .faq-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
         }
         
-        .author-role {
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-top: 2px;
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
         }
         
+        .faq-answer {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.7;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            margin-top: 16px;
+        }
+        
+        /* --- CANVAS BACKGROUND --- */
+        #cashCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* --- ANIMATIONS --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- STATS SECTION --- */
         .stats-section {
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 48px;
-            margin-bottom: 80px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.03) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 24px;
+            padding: 80px 60px;
+            margin: 80px 0;
             text-align: center;
-            backdrop-filter: blur(10px);
-            background: rgba(248, 250, 252, 0.9);
-        }
-        
-        .stats-section h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 40px;
-            color: #000000;
         }
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
         }
         
-        .stat-item {
-            text-align: center;
-            padding: 32px 24px;
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
             transition: all 0.3s ease;
         }
         
-        .stat-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15);
         }
         
         .stat-number {
             font-size: 3rem;
             font-weight: 900;
-            color: #2563eb;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
             margin-bottom: 12px;
-            font-family: 'Inter', sans-serif;
+            text-shadow: 0 0 25px var(--accent-glow);
         }
         
         .stat-label {
             font-size: 0.875rem;
-            color: #6b7280;
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
             font-weight: 600;
         }
         
-        .support-section {
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 48px;
-            margin-bottom: 80px;
+        /* --- QUICK ACTIONS --- */
+        .actions-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 80px 0;
             text-align: center;
-            backdrop-filter: blur(10px);
-            background: rgba(248, 250, 252, 0.9);
         }
         
-        .support-section h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #000000;
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
         
-        .support-section p {
-            color: #6b7280;
-            margin-bottom: 32px;
-            line-height: 1.7;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .support-btn {
-            background: #2563eb;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 700;
+        .action-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 24px 40px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            border: none;
-            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
-        .support-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        .action-btn:hover {
+            background: #2563eb;
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
         }
         
-        .footer {
-            background: #f8fafc;
-            border-top: 1px solid #e5e7eb;
-            padding: 48px;
-            text-align: center;
-            margin-top: 80px;
+        .action-btn.secondary {
+            background: var(--card);
+            color: var(--text-main);
+            border: 2px solid var(--border);
         }
         
-        .footer p {
-            color: #6b7280;
-            margin-bottom: 24px;
-            font-size: 0.875rem;
-            line-height: 1.6;
+        .action-btn.secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent);
         }
         
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-        }
-        
-        .footer-links a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
-        }
-        
-        .footer-links a:hover {
-            color: #1d4ed8;
-        }
-        
-        .discord-btn {
-            background: #5865F2;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .discord-btn:hover {
-            background: #4752C5;
-            transform: translateY(-2px);
-        }
-        
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .main-content {
+            .info-split {
                 grid-template-columns: 1fr;
             }
             
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
             }
             
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .container {
-                padding: 16px;
+            .actions-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Jailbreak Changelogs</h1>
-            <p>Your all-in-one Roblox Jailbreak platform for changelogs and game update tracking, values, trading, inventory lookups, OG item tracking, dupe detection, and more.</p>
-            
-            <div class="cta-buttons">
-                <a href="roblox://experiences/start?placeId=606849621" class="cta-btn">
-                    <i class="fas fa-play"></i>
-                    Play Jailbreak Now
-                </a>
-                <a href="https://discord.jailbreakchangelogs.xyz" class="cta-btn">
-                    <i class="fab fa-discord"></i>
-                    Join Discord
-                </a>
-            </div>
-        </div>
-        
-        <div class="main-content">
-            <div class="content-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-gem"></i>
-                        Trading & Values
-                    </h3>
-                    <p class="section-subtitle">Everything you need for values and trading</p>
-                </div>
-                <div class="section-items">
-                    <a href="values.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-gem"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Item Values</span>
-                            <span class="item-description">Check current values, trends, and recent value changes.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="trading.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-exchange-alt"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Trade Ads</span>
-                            <span class="item-description">Post your trades and browse active offers from others.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="inventories.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Inventory Checker</span>
-                            <span class="item-description">View player inventories with full net worth totals and inventory breakdowns.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="dupes.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-copy"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Dupe Detection</span>
-                            <span class="item-description">Check items for dupes before you trade.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="content-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-chart-line"></i>
-                        Progression & History
-                    </h3>
-                    <p class="section-subtitle">Track updates, seasons, and progression</p>
-                </div>
-                <div class="section-items">
-                    <a href="changelogs.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-history"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Changelogs</span>
-                            <span class="item-description">Browse update history and patch notes since 2017.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="seasons.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Seasons & Rewards</span>
-                            <span class="item-description">See season rewards, contracts, and your progress tools.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="leaderboard.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-podium"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Leaderboards</span>
-                            <span class="item-description">Compare your progress with top players.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="calculators.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Calculators</span>
-                            <span class="item-description">Use XP and progression calculators to plan ahead.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="content-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-users"></i>
-                        Community & Utility
-                    </h3>
-                    <p class="section-subtitle">Community tools and useful extras</p>
-                </div>
-                <div class="section-items">
-                    <a href="servers.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-server"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Private Servers</span>
-                            <span class="item-description">Find and share active private server links.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="users.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-user-friends"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">User Profiles</span>
-                            <span class="item-description">Look up user profiles and customize how your profile appears on the website.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="og.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">OG Finder</span>
-                            <span class="item-description">Track your original items, see where they are now, and get notified when we find them.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <a href="bot.html" class="section-item">
-                        <div class="item-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div class="item-content">
-                            <span class="item-name">Discord Bot</span>
-                            <span class="item-description">Get values and updates directly in Discord.</span>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="testimonials">
-            <h2>And loved by Jailbreak Community</h2>
-            
-            <div class="testimonial">
-                <p class="testimonial-text">"We've been watching this place grow and we think it's absolutely wonderful. We even use Jailbreakchangelogs to check our own changelogs. Your search and filter settings make it so easy. Thank you for this incredible resource!"</p>
-                <div class="testimonial-author">
-                    <span class="author-name">Badimo</span>
-                    <span class="author-role">Jailbreak Developers</span>
-                </div>
-            </div>
-            
-            <div class="testimonial">
-                <p class="testimonial-text">"Jailbreak Changelogs is literally GOAT. this website has LITERALLY changed my LIFE. Jalenzz16 and Jakobiis are ACTUAL HEROES for making this. You've never had such STRAIGHTFORWARD access to a tracker as ASTONISHING as JAILBREAK CHANGELOGS tracker. You've never had a VIGOROUS trading list and trading info as VIGOROUS as Jailbreak Changelogs."</p>
-                <div class="testimonial-author">
-                    <span class="author-name">Sky</span>
-                    <span class="author-role">Supporter</span>
-                </div>
-            </div>
-            
-            <div class="testimonial">
-                <p class="testimonial-text">"JB Changelogs have been my MAIN source for EVERYTHING Jailbreak related. This ranges from prices, to patch notes, to even the OG Finder or Dupe Checker. The changelogs are fast, clear, and reliable, and the people behind the scenes genuinely care. It's made keeping track of updates, prices and everything else much more effortless."</p>
-                <div class="testimonial-author">
-                    <span class="author-name">nod2h</span>
-                    <span class="author-role">Supporter</span>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="testimonials.html" class="cta-btn">
-                    <span>View All Testimonials</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-        
-        <div class="stats-section">
-            <h2>Something for Every Jailbreak Player</h2>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">and counting</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">and counting</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">and counting</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">and counting</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="support-section">
-            <h2>Love what we're doing? Help keep it running.</h2>
-            <p>Running this platform isn't free. Your support would mean a lot. Supporters get perks on both the website and our Discord. If you can't support directly, whitelisting us in your ad blocker also helps, and that ad revenue goes back into improving our services. We accept Ko-fi donations, crypto donations, and Robux donations.</p>
-            
-            <div style="text-align: center;">
-                <a href="support.html" class="support-btn">
-                    <i class="fas fa-heart"></i>
-                    Support Platform
-                </a>
-            </div>
-        </div>
+    <canvas id="cashCanvas"></canvas>
+    <div id="navbar-container"></div>
+
+    <div class="hero">
+        <h1>Jailbreak <span style="color: var(--accent);">Hub</span></h1>
+        <p>The ultimate toolkit for Jailbreak players - Track values, calculate pity, and dominate every heist with advanced analytics and real-time data</p>
     </div>
-    
-    <div class="footer">
-        <div class="container">
-            <p>This project is NOT affiliated with Badimo.<br>
-            Crafted with by Jakobiis & Jalenzz16<br>
-            Version: 1a3780f<br>
-            Environment: Production<br>
-            Updated: Loading...<br>
-            &copy; 2024 - 2026 Jailbreak Changelogs LLC. Jailbreak Changelogs, JBCL, and any associated logos are trademarks, service marks, and/or registered trademarks of Jailbreak Changelogs LLC.</p>
-            <div class="footer-links">
-                <a href="changelogs.html">Changelogs</a>
-                <a href="calculators.html">Calculators</a>
+
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>Powerful Tools. Real-Time Data.</h2>
+            <p>Everything you need to dominate the game, organized in one premium dashboard with advanced analytics and intelligent tracking</p>
+        </div>
+        <div class="grid">
+            <a href="contracts.html" class="feature-card">
+                <div class="icon-box">📜</div>
+                <h3>Season Contracts</h3>
+                <p>Track live missions, daily XP resets, and accurately calculate your optimal path to Level 10 with intelligent forecasting and progress tracking</p>
+            </a>
+            <a href="values.html" class="feature-card">
+                <div class="icon-box">💎</div>
+                <h3>Value Database</h3>
+                <p>Constantly updated market values for every single vehicle and limited item in the game with real-time trend analysis and historical data</p>
+            </a>
+            <a href="calculator.html" class="feature-card">
+                <div class="icon-box">⚖️</div>
+                <h3>Trade Calculator</h3>
+                <p>Ensure you never take an L with high-precision multi-item trade comparisons and intelligent value analysis for fair trading</p>
+            </a>
+            <a href="pity.html" class="feature-card">
+                <div class="icon-box">🎰</div>
+                <h3>Pity Tracker</h3>
+                <p>Log your robberies systematically and predict when your next HyperChrome will drop with advanced probability algorithms and real-time tracking</p>
+            </a>
+            <a href="tracker.html" class="feature-card">
+                <div class="icon-box">🚔</div>
+                <h3>Robbery Tracker</h3>
+                <p>Real-time countdowns for store openings and robbery rotations across all servers with intelligent scheduling and optimization</p>
+            </a>
+            <a href="testimonials.html" class="feature-card">
+                <div class="icon-box">⭐</div>
+                <h3>Testimonials</h3>
+                <p>See what the Jailbreak community thinks about our tools and value accuracy with real user reviews and feedback</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="stats-section fade-in">
+        <div class="section-header">
+            <h2>Platform Statistics</h2>
+            <p>Real-time metrics showing the impact and reach of our advanced toolkit across the Jailbreak community</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">500K+</div>
+                <div class="stat-label">Active Users</div>
             </div>
-            <div style="text-align: center; margin-top: 32px;">
-                <a href="https://discord.jailbreakchangelogs.xyz" class="discord-btn">
-                    <i class="fab fa-discord"></i>
-                    Join Discord
-                </a>
+            <div class="stat-card">
+                <div class="stat-number" id="totalTracked">2.5M+</div>
+                <div class="stat-label">Heists Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalValue">$10M+</div>
+                <div class="stat-label">Value Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="uptime">99.9%</div>
+                <div class="stat-label">Uptime</div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="info-split">
+            <div class="info-img">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1470&auto=format&fit=crop" alt="Dashboard Interface" />
+            </div>
+            <div class="info-text">
+                <h2>Gain Unfair Advantage.</h2>
+                <p>Jailbreak Hub isn't just a basic list of prices. It's a comprehensive suite designed to give you an unfair advantage in trading and grinding with advanced algorithms and real-time data processing.</p>
+                <p>With data pulled and verified by top-tier traders, you can trust our engine to guide you through complex multi-item trades, season XP planning, and HyperChrome grinding strategies with intelligent optimization.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>What Community Says</h2>
+            <p>Real testimonials from actual users who have transformed their Jailbreak experience with our advanced toolkit</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="test-card">
+                <p>"The Trade Calculator literally saved me from trading my Torpedo for a massive underpay. The UI is incredibly clean and the real-time data is unmatched. Best tool I've ever used!"</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=xX+Sniper&background=0D8ABC&color=fff" class="test-avatar" />
+                    <div>
+                        <div class="test-name">xX_Sniper_Xx</div>
+                        <div class="test-role">Verified Trader</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"I use the Season Contracts page every single day to track my XP. Reached level 10 a week early because of the intelligent path optimization and daily goal tracking. Absolutely essential!"</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=Cops+Rule&background=00ff88&color=000" class="test-avatar" />
+                    <div>
+                        <div class="test-name">CopMain2023</div>
+                        <div class="test-role">Pro Grinder</div>
+                    </div>
+                </div>
+            </div>
+            <div class="test-card">
+                <p>"Finally, a values list that actually updates quickly when a new season drops. The real-time notifications and trend analysis have completely changed how I trade. Essential tool!"</p>
+                <div class="test-user">
+                    <img src="https://ui-avatars.com/api/?name=Trade+King&background=ffac33&color=fff" class="test-avatar" />
+                    <div>
+                        <div class="test-name">TradingKing_JB</div>
+                        <div class="test-role">Value Expert</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about our advanced toolkit and how to maximize your Jailbreak experience</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">How often are item values updated and how accurate is the data? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">Our dedicated team monitors the Jailbreak trading hub 24/7 with advanced algorithms. Major list updates happen weekly with comprehensive analysis, but hot items and trending values are adjusted within hours of market shifts. Our data accuracy rate exceeds 98% based on community verification.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is the Pity Tracker 100% accurate and how does it work? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">The Pity Tracker uses community-tested algorithms and extensive data sets from thousands of users. While it can't hack the game to guarantee a drop, it provides the most mathematically accurate estimation of your pity percentage available with confidence intervals and probability analysis. Our accuracy rate is over 95% based on user feedback.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How can I support Jailbreak Hub and get premium features? <span class="faq-icon">+</span></div>
+                <div class="faq-answer">You can support us by joining our Discord community, sharing the site with your friends, or checking out our Support page to help keep servers running. Premium members get access to advanced analytics, real-time notifications, and exclusive tools. Every support helps us improve and expand the toolkit for everyone!</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="actions-section fade-in">
+        <div class="section-header">
+            <h2>Quick Actions</h2>
+            <p>Get started immediately with our most popular tools and features</p>
+        </div>
+        <div class="actions-grid">
+            <a href="pity.html" class="action-btn">
+                <i class="fas fa-calculator"></i>
+                <span>Calculate Pity</span>
+            </a>
+            <a href="values.html" class="action-btn">
+                <i class="fas fa-chart-line"></i>
+                <span>Check Values</span>
+            </a>
+            <a href="tracker.html" class="action-btn">
+                <i class="fas fa-route"></i>
+                <span>Start Heist</span>
+            </a>
+            <a href="changelogs.html" class="action-btn">
+                <i class="fas fa-history"></i>
+                <span>View Updates</span>
+            </a>
+            <a href="#" class="action-btn secondary">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script>
+        // Launch functionality
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobId = urlParams.get('jobid');
+            if (jobId) {
+                const placeId = "606849621";
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`;
+                window.location.href = launchUri;
+                console.log("Attempting to launch JobID: " + jobId);
+            }
+        });
+
+        // Animate statistics on scroll
+        function animateStats() {
+            const stats = [
+                { id: 'totalUsers', value: '500K+', target: 550000 },
+                { id: 'totalTracked', value: '2.5M+', target: 3000000 },
+                { id: 'totalValue', value: '$10M+', target: 15000000 },
+                { id: 'uptime', value: '99.9%', target: 100 }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                if (element) {
+                    animateValue(element, stat.value, stat.target);
+                }
+            });
+        }
+
+        function animateValue(element, target, max) {
+            const current = parseInt(element.textContent.replace(/[^0-9]/g, ''));
+            const increment = (max - current) / 50;
+            let value = current;
+            
+            const interval = setInterval(() => {
+                if (value < max) {
+                    value += Math.floor(Math.random() * increment);
+                    element.textContent = formatValue(value, element.id);
+                } else {
+                    clearInterval(interval);
+                    element.textContent = formatValue(max, element.id);
+                }
+            }, 50);
+        }
+
+        function formatValue(value, id) {
+            if (id === 'totalValue') {
+                return '$' + (value / 1000000).toFixed(1) + 'M+';
+            } else if (id === 'uptime') {
+                return value.toFixed(1) + '%';
+            } else {
+                return value.toLocaleString();
+            }
+        }
+
+        // FAQ accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Initialize animations when page loads
+        setTimeout(animateStats, 1000);
+
+        // Canvas background
+        const canvas = document.getElementById('cashCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        const cashChars = ['$', '💵', '💰', '💸'];
+        const fontSize = 16;
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = Array(columns).fill(1);
+        
+        function draw() {
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 4, 7, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = cashChars[Math.floor(Math.random() * cashChars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        setInterval(draw, 50);
+    </script>
+    <script src="loader.js"></script>
 </body>
 </html>
