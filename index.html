@@ -477,6 +477,38 @@ function draw() {
   }
 }
 setInterval(draw, 50);
+
+// Check login status after navbar loads
+window.addEventListener('load', function() {
+    setTimeout(async function() {
+        const sessionToken = localStorage.getItem('sessionToken');
+        if (sessionToken) {
+            try {
+                const response = await fetch(`/api/check-session?token=${sessionToken}`);
+                const data = await response.json();
+                if (data.valid) {
+                    // Update navbar if it exists
+                    const userProfile = document.getElementById('userProfile');
+                    const loginBtn = document.getElementById('loginBtn');
+                    const loginNavItem = document.getElementById('loginNavItem');
+                    if (userProfile) {
+                        userProfile.style.display = 'block';
+                        if (loginBtn) loginBtn.style.display = 'none';
+                        if (loginNavItem) loginNavItem.style.display = 'none';
+                        document.getElementById('userName').textContent = data.user.username;
+                        document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                        if (data.user.isAdmin) {
+                            const adminLink = document.getElementById('adminLink');
+                            if (adminLink) adminLink.style.display = 'block';
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Login check failed:', err);
+            }
+        }
+    }, 500);
+});
 </script>
     <script src="loader.js"></script>
 </body>
