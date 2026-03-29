@@ -426,6 +426,23 @@ footer {
   </div>
 </section>
 <div id="footer-container"></div>
+
+<!-- User Profile Button (Fixed Position) -->
+<div id="userProfileFixed" style="display: none; position: fixed; top: 80px; right: 20px; z-index: 10000;">
+    <div onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border-radius: 100px; background: rgba(88, 101, 242, 0.9); border: 1px solid rgba(88, 101, 242, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <img id="userAvatarFixed" src="" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
+        <span id="userNameFixed" style="font-size: 0.9rem; font-weight: 700; color: #fff;"></span>
+        <i class="fas fa-chevron-down" style="font-size: 0.8rem; color: #fff;"></i>
+    </div>
+    <div id="profileMenuFixed" style="display: none; position: absolute; top: 55px; right: 0; background: rgba(10, 14, 23, 0.98); border: 1px solid rgba(88, 101, 242, 0.5); border-radius: 12px; padding: 12px; min-width: 180px; box-shadow: 0 10px 40px rgba(0,0,0,0.9);">
+        <a href="admin.html" id="adminLinkFixed" style="display: none; padding: 12px 16px; color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 700; border-radius: 8px; margin-bottom: 6px; background: rgba(59, 130, 246, 0.3);">
+            <i class="fas fa-shield-alt" style="margin-right: 10px;"></i>Admin Panel
+        </a>
+        <a href="#" onclick="logoutFixed()" style="display: block; padding: 12px 16px; color: #ef4444; text-decoration: none; font-size: 0.9rem; font-weight: 700; border-radius: 8px;">
+            <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i>Logout
+        </a>
+    </div>
+</div>
 <script>
 
 let currentUsers = 1402;
@@ -478,37 +495,52 @@ function draw() {
 }
 setInterval(draw, 50);
 
-// Check login status after navbar loads
-window.addEventListener('load', function() {
-    setTimeout(async function() {
-        const sessionToken = localStorage.getItem('sessionToken');
-        if (sessionToken) {
-            try {
-                const response = await fetch(`/api/check-session?token=${sessionToken}`);
-                const data = await response.json();
-                if (data.valid) {
-                    // Update navbar if it exists
-                    const userProfile = document.getElementById('userProfile');
-                    const loginBtn = document.getElementById('loginBtn');
-                    const loginNavItem = document.getElementById('loginNavItem');
-                    if (userProfile) {
-                        userProfile.style.display = 'block';
-                        if (loginBtn) loginBtn.style.display = 'none';
-                        if (loginNavItem) loginNavItem.style.display = 'none';
-                        document.getElementById('userName').textContent = data.user.username;
-                        document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
-                        if (data.user.isAdmin) {
-                            const adminLink = document.getElementById('adminLink');
-                            if (adminLink) adminLink.style.display = 'block';
-                        }
-                    }
-                }
-            } catch (err) {
-                console.error('Login check failed:', err);
-            }
-        }
-    }, 500);
+// Fixed profile button functions
+function toggleProfileMenu() {
+    const menu = document.getElementById('profileMenuFixed');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+function logoutFixed() {
+    localStorage.removeItem('sessionToken');
+    window.location.href = '/login.html';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+    const profile = document.getElementById('userProfileFixed');
+    const menu = document.getElementById('profileMenuFixed');
+    if (profile && !profile.contains(e.target)) {
+        menu.style.display = 'none';
+    }
 });
+
+// Check login status and show profile button
+async function checkLoginAndShowProfile() {
+    const sessionToken = localStorage.getItem('sessionToken');
+    if (sessionToken) {
+        try {
+            const response = await fetch(`/api/check-session?token=${sessionToken}`);
+            const data = await response.json();
+            if (data.valid) {
+                // Show fixed profile button
+                document.getElementById('userProfileFixed').style.display = 'block';
+                document.getElementById('userNameFixed').textContent = data.user.username;
+                document.getElementById('userAvatarFixed').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                
+                // Show admin link only for admins
+                if (data.user.isAdmin) {
+                    document.getElementById('adminLinkFixed').style.display = 'block';
+                }
+            }
+        } catch (err) {
+            console.error('Login check failed:', err);
+        }
+    }
+}
+
+// Run on page load
+window.addEventListener('load', checkLoginAndShowProfile);
 </script>
     <script src="loader.js"></script>
 </body>
