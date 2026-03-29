@@ -314,38 +314,21 @@
 
         <div class="dashboard-section">
             <div class="dashboard-title">Chrome <span style="color: var(--accent);">Market Values</span></div>
-            <div class="dashboard-subtitle">Estimated values for clean (non-duped) Hyperchromes based on current trade demand.</div>
+            <div class="dashboard-subtitle">Live values from current trade data and market analysis</div>
             
-            <div class="dashboard-grid">
-                <div class="val-card">
-                    <h4>Level 5 Shift</h4>
-                    <div class="price" id="valShift">Loading...</div>
-                    <div class="trend" id="trendShift"></div>
-                </div>
-                <div class="val-card">
-                    <h4>Level 5 Diamond</h4>
-                    <div class="price" id="valDiamond">Loading...</div>
-                    <div class="trend" id="trendDiamond"></div>
-                </div>
-                <div class="val-card">
-                    <h4>Level 5 Red</h4>
-                    <div class="price" id="valRed">Loading...</div>
-                    <div class="trend" id="trendRed"></div>
-                </div>
-                <div class="val-card">
-                    <h4>Level 1 (Any)</h4>
-                    <div class="price" id="valLvl1">Loading...</div>
-                    <div class="trend" id="trendLvl1"></div>
-                </div>
+            <div class="dashboard-grid" id="valuesGrid">
+                <!-- Values will be loaded dynamically from API -->
             </div>
         </div>
 
-        <div class="dev-note">
-            <div class="dev-note-title">
-                <i class="fas fa-code"></i>
-                Engine v2.0
+        <div class="info-section">
+            <div class="info-title">
+                <i class="fas fa-server"></i>
+                API Integration
             </div>
-            <p>Our engine now accounts for <strong>CURVE_K (1.01)</strong> exponential factor. If you are Level 8, you need approximately 3,450 XP for Level 10. Visit Seasons tab for full day-by-day breakdown.</p>
+            <div class="info-content">
+                <p>Real-time HyperChrome values loaded from our market analysis API. Data updates automatically with current trading trends and values.</p>
+            </div>
         </div>
     </div>
 
