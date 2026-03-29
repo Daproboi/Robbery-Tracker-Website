@@ -11,8 +11,60 @@ class AdvancedPityCalculator {
         this.lastDropDate = null;
         this.dropRate = 1.0; // Default 1% drop rate
         this.sessionHistory = [];
-        this.baseDropRate = 0.01; // 1% base chance
-        this.pityIncrement = 0.005; // 0.5% increase per 50 robberies without drop
+        
+        // Actual Jailbreak pity system data
+        this.pityLevels = [
+            { level: 1, robberies: 0, chance: 0.01 },      // 1% at start
+            { level: 2, robberies: 50, chance: 0.02 },     // 2% at 50
+            { level: 3, robberies: 100, chance: 0.03 },    // 3% at 100
+            { level: 4, robberies: 150, chance: 0.04 },     // 4% at 150
+            { level: 5, robberies: 200, chance: 0.05 },     // 5% at 200
+            { level: 6, robberies: 250, chance: 0.06 },     // 6% at 250
+            { level: 7, robberies: 300, chance: 0.07 },     // 7% at 300
+            { level: 8, robberies: 350, chance: 0.08 },     // 8% at 350
+            { level: 9, robberies: 400, chance: 0.09 },     // 9% at 400
+            { level: 10, robberies: 450, chance: 0.10 },     // 10% at 450
+            { level: 11, robberies: 500, chance: 0.11 },     // 11% at 500
+            { level: 12, robberies: 550, chance: 0.12 },     // 12% at 550
+            { level: 13, robberies: 600, chance: 0.13 },     // 13% at 600
+            { level: 14, robberies: 650, chance: 0.14 },     // 14% at 650
+            { level: 15, robberies: 700, chance: 0.15 },     // 15% at 700
+            { level: 16, robberies: 750, chance: 0.16 },     // 16% at 750
+            { level: 17, robberies: 800, chance: 0.17 },     // 17% at 800
+            { level: 18, robberies: 850, chance: 0.18 },     // 18% at 850
+            { level: 19, robberies: 900, chance: 0.19 },     // 19% at 900
+            { level: 20, robberies: 950, chance: 0.20 },     // 20% at 950
+            { level: 21, robberies: 1000, chance: 0.21 },    // 21% at 1000
+            { level: 22, robberies: 1100, chance: 0.22 },    // 22% at 1100
+            { level: 23, robberies: 1200, chance: 0.23 },    // 23% at 1200
+            { level: 24, robberies: 1300, chance: 0.24 },    // 24% at 1300
+            { level: 25, robberies: 1400, chance: 0.25 },    // 25% at 1400
+            { level: 26, robberies: 1500, chance: 0.26 },    // 26% at 1500
+            { level: 27, robberies: 1600, chance: 0.27 },    // 27% at 1600
+            { level: 28, robberies: 1700, chance: 0.28 },    // 28% at 1700
+            { level: 29, robberies: 1800, chance: 0.29 },    // 29% at 1800
+            { level: 30, robberies: 1900, chance: 0.30 },    // 30% at 1900
+            { level: 31, robberies: 2000, chance: 0.31 },    // 31% at 2000
+            { level: 32, robberies: 2100, chance: 0.32 },    // 32% at 2100
+            { level: 33, robberies: 2200, chance: 0.33 },    // 33% at 2200
+            { level: 34, robberies: 2300, chance: 0.34 },    // 34% at 2300
+            { level: 35, robberies: 2400, chance: 0.35 },    // 35% at 2400
+            { level: 36, robberies: 2500, chance: 0.36 },    // 36% at 2500
+            { level: 37, robberies: 2600, chance: 0.37 },    // 37% at 2600
+            { level: 38, robberies: 2700, chance: 0.38 },    // 38% at 2700
+            { level: 39, robberies: 2800, chance: 0.39 },    // 39% at 2800
+            { level: 40, robberies: 2900, chance: 0.40 },    // 40% at 2900
+            { level: 41, robberies: 3000, chance: 0.41 },    // 41% at 3000
+            { level: 42, robberies: 3100, chance: 0.42 },    // 42% at 3100
+            { level: 43, robberies: 3200, chance: 0.43 },    // 43% at 3200
+            { level: 44, robberies: 3300, chance: 0.44 },    // 44% at 3300
+            { level: 45, robberies: 3400, chance: 0.45 },    // 45% at 3400
+            { level: 46, robberies: 3500, chance: 0.46 },    // 46% at 3500
+            { level: 47, robberies: 3600, chance: 0.47 },    // 47% at 3600
+            { level: 48, robberies: 3700, chance: 0.48 },    // 48% at 3700
+            { level: 49, robberies: 3800, chance: 0.49 },    // 49% at 3800
+            { level: 50, robberies: 3900, chance: 0.50 }     // 50% at 3900
+        ];
         
         this.init();
     }
@@ -153,42 +205,56 @@ class AdvancedPityCalculator {
         return Math.max(0, this.totalRobberies - (daysSinceDrop * 10)); // Assume 10 robberies/day avg
     }
 
-    calculateDropChance(pity) {
-        // Advanced pity system with increasing probability
-        let chance = this.baseDropRate;
+    getCurrentPityLevel() {
+        const currentPity = this.calculateCurrentPity();
         
-        // Add pity bonus
-        if (pity > 50) {
-            chance += this.pityIncrement * Math.floor(pity / 50);
+        // Find the current pity level
+        for (let i = this.pityLevels.length - 1; i >= 0; i--) {
+            if (currentPity >= this.pityLevels[i].robberies) {
+                return this.pityLevels[i];
+            }
         }
         
-        // Cap at reasonable maximum (25%)
-        chance = Math.min(chance, 0.25);
+        return this.pityLevels[0]; // Default to level 1
+    }
+
+    calculateDropChance(pity) {
+        const currentLevel = this.getCurrentPityLevel();
+        let baseChance = currentLevel.chance;
         
         // Apply user's personal drop rate modifier
-        chance *= (this.dropRate / 100);
+        baseChance *= (this.dropRate / 100);
         
-        return chance;
+        return Math.min(baseChance, 0.50); // Cap at 50%
     }
 
     calculateEstimatedRobberies(dropChance) {
         if (dropChance <= 0) return 999;
         
-        // Use negative binomial distribution for more accurate estimation
-        const expectedValue = 1 / dropChance;
-        const variance = (1 - dropChance) / (dropChance * dropChance);
-        const standardDeviation = Math.sqrt(variance);
+        const currentPity = this.calculateCurrentPity();
+        const currentLevel = this.getCurrentPityLevel();
         
-        // Return 95% confidence interval
-        return Math.ceil(expectedValue + (1.96 * standardDeviation));
+        // Find next level or calculate based on current chance
+        for (let i = 0; i < this.pityLevels.length; i++) {
+            if (this.pityLevels[i].robberies > currentPity) {
+                const nextLevel = this.pityLevels[i];
+                return nextLevel.robberies - currentPity;
+            }
+        }
+        
+        // If at max level, use probability
+        const expectedValue = 1 / dropChance;
+        return Math.ceil(expectedValue);
     }
 
     calculateConfidence(pity) {
-        if (pity < 25) return 'Very Low';
-        if (pity < 50) return 'Low';
-        if (pity < 100) return 'Medium';
-        if (pity < 200) return 'High';
-        if (pity < 300) return 'Very High';
+        const currentLevel = this.getCurrentPityLevel();
+        
+        if (currentLevel.level <= 5) return 'Very Low';
+        if (currentLevel.level <= 10) return 'Low';
+        if (currentLevel.level <= 20) return 'Medium';
+        if (currentLevel.level <= 35) return 'High';
+        if (currentLevel.level <= 45) return 'Very High';
         return 'Extremely High';
     }
 
@@ -275,31 +341,56 @@ class AdvancedPityCalculator {
         const progressBar = document.getElementById('progressBar');
         const progressPercentage = document.getElementById('progressPercentage');
         
-        // Calculate progress percentage (capped at 300 for display)
-        const cappedPity = Math.min(currentPity, 300);
-        const percentage = (cappedPity / 300) * 100;
+        // Get current level info
+        const currentLevel = this.getCurrentPityLevel();
+        
+        // Calculate progress within current level
+        const previousLevelRobberies = currentLevel.robberies;
+        const nextLevelIndex = this.pityLevels.findIndex(level => level.level === currentLevel.level) + 1;
+        const nextLevelRobberies = nextLevelIndex < this.pityLevels.length ? 
+            this.pityLevels[nextLevelIndex].robberies : 
+            this.pityLevels[this.pityLevels.length - 1].robberies;
+        
+        const progressWithinLevel = currentPity - previousLevelRobberies;
+        const levelRange = nextLevelRobberies - previousLevelRobberies;
+        const percentage = levelRange > 0 ? (progressWithinLevel / levelRange) * 100 : 100;
         
         progressBar.style.width = `${percentage}%`;
-        progressPercentage.textContent = `${percentage.toFixed(0)}%`;
+        progressPercentage.textContent = `${percentage.toFixed(1)}%`;
         
-        // Update milestones
+        // Update milestones to show key pity levels
         this.updateMilestones(currentPity);
     }
 
     updateMilestones(currentPity) {
-        const milestones = [0, 50, 100, 200, 300];
+        // Key milestones from the actual pity system
+        const keyMilestones = [
+            { robberies: 0, label: 'Start' },
+            { robberies: 100, label: '3%' },
+            { robberies: 500, label: '11%' },
+            { robberies: 1000, label: '21%' },
+            { robberies: 2000, label: '31%' },
+            { robberies: 3900, label: '50%' }
+        ];
         
-        milestones.forEach(robberies => {
-            const milestoneEl = document.querySelector(`[data-robberies="${robberies}"] .milestone-dot`);
-            const isCompleted = currentPity >= robberies;
-            const isCurrent = currentPity >= robberies && currentPity < (milestones[milestones.indexOf(robberies) + 1] || 999);
-            
-            milestoneEl.className = 'milestone-dot';
-            if (isCompleted) {
-                milestoneEl.classList.add('completed');
-            }
-            if (isCurrent) {
-                milestoneEl.classList.add('current');
+        keyMilestones.forEach((milestone, index) => {
+            const milestoneEl = document.querySelector(`[data-robberies="${milestone.robberies}"]`);
+            if (milestoneEl) {
+                const dot = milestoneEl.querySelector('.milestone-dot');
+                const labelEl = milestoneEl.querySelector('.milestone-label');
+                const valueEl = milestoneEl.querySelector('.milestone-value');
+                
+                dot.className = 'milestone-dot';
+                if (currentPity >= milestone.robberies) {
+                    dot.classList.add('completed');
+                }
+                if (currentPity >= milestone.robberies && 
+                    (index === keyMilestones.length - 1 || currentPity < keyMilestones[index + 1].robberies)) {
+                    dot.classList.add('current');
+                }
+                
+                labelEl.textContent = milestone.label;
+                valueEl.textContent = milestone.robberies;
             }
         });
     }
