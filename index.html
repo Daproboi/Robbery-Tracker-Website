@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | The All-in-One Platform</title>
+    <title>Home | Jailbreak Changelogs</title>
     <meta name="description" content="Your all-in-one Roblox Jailbreak platform for changelogs and game update tracking, values, trading, inventory lookups, OG item tracking, dupe detection, and more.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -82,67 +82,65 @@
             box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
         }
         
-        .features {
+        .main-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-bottom: 60px;
         }
         
-        .feature-card {
+        .content-section {
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 12px;
             padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: #ffffff;
         }
         
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff88;
-            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.2);
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #00ff88;
-        }
-        
-        .feature-title {
+        .section-title {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: #00ff88;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .section-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
             color: #ffffff;
         }
         
-        .feature-description {
-            font-size: 1rem;
-            color: #b0b0b0;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .section-item:hover {
+            background: #333333;
+            transform: translateX(5px);
         }
         
-        .feature-link {
-            background: #2a2a2a;
-            color: #00ff88;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+        .item-name {
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            color: #ffffff;
         }
         
-        .feature-link:hover {
-            background: #00ff88;
-            color: #000000;
+        .item-arrow {
+            color: #00ff88;
+            transition: all 0.3s ease;
+        }
+        
+        .section-item:hover .item-arrow {
+            transform: translateX(5px);
         }
         
         .testimonials {
@@ -194,8 +192,8 @@
             font-size: 0.9rem;
         }
         
-        .stats {
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+        .stats-section {
+            background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 12px;
             padding: 40px;
@@ -203,7 +201,7 @@
             text-align: center;
         }
         
-        .stats h2 {
+        .stats-section h2 {
             font-size: 2rem;
             font-weight: 800;
             margin-bottom: 30px;
@@ -218,6 +216,15 @@
         
         .stat-item {
             text-align: center;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.2);
         }
         
         .stat-number {
@@ -280,8 +287,49 @@
             transform: translateY(-2px);
         }
         
+        .support-section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .support-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        .support-section p {
+            color: #b0b0b0;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .support-btn {
+            background: #00ff88;
+            color: #000000;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .support-btn:hover {
+            background: #00d4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+        }
+        
         @media (max-width: 768px) {
-            .features {
+            .main-content {
                 grid-template-columns: 1fr;
             }
             
@@ -309,63 +357,90 @@
                 </a>
                 <a href="https://discord.jailbreakchangelogs.xyz" class="cta-btn">
                     <i class="fab fa-discord"></i>
-                    Join the Discord
+                    Join Discord
                 </a>
             </div>
         </div>
         
-        <div class="features">
-            <a href="values.html" class="feature-card">
-                <div class="feature-icon">
+        <div class="main-content">
+            <div class="content-section">
+                <h3 class="section-title">
                     <i class="fas fa-gem"></i>
+                    Trading & Values
+                </h3>
+                <div class="section-items">
+                    <a href="values.html" class="section-item">
+                        <span class="item-name">Item Values</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="trading.html" class="section-item">
+                        <span class="item-name">Trade Ads</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="inventories.html" class="section-item">
+                        <span class="item-name">Inventory Checker</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="dupes.html" class="section-item">
+                        <span class="item-name">Dupe Detection</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
                 </div>
-                <h3 class="feature-title">Item Values</h3>
-                <p class="feature-description">Check current trading values and market trends for all Jailbreak items with real-time updates</p>
-                <div class="feature-link">
-                    <span>Check Values</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+            </div>
             
-            <a href="trading.html" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-exchange-alt"></i>
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Progression & History
+                </h3>
+                <div class="section-items">
+                    <a href="changelogs.html" class="section-item">
+                        <span class="item-name">Changelogs</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="seasons.html" class="section-item">
+                        <span class="item-name">Seasons & Rewards</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="leaderboard.html" class="section-item">
+                        <span class="item-name">Leaderboards</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="calculators.html" class="section-item">
+                        <span class="item-name">Calculators</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
                 </div>
-                <h3 class="feature-title">Trade Ads</h3>
-                <p class="feature-description">Post and browse trade offers from the Jailbreak community with advanced filtering</p>
-                <div class="feature-link">
-                    <span>Browse Trades</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+            </div>
             
-            <a href="inventories.html" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-box"></i>
+            <div class="content-section">
+                <h3 class="section-title">
+                    <i class="fas fa-users"></i>
+                    Community & Utility
+                </h3>
+                <div class="section-items">
+                    <a href="servers.html" class="section-item">
+                        <span class="item-name">Private Servers</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="users.html" class="section-item">
+                        <span class="item-name">User Profiles</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="og.html" class="section-item">
+                        <span class="item-name">OG Finder</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <a href="bot.html" class="section-item">
+                        <span class="item-name">Discord Bot</span>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
                 </div>
-                <h3 class="feature-title">Inventory Checker</h3>
-                <p class="feature-description">View networth breakdowns and analyze your complete inventory value</p>
-                <div class="feature-link">
-                    <span>Check Inventory</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
-            
-            <a href="dupes.html" class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-copy"></i>
-                </div>
-                <h3 class="feature-title">Dupe Finder</h3>
-                <p class="feature-description">Check for duplicated items and verify authenticity with advanced detection</p>
-                <div class="feature-link">
-                    <span>Find Dupes</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-            </a>
+            </div>
         </div>
         
         <div class="testimonials">
-            <h2>And loved by the Jailbreak Community</h2>
+            <h2>And loved by Jailbreak Community</h2>
             
             <div class="testimonial">
                 <p class="testimonial-text">"We've been watching this place grow and we think it's absolutely wonderful. We even use Jailbreakchangelogs to check our own changelogs. Your search and filter settings make it so easy. Thank you for this incredible resource!"</p>
@@ -376,7 +451,7 @@
             </div>
             
             <div class="testimonial">
-                <p class="testimonial-text">"Jailbreak Changelogs is literally the GOAT. This website has LITERALLY changed my LIFE. Jalenzz16 and Jakobiis are ACTUAL HEROES for making this. You've never had such STRAIGHTFORWARD access to a tracker as ASTONISHING as the JAILBREAK CHANGELOGS tracker."</p>
+                <p class="testimonial-text">"Jailbreak Changelogs is literally GOAT. This website has LITERALLY changed my LIFE. Jalenzz16 and Jakobiis are ACTUAL HEROES for making this. You've never had such STRAIGHTFORWARD access to a tracker as ASTONISHING as JAILBREAK CHANGELOGS tracker."</p>
                 <div class="testimonial-author">
                     <span class="author-name">Sky</span>
                     <span class="author-role">Supporter</span>
@@ -384,7 +459,7 @@
             </div>
             
             <div class="testimonial">
-                <p class="testimonial-text">"JB Changelogs have been my MAIN source for EVERYTHING Jailbreak related. This ranges from prices, to patch notes, to even the OG Finder or the Dupe Checker. The changelogs are fast, clear, and reliable, and the people behind the scenes genuinely care."</p>
+                <p class="testimonial-text">"JB Changelogs have been my MAIN source for EVERYTHING Jailbreak related. This ranges from prices, to patch notes, to even OG Finder or Dupe Checker. The changelogs are fast, clear, and reliable, and people behind the scenes genuinely care."</p>
                 <div class="testimonial-author">
                     <span class="author-name">nod2h</span>
                     <span class="author-role">Supporter</span>
@@ -392,14 +467,14 @@
             </div>
             
             <div style="text-align: center; margin: 40px 0;">
-                <a href="testimonials.html" class="feature-link" style="display: inline-flex;">
+                <a href="testimonials.html" class="cta-btn">
                     <span>View All Testimonials</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
         
-        <div class="stats">
+        <div class="stats-section">
             <h2>Something for Every Jailbreak Player</h2>
             
             <div class="stats-grid">
@@ -422,14 +497,14 @@
             </div>
         </div>
         
-        <div class="stats">
-            <h2>Trading & Values + Progression & History + Community & Utility</h2>
-            <p style="text-align: center; color: #b0b0b0; margin-bottom: 30px;">Love what we're doing? Help keep it running.</p>
+        <div class="support-section">
+            <h2>Love what we're doing? Help keep it running.</h2>
+            <p>Running this platform isn't free. Your support would mean a lot. Supporters get perks on both the website and our Discord. If you can't support directly, whitelisting us in your ad blocker also helps, and that ad revenue goes back into improving our services.</p>
             
             <div style="text-align: center;">
-                <a href="https://x.com/badimo/status/1983975178733543491" target="_blank" class="feature-link" style="display: inline-flex; justify-content: center;">
-                    <span>Trusted by Badimo</span>
-                    <i class="fab fa-x-twitter"></i>
+                <a href="support.html" class="support-btn">
+                    <i class="fas fa-heart"></i>
+                    Support Platform
                 </a>
             </div>
         </div>
@@ -437,13 +512,11 @@
     
     <div class="footer">
         <div class="container">
-            <p>&copy; 2024 Jailbreak Hub. All rights reserved.</p>
+            <p>&copy; 2024 - 2026 Jailbreak Changelogs LLC. Jailbreak Changelogs, JBCL, and any associated logos are trademarks, service marks, and/or registered trademarks of Jailbreak Changelogs LLC.</p>
             <div class="footer-links">
                 <a href="index.html">Home</a>
-                <a href="values.html">Values</a>
-                <a href="pity.html">Pity Calculator</a>
-                <a href="tracker.html">Tracker</a>
                 <a href="changelogs.html">Changelogs</a>
+                <a href="calculators.html">Calculators</a>
             </div>
             <div style="text-align: center; margin-top: 30px;">
                 <a href="https://discord.jailbreakchangelogs.xyz" class="discord-btn">
