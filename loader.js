@@ -107,6 +107,13 @@ document.addEventListener("DOMContentLoaded", async function() {
                 }
             });
 
+            // Run login status check after navbar loads
+            setTimeout(() => {
+                if (typeof checkLoginStatus === 'function') {
+                    checkLoginStatus();
+                }
+            }, 100);
+
             // --- THE NATIVE VIEW TRANSITION API (Flawless Wave in BOTH directions!) ---
             const themeBtn = document.getElementById('themeBtn');
             if (themeBtn) {
