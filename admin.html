@@ -103,6 +103,28 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .back-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
         }
         
         .logout-btn:hover {
@@ -210,6 +232,10 @@
             <i class="fas fa-sign-out-alt"></i>
             Logout
         </button>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-home"></i>
+            Back to Site
+        </a>
     </div>
     
     <div class="admin-content">

@@ -186,9 +186,20 @@ body.light-mode .mobile-toggle { color: #000; }
 
         <div class="nav-actions">
             <!-- User Profile (shown when logged in) -->
-            <div id="userProfile" style="display: none; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 100px; background: rgba(88, 101, 242, 0.15); border: 1px solid rgba(88, 101, 242, 0.3);">
-                <img id="userAvatar" src="" alt="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
-                <span id="userName" style="font-size: 0.8rem; font-weight: 700; color: #fff;"></span>
+            <div id="userProfile" style="display: none; position: relative;">
+                <div onclick="toggleUserMenu()" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 100px; background: rgba(88, 101, 242, 0.15); border: 1px solid rgba(88, 101, 242, 0.3);">
+                    <img id="userAvatar" src="" alt="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                    <span id="userName" style="font-size: 0.8rem; font-weight: 700; color: #fff;"></span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: #fff;"></i>
+                </div>
+                <div id="userMenu" style="display: none; position: absolute; top: 45px; right: 0; background: rgba(10, 14, 23, 0.95); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 12px; padding: 10px; min-width: 150px; box-shadow: 0 20px 50px rgba(0,0,0,0.9); backdrop-filter: blur(25px); z-index: 1000;">
+                    <a href="admin.html" id="adminLink" style="display: none; padding: 10px 14px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; font-weight: 700; border-radius: 8px; margin-bottom: 4px;">
+                        <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Admin Panel
+                    </a>
+                    <a href="#" onclick="logout()" style="display: block; padding: 10px 14px; color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: 700; border-radius: 8px;">
+                        <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>Logout
+                    </a>
+                </div>
             </div>
             <!-- Login Button (shown when not logged in) -->
             <a href="login.html" id="loginBtn" style="display: none; text-decoration: none; color: #fff; font-size: 0.8rem; font-weight: 700; padding: 8px 16px; border-radius: 100px; background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.4);">
@@ -202,6 +213,29 @@ body.light-mode .mobile-toggle { color: #000; }
 </div>
 
 <script>
+    let currentUserData = null;
+    
+    // Toggle user menu dropdown
+    function toggleUserMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const userProfile = document.getElementById('userProfile');
+        const menu = document.getElementById('userMenu');
+        if (userProfile && !userProfile.contains(e.target)) {
+            menu.style.display = 'none';
+        }
+    });
+    
+    // Logout function
+    function logout() {
+        localStorage.removeItem('sessionToken');
+        window.location.href = '/login.html';
+    }
+    
     // Check if user is logged in
     async function checkLoginStatus() {
         const sessionToken = localStorage.getItem('sessionToken');
@@ -216,8 +250,9 @@ body.light-mode .mobile-toggle { color: #000; }
                 const data = await response.json();
                 
                 if (data.valid) {
+                    currentUserData = data.user;
                     // Show user profile
-                    userProfile.style.display = 'flex';
+                    userProfile.style.display = 'block';
                     loginBtn.style.display = 'none';
                     loginNavItem.style.display = 'none';
                     
@@ -225,12 +260,10 @@ body.light-mode .mobile-toggle { color: #000; }
                     document.getElementById('userName').textContent = data.user.username;
                     document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
                     
-                    // Click profile to go to admin if admin
-                    userProfile.onclick = () => {
-                        if (data.user.isAdmin) {
-                            window.location.href = '/admin.html';
-                        }
-                    };
+                    // Show admin link if admin
+                    if (data.user.isAdmin) {
+                        document.getElementById('adminLink').style.display = 'block';
+                    }
                 } else {
                     // Invalid session
                     localStorage.removeItem('sessionToken');
