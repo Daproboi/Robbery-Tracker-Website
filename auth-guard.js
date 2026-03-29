@@ -88,6 +88,9 @@
                     adminLink.style.display = 'block';
                 }
                 
+                // Setup click handler for profile dropdown
+                setupProfileDropdown();
+                
                 // Also update fixed profile button if it exists
                 updateFixedProfileButton(user);
             } else {
@@ -96,6 +99,38 @@
             }
         }, 500);
     }
+    
+    // Setup profile dropdown click handlers
+    function setupProfileDropdown() {
+        const userProfile = document.getElementById('userProfile');
+        const userMenu = document.getElementById('userMenu');
+        
+        if (userProfile && userMenu) {
+            // Remove existing handlers to avoid duplicates
+            userProfile.onclick = null;
+            
+            // Add click handler
+            userProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = userMenu.style.display === 'none' || !userMenu.style.display;
+                userMenu.style.display = isHidden ? 'block' : 'none';
+            });
+            
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!userProfile.contains(e.target)) {
+                    userMenu.style.display = 'none';
+                }
+            });
+        }
+    }
+    
+    // Global logout function
+    window.logout = function() {
+        localStorage.removeItem('sessionToken');
+        localStorage.removeItem('sessionTime');
+        window.location.href = '/login.html';
+    };
     
     // Update fixed profile button (fallback for pages without navbar)
     function updateFixedProfileButton(user) {
