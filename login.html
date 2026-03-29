@@ -162,107 +162,39 @@
         // Discord OAuth Configuration
         const CLIENT_ID = '1487705589210550282';
         const REDIRECT_URI = encodeURIComponent(window.location.origin + '/auth/callback');
-        const SCOPE = 'identify%20email%20guilds';
-        
-        // Mock user database (in real implementation, this would be server-side)
-        const ADMINS = ['1487705589210550282', 'plugtm']; // Discord user IDs of admins
+        const SCOPE = 'identify';
         
         function loginWithDiscord() {
             const authUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}`;
             window.location.href = authUrl;
         }
         
-        // Handle OAuth callback
-        function handleAuthCallback() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            
-            if (code) {
-                document.getElementById('loading').style.display = 'block';
-                
-                // Exchange code for access token
-                fetch('https://discord.com/api/oauth2/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        client_id: CLIENT_ID,
-                        client_secret: 'YOUR_CLIENT_SECRET', // You'll need to replace this
-                        grant_type: 'authorization_code',
-                        code: code,
-                        redirect_uri: window.location.origin + '/auth/callback',
-                        scope: SCOPE,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.access_token) {
-                        // Get user info
-                        return fetch('https://discord.com/api/users/@me', {
-                            headers: {
-                                'Authorization': `Bearer ${data.access_token}`,
-                            },
-                        });
-                    }
-                })
-                .then(response => response.json())
-                .then(user => {
-                    if (user.id) {
-                        // Check if user is admin
-                        const isAdmin = ADMINS.includes(user.id);
-                        
-                        // Store user session
-                        localStorage.setItem('user', JSON.stringify({
-                            id: user.id,
-                            username: user.username,
-                            discriminator: user.discriminator,
-                            avatar: user.avatar,
-                            isAdmin: isAdmin,
-                            loginTime: new Date().toISOString()
-                        }));
-                        
+        // Check if user is already logged in (session check via server)
+        async function checkLoginStatus() {
+            const sessionToken = localStorage.getItem('sessionToken');
+            if (sessionToken) {
+                try {
+                    const response = await fetch(`/api/check-session?token=${sessionToken}`);
+                    const data = await response.json();
+                    if (data.valid) {
                         // Redirect based on user role
-                        if (isAdmin) {
+                        if (data.user.isAdmin) {
                             window.location.href = '/admin.html';
                         } else {
                             window.location.href = '/index.html';
                         }
+                    } else {
+                        localStorage.removeItem('sessionToken');
                     }
-                })
-                .catch(error => {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('error').style.display = 'block';
-                    document.getElementById('error-message').textContent = 'Authentication failed. Please try again.';
-                });
-            }
-        }
-        
-        // Check if user is already logged in
-        function checkLoginStatus() {
-            const user = localStorage.getItem('user');
-            if (user) {
-                const userData = JSON.parse(user);
-                // Redirect based on stored user role
-                if (userData.isAdmin) {
-                    window.location.href = '/admin.html';
-                } else {
-                    window.location.href = '/index.html';
+                } catch (err) {
+                    console.error('Session check failed:', err);
                 }
-            } else {
-                // Show login page
-                document.querySelector('.login-container').style.display = 'block';
             }
         }
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if this is auth callback
-            if (window.location.pathname === '/auth/callback') {
-                handleAuthCallback();
-            } else {
-                checkLoginStatus();
-            }
+            checkLoginStatus();
         });
     </script>
 </body>

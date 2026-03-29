@@ -15,7 +15,7 @@ require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = 'https://yourdomain.com/auth/callback';
+const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/auth/callback';
 
 // Database Schema
 const userSchema = new mongoose.Schema({
@@ -80,7 +80,7 @@ app.get('/auth/callback', async (req, res) => {
         }
         
         // Check if user is admin
-        const ADMINS = ['1487705589210550282', 'plugtm'];
+        const ADMINS = (process.env.ADMIN_DISCORD_IDS || '').split(',').filter(id => id.trim());
         const isAdmin = ADMINS.includes(userData.id);
         
         // Create or update user in database
@@ -103,12 +103,9 @@ app.get('/auth/callback', async (req, res) => {
         
         console.log(`User ${userData.username} (${isAdmin ? 'Admin' : 'Member'}) logged in at ${new Date()}`);
         
-        // Redirect based on user role
-        if (isAdmin) {
-            res.redirect('/admin.html');
-        } else {
-            res.redirect('/index.html');
-        }
+        // Redirect with session token
+        const redirectUrl = isAdmin ? '/admin.html' : '/index.html';
+        res.redirect(`${redirectUrl}?session=${userSession.sessionToken}`);
         
     } catch (error) {
         console.error('Authentication error:', error);
@@ -173,8 +170,8 @@ app.get('/api/users', async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
-
-};
+    }
+});
 
 // Logout route
 app.get('/logout', async (req, res) => {
