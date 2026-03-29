@@ -255,43 +255,44 @@
         // Check if user is logged in and is admin
         async function checkAdminAuth() {
             const sessionToken = localStorage.getItem('sessionToken');
-            console.log('Session token:', sessionToken);
+            document.body.innerHTML = '<div id="debug" style="padding: 20px; font-family: monospace;">Checking auth...</div>' + document.body.innerHTML;
+            const debug = document.getElementById('debug');
+            
+            debug.innerHTML += '<br>Session token: ' + (sessionToken ? 'found' : 'NOT FOUND');
             
             if (!sessionToken) {
-                console.log('No session token, redirecting to login');
-                window.location.href = '/login.html';
+                debug.innerHTML += '<br>No session - redirecting to login...';
+                setTimeout(() => window.location.href = '/login.html', 2000);
                 return;
             }
             
             try {
-                console.log('Checking session with server...');
+                debug.innerHTML += '<br>Checking with server...';
                 const response = await fetch(`/api/check-session?token=${sessionToken}`);
                 const data = await response.json();
-                console.log('Server response:', data);
+                debug.innerHTML += '<br>Server says: ' + JSON.stringify(data);
                 
                 if (!data.valid) {
-                    console.log('Invalid session, redirecting to login');
-                    window.location.href = '/login.html';
+                    debug.innerHTML += '<br>Invalid session - redirecting...';
+                    setTimeout(() => window.location.href = '/login.html', 2000);
                     return;
                 }
                 
                 if (!data.user.isAdmin) {
-                    console.log('Not admin, redirecting to index');
-                    window.location.href = '/index.html';
+                    debug.innerHTML += '<br>Not admin - redirecting to index...';
+                    setTimeout(() => window.location.href = '/index.html', 2000);
                     return;
                 }
                 
-                console.log('Admin access granted');
-                // Display user info
+                debug.innerHTML += '<br><b>Access granted! Loading admin panel...</b>';
                 document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
                 document.getElementById('userName').textContent = data.user.username;
                 document.getElementById('userRole').textContent = 'Administrator';
-                
-                // Load admin data
                 loadAdminData();
+                
             } catch (err) {
-                console.error('Auth check failed:', err);
-                window.location.href = '/login.html';
+                debug.innerHTML += '<br>Error: ' + err.message;
+                setTimeout(() => window.location.href = '/login.html', 2000);
             }
         }
         
