@@ -154,11 +154,11 @@
     <script>
         // Discord OAuth Configuration
         const CLIENT_ID = '1487705589210550282';
-        const REDIRECT_URI = encodeURIComponent('https://jailbreakhub.onrender.com/auth/callback');
+        const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
         const SCOPE = 'identify';
         
         function loginWithDiscord() {
-            const authUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}`;
+            const authUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${SCOPE}`;
             window.location.href = authUrl;
         }
         
