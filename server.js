@@ -222,7 +222,7 @@ app.get('/api/check-session', (req, res) => {
 });
 
 // Admin API routes
-app.get('/api/users', async (req, res) => {
+app.get('/api/users', (req, res) => {
     try {
         const { token } = req.query;
         
@@ -232,7 +232,7 @@ app.get('/api/users', async (req, res) => {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
-        // Get all users
+        // Get all users from database
         const users = User.find({}).sort({ loginTime: -1 });
         
         res.json({

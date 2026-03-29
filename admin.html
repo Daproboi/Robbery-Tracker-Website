@@ -255,103 +255,78 @@
         // Check if user is logged in and is admin
         async function checkAdminAuth() {
             const sessionToken = localStorage.getItem('sessionToken');
-            document.body.innerHTML = '<div id="debug" style="padding: 20px; font-family: monospace;">Checking auth...</div>' + document.body.innerHTML;
-            const debug = document.getElementById('debug');
-            
-            debug.innerHTML += '<br>Session token: ' + (sessionToken ? 'found' : 'NOT FOUND');
             
             if (!sessionToken) {
-                debug.innerHTML += '<br>No session - redirecting to login...';
-                setTimeout(() => window.location.href = '/login.html', 2000);
+                window.location.href = '/login.html';
                 return;
             }
             
             try {
-                debug.innerHTML += '<br>Checking with server...';
                 const response = await fetch(`/api/check-session?token=${sessionToken}`);
                 const data = await response.json();
-                debug.innerHTML += '<br>Server says: ' + JSON.stringify(data);
                 
-                if (!data.valid) {
-                    debug.innerHTML += '<br>Invalid session - redirecting...';
-                    setTimeout(() => window.location.href = '/login.html', 2000);
+                if (!data.valid || !data.user.isAdmin) {
+                    window.location.href = '/index.html';
                     return;
                 }
                 
-                if (!data.user.isAdmin) {
-                    debug.innerHTML += '<br>Not admin - redirecting to index...';
-                    setTimeout(() => window.location.href = '/index.html', 2000);
-                    return;
-                }
-                
-                debug.innerHTML += '<br><b>Access granted! Loading admin panel...</b>';
                 document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
                 document.getElementById('userName').textContent = data.user.username;
                 document.getElementById('userRole').textContent = 'Administrator';
                 loadAdminData();
                 
             } catch (err) {
-                debug.innerHTML += '<br>Error: ' + err.message;
-                setTimeout(() => window.location.href = '/login.html', 2000);
+                window.location.href = '/login.html';
             }
         }
         
-        function loadAdminData() {
-            // In real implementation, this would fetch from your backend
-            // For demo purposes, we'll use mock data
+        async function loadAdminData() {
+            const sessionToken = localStorage.getItem('sessionToken');
             
-            // Mock statistics
-            document.getElementById('totalUsers').textContent = '1,247';
-            document.getElementById('activeUsers').textContent = '89';
-            document.getElementById('newUsers').textContent = '156';
-            document.getElementById('totalLogins').textContent = '15,432';
-            
-            // Mock users table
-            const mockUsers = [
-                {
-                    username: 'daproboi',
-                    discordId: 'daproboi_id',
-                    role: 'Super Admin',
-                    loginTime: '2024-03-28 10:30:00',
-                    status: 'Online'
-                },
-                {
-                    username: 'plugtm',
-                    discordId: 'plugtm_id', 
-                    role: 'Admin',
-                    loginTime: '2024-03-28 09:15:00',
-                    status: 'Online'
-                },
-                {
-                    username: 'purpledino1780',
-                    discordId: 'purpledino1780_id',
-                    role: 'Member',
-                    loginTime: '2024-03-28 08:45:00',
-                    status: 'Online'
+            try {
+                // Fetch real statistics
+                const statsRes = await fetch(`/api/stats?token=${sessionToken}`);
+                const stats = await statsRes.json();
+                document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+                document.getElementById('activeUsers').textContent = stats.activeToday || 0;
+                document.getElementById('newUsers').textContent = stats.newThisWeek || 0;
+                
+                // Fetch real users
+                const usersRes = await fetch(`/api/users?token=${sessionToken}`);
+                const data = await usersRes.json();
+                
+                const tableBody = document.getElementById('usersTableBody');
+                tableBody.innerHTML = '';
+                
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
+                        const row = document.createElement('tr');
+                        const loginDate = user.loginTime ? new Date(user.loginTime).toLocaleString() : 'Unknown';
+                        
+                        row.innerHTML = `
+                            <td>
+                                <img src="${user.avatar || `https://cdn.discordapp.com/avatars/${user.discordId}.png`}" 
+                                     style="width: 30px; height: 30px; border-radius: 50%;"
+                                     onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+                            </td>
+                            <td>${user.username}</td>
+                            <td>${user.discordId}</td>
+                            <td>
+                                <span class="${user.isAdmin ? 'admin-badge' : 'regular-badge'}">${user.isAdmin ? 'Admin' : 'Member'}</span>
+                            </td>
+                            <td>${loginDate}</td>
+                            <td>
+                                <span class="regular-badge">Online</span>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6">No users found</td></tr>';
                 }
-            ];
-            
-            const tableBody = document.getElementById('usersTableBody');
-            mockUsers.forEach(user => {
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td>
-                        <img src="https://cdn.discordapp.com/avatars/${user.discordId}.png" style="width: 30px; height: 30px; border-radius: 50%;">
-                    </td>
-                    <td>${user.username}</td>
-                    <td>${user.discordId}</td>
-                    <td>
-                        <span class="admin-badge">${user.role}</span>
-                    </td>
-                    <td>${user.loginTime}</td>
-                    <td>
-                        <span class="regular-badge">${user.status}</span>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
+            } catch (err) {
+                console.error('Failed to load admin data:', err);
+            }
         }
         
         function logout() {
