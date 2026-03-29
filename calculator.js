@@ -19,17 +19,45 @@ class AdvancedTradeCalculator {
 
     async init() {
         try {
+            // Show loading state
+            this.showLoadingState();
             await this.loadItems();
             this.setupEventListeners();
             this.updateUI();
+            this.hideLoadingState();
         } catch (error) {
             console.error('Failed to initialize calculator:', error);
+            this.hideLoadingState();
             this.showError('Failed to load item database. Please refresh the page.');
+        }
+    }
+
+    showLoadingState() {
+        const modalItemsGrid = document.getElementById('modalItemsGrid');
+        if (modalItemsGrid) {
+            modalItemsGrid.innerHTML = `
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading item database...</p>
+                </div>
+            `;
+        }
+    }
+
+    hideLoadingState() {
+        const modalItemsGrid = document.getElementById('modalItemsGrid');
+        if (modalItemsGrid && this.filteredItems.length > 0) {
+            this.renderModalItems();
         }
     }
 
     async loadItems() {
         try {
+            // Initialize the API first
+            if (typeof init === 'function') {
+                await init();
+            }
+            
             // Wait for API to load items
             if (typeof db === 'undefined') {
                 await new Promise(resolve => {
@@ -39,7 +67,17 @@ class AdvancedTradeCalculator {
                             resolve();
                         }
                     }, 100);
+                    // Timeout after 10 seconds
+                    setTimeout(() => {
+                        clearInterval(checkDb);
+                        resolve();
+                    }, 10000);
                 });
+            }
+
+            // Check if db is available
+            if (typeof db === 'undefined') {
+                throw new Error('Item database not available');
             }
 
             // Flatten all items from all categories
@@ -54,6 +92,7 @@ class AdvancedTradeCalculator {
                 });
             }
 
+            console.log(`Loaded ${this.allItems.length} items from ${Object.keys(db).length} categories`);
             this.populateCategoryFilter();
             this.filteredItems = [...this.allItems];
             
