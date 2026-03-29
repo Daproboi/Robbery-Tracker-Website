@@ -517,30 +517,50 @@ document.addEventListener('click', function(e) {
 
 // Check login status and show profile button
 async function checkLoginAndShowProfile() {
+    console.log('Checking login status...');
     const sessionToken = localStorage.getItem('sessionToken');
+    console.log('Session token:', sessionToken ? 'found' : 'not found');
+    
     if (sessionToken) {
         try {
             const response = await fetch(`/api/check-session?token=${sessionToken}`);
             const data = await response.json();
+            console.log('Session check response:', data);
+            
             if (data.valid) {
                 // Show fixed profile button
-                document.getElementById('userProfileFixed').style.display = 'block';
+                const profileDiv = document.getElementById('userProfileFixed');
+                profileDiv.style.display = 'block';
                 document.getElementById('userNameFixed').textContent = data.user.username;
                 document.getElementById('userAvatarFixed').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                console.log('Profile button shown for:', data.user.username);
                 
                 // Show admin link only for admins
                 if (data.user.isAdmin) {
                     document.getElementById('adminLinkFixed').style.display = 'block';
+                    console.log('Admin link shown');
                 }
+            } else {
+                console.log('Session invalid');
+                localStorage.removeItem('sessionToken');
             }
         } catch (err) {
             console.error('Login check failed:', err);
         }
+    } else {
+        console.log('No session token, showing login button');
+        // Show login button if not logged in
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) loginBtn.style.display = 'inline-flex';
     }
 }
 
-// Run on page load
-window.addEventListener('load', checkLoginAndShowProfile);
+// Run immediately when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkLoginAndShowProfile);
+} else {
+    checkLoginAndShowProfile();
+}
 </script>
     <script src="loader.js"></script>
 </body>
