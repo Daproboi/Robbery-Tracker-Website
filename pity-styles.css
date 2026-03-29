@@ -1,0 +1,539 @@
+/**
+ * Additional styles for Advanced Pity Calculator
+ * Professional animations and responsive design
+ */
+
+/* Notification system */
+.notification {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #00d4aa 0%, #00ff88 100%);
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 212, 170, 0.4);
+}
+
+.notification-warning {
+    background: linear-gradient(135deg, #ffb347 0%, #ffd93d 100%);
+    color: white;
+    box-shadow: 0 10px 25px rgba(255, 179, 71, 0.4);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6b6b 100%);
+    color: white;
+    box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
+}
+
+.notification-info {
+    background: var(--surface-elevated);
+    color: #ffffff;
+    border: 1px solid var(--accent);
+    box-shadow: 0 10px 25px rgba(0, 102, 255, 0.3);
+}
+
+/* Enhanced progress animations */
+.progress-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 100%);
+    animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Milestone animations */
+.milestone-dot {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.milestone-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: inherit;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.milestone.completed::after {
+    width: 24px;
+    height: 24px;
+    opacity: 0.3;
+}
+
+.milestone.current::after {
+    width: 32px;
+    height: 32px;
+    opacity: 0.6;
+    animation: milestonePulse 2s infinite;
+}
+
+@keyframes milestonePulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.8;
+    }
+}
+
+/* Input field enhancements */
+.input-field {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-field:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 102, 255, 0.15);
+}
+
+.input-field:valid {
+    border-color: var(--success);
+}
+
+.input-field:invalid {
+    border-color: var(--danger);
+}
+
+/* Button animations */
+.action-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.2) 50%, 
+        transparent 100%);
+    transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn:hover::before {
+    left: 100%;
+}
+
+.action-btn:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Result card animations */
+.result-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.result-card:hover::before {
+    transform: scaleX(1);
+    background: var(--gradient-accent);
+}
+
+/* History item animations */
+.history-item {
+    position: relative;
+    animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.history-item:hover {
+    transform: translateX(4px);
+    border-color: var(--accent);
+}
+
+/* Loading states */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty states */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    opacity: 0.3;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* Responsive enhancements */
+@media (max-width: 480px) {
+    .stats-dashboard {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .input-section {
+        gap: 16px;
+    }
+    
+    .action-section {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .progress-milestones {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .milestone {
+        min-width: 80px;
+    }
+    
+    .milestone-label {
+        font-size: 0.625rem;
+    }
+    
+    .milestone-value {
+        font-size: 0.75rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border: rgba(255, 255, 255, 0.2);
+        --border-hover: rgba(255, 255, 255, 0.4);
+    }
+    
+    .input-field {
+        border-width: 2px;
+    }
+    
+    .action-btn {
+        border: 2px solid transparent;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .progress-bar::before,
+    .action-btn::before,
+    .milestone-dot::after {
+        animation: none !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .action-section,
+    .history-section {
+        display: none !important;
+    }
+    
+    .pity-calculator,
+    .results-section {
+        break-inside: avoid;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .input-field {
+        border: 1px solid black !important;
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Custom scrollbar */
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+}
+
+/* Focus styles for accessibility */
+.input-field:focus,
+.action-btn:focus,
+.history-btn:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Data visualization enhancements */
+.stat-value {
+    position: relative;
+}
+
+.stat-value::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-accent);
+    transform: scaleX(0);
+    transition: transform 0.6s ease;
+}
+
+.stat-card:hover .stat-value::after {
+    transform: scaleX(1);
+}
+
+/* Tooltip enhancements */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface-elevated);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+}
+
+/* Micro-interactions */
+.micro-bounce {
+    animation: microBounce 0.6s ease;
+}
+
+@keyframes microBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Success state animations */
+.success-flash {
+    animation: successFlash 0.8s ease;
+}
+
+@keyframes successFlash {
+    0%, 100% { background: var(--surface-elevated); }
+    50% { background: rgba(0, 212, 170, 0.2); }
+}
+
+/* Error state animations */
+.error-shake {
+    animation: errorShake 0.6s ease;
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, 
+        var(--surface-elevated) 25%, 
+        var(--surface) 50%, 
+        var(--surface-elevated) 75%);
+    background-size: 200% 100%;
+    animation: skeletonLoading 1.5s infinite;
+}
+
+@keyframes skeletonLoading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Advanced hover states */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 102, 255, 0.3);
+}
+
+/* Glow effects */
+.glow-effect {
+    position: relative;
+}
+
+.glow-effect::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: inherit;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.glow-effect:hover::before {
+    opacity: 0.3;
+    filter: blur(8px);
+}
+
+/* Chart container (for future data visualization) */
+.chart-container {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 24px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-placeholder {
+    text-align: center;
+    color: #6b7280;
+}
+
+.chart-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.3;
+}
