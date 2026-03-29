@@ -1,8 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const { Client } = require('discord.js');
+const Database = require('better-sqlite3');
 const path = require('path');
 const cors = require('cors');
+const crypto = require('crypto');
 
 // App initialization
 const app = express();
@@ -17,19 +17,94 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/auth/callback';
 
-// Database Schema
-const userSchema = new mongoose.Schema({
-    discordId: { type: String, required: true, unique: true },
-    username: { type: String, required: true },
-    discriminator: { type: String, required: true },
-    avatar: { type: String },
-    isAdmin: { type: Boolean, default: false },
-    loginTime: { type: Date, default: Date.now },
-    lastLogin: { type: Date, default: Date.now },
-    sessionToken: { type: String }
-});
+// SQLite Database
+const db = new Database('./users.db');
 
-const User = mongoose.model('User', userSchema);
+// Create users table
+db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+        discordId TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        discriminator TEXT,
+        avatar TEXT,
+        isAdmin INTEGER DEFAULT 0,
+        loginTime TEXT,
+        lastLogin TEXT,
+        sessionToken TEXT
+    )
+`);
+
+// Database helpers
+const User = {
+    findOneAndUpdate: (filter, update, options) => {
+        const { discordId } = filter;
+        const existing = db.prepare('SELECT * FROM users WHERE discordId = ?').get(discordId);
+        
+        if (existing) {
+            db.prepare(`
+                UPDATE users SET 
+                    username = ?, 
+                    discriminator = ?, 
+                    avatar = ?, 
+                    isAdmin = ?, 
+                    loginTime = ?, 
+                    lastLogin = ?, 
+                    sessionToken = ? 
+                WHERE discordId = ?
+            `).run(
+                update.username || existing.username,
+                update.discriminator || existing.discriminator,
+                update.avatar || existing.avatar,
+                update.isAdmin ? 1 : 0,
+                update.loginTime || existing.loginTime,
+                update.lastLogin || existing.lastLogin,
+                update.sessionToken || existing.sessionToken,
+                discordId
+            );
+        } else {
+            db.prepare(`
+                INSERT INTO users (discordId, username, discriminator, avatar, isAdmin, loginTime, lastLogin, sessionToken)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `).run(
+                discordId,
+                update.username,
+                update.discriminator,
+                update.avatar,
+                update.isAdmin ? 1 : 0,
+                update.loginTime,
+                update.lastLogin,
+                update.sessionToken
+            );
+        }
+        
+        return db.prepare('SELECT * FROM users WHERE discordId = ?').get(discordId);
+    },
+    
+    findOne: (filter) => {
+        if (filter.sessionToken) {
+            return db.prepare('SELECT * FROM users WHERE sessionToken = ?').get(filter.sessionToken);
+        }
+        if (filter.discordId) {
+            return db.prepare('SELECT * FROM users WHERE discordId = ?').get(filter.discordId);
+        }
+        return null;
+    },
+    
+    find: (options = {}) => {
+        let query = 'SELECT * FROM users';
+        if (options.sort && options.sort.loginTime === -1) {
+            query += ' ORDER BY loginTime DESC';
+        }
+        return db.prepare(query).all();
+    },
+    
+    countDocuments: (filter = {}) => {
+        if (filter.loginTime && filter.loginTime.$gte) {
+            return db.prepare('SELECT COUNT(*) as count FROM users WHERE loginTime >= ?').get(filter.loginTime.$gte).count;
+        }
+        return db.prepare('SELECT COUNT(*) as count FROM users').get().count;
+    }
+};
 
 // Discord OAuth Routes
 app.get('/auth/callback', async (req, res) => {
@@ -115,7 +190,7 @@ app.get('/auth/callback', async (req, res) => {
 });
 
 // Session verification route
-app.get('/api/check-session', async (req, res) => {
+app.get('/api/check-session', (req, res) => {
     const { token } = req.query;
     
     if (!token) {
@@ -123,7 +198,7 @@ app.get('/api/check-session', async (req, res) => {
     }
     
     try {
-        const user = await User.findOne({ sessionToken: token });
+        const user = User.findOne({ sessionToken: token });
         
         if (!user) {
             return res.status(401).json({ error: 'Invalid session' });
@@ -134,7 +209,7 @@ app.get('/api/check-session', async (req, res) => {
             user: {
                 id: user.discordId,
                 username: user.username,
-                isAdmin: user.isAdmin
+                isAdmin: Boolean(user.isAdmin)
             }
         });
         
@@ -149,20 +224,20 @@ app.get('/api/users', async (req, res) => {
         const { token } = req.query;
         
         // Verify admin session
-        const adminUser = await User.findOne({ sessionToken: token });
+        const adminUser = User.findOne({ sessionToken: token });
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
         // Get all users
-        const users = await User.find({}).sort({ loginTime: -1 });
+        const users = User.find({}).sort({ loginTime: -1 });
         
         res.json({
             users: users.map(user => ({
                 discordId: user.discordId,
                 username: user.username,
                 avatar: user.avatar,
-                isAdmin: user.isAdmin,
+                isAdmin: Boolean(user.isAdmin),
                 loginTime: user.loginTime,
                 lastLogin: user.lastLogin
             })),
@@ -175,46 +250,42 @@ app.get('/api/users', async (req, res) => {
 });
 
 // Logout route
-app.get('/logout', async (req, res) => {
+app.get('/logout', (req, res) => {
     const { token } = req.query;
     
     if (token) {
         // Invalidate user session
-        await User.findOneAndUpdate(
-            { sessionToken: token },
-            { sessionToken: null }
-        );
+        const user = User.findOne({ sessionToken: token });
+        if (user) {
+            db.prepare('UPDATE users SET sessionToken = NULL WHERE discordId = ?').run(user.discordId);
+        }
     }
     
     res.redirect('/login.html');
 });
 
 // Statistics API
-app.get('/api/stats', async (req, res) => {
+app.get('/api/stats', (req, res) => {
     try {
         const { token } = req.query;
         
         // Verify admin session
-        const adminUser = await User.findOne({ sessionToken: token });
+        const adminUser = User.findOne({ sessionToken: token });
         if (!adminUser || !adminUser.isAdmin) {
             return res.status(403).json({ error: 'Admin access required' });
         }
         
-        const totalUsers = await User.countDocuments();
-        const activeToday = await User.countDocuments({
-            loginTime: {
-                $gte: new Date(new Date().setHours(0, 0, 0, 0))
-            }
-        });
+        const today = new Date().toISOString().split('T')[0];
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        
+        const totalUsers = User.countDocuments();
+        const activeToday = db.prepare("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?").get(today + 'T00:00:00').count;
+        const newThisWeek = db.prepare("SELECT COUNT(*) as count FROM users WHERE loginTime >= ?").get(weekAgo).count;
         
         res.json({
             totalUsers,
             activeToday,
-            newThisWeek: await User.countDocuments({
-                loginTime: {
-                    $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-                }
-            })
+            newThisWeek
         });
         
     } catch (error) {
@@ -235,21 +306,9 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
-// Database connection
-mongoose.connect('mongodb://localhost:27017/jailbreak-hub', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log('Connected to MongoDB');
-})
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-});
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Discord Client ID: ${CLIENT_ID}`);
-    console.log(`Admin Users: ['1487705589210550282', 'plugtm']`);
+    console.log(`Database: SQLite (users.db)`);
 });
