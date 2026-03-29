@@ -305,13 +305,51 @@ app.get('/logout', async (req, res) => {
     res.redirect('/login.html');
 });
 
+// Admin middleware - server-side protection
+async function requireAdmin(req, res, next) {
+    const token = req.query.token || req.headers['x-session-token'];
+    
+    if (!token) {
+        return res.status(403).send('Access denied - Admin login required');
+    }
+    
+    try {
+        const user = await User.findOne({ sessionToken: token });
+        if (!user || !user.isAdmin) {
+            return res.status(403).send('Access denied - Admin only');
+        }
+        req.user = user;
+        next();
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
+}
+
 // Serve static files
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
+// Protect admin route with server-side check
+app.get('/admin', async (req, res) => {
+    // Check for session token in query or redirect to login
+    const token = req.query.token;
+    
+    if (!token) {
+        // Try to serve but client-side JS will redirect if not admin
+        res.sendFile(path.join(__dirname, 'admin.html'));
+        return;
+    }
+    
+    try {
+        const user = await User.findOne({ sessionToken: token });
+        if (!user || !user.isAdmin) {
+            return res.status(403).send('Access denied - Admin only');
+        }
+        res.sendFile(path.join(__dirname, 'admin.html'));
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
 });
 
 app.get('/login', (req, res) => {
