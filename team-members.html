@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Hub | Team Members</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="Values.js"></script>
+
+    <script> 
+        document.addEventListener("DOMContentLoaded", function() { 
+            const urlParams = new URLSearchParams(window.location.search); 
+            const jobId = urlParams.get('jobid'); 
+            if (jobId) { 
+                const placeId = "606849621";  
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`; 
+                window.location.href = launchUri; 
+            }
+        }); 
+    </script> 
+
+    <style>
+        /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
+        body.light-mode {   
+            --bg: #f8fafc !important;   
+            --surface: rgba(255, 255, 255, 0.8) !important;   
+            --card: rgba(241, 245, 249, 0.8) !important;   
+            --card-hover: rgba(255, 255, 255, 0.95) !important;
+            --border: rgba(0, 0, 0, 0.08) !important;   
+            --border-light: rgba(0, 0, 0, 0.15) !important;
+            --accent: #005bb5 !important;   
+            --accent-glow: #005bb5 !important;   
+            --green: #00b35f !important;   
+            --orange: #d97706 !important;
+            --red: #dc2626 !important;
+            --text-main: #0f172a !important;   
+            --text-dim: #475569 !important;   
+            --muted: rgba(0, 0, 0, 0.05) !important;
+            --muted-hover: rgba(0, 0, 0, 0.1) !important;
+            --invert: 1 !important;
+        }
+        /* Forces hardcoded white text to flip dark when light mode is active */
+        body.light-mode * { color: var(--text-main); }
+        body.light-mode .text-green { color: var(--green) !important; }
+        body.light-mode .text-orange { color: var(--orange) !important; }
+        body.light-mode .text-red { color: var(--red) !important; }
+        body.light-mode .text-blue { color: var(--accent) !important; }
+        /* --------------------------------------- */
+        
+        :root {
+            --bg: #0a0e27;
+            --surface: #1e293b;
+            --card: #1e1f2e;
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        /* --- UNIFIED NAVIGATION --- */
+        .nav-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 5000;
+        }
+        
+        .nav-logo {
+            position: absolute;
+            left: 40px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            text-decoration: none;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+        
+        .nav-logo span {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-main);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .nav-link.active {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.15);
+        }
+        
+        .nav-item {
+            position: relative;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            min-width: 220px;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .drop-link {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .drop-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-main);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .theme-toggle {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* --- HERO SECTION --- */
+        .hero-section {
+            text-align: center;
+            padding: 120px 40px 80px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -2px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* --- TEAM SECTION --- */
+        .team-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+        
+        .team-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            font-weight: 700;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+        
+        .team-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--green));
+            z-index: -1;
+            opacity: 0.3;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.05); opacity: 0.1; }
+        }
+        
+        .team-name {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+        
+        .team-role {
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .team-bio {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        
+        .team-socials {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* --- ROLES SECTION --- */
+        .roles-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px;
+            margin: 80px 0;
+            text-align: center;
+        }
+        
+        .roles-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 48px;
+        }
+        
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+        
+        .role-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.15);
+        }
+        
+        .role-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        
+        .role-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+        
+        .role-description {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+        
+        /* --- CTA SECTION --- */
+        .cta-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 80px;
+            margin: 80px 0;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 24px;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 20px 40px;
+            border-radius: 16px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .cta-btn:hover {
+            background: #2563eb;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+        }
+        
+        .cta-btn.secondary {
+            background: var(--card);
+            color: var(--text-main);
+            border: 2px solid var(--border);
+        }
+        
+        .cta-btn.secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent);
+        }
+        
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="hero-section">
+        <h1 class="hero-title">Meet Our <span style="color: var(--accent);">Team</span></h1>
+        <p class="hero-subtitle">The dedicated individuals behind Jailbreak Hub who work tirelessly to bring you the best tools and analytics for your Jailbreak experience</p>
+    </div>
+
+    <div class="team-section">
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">J</div>
+                <h3 class="team-name">Jakobiis</h3>
+                <div class="team-role">Lead Developer</div>
+                <p class="team-bio">Founder and lead developer of Jailbreak Hub. Specializes in backend development, API integration, and data analytics. Passionate about creating tools that help the Jailbreak community.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">J</div>
+                <h3 class="team-name">Jalenzz16</h3>
+                <div class="team-role">Co-Founder & Frontend Developer</div>
+                <p class="team-bio">Co-founder and frontend specialist. Focuses on user experience, interface design, and creating intuitive tools. Ensures our platform is both powerful and easy to use.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">A</div>
+                <h3 class="team-name">Alex</h3>
+                <div class="team-role">Data Analyst</div>
+                <p class="team-bio">Expert in Jailbreak market trends and value tracking. Maintains our comprehensive database and ensures accuracy of all trading values and market data.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">S</div>
+                <h3 class="team-name">Sarah</h3>
+                <div class="team-role">Community Manager</div>
+                <p class="team-bio">Manages our Discord community and user support. Ensures everyone gets the help they need and maintains a positive, helpful community environment.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitch"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">M</div>
+                <h3 class="team-name">Mike</h3>
+                <div class="team-role">QA Tester</div>
+                <p class="team-bio">Ensures all our tools work perfectly and catches bugs before they reach users. Dedicated to maintaining the highest quality standards for our platform.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">E</div>
+                <h3 class="team-name">Emma</h3>
+                <div class="team-role">Content Creator</div>
+                <p class="team-bio">Creates tutorials, guides, and educational content to help users get the most out of our tools. Makes complex features easy to understand and use.</p>
+                <div class="team-socials">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitch"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="roles-section">
+        <h2 class="roles-title">Our Team Roles</h2>
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="role-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="role-title">Development</h3>
+                <p class="role-description">Building and maintaining our platform with cutting-edge technology and innovative features</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="role-title">Data Analysis</h3>
+                <p class="role-description">Tracking market trends and ensuring accurate, up-to-date information for all users</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="role-title">Community</h3>
+                <p class="role-description">Supporting our users and fostering a positive, helpful community environment</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">
+                    <i class="fas fa-bug"></i>
+                </div>
+                <h3 class="role-title">Quality Assurance</h3>
+                <p class="role-description">Testing and ensuring all features work perfectly before release</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2 class="cta-title">Join Our Team</h2>
+        <p class="cta-subtitle">We're always looking for talented individuals to help us improve Jailbreak Hub. If you're passionate about Jailbreak and want to contribute, we'd love to hear from you!</p>
+        <div class="cta-buttons">
+            <a href="https://discord.jailbreakchangelogs.xyz" class="cta-btn">
+                <i class="fab fa-discord"></i>
+                <span>Join Discord</span>
+            </a>
+            <a href="#" class="cta-btn secondary">
+                <i class="fas fa-envelope"></i>
+                <span>Contact Us</span>
+            </a>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="loader.js"></script>
+</body>
+</html>
