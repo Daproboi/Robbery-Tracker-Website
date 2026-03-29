@@ -82,9 +82,8 @@
             margin-bottom: 16px;
             background: linear-gradient(135deg, var(--text-primary), var(--accent));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
+            color: transparent;
             position: relative;
             z-index: 1;
         }
@@ -333,6 +332,8 @@
     </style>
 </head>
 <body>
+    <div id="navbar-container"></div>
+
     <div class="container">
         <div class="hero">
             <h1>HyperChrome <span style="color: var(--accent);">Pity Calculator</span></h1>
@@ -399,5 +400,7 @@
     </div>
 
     <script src="pity.js"></script>
+
+    <div id="footer-container"></div>
 </body>
 </html>
