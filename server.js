@@ -191,6 +191,7 @@ app.get('/api/check-session', async (req, res) => {
             user: {
                 id: user.discordId,
                 username: user.username,
+                avatar: user.avatar,
                 isAdmin: Boolean(user.isAdmin)
             },
             lastLogin: user.lastLogin

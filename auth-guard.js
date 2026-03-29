@@ -73,11 +73,9 @@
                 
                 if (userName) userName.textContent = user.username;
                 
-                // Fix avatar URL - use Discord CDN with fallback
+                // Use avatar URL from API (Discord CDN)
                 if (userAvatar) {
-                    const avatarUrl = user.id ? 
-                        `https://cdn.discordapp.com/avatars/${user.id}.png` : 
-                        'https://cdn.discordapp.com/embed/avatars/0.png';
+                    const avatarUrl = user.avatar || `https://cdn.discordapp.com/embed/avatars/0.png`;
                     userAvatar.src = avatarUrl;
                     userAvatar.onerror = function() {
                         this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
