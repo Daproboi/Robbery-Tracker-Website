@@ -105,27 +105,42 @@ class PityCalculator {
         const currentPity = this.getCurrentPity();
         const currentLevel = this.getCurrentPityLevel(currentPity);
         const nextLevel = this.getNextLevel(currentLevel);
+        
+        // Calculate robberies needed to reach next level
         const robberiesToNext = nextLevel ? nextLevel.robberies - currentPity : 0;
+        
+        // Calculate total progress to max level (50)
         const totalProgress = (currentPity / 3900) * 100;
+        
+        // Calculate progress within current level
+        let progressWithinLevel = 0;
+        if (currentLevel.robberies === 0) {
+            // Level 1: progress from 0 to 50 robberies
+            progressWithinLevel = Math.min((currentPity / 50) * 100, 100);
+        } else if (nextLevel) {
+            // Other levels: progress from current level start to next level
+            const levelRange = nextLevel.robberies - currentLevel.robberies;
+            const progressInLevel = currentPity - currentLevel.robberies;
+            progressWithinLevel = Math.min((progressInLevel / levelRange) * 100, 100);
+        } else {
+            // Max level
+            progressWithinLevel = 100;
+        }
 
         // Update results
         document.getElementById('currentLevel').textContent = currentLevel.level;
         document.getElementById('dropChance').textContent = `${(currentLevel.chance * 100).toFixed(0)}%`;
-        document.getElementById('robberiesToNext').textContent = robberiesToNext;
+        document.getElementById('robberiesToNext').textContent = robberiesToNext > 0 ? robberiesToNext : 'MAX';
         document.getElementById('totalProgress').textContent = `${totalProgress.toFixed(1)}%`;
 
         // Update progress bar
-        const progressWithinLevel = currentLevel.robberies > 0 ? 
-            ((currentPity - currentLevel.robberies) / (nextLevel ? nextLevel.robberies - currentLevel.robberies : 50)) * 100 : 
-            (currentPity / 50) * 100;
-        
         document.getElementById('progressBar').style.width = `${progressWithinLevel}%`;
         document.getElementById('progressPercentage').textContent = `${progressWithinLevel.toFixed(1)}%`;
 
         // Update result descriptions
         document.querySelector('#currentLevel').nextElementSibling.textContent = `${(currentLevel.chance * 100).toFixed(0)}% chance`;
         document.querySelector('#dropChance').nextElementSibling.textContent = 'Next robbery';
-        document.querySelector('#robberiesToNext').nextElementSibling.textContent = 'Estimated';
+        document.querySelector('#robberiesToNext').nextElementSibling.textContent = robberiesToNext > 0 ? 'To next level' : 'Max level';
         document.querySelector('#totalProgress').nextElementSibling.textContent = 'To max level';
 
         // Show results
@@ -141,21 +156,28 @@ class PityCalculator {
 
     getCurrentPity() {
         if (this.serverType === 'big') {
-            // Big servers reset daily, so we use lastDropAgo
+            // Big servers reset pity every 24 hours
+            // Use "Robberies Since Last Drop" as the current pity
             return this.lastDropAgo;
         } else {
-            // Small servers maintain pity, so we calculate from total
-            return this.currentRobberies;
+            // Small servers maintain pity across restarts
+            // Calculate pity based on total robberies minus drops
+            // Each Hyperchrome drop typically happens around 100 robberies on average
+            // So we subtract estimated robberies for each drop
+            const estimatedRobberiesPerDrop = 100;
+            const effectivePity = this.currentRobberies - (this.hyperchromesEarned * estimatedRobberiesPerDrop);
+            return Math.max(0, effectivePity);
         }
     }
 
     getCurrentPityLevel(pity) {
+        // Find the highest level that's still <= current pity
         for (let i = this.pityLevels.length - 1; i >= 0; i--) {
             if (pity >= this.pityLevels[i].robberies) {
                 return this.pityLevels[i];
             }
         }
-        return this.pityLevels[0];
+        return this.pityLevels[0]; // Level 1
     }
 
     getNextLevel(currentLevel) {
