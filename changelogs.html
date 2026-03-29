@@ -1,15 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Changelogs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Jailbreak Hub | Pity Calculator</title>  
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script src="Values.js"></script>
+
+    <script> 
+        document.addEventListener("DOMContentLoaded", function() { 
+            const urlParams = new URLSearchParams(window.location.search); 
+            const jobId = urlParams.get('jobid'); 
+            if (jobId) { 
+                const placeId = "606849621";  
+                const launchUri = `roblox://experiences/start?placeId=${placeId}&gameInstanceId=${jobId}`; 
+                window.location.href = launchUri; 
+            }
+            
+            // Function to load values from Values.js [cite: 34792]
+            if (typeof HyperchromeValues !== 'undefined') {
+                document.getElementById('valShift').innerText = HyperchromeValues.shiftLvl5;
+                document.getElementById('trendShift').innerHTML = `<i class="fa-solid fa-arrow-${HyperchromeValues.shiftTrend}"></i> ${HyperchromeValues.shiftTrendText}`;
+                document.getElementById('trendShift').className = `trend ${HyperchromeValues.shiftTrend}`;
+
+                document.getElementById('valDiamond').innerText = HyperchromeValues.diamondLvl5;
+                document.getElementById('trendDiamond').innerHTML = `<i class="fa-solid fa-minus"></i> ${HyperchromeValues.diamondTrendText}`;
+                document.getElementById('trendDiamond').className = `trend ${HyperchromeValues.diamondTrend}`;
+
+                document.getElementById('valRed').innerText = HyperchromeValues.redLvl5;
+                document.getElementById('trendRed').innerHTML = `<i class="fa-solid fa-arrow-${HyperchromeValues.redTrend}"></i> ${HyperchromeValues.redTrendText}`;
+                document.getElementById('trendRed').className = `trend ${HyperchromeValues.redTrend}`;
+
+                document.getElementById('valLvl1').innerText = HyperchromeValues.lvl1Any;
+                document.getElementById('trendLvl1').innerHTML = `<i class="fa-solid fa-minus"></i> ${HyperchromeValues.lvl1TrendText}`;
+                document.getElementById('trendLvl1').className = `trend ${HyperchromeValues.lvl1Trend}`;
+            }
+        }); 
+    </script> 
+
     <style>
+
         /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
         body.light-mode {   
             --bg: #f8fafc !important;   
@@ -34,798 +67,278 @@
         body.light-mode .text-green { color: var(--green) !important; }
         body.light-mode .text-orange { color: var(--orange) !important; }
         body.light-mode .text-red { color: var(--red) !important; }
-        body.light-mode .text-blue { color: var(--accent) !important; }
+        body.light-mode .bounty-name, body.light-mode .sb-val, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
         /* --------------------------------------- */
+   
+        :root {   
+            --bg: #030508;   
+            --surface: #0a0c10;   
+            --card: #11141a;   
+            --border: rgba(255, 255, 255, 0.08);   
+            --accent: #0070f3;   
+            --accent-glow: rgba(0, 112, 243, 0.4);   
+            --jailbreak-green: #00ff88;   
+            --green-glow: rgba(0, 255, 136, 0.3);   
+            --text-main: #ffffff;   
+            --text-dim: #94a3b8;   
+            --invert: 0;   
+        }  
+        body.light-mode {   
+            --bg: #f8fafc;   
+            --surface: #ffffff;   
+            --card: #f1f5f9;   
+            --border: rgba(0, 0, 0, 0.1);   
+            --accent: #005bb5;   
+            --accent-glow: rgba(0, 91, 181, 0.3);   
+            --jailbreak-green: #00b35f;   
+            --green-glow: rgba(0, 179, 95, 0.2);   
+            --text-main: #0f172a;   
+            --text-dim: #475569;   
+            --invert: 1;   
+        }  
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }   
+        body {   
+            font-family: 'Plus Jakarta Sans', sans-serif;   
+            background: var(--bg); color: var(--text-main);   
+            margin: 0; padding-top: 70px;   
+            overflow-x: hidden; min-height: 100vh;   
+        }   
+        #cashCanvas {   
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
+            z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));   
+        }   
+        .nav-top {   
+            position: fixed; top: 0; width: 100%; height: 70px;   
+            background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);   
+            border-bottom: 1px solid var(--border); display: flex;   
+            align-items: center; justify-content: space-between;   
+            padding: 0 40px; z-index: 5000;   
+        }   
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }   
+        .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }   
+        .nav-links { display: flex; gap: 20px; align-items: center; }   
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }   
+        .nav-link:hover { color: var(--text-main); }   
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }   
+        .dropdown {   
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);   
+            background: var(--surface); border: 1px solid var(--border);   
+            border-radius: 12px; min-width: 220px; padding: 10px;   
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);   
+            transition: all 0.2s ease;   
+        }   
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }   
+        .drop-link {   
+            display: flex; flex-direction: column; padding: 12px;   
+            color: var(--text-dim); text-decoration: none;   
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600;   
+            margin-bottom: 4px;   
+        }   
+        .drop-link:hover { background: var(--card); color: var(--text-main); }   
+        .nav-actions { display: flex; align-items: center; gap: 15px; }   
+        .theme-toggle {   
+            background: var(--card); border: 1px solid var(--border); color: var(--text-main);   
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;   
+        }   
+        .hero { position: relative; padding: 10vh 20px 5vh; text-align: center; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }   
+        .hero h1 { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; background: linear-gradient(135deg, var(--text-main), var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }   
         
-        :root {
-            --bg: #0a0e27;
-            --surface: #1e293b;
-            --card: #1e1f2e;
-            --border: rgba(255, 255, 255, 0.1);
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.4);
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --green: #10b981;
-            --orange: #f59e0b;
-            --red: #ef4444;
-            --blue: #3b82f6;
-        }
+        /* CALCULATOR STYLES */ 
+        .section { max-width: 1100px; margin: 40px auto; padding: 0 20px; z-index: 2; position: relative; } 
+        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; } 
         
-        * {
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding-top: 80px;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-            min-height: 100vh;
-        }
-        
-        /* --- UNIFIED NAVIGATION --- */
-        .nav-top {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 70px;
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            z-index: 5000;
-        }
-        
-        .nav-logo {
-            position: absolute;
-            left: 40px;
-            font-weight: 800;
-            font-size: 1.4rem;
-            text-decoration: none;
-            color: var(--text-main);
-            letter-spacing: -1px;
-        }
-        
-        .nav-logo span {
-            color: var(--accent);
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-        
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--text-main);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .nav-link.active {
-            color: var(--accent);
-            background: rgba(59, 130, 246, 0.15);
-        }
-        
-        .nav-item {
-            position: relative;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-        }
-        
-        .dropdown {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            min-width: 220px;
-            padding: 16px;
-            opacity: 0;
-            pointer-events: none;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-item:hover .dropdown {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        .drop-link {
-            display: flex;
-            flex-direction: column;
-            padding: 12px 16px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.875rem;
-            border-radius: 8px;
-            font-weight: 500;
-            margin-bottom: 4px;
-            transition: all 0.2s ease;
-        }
-        
-        .drop-link:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--text-main);
-        }
-        
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .theme-toggle {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        
-        .theme-toggle:hover {
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        /* --- CHANGELOG HERO --- */
-        .hero-section {
-            text-align: center;
-            padding: 80px 40px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-            border-radius: 24px;
-            margin-bottom: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.1; }
-        }
-        
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, var(--text-main), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        /* --- CHANGELOG FILTERS --- */
-        .filters-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 40px;
-        }
-        
-        .filter-header {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        
-        .filter-btn {
-            padding: 12px 20px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--card);
-            color: var(--text-dim);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            font-size: 0.875rem;
-        }
-        
-        .filter-btn:hover {
-            border-color: var(--accent);
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--text-main);
-        }
-        
-        .filter-btn.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        /* --- CHANGELOG CARDS --- */
-        .changelog-section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .timeline-container {
-            position: relative;
-            padding-left: 40px;
-        }
-        
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, var(--accent), var(--green));
-        }
-        
-        .changelog-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .changelog-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-        
-        .changelog-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent), var(--green));
-        }
-        
-        .version-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .version-tag {
-            background: var(--accent);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.875rem;
-            font-family: 'JetBrains Mono', monospace;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .version-date {
-            color: var(--text-dim);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .version-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin: 0;
-        }
-        
-        .patch-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .patch-item {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-        }
-        
-        .patch-item:last-child {
-            border-bottom: none;
-        }
-        
-        .patch-type {
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            min-width: 80px;
-            text-align: center;
-        }
-        
-        .patch-type.bugfix {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--orange);
-        }
-        
-        .patch-type.feature {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent);
-        }
-        
-        .patch-type.improvement {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--green);
-        }
-        
-        .patch-content {
-            flex: 1;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-        
-        .patch-content strong {
-            color: var(--accent);
-            font-weight: 600;
-        }
-        
-        /* --- UNIFIED FOOTER --- */
-        footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 60px 20px;
-            text-align: center;
-            margin-top: 80px;
-        }
-        
-        .footer-brand {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-        }
-        
-        .footer-brand span {
-            color: var(--accent);
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .footer-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-        
-        .support-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.2s ease;
-        }
-        
-        .support-btn:hover {
-            border-color: var(--accent);
-            background: rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .legal {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 30px;
-            max-width: 800px;
-            line-height: 1.6;
-        }
-        
-        /* --- RESPONSIVE DESIGN --- */
-        @media (max-width: 768px) {
-            .filter-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .version-header {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                gap: 16px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div id="navbar-container"></div>
+        .input-group { margin-bottom: 20px; } 
+        label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 1px; } 
+        select, input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; font-family: 'JetBrains Mono'; } 
+        select:focus, input:focus { border-color: var(--accent); }
 
-    <div class="hero-section">
-        <h1 class="hero-title">Jailbreak <span style="color: var(--accent);">Changelogs</span></h1>
-        <p class="hero-subtitle">Complete tracking of every update, fix, and feature added to Jailbreak</p>
-    </div>
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; border: 1px solid var(--border); }
+        .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
+        .toggle-btn.active { background: var(--accent); color: white; box-shadow: 0 0 15px var(--accent-glow); }
 
-    <div class="filters-section">
-        <div class="filter-header">
-            <span>📊 Quick Stats</span>
-            <span style="color: var(--text-dim); font-size: 0.875rem;">Total Updates Tracked</span>
-        </div>
+        .display-pity { background: linear-gradient(180deg, rgba(0, 112, 243, 0.05) 0%, rgba(0,0,0,0) 100%); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid var(--border); text-align: center; } 
+        .pity-num { font-family: 'JetBrains Mono'; font-size: 5rem; font-weight: 800; color: var(--accent); line-height: 1; margin: 10px 0; text-shadow: 0 0 30px var(--accent-glow); } 
+        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 20px 0; overflow: hidden; border: 1px solid var(--border); } 
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--jailbreak-green)); box-shadow: 0 0 15px var(--accent-glow); transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); } 
         
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="totalUpdates">0</div>
-                <div class="stat-label">Total Updates</div>
+        /* VALUE DASHBOARD */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 40px; }
+        .val-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; position: relative; overflow: hidden; }
+        .val-card h4 { margin: 0; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .val-card .price { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 700; margin: 8px 0; color: var(--jailbreak-green); }
+        .val-card .trend { font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .trend.up { color: #22c55e; } .trend.stable { color: #94a3b8; } .trend.down { color: #ef4444; }
+
+        .info-panel { margin-top: 30px; padding: 25px; background: rgba(0, 112, 243, 0.03); border: 1px border var(--accent); border-radius: 16px; font-size: 0.85rem; line-height: 1.6; color: var(--text-dim); }
+        .info-panel strong { color: var(--text-main); }
+
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 20px; text-align: center; margin-top: 100px; }   
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }   
+        .footer-brand span { color: var(--accent); }   
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }   
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }   
+        .support-btn { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; text-decoration: none; display: inline-block; }   
+    </style>   
+</head>   
+<body>   
+    <canvas id="cashCanvas"></canvas>   
+    <div id="navbar-container"></div>   
+
+    <section class="hero">   
+        <h1>Pity <span style="color:var(--accent); -webkit-text-fill-color: var(--accent);">Engine</span></h1>   
+        <p style="color: var(--text-dim); max-width: 600px; margin-top: 15px;">Professional-grade tracking for Hyperchrome drops and Season completion based on official game curves.</p>   
+    </section>   
+
+    <div class="section"> 
+        <div class="calc-box"> 
+            <div class="inputs"> 
+                <label>1. Select Server Environment</label>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" id="btnPublic" onclick="setServer('public')">Public Server</button>
+                    <button class="toggle-btn" id="btnSmall" onclick="setServer('small')">Small/VIP Server</button>
+                </div>
+
+                <div class="input-group"> 
+                    <label>2. Current Target Level</label> 
+                    <select id="pityRate" onchange="runCalc('rolls')"> 
+                        <option value="0">Hyperchrome Level 1</option> 
+                        <option value="1">Hyperchrome Level 2</option> 
+                        <option value="2">Hyperchrome Level 3</option> 
+                        <option value="3">Hyperchrome Level 4</option> 
+                        <option value="4">Hyperchrome Level 5</option> 
+                    </select> 
+                </div> 
+
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Option A: Rolls</label>
+                        <input type="number" id="userRolls" placeholder="e.g. 150" oninput="runCalc('rolls')">
+                    </div> 
+                    <div class="input-group">
+                        <label>Option B: Percent</label>
+                        <input type="number" id="userPercent" placeholder="e.g. 45.5" step="0.1" oninput="runCalc('percent')">
+                    </div> 
+                </div>
+
+                <div class="info-panel">
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent); margin-right: 8px;"></i>
+                    <strong>System Note:</strong> 
+                    Small servers (under 12 players) require <span style="color: var(--accent);">50% fewer robberies</span> for pity, but the base drop chance remains lower. This calculator uses the official 2026 drop curves.
+                </div>
+            </div> 
+
+            <div class="display-pity"> 
+                <label>Probability Status</label> 
+                <div class="pity-num" id="pityOut">0%</div> 
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="barFill"></div></div> 
+                <div id="rollsLeft" style="font-size: 1rem; color: var(--text-main); font-weight: 800; margin-bottom: 5px;">Awaiting Data...</div> 
+                <div id="subStatus" style="font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">0 total robberies required</div>
+            </div> 
+        </div> 
+
+        <h2 style="margin-top: 60px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">Chrome <span style="color: var(--accent)">Market Values</span></h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem;">Estimated values for clean (non-duped) Hyperchromes based on current trade demand.</p>
+        
+        <div class="dashboard-grid">
+            <div class="val-card">
+                <h4>Level 5 Shift</h4>
+                <div class="price" id="valShift">Loading...</div>
+                <div class="trend" id="trendShift"></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="bugfixes">0</div>
-                <div class="stat-label">Bug Fixes</div>
+            <div class="val-card">
+                <h4>Level 5 Diamond</h4>
+                <div class="price" id="valDiamond">Loading...</div>
+                <div class="trend" id="trendDiamond"></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="newFeatures">0</div>
-                <div class="stat-label">New Features</div>
+            <div class="val-card">
+                <h4>Level 5 Red</h4>
+                <div class="price" id="valRed">Loading...</div>
+                <div class="trend" id="trendRed"></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="majorUpdates">0</div>
-                <div class="stat-label">Major Updates</div>
+            <div class="val-card">
+                <h4>Level 1 (Any)</h4>
+                <div class="price" id="valLvl1">Loading...</div>
+                <div class="trend" id="trendLvl1"></div>
             </div>
         </div>
+
+        <div class="dev-container" style="margin-top: 80px; border-style: dashed;"> 
+            <div style="font-size: 2rem;">📊</div> 
+            <h2 style="font-weight: 800;">XP Curve Calculator Integrated</h2> 
+            <p style="max-width: 700px; margin: 10px auto;">Our engine now accounts for the <strong>CURVE_K (1.01)</strong> exponential factor. [cite: 34791] If you are Level 8, you need approximately 3,450 XP for Level 10. Visit the Seasons tab for the full day-by-day breakdown.</p> 
+        </div> 
+    </div> 
+
+    <div id="footer-container"></div>   
+
+    <script> 
+        // Logic from PROJECT_CODE_DUMP.txt [cite: 30028, 30033]
+        const PUBLIC_THRESHOLDS = [179, 378, 608, 696, 1068];
+        const SMALL_THRESHOLDS = [90, 189, 304, 348, 534];
         
-        <div class="filter-header" style="margin-top: 32px;">
-            <span>🔍 Filter Updates</span>
-        </div>
+        let currentServer = 'public';
+
+        function setServer(type) {
+            currentServer = type;
+            document.getElementById('btnPublic').classList.toggle('active', type === 'public');
+            document.getElementById('btnSmall').classList.toggle('active', type === 'small');
+            runCalc('rolls');
+        }
+
+        function runCalc(source) { 
+            const index = parseInt(document.getElementById('pityRate').value);
+            const target = currentServer === 'public' ? PUBLIC_THRESHOLDS[index] : SMALL_THRESHOLDS[index];
+            
+            const rollInput = document.getElementById('userRolls'); 
+            const percentInput = document.getElementById('userPercent'); 
+            const pityOut = document.getElementById('pityOut'); 
+            const barFill = document.getElementById('barFill'); 
+            const statusBox = document.getElementById('rollsLeft'); 
+            const subStatus = document.getElementById('subStatus');
+
+            let rolls = 0, displayPerc = 0; 
+
+            if (source === 'rolls') { 
+                rolls = parseInt(rollInput.value) || 0; 
+                displayPerc = (rolls / target) * 100; 
+                percentInput.value = displayPerc > 0 ? displayPerc.toFixed(1) : ""; 
+            } else { 
+                const percent = parseFloat(percentInput.value) || 0; 
+                rolls = Math.round((percent / 100) * target); 
+                rollInput.value = rolls > 0 ? rolls : ""; 
+                displayPerc = percent; 
+            } 
+
+            const clampedPerc = Math.min(displayPerc, 100); 
+            pityOut.innerText = clampedPerc.toFixed(1) + "%"; 
+            barFill.style.width = clampedPerc + "%"; 
+            
+            const remaining = target - rolls; 
+            statusBox.innerText = remaining > 0 ? remaining + " Robberies Remaining" : "GUARENTEED DROP WINDOW"; 
+            statusBox.style.color = remaining > 0 ? "var(--text-main)" : "var(--jailbreak-green)"; 
+            subStatus.innerText = `Target Threshold: ${target} total robberies`;
+        } 
+
+           
         
-        <div class="filter-grid">
-            <button class="filter-btn active" onclick="filterChangelogs('all')">All Updates</button>
-            <button class="filter-btn" onclick="filterChangelogs('major')">Major Only</button>
-            <button class="filter-btn" onclick="filterChangelogs('bugfix')">Bug Fixes</button>
-            <button class="filter-btn" onclick="filterChangelogs('feature')">New Features</button>
-        </div>
-    </div>
-
-    <div class="changelog-section">
-        <div class="timeline-container">
-            <div id="changelogContainer">
-                <!-- Changelog items will be dynamically loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-brand">Jailbreak<span style="color: var(--accent);">Hub</span></div>
-        <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="tracker.html">Tracker</a>
-            <a href="pity.html">Pity Calculator</a>
-            <a href="values.html">Values</a>
-            <a href="changelogs.html" class="nav-link active">Changelogs</a>
-        </div>
-        <div class="legal">© 2024 Jailbreak Hub. All rights reserved.</div>
-        <a href="support.html" class="support-btn">Get Support</a>
-    </footer>
-
-    <script>
-        // Changelog Data
-        const changelogs = [
-            {
-                version: "2.1.0",
-                date: "2024-03-28",
-                type: "major",
-                title: "Complete Changelog Redesign",
-                description: "Next-generation changelog system with modern design and enhanced filtering",
-                patches: [
-                    {
-                        type: "feature",
-                        content: "Modern gradient hero section with animated background effects"
-                    },
-                    {
-                        type: "feature", 
-                        content: "Interactive filter system for updates, bug fixes, and new features"
-                    },
-                    {
-                        type: "feature",
-                        content: "Real-time statistics dashboard showing total updates and breakdown"
-                    },
-                    {
-                        type: "improvement",
-                        content: "Enhanced timeline design with better visual hierarchy"
-                    },
-                    {
-                        type: "feature",
-                        content: "Responsive design optimized for all devices"
-                    }
-                ]
-            },
-            {
-                version: "2.0.5",
-                date: "2024-03-25",
-                type: "bugfix",
-                title: "Critical Bug Fixes",
-                description: "Fixed multiple game-breaking issues affecting player experience",
-                patches: [
-                    {
-                        type: "bugfix",
-                        content: "Fixed Safe Pity reset issue affecting private server players"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Command autocomplete window now properly scrollable"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Fixed Season Leaderboards not displaying correct rankings"
-                    }
-                ]
-            },
-            {
-                version: "2.0.4",
-                date: "2024-03-20",
-                type: "feature",
-                title: "Quality of Life Updates",
-                description: "Major improvements to player experience and interface",
-                patches: [
-                    {
-                        type: "feature",
-                        content: "Updated Cassette Spoiler with new animation effects"
-                    },
-                    {
-                        type: "improvement",
-                        content: "Enhanced vehicle performance and handling"
-                    },
-                    {
-                        type: "feature",
-                        content: "Added new Police Chase mechanics and AI improvements"
-                    }
-                ]
-            },
-            {
-                version: "2.0.3",
-                date: "2024-03-15",
-                type: "bugfix",
-                title: "Stability Update",
-                description: "Fixed critical stability issues and improved performance",
-                patches: [
-                    {
-                        type: "bugfix",
-                        content: "Fixed Rim Garage visuals for Military Jeep"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Fixed Rainboom Drift visual effects"
-                    },
-                    {
-                        type: "improvement",
-                        content: "Optimized train robbery closing sequence"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Fixed E circles not appearing on Passenger Train"
-                    }
-                ]
-            },
-            {
-                version: "2.0.2",
-                date: "2024-03-10",
-                type: "feature",
-                title: "Major Content Update",
-                description: "Significant new content and features added",
-                patches: [
-                    {
-                        type: "feature",
-                        content: "Added new HyperChrome vehicle customization system"
-                    },
-                    {
-                        type: "feature",
-                        content: "Introduced new Bank robbery mechanics"
-                    },
-                    {
-                        type: "improvement",
-                        content: "Enhanced weapon customization options"
-                    }
-                ]
-            },
-            {
-                version: "2.0.1",
-                date: "2024-03-05",
-                type: "bugfix",
-                title: "Launch Day Fixes",
-                description: "Critical fixes for day one stability issues",
-                patches: [
-                    {
-                        type: "bugfix",
-                        content: "Fixed vehicles breaking if you enter/exit too quickly"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Fixed vehicle camera sometimes breaking on exit"
-                    },
-                    {
-                        type: "bugfix",
-                        content: "Fixed an issue with vehicles not properly closing"
-                    }
-                ]
-            }
-        ];
-
-        let currentFilter = 'all';
-        let filteredLogs = changelogs;
-
-        // Initialize statistics
-        function updateStats() {
-            const totalUpdates = changelogs.length;
-            const bugfixes = changelogs.filter(log => log.type === 'bugfix').length;
-            const newFeatures = changelogs.filter(log => log.type === 'feature').length;
-            const majorUpdates = changelogs.filter(log => log.type === 'major').length;
-
-            document.getElementById('totalUpdates').textContent = totalUpdates;
-            document.getElementById('bugfixes').textContent = bugfixes;
-            document.getElementById('newFeatures').textContent = newFeatures;
-            document.getElementById('majorUpdates').textContent = majorUpdates;
-        }
-
-        // Filter changelogs
-        function filterChangelogs(filter) {
-            currentFilter = filter;
-            filteredLogs = filter === 'all' ? changelogs : changelogs.filter(log => log.type === filter);
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            renderChangelogs();
-        }
-
-        // Render changelogs
-        function renderChangelogs() {
-            const container = document.getElementById('changelogContainer');
-            container.innerHTML = '';
-
-            filteredLogs.forEach((log, index) => {
-                const card = document.createElement('div');
-                card.className = 'changelog-card';
-                card.innerHTML = `
-                    <div class="version-header">
-                        <div class="version-tag">${log.version}</div>
-                        <div class="version-date">${log.date}</div>
-                        <div class="version-title">${log.title}</div>
-                    </div>
-                    <div class="patch-list">
-                        ${log.patches.map(patch => `
-                            <div class="patch-item">
-                                <div class="patch-type ${patch.type}">${patch.type}</div>
-                                <div class="patch-content">${patch.content}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                
-                container.appendChild(card);
-            });
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            renderChangelogs();
-        });
-    </script>
+        const canvas = document.getElementById('cashCanvas'), ctx = canvas.getContext('2d');   
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } 
+        resize(); window.addEventListener('resize', resize); 
+        
+        const cashChars = ['$', '💵', '💰', '💸'], fontSize = 16; 
+        let columns = Math.floor(canvas.width / fontSize), drops = Array(columns).fill(1); 
+        function draw() { 
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            ctx.fillStyle = '#00ff88'; ctx.font = fontSize + 'px monospace'; 
+            for (let i = 0; i < drops.length; i++) { 
+                ctx.fillText(cashChars[Math.floor(Math.random() * cashChars.length)], i * fontSize, drops[i] * fontSize); 
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; 
+                drops[i]++; 
+            } 
+        } 
+        setInterval(draw, 50); 
+    </script>   
     <script src="loader.js"></script>
-</body>
+</body>   
 </html>
