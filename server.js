@@ -166,8 +166,8 @@ app.get('/auth/callback', async (req, res) => {
             discriminator: userData.discriminator,
             avatar: userData.avatar || `https://cdn.discordapp.com/avatars/${userData.id}.png`,
             isAdmin: isAdmin,
-            loginTime: new Date(),
-            lastLogin: new Date(),
+            loginTime: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
             sessionToken: require('crypto').randomBytes(32).toString('hex')
         };
         
