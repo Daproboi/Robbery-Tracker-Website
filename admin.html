@@ -253,26 +253,33 @@
     
     <script>
         // Check if user is logged in and is admin
-        function checkAdminAuth() {
-            const user = localStorage.getItem('user');
-            if (user) {
-                const userData = JSON.parse(user);
+        async function checkAdminAuth() {
+            const sessionToken = localStorage.getItem('sessionToken');
+            
+            if (!sessionToken) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/check-session?token=${sessionToken}`);
+                const data = await response.json();
                 
-                if (!userData.isAdmin) {
-                    // Redirect non-admin users away
+                if (!data.valid || !data.user.isAdmin) {
+                    // Redirect non-admin users or invalid sessions
                     window.location.href = '/index.html';
                     return;
                 }
                 
                 // Display user info
-                document.getElementById('userAvatar').src = userData.avatar || `https://cdn.discordapp.com/avatars/${userData.id}.png`;
-                document.getElementById('userName').textContent = userData.username;
+                document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${data.user.id}.png`;
+                document.getElementById('userName').textContent = data.user.username;
                 document.getElementById('userRole').textContent = 'Administrator';
                 
                 // Load admin data
                 loadAdminData();
-            } else {
-                // Redirect to login
+            } catch (err) {
+                console.error('Auth check failed:', err);
                 window.location.href = '/login.html';
             }
         }
@@ -336,7 +343,7 @@
         }
         
         function logout() {
-            localStorage.removeItem('user');
+            localStorage.removeItem('sessionToken');
             window.location.href = '/login.html';
         }
         
