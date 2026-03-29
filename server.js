@@ -63,7 +63,8 @@ app.get('/auth/callback', async (req, res) => {
         const tokenData = await tokenResponse.json();
         
         if (!tokenData.access_token) {
-            return res.status(500).send('Failed to obtain access token');
+            console.error('Discord token error:', tokenData);
+            return res.status(500).send('Failed to obtain access token: ' + JSON.stringify(tokenData));
         }
         
         // Get user information from Discord
@@ -109,7 +110,7 @@ app.get('/auth/callback', async (req, res) => {
         
     } catch (error) {
         console.error('Authentication error:', error);
-        res.status(500).send('Internal server error');
+        res.status(500).send('Internal server error: ' + error.message);
     }
 });
 
@@ -223,15 +224,15 @@ app.get('/api/stats', async (req, res) => {
 
 // Serve static files
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+    res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 // Database connection
