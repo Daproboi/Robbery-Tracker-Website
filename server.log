@@ -1,0 +1,7 @@
+
+> jailbreak-hub-backend@1.0.0 start
+> node server.js
+
+Server running on port 3000
+Discord Client ID: 1487705589210550282
+Database: SQLite (users.db)

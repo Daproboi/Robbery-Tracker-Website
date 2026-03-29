@@ -157,7 +157,10 @@ app.get('/auth/callback', async (req, res) => {
         
         // Check if user is admin
         const ADMINS = (process.env.ADMIN_DISCORD_IDS || '').split(',').filter(id => id.trim());
+        console.log('Discord user ID:', userData.id, 'Type:', typeof userData.id);
+        console.log('Admin list:', ADMINS);
         const isAdmin = ADMINS.includes(userData.id);
+        console.log('Is admin:', isAdmin);
         
         // Create or update user in database
         const userSession = {
