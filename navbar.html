@@ -208,7 +208,23 @@ body.light-mode .mobile-toggle { color: #000; }
         }
     }
     
-    // Check login status on page load and when storage changes
-    document.addEventListener('DOMContentLoaded', checkLoginStatus);
-    window.addEventListener('storage', checkLoginStatus);
+    // Check login status on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+    
+    // Update login status when user logs in/out
+    window.addEventListener('storage', function() {
+        checkLoginStatus();
+    });
+    
+    // Fallback: Make login button visible if no user after 1 second
+    setTimeout(() => {
+        const user = localStorage.getItem('user');
+        const loginNavItem = document.getElementById('loginNavItem');
+        
+        if (!user && loginNavItem) {
+            loginNavItem.style.display = 'block';
+        }
+    }, 1000);
 </script>
