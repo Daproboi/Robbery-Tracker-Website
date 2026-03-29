@@ -10,13 +10,13 @@ class PityCalculator {
         this.hyperchromesEarned = 0;
         this.lastDropAgo = 0;
         
-        // Actual HyperChrome system - 5 levels only
+        // Actual HyperChrome pity system - 5 levels only
         this.hyperChromeLevels = [
-            { level: 1, probability: 0.005, pityMultiplier: 200 },    // 0.5% chance, 200 robberies for 100% pity
-            { level: 2, probability: 0.001, pityMultiplier: 500 },    // 0.1% chance, 500 robberies for 100% pity  
-            { level: 3, probability: 0.0005, pityMultiplier: 1000 },   // 0.05% chance, 1000 robberies for 100% pity
-            { level: 4, probability: 0.0002, pityMultiplier: 2500 },   // 0.02% chance, 2500 robberies for 100% pity
-            { level: 5, probability: 0.0001, pityMultiplier: 5000 }    // 0.01% chance, 5000 robberies for 100% pity
+            { level: 1, robberies: 250, probability: 0.01 },    // 250 robberies for 100% pity, ~1% base chance
+            { level: 2, robberies: 500, probability: 0.005 },   // 500 robberies for 100% pity, ~0.5% base chance
+            { level: 3, robberies: 750, probability: 0.002 },   // 750 robberies for 100% pity, ~0.2% base chance
+            { level: 4, robberies: 1000, probability: 0.001 },  // 1000 robberies for 100% pity, ~0.1% base chance
+            { level: 5, robberies: 1500, probability: 0.0005 }   // 1500 robberies for 100% pity, ~0.05% base chance
         ];
         
         this.init();
@@ -61,15 +61,12 @@ class PityCalculator {
         const currentLevel = this.getCurrentHyperChromeLevel();
         const levelData = this.hyperChromeLevels[currentLevel - 1] || this.hyperChromeLevels[4]; // Default to level 5 if beyond
         
-        // Calculate pity percentage
-        const pityPercentage = Math.min((currentPity / levelData.pityMultiplier) * 100, 100);
+        // Calculate pity percentage (progress toward guaranteed drop)
+        const pityPercentage = Math.min((currentPity / levelData.robberies) * 100, 100);
         
         // Calculate robberies needed for 100% pity
-        const robberiesToMaxPity = Math.max(levelData.pityMultiplier - currentPity, 0);
+        const robberiesToMaxPity = Math.max(levelData.robberies - currentPity, 0);
         
-        // Calculate expected robberies for drop (considering both chance and pity)
-        const expectedRobberies = this.calculateExpectedRobberies(levelData.probability, currentPity, levelData.pityMultiplier);
-
         // Update results
         document.getElementById('currentLevel').textContent = `Level ${currentLevel}`;
         document.getElementById('dropChance').textContent = `${(levelData.probability * 100).toFixed(2)}%`;
@@ -81,9 +78,9 @@ class PityCalculator {
         document.getElementById('progressPercentage').textContent = `${pityPercentage.toFixed(1)}%`;
 
         // Update result descriptions
-        document.querySelector('#currentLevel').nextElementSibling.textContent = `${(levelData.probability * 100).toFixed(2)}% base chance`;
-        document.querySelector('#dropChance').nextElementSibling.textContent = 'Per robbery';
-        document.querySelector('#robberiesToNext').nextElementSibling.textContent = 'For 100% pity';
+        document.querySelector('#currentLevel').nextElementSibling.textContent = `${levelData.robberies} robberies for 100% pity`;
+        document.querySelector('#dropChance').nextElementSibling.textContent = 'Base chance per robbery';
+        document.querySelector('#robberiesToNext').nextElementSibling.textContent = 'More robberies needed';
         document.querySelector('#totalProgress').nextElementSibling.textContent = 'Pity progress';
 
         // Show results
@@ -146,7 +143,7 @@ class PityCalculator {
         tbody.innerHTML = this.hyperChromeLevels.map(level => `
             <tr data-level="${level.level}">
                 <td>Level ${level.level}</td>
-                <td>${level.pityMultiplier.toLocaleString()}</td>
+                <td>${level.robberies.toLocaleString()}</td>
                 <td><span class="chance-badge ${this.getChanceBadgeClass(level.probability)}">${(level.probability * 100).toFixed(2)}%</span></td>
                 <td>${this.getCategory(level.probability)}</td>
             </tr>
