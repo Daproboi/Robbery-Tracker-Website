@@ -173,8 +173,8 @@ app.get('/api/users', async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
-    }
-});
+
+};
 
 // Logout route
 app.get('/logout', (req, res) => {

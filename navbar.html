@@ -217,4 +217,12 @@ body.light-mode .mobile-toggle { color: #000; }
     window.addEventListener('storage', function() {
         checkLoginStatus();
     });
+    
+    // Make login button visible by default (for testing)
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginNavItem = document.getElementById('loginNavItem');
+        if (loginNavItem) {
+            loginNavItem.style.display = 'block';
+        }
+    });
 </script>
