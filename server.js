@@ -183,13 +183,25 @@ app.get('/auth/callback', async (req, res) => {
         };
         
         // Check if user or IP is banned
-        const users = await loadUsers();
-        const existingUser = users[userData.id];
-        
-        // Check for IP ban
-        for (const [id, user] of Object.entries(users)) {
-            if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
-                return res.status(403).send('This IP address has been banned.');
+        let existingUser;
+        if (USE_MONGODB) {
+            existingUser = await User.findOne({ discordId: userData.id });
+            // For IP ban check in MongoDB, we'd need to query all users
+            const allUsers = await User.find();
+            for (const user of allUsers) {
+                if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
+                    return res.status(403).send('This IP address has been banned.');
+                }
+            }
+        } else {
+            const users = await loadUsers();
+            existingUser = users[userData.id];
+            
+            // Check for IP ban
+            for (const [id, user] of Object.entries(users)) {
+                if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
+                    return res.status(403).send('This IP address has been banned.');
+                }
             }
         }
         
