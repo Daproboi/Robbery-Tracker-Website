@@ -158,7 +158,7 @@ body.light-mode .mobile-toggle { color: #000; }
     }
     .dropdown {
         position: static; 
-        transform: none; 
+        transform: none !important; 
         opacity: 1; 
         pointer-events: auto; 
         box-shadow: none; 
@@ -167,11 +167,12 @@ body.light-mode .mobile-toggle { color: #000; }
         padding: 5px 0 5px 15px; 
         min-width: 100%; 
         display: none; 
+        left: auto !important;
+        top: auto !important;
     }
-    /* Show dropdown when parent nav-item has active class (for mobile) */
+    /* Only show dropdown via active class (click), not hover, in mobile menu */
     .nav-item.active > .dropdown { display: block; }
-    /* Also support hover for desktop that falls in this range */
-    .nav-item:hover > .dropdown { display: none; }
+    .nav-item:hover > .dropdown { display: none !important; }
     .nav-item.active:hover > .dropdown { display: block; }
     
     /* User menu mobile fixes */
