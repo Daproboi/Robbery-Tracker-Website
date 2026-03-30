@@ -160,16 +160,25 @@ body.light-mode .mobile-toggle { color: #000; }
     
     /* COMPLETELY RESET DROPDOWN FOR MOBILE - NO ANIMATIONS */
     .dropdown {
-        position: static;
+        position: static !important;
         display: none;
         width: 100%;
         padding: 5px 0 5px 20px;
         box-sizing: border-box;
-        transform: none;
-        left: auto;
-        top: auto;
-        opacity: 1;
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+        opacity: 1 !important;
         pointer-events: auto;
+    }
+    /* Force override of desktop hover transform */
+    .nav-item:hover .dropdown,
+    .nav-item.active .dropdown,
+    .nav-item.active:hover .dropdown {
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+        position: static !important;
     }
     .nav-item.active > .dropdown { 
         display: block; 
