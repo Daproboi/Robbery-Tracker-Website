@@ -240,11 +240,18 @@ app.get('/api/check-session', async (req, res) => {
         const now = Date.now();
         
         if (now - lastLogin > ONE_DAY) {
-            // Session expired
-            const users = await loadUsers();
-            if (users[user.discordId]) {
-                users[user.discordId].sessionToken = null;
-                await saveUsers(users);
+            // Session expired - use MongoDB update
+            if (USE_MONGODB) {
+                await User.findOneAndUpdate(
+                    { discordId: user.discordId },
+                    { sessionToken: null }
+                );
+            } else {
+                const users = await loadUsers();
+                if (users[user.discordId]) {
+                    users[user.discordId].sessionToken = null;
+                    await saveUsers(users);
+                }
             }
             return res.status(401).json({ error: 'Session expired' });
         }
@@ -334,9 +341,16 @@ app.get('/logout', async (req, res) => {
     if (token) {
         const user = await User.findOne({ sessionToken: token });
         if (user) {
-            const users = await loadUsers();
-            users[user.discordId].sessionToken = null;
-            await saveUsers(users);
+            if (USE_MONGODB) {
+                await User.findOneAndUpdate(
+                    { discordId: user.discordId },
+                    { sessionToken: null }
+                );
+            } else {
+                const users = await loadUsers();
+                users[user.discordId].sessionToken = null;
+                await saveUsers(users);
+            }
         }
     }
     
@@ -398,5 +412,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Discord Client ID: ${CLIENT_ID}`);
-    console.log(`Database: JSON file (users.json)`);
+    console.log(`Database: ${USE_MONGODB ? 'MongoDB Atlas' : 'JSON file (users.json)'}`);
 });
