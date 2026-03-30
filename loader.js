@@ -203,8 +203,12 @@ document.addEventListener("DOMContentLoaded", async function() {
                     const dropdown = item.querySelector('.dropdown');
                     
                     if (dropdown && link) {
-                        link.addEventListener('click', (e) => {
-                            // Only handle click on mobile/tablet (match CSS breakpoint of 1200px)
+                        // Remove any existing click listeners to prevent duplicates
+                        link.removeEventListener('click', link._dropdownHandler);
+                        
+                        // Create handler function
+                        link._dropdownHandler = (e) => {
+                            // Check if we're in mobile/tablet view (CSS breakpoint is 1200px)
                             if (window.innerWidth <= 1200) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -219,21 +223,28 @@ document.addEventListener("DOMContentLoaded", async function() {
                                 // Toggle this dropdown
                                 item.classList.toggle('active');
                             }
-                        });
+                        };
+                        
+                        // Add the click listener
+                        link.addEventListener('click', link._dropdownHandler);
                     }
                 });
 
                 // Close menu when clicking a regular link (no dropdown)
-                const regularLinks = navLinks.querySelectorAll('.nav-item:not(:has(.dropdown)) .nav-link');
-                regularLinks.forEach((link) => {
-                    link.addEventListener('click', () => {
-                        navLinks.classList.remove('active');
-                        const icon = menuToggle.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-xmark');
-                            icon.classList.add('fa-bars');
-                        }
-                    });
+                const allNavLinks = navLinks.querySelectorAll('.nav-link');
+                allNavLinks.forEach((link) => {
+                    // Skip links that have dropdowns (they're handled above)
+                    const parentItem = link.closest('.nav-item');
+                    if (parentItem && !parentItem.querySelector('.dropdown')) {
+                        link.addEventListener('click', () => {
+                            navLinks.classList.remove('active');
+                            const icon = menuToggle.querySelector('i');
+                            if (icon) {
+                                icon.classList.remove('fa-xmark');
+                                icon.classList.add('fa-bars');
+                            }
+                        });
+                    }
                 });
 
                 // Close menu when clicking a dropdown link
