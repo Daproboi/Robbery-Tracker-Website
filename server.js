@@ -130,65 +130,69 @@ function formatItemName(key) {
     return names[key] || key;
 }
 
-// Monitor Values.js for changes
+// Monitor Values from external API
 async function checkValueChanges() {
     try {
-        // Read current Values.js
-        const valuesContent = await fs.readFile('./Values.js', 'utf8');
+        // Fetch current values from API
+        const response = await fetch('https://api.jbvalues.com/v1/items');
+        if (!response.ok) {
+            console.error('[Value Monitor] API request failed:', response.status);
+            return [];
+        }
         
-        // Extract HyperchromeValues from the file content
-        const match = valuesContent.match(/const\s+HyperchromeValues\s*=\s*\{([^}]+)\}/);
-        if (!match) return [];
-        
-        // Parse the values
-        const valuesStr = match[1];
+        const items = await response.json();
         const currentValues = {};
         
-        // Extract each property
-        const propRegex = /(\w+):\s*['"]?([^'",\n]+)['"]?/g;
-        let propMatch;
-        while ((propMatch = propRegex.exec(valuesStr)) !== null) {
-            currentValues[propMatch[1]] = propMatch[2].trim();
-        }
+        // Extract key values we want to track
+        items.forEach(item => {
+            if (item.name && item.value) {
+                currentValues[item.name] = item.value.toString();
+            }
+        });
         
         const snapshot = await loadValuesSnapshot();
         
         // First run - just save snapshot
         if (!snapshot) {
             await saveValuesSnapshot(currentValues);
+            console.log('[Value Monitor] Initial snapshot saved with', Object.keys(currentValues).length, 'items');
             return [];
         }
         
         const changes = [];
         const timestamp = new Date().toISOString();
         
-        for (const [key, current] of Object.entries(currentValues)) {
-            const previous = snapshot[key];
+        // Check for changes and new items
+        for (const [name, currentValue] of Object.entries(currentValues)) {
+            const previousValue = snapshot[name];
             
-            if (!previous) {
+            if (!previousValue) {
                 // New item
                 changes.push({
                     id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-                    item: formatItemName(key),
-                    itemKey: key,
+                    item: name,
+                    itemKey: name,
                     type: 'new',
-                    value: current,
+                    value: currentValue,
                     timestamp: timestamp
                 });
-            } else if (previous !== current) {
+            } else if (previousValue !== currentValue) {
                 // Value changed
-                const oldVal = parseValue(previous);
-                const newVal = parseValue(current);
-                const percentChange = ((newVal - oldVal) / oldVal * 100).toFixed(1);
+                const oldVal = parseValue(previousValue);
+                const newVal = parseValue(currentValue);
+                let percentChange = 0;
+                if (oldVal > 0) {
+                    percentChange = ((newVal - oldVal) / oldVal * 100);
+                }
                 
                 changes.push({
                     id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-                    item: formatItemName(key),
-                    itemKey: key,
+                    item: name,
+                    itemKey: name,
                     type: newVal > oldVal ? 'increase' : 'decrease',
-                    oldValue: previous,
-                    newValue: current,
-                    percentChange: parseFloat(percentChange),
+                    oldValue: previousValue,
+                    newValue: currentValue,
+                    percentChange: parseFloat(percentChange.toFixed(1)),
                     timestamp: timestamp
                 });
             }
@@ -204,6 +208,9 @@ async function checkValueChanges() {
             // Keep only last 500 changes
             await saveValueChanges(history.slice(0, 500));
             console.log(`[Value Monitor] Detected ${changes.length} value changes at ${timestamp}`);
+            changes.forEach(c => {
+                console.log(`  - ${c.item}: ${c.oldValue || 'NEW'} → ${c.newValue || c.value}`);
+            });
         }
         
         return changes;
