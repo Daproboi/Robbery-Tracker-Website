@@ -167,20 +167,58 @@ document.addEventListener("DOMContentLoaded", async function() {
                 });
             }
 
-            // Mobile Hamburger Menu
+            // Mobile Hamburger Menu - Single Event Delegation Approach
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             if (menuToggle && navLinks) {
+                // Hamburger toggle
                 menuToggle.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    navLinks.classList.toggle('active');
+                    const isActive = navLinks.classList.toggle('active');
                     const icon = menuToggle.querySelector('i');
-                    if (navLinks.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-xmark');
-                    } else {
-                        icon.classList.remove('fa-xmark');
-                        icon.classList.add('fa-bars');
+                    if (icon) {
+                        icon.className = isActive ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+                    }
+                });
+
+                // Single delegated click handler for entire nav menu
+                navLinks.addEventListener('click', (e) => {
+                    // Only handle clicks in mobile view
+                    if (window.innerWidth > 1200) return;
+
+                    const link = e.target.closest('.nav-link');
+                    const dropLink = e.target.closest('.drop-link');
+                    
+                    if (dropLink) {
+                        // Clicked a dropdown link - close menu and navigate
+                        navLinks.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        if (icon) icon.className = 'fa-solid fa-bars';
+                        return; // Let default navigation happen
+                    }
+                    
+                    if (link) {
+                        const navItem = link.closest('.nav-item');
+                        const hasDropdown = navItem && navItem.querySelector('.dropdown');
+                        
+                        if (hasDropdown) {
+                            // Toggle dropdown
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // Close other dropdowns
+                            navLinks.querySelectorAll('.nav-item.active').forEach(item => {
+                                if (item !== navItem) item.classList.remove('active');
+                            });
+                            
+                            // Toggle this one
+                            navItem.classList.toggle('active');
+                        } else {
+                            // Regular link - close menu
+                            navLinks.classList.remove('active');
+                            const icon = menuToggle.querySelector('i');
+                            if (icon) icon.className = 'fa-solid fa-bars';
+                        }
                     }
                 });
 
@@ -188,76 +226,12 @@ document.addEventListener("DOMContentLoaded", async function() {
                 document.addEventListener('click', (e) => {
                     if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
                         navLinks.classList.remove('active');
-                        const icon = menuToggle.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-xmark');
-                            icon.classList.add('fa-bars');
-                        }
-                    }
-                });
-
-                // Mobile dropdown handling (click to toggle) - works at 1200px breakpoint
-                const navItems = navLinks.querySelectorAll('.nav-item');
-                navItems.forEach((item) => {
-                    const link = item.querySelector('.nav-link');
-                    const dropdown = item.querySelector('.dropdown');
-                    
-                    if (dropdown && link) {
-                        // Remove any existing click listeners to prevent duplicates
-                        link.removeEventListener('click', link._dropdownHandler);
-                        
-                        // Create handler function
-                        link._dropdownHandler = (e) => {
-                            // Check if we're in mobile/tablet view (CSS breakpoint is 1200px)
-                            if (window.innerWidth <= 1200) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                
-                                // Close other open dropdowns
-                                navItems.forEach((otherItem) => {
-                                    if (otherItem !== item) {
-                                        otherItem.classList.remove('active');
-                                    }
-                                });
-                                
-                                // Toggle this dropdown
-                                item.classList.toggle('active');
-                            }
-                        };
-                        
-                        // Add the click listener
-                        link.addEventListener('click', link._dropdownHandler);
-                    }
-                });
-
-                // Close menu when clicking a regular link (no dropdown)
-                const allNavLinks = navLinks.querySelectorAll('.nav-link');
-                allNavLinks.forEach((link) => {
-                    // Skip links that have dropdowns (they're handled above)
-                    const parentItem = link.closest('.nav-item');
-                    if (parentItem && !parentItem.querySelector('.dropdown')) {
-                        link.addEventListener('click', () => {
-                            navLinks.classList.remove('active');
-                            const icon = menuToggle.querySelector('i');
-                            if (icon) {
-                                icon.classList.remove('fa-xmark');
-                                icon.classList.add('fa-bars');
-                            }
+                        navLinks.querySelectorAll('.nav-item.active').forEach(item => {
+                            item.classList.remove('active');
                         });
-                    }
-                });
-
-                // Close menu when clicking a dropdown link
-                const dropLinks = navLinks.querySelectorAll('.drop-link');
-                dropLinks.forEach((link) => {
-                    link.addEventListener('click', () => {
-                        navLinks.classList.remove('active');
                         const icon = menuToggle.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-xmark');
-                            icon.classList.add('fa-bars');
-                        }
-                    });
+                        if (icon) icon.className = 'fa-solid fa-bars';
+                    }
                 });
             }
         }
