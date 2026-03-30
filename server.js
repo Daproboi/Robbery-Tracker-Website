@@ -22,6 +22,9 @@ const ADDITIONAL_CLIENT_SECRETS = (process.env.ADDITIONAL_CLIENT_SECRETS || '').
 
 const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
 
+// Discord Server Requirements
+const REQUIRED_DISCORD_GUILD_ID = process.env.REQUIRED_DISCORD_GUILD_ID || '';
+
 // Simple JSON Database
 const DB_FILE = './users.json';
 
@@ -123,6 +126,32 @@ app.get('/auth/callback', async (req, res) => {
         
         if (!userData.id) {
             return res.status(500).send('Failed to obtain user information');
+        }
+        
+        // Check Discord server membership if required
+        if (REQUIRED_DISCORD_GUILD_ID) {
+            const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
+                headers: {
+                    'Authorization': `Bearer ${tokenData.access_token}`
+                }
+            });
+            
+            const guilds = await guildsResponse.json();
+            const isInRequiredServer = guilds.some(guild => guild.id === REQUIRED_DISCORD_GUILD_ID);
+            
+            if (!isInRequiredServer) {
+                return res.status(403).send(`
+                    <html>
+                    <head><title>Access Denied</title></head>
+                    <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #0a0e27; color: white;">
+                        <h1 style="color: #ef4444;">Access Denied</h1>
+                        <p>You must be a member of our Discord server to use this website.</p>
+                        <p>Please join the server first, then try logging in again.</p>
+                        <a href="/login.html" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #3b82f6; color: white; text-decoration: none; border-radius: 5px;">Back to Login</a>
+                    </body>
+                    </html>
+                `);
+            }
         }
         
         // Check if user is admin - support multiple admin IDs

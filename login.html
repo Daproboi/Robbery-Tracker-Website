@@ -177,7 +177,7 @@
         // Discord OAuth Configuration
         const CLIENT_ID = '1487705589210550282';
         const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
-        const SCOPE = 'identify';
+        const SCOPE = 'identify guilds';
         
         function loginWithDiscord() {
             const authUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${SCOPE}`;
