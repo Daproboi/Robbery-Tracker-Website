@@ -299,129 +299,55 @@
     <div id="footer-container"></div>
     
     <script>
-        // Check for value changes and store history
-        function checkValueChanges() {
-            const currentValues = getCurrentValues();
-            const storedSnapshot = localStorage.getItem('valuesSnapshot');
-            const snapshot = storedSnapshot ? JSON.parse(storedSnapshot) : null;
-            
-            // Store current snapshot
-            localStorage.setItem('valuesSnapshot', JSON.stringify(currentValues));
-            localStorage.setItem('lastValuesCheck', new Date().toISOString());
-            
-            if (!snapshot) {
-                // First visit - no previous data to compare
-                return [];
-            }
-            
-            // Compare and find changes
-            const changes = [];
-            const timestamp = new Date().toISOString();
-            
-            for (const [key, current] of Object.entries(currentValues)) {
-                const previous = snapshot[key];
-                
-                if (!previous) {
-                    // New item
-                    changes.push({
-                        item: formatItemName(key),
-                        type: 'new',
-                        value: current,
-                        timestamp: timestamp
-                    });
-                } else if (previous !== current) {
-                    // Value changed
-                    const oldVal = parseValue(previous);
-                    const newVal = parseValue(current);
-                    const percentChange = ((newVal - oldVal) / oldVal * 100).toFixed(1);
-                    
-                    changes.push({
-                        item: formatItemName(key),
-                        type: newVal > oldVal ? 'increase' : 'decrease',
-                        oldValue: previous,
-                        newValue: current,
-                        percentChange: percentChange,
-                        timestamp: timestamp
-                    });
-                }
-            }
-            
-            // Store changes in history
-            if (changes.length > 0) {
-                const history = JSON.parse(localStorage.getItem('valuesHistory') || '[]');
-                history.unshift(...changes);
-                // Keep only last 100 changes
-                localStorage.setItem('valuesHistory', JSON.stringify(history.slice(0, 100)));
-            }
-            
-            return changes;
-        }
+        let allChanges = [];
         
-        // Get current values from Values.js
-        function getCurrentValues() {
-            const values = {};
-            
-            // Check if HyperchromeValues exists
-            if (typeof HyperchromeValues !== 'undefined') {
-                values.shiftLvl5 = HyperchromeValues.shiftLvl5;
-                values.diamondLvl5 = HyperchromeValues.diamondLvl5;
-                values.redLvl5 = HyperchromeValues.redLvl5;
-                values.lvl1Any = HyperchromeValues.lvl1Any;
+        // Fetch value changes from server API
+        async function fetchValueChanges() {
+            try {
+                const response = await fetch('/api/value-changes');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching value changes:', error);
+                return { changes: [], total: 0, increases: 0, decreases: 0, newItems: 0 };
             }
-            
-            // Add more value sources as needed
-            return values;
-        }
-        
-        // Parse value string (handles "1.2M", "850K", etc)
-        function parseValue(val) {
-            if (typeof val === 'number') return val;
-            if (!val) return 0;
-            
-            const str = val.toString().toUpperCase();
-            let num = parseFloat(str.replace(/[^0-9.]/g, ''));
-            
-            if (str.includes('M')) num *= 1000000;
-            else if (str.includes('K')) num *= 1000;
-            
-            return num;
-        }
-        
-        // Format item name for display
-        function formatItemName(key) {
-            const names = {
-                shiftLvl5: 'Shift HyperChrome (Lvl 5)',
-                diamondLvl5: 'Diamond HyperChrome (Lvl 5)',
-                redLvl5: 'Red HyperChrome (Lvl 5)',
-                lvl1Any: 'Level 1 HyperChrome (Any)'
-            };
-            return names[key] || key;
         }
         
         // Render changelog
-        function renderChangelog(filter = 'all') {
-            const history = JSON.parse(localStorage.getItem('valuesHistory') || '[]');
+        async function renderChangelog(filter = 'all') {
             const list = document.getElementById('changelogList');
             
-            // Update stats
-            document.getElementById('totalChanges').textContent = history.length;
-            document.getElementById('increases').textContent = history.filter(h => h.type === 'increase').length;
-            document.getElementById('decreases').textContent = history.filter(h => h.type === 'decrease').length;
+            // Show loading
+            list.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-sync fa-spin"></i>
+                    <p>Loading value changes...</p>
+                </div>
+            `;
             
-            // Update last updated
-            const lastCheck = localStorage.getItem('lastValuesCheck');
-            if (lastCheck) {
-                document.getElementById('lastUpdated').textContent = new Date(lastCheck).toLocaleString();
-            }
+            // Fetch from server
+            const data = await fetchValueChanges();
+            allChanges = data.changes || [];
+            
+            // Update stats
+            document.getElementById('totalChanges').textContent = data.total || 0;
+            document.getElementById('increases').textContent = data.increases || 0;
+            document.getElementById('decreases').textContent = data.decreases || 0;
+            
+            // Update last updated (use most recent change or now)
+            const lastChange = allChanges[0]?.timestamp;
+            document.getElementById('lastUpdated').textContent = lastChange 
+                ? new Date(lastChange).toLocaleString() 
+                : 'No changes yet';
             
             // Filter changes
-            const filtered = filter === 'all' ? history : history.filter(h => h.type === filter);
+            const filtered = filter === 'all' ? allChanges : allChanges.filter(h => h.type === filter);
             
             if (filtered.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-chart-line"></i>
-                        <p>${filter === 'all' ? 'No value changes recorded yet. Changes will appear here when values are updated.' : `No ${filter}s recorded yet.`}</p>
+                        <p>${filter === 'all' ? 'No value changes recorded yet. Changes appear automatically when Values.js is updated.' : `No ${filter}s recorded yet.`}</p>
                     </div>
                 `;
                 return;
@@ -448,6 +374,7 @@
                 
                 const percentClass = entry.percentChange > 0 ? 'positive' : 'negative';
                 const valueClass = entry.type;
+                const percentSign = entry.percentChange > 0 ? '+' : '';
                 
                 return `
                     <div class="changelog-entry ${entry.type}">
@@ -460,7 +387,7 @@
                             <span class="old-value">${entry.oldValue}</span>
                             <span class="arrow"><i class="fas fa-arrow-right"></i></span>
                             <span class="new-value ${valueClass}">${entry.newValue}</span>
-                            <span class="percent-change ${percentClass}">${entry.percentChange > 0 ? '+' : ''}${entry.percentChange}%</span>
+                            <span class="percent-change ${percentClass}">${percentSign}${entry.percentChange}%</span>
                         </div>
                     </div>
                 `;
@@ -478,7 +405,6 @@
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            checkValueChanges();
             renderChangelog();
         });
     </script>

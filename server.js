@@ -27,6 +27,8 @@ const REQUIRED_DISCORD_GUILD_ID = process.env.REQUIRED_DISCORD_GUILD_ID || '';
 
 // Simple JSON Database
 const DB_FILE = './users.json';
+const VALUE_CHANGES_FILE = './value-changes.json';
+const VALUES_SNAPSHOT_FILE = './values-snapshot.json';
 
 async function loadUsers() {
     try {
@@ -78,6 +80,147 @@ const User = {
         return Object.keys(users).length;
     }
 };
+
+// Value Changes Database Helpers
+async function loadValueChanges() {
+    try {
+        const data = await fs.readFile(VALUE_CHANGES_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return [];
+    }
+}
+
+async function saveValueChanges(changes) {
+    await fs.writeFile(VALUE_CHANGES_FILE, JSON.stringify(changes, null, 2));
+}
+
+async function loadValuesSnapshot() {
+    try {
+        const data = await fs.readFile(VALUES_SNAPSHOT_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return null;
+    }
+}
+
+async function saveValuesSnapshot(snapshot) {
+    await fs.writeFile(VALUES_SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
+}
+
+// Parse value string (handles "1.2M", "850K", etc)
+function parseValue(val) {
+    if (typeof val === 'number') return val;
+    if (!val) return 0;
+    const str = val.toString().toUpperCase();
+    let num = parseFloat(str.replace(/[^0-9.]/g, ''));
+    if (str.includes('M')) num *= 1000000;
+    else if (str.includes('K')) num *= 1000;
+    return num;
+}
+
+// Format item name for display
+function formatItemName(key) {
+    const names = {
+        shiftLvl5: 'Shift HyperChrome (Lvl 5)',
+        diamondLvl5: 'Diamond HyperChrome (Lvl 5)',
+        redLvl5: 'Red HyperChrome (Lvl 5)',
+        lvl1Any: 'Level 1 HyperChrome (Any)'
+    };
+    return names[key] || key;
+}
+
+// Monitor Values.js for changes
+async function checkValueChanges() {
+    try {
+        // Read current Values.js
+        const valuesContent = await fs.readFile('./Values.js', 'utf8');
+        
+        // Extract HyperchromeValues from the file content
+        const match = valuesContent.match(/const\s+HyperchromeValues\s*=\s*\{([^}]+)\}/);
+        if (!match) return [];
+        
+        // Parse the values
+        const valuesStr = match[1];
+        const currentValues = {};
+        
+        // Extract each property
+        const propRegex = /(\w+):\s*['"]?([^'",\n]+)['"]?/g;
+        let propMatch;
+        while ((propMatch = propRegex.exec(valuesStr)) !== null) {
+            currentValues[propMatch[1]] = propMatch[2].trim();
+        }
+        
+        const snapshot = await loadValuesSnapshot();
+        
+        // First run - just save snapshot
+        if (!snapshot) {
+            await saveValuesSnapshot(currentValues);
+            return [];
+        }
+        
+        const changes = [];
+        const timestamp = new Date().toISOString();
+        
+        for (const [key, current] of Object.entries(currentValues)) {
+            const previous = snapshot[key];
+            
+            if (!previous) {
+                // New item
+                changes.push({
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    item: formatItemName(key),
+                    itemKey: key,
+                    type: 'new',
+                    value: current,
+                    timestamp: timestamp
+                });
+            } else if (previous !== current) {
+                // Value changed
+                const oldVal = parseValue(previous);
+                const newVal = parseValue(current);
+                const percentChange = ((newVal - oldVal) / oldVal * 100).toFixed(1);
+                
+                changes.push({
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    item: formatItemName(key),
+                    itemKey: key,
+                    type: newVal > oldVal ? 'increase' : 'decrease',
+                    oldValue: previous,
+                    newValue: current,
+                    percentChange: parseFloat(percentChange),
+                    timestamp: timestamp
+                });
+            }
+        }
+        
+        // Save new snapshot
+        await saveValuesSnapshot(currentValues);
+        
+        // Append changes to history
+        if (changes.length > 0) {
+            const history = await loadValueChanges();
+            history.unshift(...changes);
+            // Keep only last 500 changes
+            await saveValueChanges(history.slice(0, 500));
+            console.log(`[Value Monitor] Detected ${changes.length} value changes at ${timestamp}`);
+        }
+        
+        return changes;
+    } catch (error) {
+        console.error('[Value Monitor] Error checking changes:', error);
+        return [];
+    }
+}
+
+// Start value monitoring (check every 5 minutes)
+function startValueMonitoring() {
+    console.log('[Value Monitor] Starting value monitoring...');
+    // Check immediately on startup
+    checkValueChanges();
+    // Then check every 5 minutes
+    setInterval(checkValueChanges, 5 * 60 * 1000);
+}
 
 // Discord OAuth Routes
 app.get('/auth/callback', async (req, res) => {
@@ -390,9 +533,27 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
+// Value Changes API
+app.get('/api/value-changes', async (req, res) => {
+    try {
+        const changes = await loadValueChanges();
+        res.json({
+            changes: changes,
+            total: changes.length,
+            increases: changes.filter(c => c.type === 'increase').length,
+            decreases: changes.filter(c => c.type === 'decrease').length,
+            newItems: changes.filter(c => c.type === 'new').length
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Discord Client ID: ${CLIENT_ID}`);
     console.log(`Database: JSON file (users.json)`);
+    // Start value monitoring
+    startValueMonitoring();
 });
