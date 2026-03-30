@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value Changelogs | Jailbreak Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="Values.js"></script>
+    <style>
+        :root {
+            --bg: #0a0e27;
+            --surface: #1e293b;
+            --card: #1e1f2e;
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --green: #10b981;
+            --red: #ef4444;
+            --orange: #f59e0b;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+        }
+        
+        body.light-mode {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --card: #f1f5f9;
+            --border: rgba(0, 0, 0, 0.1);
+            --accent: #005bb5;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+        }
+        
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 100px 40px 60px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border-radius: 32px;
+            margin: 0 40px 60px;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
+        }
+        
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .changelog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .changelog-entry {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .changelog-entry::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent);
+        }
+        
+        .changelog-entry.increase::before { background: var(--green); }
+        .changelog-entry.decrease::before { background: var(--red); }
+        .changelog-entry.new::before { background: var(--orange); }
+        
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .entry-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-dim);
+        }
+        
+        .entry-type {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .entry-type.increase { background: rgba(16, 185, 129, 0.2); color: var(--green); }
+        .entry-type.decrease { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+        .entry-type.new { background: rgba(245, 158, 11, 0.2); color: var(--orange); }
+        
+        .item-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .value-change {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .old-value {
+            color: var(--text-dim);
+            text-decoration: line-through;
+        }
+        
+        .arrow {
+            color: var(--text-dim);
+        }
+        
+        .new-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .new-value.increase { color: var(--green); }
+        .new-value.decrease { color: var(--red); }
+        
+        .percent-change {
+            margin-left: auto;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        
+        .percent-change.positive { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+        .percent-change.negative { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: var(--text-dim);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+        
+        .last-updated {
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-dim);
+            font-size: 0.875rem;
+        }
+        
+        .last-updated span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .stats-bar { grid-template-columns: 1fr; }
+            .container { padding: 0 20px 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    
+    <div class="hero-section">
+        <h1 class="hero-title">Value Changelogs</h1>
+        <p class="hero-subtitle">Track every value change for HyperChromes and limited items. Updated automatically when values change.</p>
+    </div>
+    
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="totalChanges">-</div>
+                <div class="stat-label">Total Changes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="increases">-</div>
+                <div class="stat-label">Increases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="decreases">-</div>
+                <div class="stat-label">Decreases</div>
+            </div>
+        </div>
+        
+        <div class="last-updated">
+            Last updated: <span id="lastUpdated">Checking...</span>
+        </div>
+        
+        <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">All Changes</button>
+            <button class="filter-btn" data-filter="increase">Increases</button>
+            <button class="filter-btn" data-filter="decrease">Decreases</button>
+            <button class="filter-btn" data-filter="new">New Items</button>
+        </div>
+        
+        <div class="changelog-list" id="changelogList">
+            <div class="empty-state">
+                <i class="fas fa-sync fa-spin"></i>
+                <p>Loading value changes...</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="footer-container"></div>
+    
+    <script>
+        // Check for value changes and store history
+        function checkValueChanges() {
+            const currentValues = getCurrentValues();
+            const storedSnapshot = localStorage.getItem('valuesSnapshot');
+            const snapshot = storedSnapshot ? JSON.parse(storedSnapshot) : null;
+            
+            // Store current snapshot
+            localStorage.setItem('valuesSnapshot', JSON.stringify(currentValues));
+            localStorage.setItem('lastValuesCheck', new Date().toISOString());
+            
+            if (!snapshot) {
+                // First visit - no previous data to compare
+                return [];
+            }
+            
+            // Compare and find changes
+            const changes = [];
+            const timestamp = new Date().toISOString();
+            
+            for (const [key, current] of Object.entries(currentValues)) {
+                const previous = snapshot[key];
+                
+                if (!previous) {
+                    // New item
+                    changes.push({
+                        item: formatItemName(key),
+                        type: 'new',
+                        value: current,
+                        timestamp: timestamp
+                    });
+                } else if (previous !== current) {
+                    // Value changed
+                    const oldVal = parseValue(previous);
+                    const newVal = parseValue(current);
+                    const percentChange = ((newVal - oldVal) / oldVal * 100).toFixed(1);
+                    
+                    changes.push({
+                        item: formatItemName(key),
+                        type: newVal > oldVal ? 'increase' : 'decrease',
+                        oldValue: previous,
+                        newValue: current,
+                        percentChange: percentChange,
+                        timestamp: timestamp
+                    });
+                }
+            }
+            
+            // Store changes in history
+            if (changes.length > 0) {
+                const history = JSON.parse(localStorage.getItem('valuesHistory') || '[]');
+                history.unshift(...changes);
+                // Keep only last 100 changes
+                localStorage.setItem('valuesHistory', JSON.stringify(history.slice(0, 100)));
+            }
+            
+            return changes;
+        }
+        
+        // Get current values from Values.js
+        function getCurrentValues() {
+            const values = {};
+            
+            // Check if HyperchromeValues exists
+            if (typeof HyperchromeValues !== 'undefined') {
+                values.shiftLvl5 = HyperchromeValues.shiftLvl5;
+                values.diamondLvl5 = HyperchromeValues.diamondLvl5;
+                values.redLvl5 = HyperchromeValues.redLvl5;
+                values.lvl1Any = HyperchromeValues.lvl1Any;
+            }
+            
+            // Add more value sources as needed
+            return values;
+        }
+        
+        // Parse value string (handles "1.2M", "850K", etc)
+        function parseValue(val) {
+            if (typeof val === 'number') return val;
+            if (!val) return 0;
+            
+            const str = val.toString().toUpperCase();
+            let num = parseFloat(str.replace(/[^0-9.]/g, ''));
+            
+            if (str.includes('M')) num *= 1000000;
+            else if (str.includes('K')) num *= 1000;
+            
+            return num;
+        }
+        
+        // Format item name for display
+        function formatItemName(key) {
+            const names = {
+                shiftLvl5: 'Shift HyperChrome (Lvl 5)',
+                diamondLvl5: 'Diamond HyperChrome (Lvl 5)',
+                redLvl5: 'Red HyperChrome (Lvl 5)',
+                lvl1Any: 'Level 1 HyperChrome (Any)'
+            };
+            return names[key] || key;
+        }
+        
+        // Render changelog
+        function renderChangelog(filter = 'all') {
+            const history = JSON.parse(localStorage.getItem('valuesHistory') || '[]');
+            const list = document.getElementById('changelogList');
+            
+            // Update stats
+            document.getElementById('totalChanges').textContent = history.length;
+            document.getElementById('increases').textContent = history.filter(h => h.type === 'increase').length;
+            document.getElementById('decreases').textContent = history.filter(h => h.type === 'decrease').length;
+            
+            // Update last updated
+            const lastCheck = localStorage.getItem('lastValuesCheck');
+            if (lastCheck) {
+                document.getElementById('lastUpdated').textContent = new Date(lastCheck).toLocaleString();
+            }
+            
+            // Filter changes
+            const filtered = filter === 'all' ? history : history.filter(h => h.type === filter);
+            
+            if (filtered.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <p>${filter === 'all' ? 'No value changes recorded yet. Changes will appear here when values are updated.' : `No ${filter}s recorded yet.`}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = filtered.map(entry => {
+                const date = new Date(entry.timestamp);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                if (entry.type === 'new') {
+                    return `
+                        <div class="changelog-entry new">
+                            <div class="entry-header">
+                                <span class="entry-date">${dateStr}</span>
+                                <span class="entry-type new">New Item</span>
+                            </div>
+                            <div class="item-name">${entry.item}</div>
+                            <div class="value-change">
+                                <span class="new-value">${entry.value}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const percentClass = entry.percentChange > 0 ? 'positive' : 'negative';
+                const valueClass = entry.type;
+                
+                return `
+                    <div class="changelog-entry ${entry.type}">
+                        <div class="entry-header">
+                            <span class="entry-date">${dateStr}</span>
+                            <span class="entry-type ${entry.type}">${entry.type === 'increase' ? 'Price Up' : 'Price Down'}</span>
+                        </div>
+                        <div class="item-name">${entry.item}</div>
+                        <div class="value-change">
+                            <span class="old-value">${entry.oldValue}</span>
+                            <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+                            <span class="new-value ${valueClass}">${entry.newValue}</span>
+                            <span class="percent-change ${percentClass}">${entry.percentChange > 0 ? '+' : ''}${entry.percentChange}%</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Filter button handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderChangelog(btn.dataset.filter);
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkValueChanges();
+            renderChangelog();
+        });
+    </script>
+    <script src="auth-guard.js"></script>
+    <script src="loader.js"></script>
+</body>
+</html>
