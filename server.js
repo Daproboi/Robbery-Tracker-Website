@@ -22,6 +22,11 @@ const ADDITIONAL_CLIENT_SECRETS = (process.env.ADDITIONAL_CLIENT_SECRETS || '').
 
 const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
 
+// Roblox OAuth Configuration
+const ROBLOX_CLIENT_ID = process.env.ROBLOX_CLIENT_ID || '';
+const ROBLOX_CLIENT_SECRET = process.env.ROBLOX_CLIENT_SECRET || '';
+const ROBLOX_REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/roblox/callback';
+
 // Discord Server Requirements
 const REQUIRED_DISCORD_GUILD_ID = process.env.REQUIRED_DISCORD_GUILD_ID || '';
 
@@ -47,16 +52,16 @@ async function saveUsers(users) {
 const User = {
     findOneAndUpdate: async (filter, update) => {
         const users = await loadUsers();
-        const { discordId } = filter;
+        const id = filter.discordId || filter.robloxId;
         
-        users[discordId] = {
-            ...users[discordId],
+        users[id] = {
+            ...users[id],
             ...update,
-            discordId
+            id: id
         };
         
         await saveUsers(users);
-        return users[discordId];
+        return users[id];
     },
     
     findOne: async (filter) => {
@@ -66,6 +71,9 @@ const User = {
         }
         if (filter.discordId) {
             return users[filter.discordId] || null;
+        }
+        if (filter.robloxId) {
+            return users[filter.robloxId] || null;
         }
         return null;
     },
@@ -360,6 +368,101 @@ app.get('/auth/callback', async (req, res) => {
     }
 });
 
+// Roblox OAuth Routes
+app.get('/auth/roblox/callback', async (req, res) => {
+    const { code, error } = req.query;
+    
+    if (error) {
+        return res.status(400).send('Roblox authentication failed');
+    }
+    
+    if (!code) {
+        return res.status(400).send('Authorization code not provided');
+    }
+    
+    try {
+        // Exchange authorization code for access token
+        const tokenResponse = await fetch('https://apis.roblox.com/oauth/v1/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                client_id: ROBLOX_CLIENT_ID,
+                client_secret: ROBLOX_CLIENT_SECRET,
+                grant_type: 'authorization_code',
+                code: code,
+                redirect_uri: ROBLOX_REDIRECT_URI
+            })
+        });
+        
+        const tokenData = await tokenResponse.json();
+        
+        if (!tokenData.access_token) {
+            console.error('Roblox token error:', tokenData);
+            return res.status(500).send('Failed to obtain access token: ' + JSON.stringify(tokenData));
+        }
+        
+        // Get user information from Roblox
+        const userResponse = await fetch('https://apis.roblox.com/oauth/v1/userinfo', {
+            headers: {
+                'Authorization': `Bearer ${tokenData.access_token}`
+            }
+        });
+        
+        const userData = await userResponse.json();
+        
+        if (!userData.sub) {
+            return res.status(500).send('Failed to obtain user information');
+        }
+        
+        // Create or update user in database
+        const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        
+        const userSession = {
+            robloxId: userData.sub,
+            username: userData.preferred_username || userData.name || `RobloxUser${userData.sub}`,
+            avatar: `https://www.roblox.com/headshot-thumbnail/image?userId=${userData.sub}&width=150&height=150&format=png`,
+            isAdmin: false,
+            isBanned: false,
+            bannedIPs: [],
+            loginTime: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
+            sessionToken: crypto.randomBytes(32).toString('hex'),
+            lastIP: clientIP
+        };
+        
+        // Check if user or IP is banned
+        const users = await loadUsers();
+        const existingUser = users[userData.sub];
+        
+        // Check for IP ban
+        for (const [id, user] of Object.entries(users)) {
+            if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
+                return res.status(403).send('This IP address has been banned.');
+            }
+        }
+        
+        if (existingUser && existingUser.isBanned) {
+            return res.status(403).send('Your account has been banned.');
+        }
+        
+        await User.findOneAndUpdate(
+            { robloxId: userData.sub },
+            userSession
+        );
+        
+        console.log(`Roblox User ${userSession.username} logged in`);
+        
+        // Redirect with session token
+        res.redirect(`/index.html?session=${userSession.sessionToken}`);
+        
+    } catch (error) {
+        console.error('Roblox authentication error:', error);
+        res.status(500).send('Internal server error: ' + error.message);
+    }
+});
+
 // Session verification route
 app.get('/api/check-session', async (req, res) => {
     const { token } = req.query;
@@ -388,8 +491,9 @@ app.get('/api/check-session', async (req, res) => {
         if (now - lastLogin > ONE_DAY) {
             // Session expired
             const users = await loadUsers();
-            if (users[user.discordId]) {
-                users[user.discordId].sessionToken = null;
+            const userId = user.discordId || user.robloxId;
+            if (users[userId]) {
+                users[userId].sessionToken = null;
                 await saveUsers(users);
             }
             return res.status(401).json({ error: 'Session expired' });
@@ -398,10 +502,11 @@ app.get('/api/check-session', async (req, res) => {
         res.json({
             valid: true,
             user: {
-                id: user.discordId,
+                id: user.discordId || user.robloxId,
                 username: user.username,
                 avatar: user.avatar,
-                isAdmin: Boolean(user.isAdmin)
+                isAdmin: Boolean(user.isAdmin),
+                loginType: user.discordId ? 'discord' : 'roblox'
             },
             lastLogin: user.lastLogin
         });
@@ -481,8 +586,11 @@ app.get('/logout', async (req, res) => {
         const user = await User.findOne({ sessionToken: token });
         if (user) {
             const users = await loadUsers();
-            users[user.discordId].sessionToken = null;
-            await saveUsers(users);
+            const userId = user.discordId || user.robloxId;
+            if (users[userId]) {
+                users[userId].sessionToken = null;
+                await saveUsers(users);
+            }
         }
     }
     

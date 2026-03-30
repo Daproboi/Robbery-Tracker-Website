@@ -97,6 +97,53 @@
             box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
         
+        .roblox-login-btn {
+            background: #000;
+            color: white;
+            border: 2px solid #333;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px auto;
+            text-decoration: none;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .roblox-login-btn:hover {
+            background: #1a1a1a;
+            border-color: #555;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .login-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .login-divider span {
+            padding: 0 15px;
+        }
+        
         .divider {
             text-align: center;
             color: var(--text-dim);
@@ -165,6 +212,15 @@
             <span>Login with Discord</span>
         </button>
         
+        <div class="login-divider">
+            <span>or</span>
+        </div>
+        
+        <button class="roblox-login-btn" onclick="loginWithRoblox()">
+            <i class="fas fa-gamepad"></i>
+            <span>Login with Roblox</span>
+        </button>
+        
         <div class="loading" id="loading">
             <i class="fas fa-spinner fa-spin"></i>
             Authenticating...
@@ -184,6 +240,19 @@
         
         function loginWithDiscord() {
             const authUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${SCOPE}`;
+            window.location.href = authUrl;
+        }
+        
+        // Roblox OAuth Configuration
+        const ROBLOX_CLIENT_ID = ''; // Add your Roblox OAuth app client ID here
+        const ROBLOX_REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/roblox/callback';
+        
+        function loginWithRoblox() {
+            if (!ROBLOX_CLIENT_ID) {
+                alert('Roblox login is not configured yet. Please contact the administrator.');
+                return;
+            }
+            const authUrl = `https://apis.roblox.com/oauth/v1/authorize?client_id=${ROBLOX_CLIENT_ID}&redirect_uri=${encodeURIComponent(ROBLOX_REDIRECT_URI)}&response_type=code&scope=openid+profile`;
             window.location.href = authUrl;
         }
         
