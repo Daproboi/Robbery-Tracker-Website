@@ -307,6 +307,7 @@
                         <th>Avatar</th>
                         <th>Username</th>
                         <th>Discord ID</th>
+                        <th>IP Address</th>
                         <th>Role</th>
                         <th>Last Login</th>
                         <th>Status</th>
@@ -381,6 +382,7 @@
                             </td>
                             <td>${user.username}</td>
                             <td>${user.discordId}</td>
+                            <td><code>${user.lastIP || 'Unknown'}</code></td>
                             <td>
                                 <span class="${user.isAdmin ? 'admin-badge' : 'regular-badge'}">${user.isAdmin ? 'Admin' : 'Member'}</span>
                             </td>
@@ -400,7 +402,7 @@
                         tableBody.appendChild(row);
                     });
                 } else {
-                    tableBody.innerHTML = '<tr><td colspan="7">No users found</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="8">No users found</td></tr>';
                 }
             } catch (err) {
                 console.error('Failed to load admin data:', err);
