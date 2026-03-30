@@ -74,36 +74,6 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER (COPIED EXACTLY) --- */
-        .nav-top {
-            position: fixed; top: 0; width: 100%; height: 70px;
-            background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border); display: flex;
-            align-items: center; justify-content: space-between;
-            padding: 0 40px; z-index: 5000;
-        }
-        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }
-        .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }
-        .theme-toggle { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-        .nav-link:hover { color: var(--text-main); }
-        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }
-        .dropdown {
-            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 12px; min-width: 220px; padding: 10px;
-            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
-        }
-        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
-        .drop-link {
-            display: flex; flex-direction: column; padding: 12px;
-            color: var(--text-dim); text-decoration: none;
-            font-size: 0.75rem; border-radius: 8px; font-weight: 600;
-            margin-bottom: 4px;
-        }
-        .drop-link:hover { background: var(--card); color: var(--text-main); }
-        .mobile-menu-btn { display: none; font-size: 1.5rem; background: none; border: none; color: var(--text-main); cursor: pointer; }
-
         /* --- TIER CARDS STYLING --- */
         .tier-card {
             background: var(--card);
@@ -142,20 +112,6 @@
         .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .footer-links a:hover { color: var(--accent); }
         .support-btn-footer { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; color: var(--text-main); text-decoration: none; display: inline-block;}
-
-        /* MOBILE MENU LOGIC */
-        @media screen and (max-width: 768px) {
-            .mobile-menu-btn { display: block; }
-            .nav-links {
-                position: fixed; top: 70px; left: -100%; width: 100%; height: calc(100vh - 70px);
-                background: var(--bg); flex-direction: column; padding: 40px; gap: 10px;
-                transition: 0.3s ease-in-out; overflow-y: auto; align-items: flex-start;
-                border-top: 1px solid var(--border);
-            }
-            .nav-links.active { left: 0; }
-            .nav-item { height: auto; width: 100%; flex-direction: column; align-items: flex-start; }
-            .dropdown { position: static; transform: none; opacity: 1; pointer-events: auto; box-shadow: none; border: none; background: transparent; padding: 0 0 0 20px; display: block; }
-        }
     </style>
 </head>
 <body>
@@ -210,18 +166,6 @@
 
     <div id="footer-container"></div>
 
-    <script>
-        
-        // Mobile Menu
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-xmark');
-        });
-    </script>
     <script src="auth-guard.js"></script>
     <script src="loader.js"></script>
 </body>
