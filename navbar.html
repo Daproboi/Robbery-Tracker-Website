@@ -85,7 +85,15 @@ body.light-mode .mobile-toggle { color: #000; background: rgba(0,0,0,0.1); borde
 
 /* --- MOBILE RESPONSIVENESS (matches index.html) --- */
 @media screen and (max-width: 768px) {
-    .nav-top { padding: 0 20px; width: 100%; top: 0; border-radius: 0; border-left: none; border-right: none; border-top: none; }
+    .nav-top { 
+        padding: 0 20px; 
+        width: calc(100% - 40px);
+        top: 0; 
+        border-radius: 0; 
+        border-left: none; 
+        border-right: none; 
+        border-top: none; 
+    }
     .mobile-toggle { 
         display: flex; 
         align-items: center; 
