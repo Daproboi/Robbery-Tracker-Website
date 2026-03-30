@@ -146,24 +146,6 @@
         .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
         .legal { font-size: 0.7rem; color: #444; text-transform: uppercase; margin: 30px auto 15px; max-width: 800px; line-height: 1.6; }
 
-        /* Mobile Adjustments */
-        .mobile-toggle { display: none; }
-        .mobile-toggle span { width: 25px; height: 2px; background: white; transition: 0.3s; }
-
-        @media screen and (max-width: 768px) {
-            .mobile-toggle { display: flex; }
-            .nav-logo { left: 20px; }
-            .nav-links { 
-                display: none; position: fixed; inset: 0; background: var(--bg); 
-                flex-direction: column; justify-content: center; gap: 15px; 
-                padding: 20px; z-index: 9500;
-            }
-            .nav-links.active { display: flex; }
-            .info-panel { grid-template-columns: 1fr; }
-            .intel-grid { grid-template-columns: 1fr; }
-            .input-group { flex-direction: column; }
-            .footer-links { flex-direction: column; gap: 15px; }
-        }
     </style>
 </head>
 <body>
@@ -309,11 +291,6 @@
             const days = Math.ceil(remaining / 100);
             document.getElementById('days-est').innerText = days + " Days";
         }
-
-        // Mobile Nav Toggle
-        document.getElementById('mobileToggle').onclick = function() {
-            document.getElementById('navLinks').classList.toggle('active');
-        };
 
         setInterval(updateTimers, 1000);
         updateTimers();

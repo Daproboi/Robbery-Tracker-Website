@@ -444,40 +444,6 @@
             max-width: 800px;
             line-height: 1.6;
         }
-        
-        .mobile-toggle { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 10000; }
-        
-        .mobile-toggle div {
-            width: 25px;
-            height: 2px;
-            background: white;
-            transition: 0.3s;
-        }
-        
-        @media screen and (max-width: 768px) {
-            body { padding-top: 80px; }
-            .nav-top { justify-content: space-between; padding: 0 20px; }
-            .nav-logo { position: static; }
-            .mobile-toggle { display: flex; }
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 100%;
-                height: 100vh;
-                background: var(--bg);
-                flex-direction: column;
-                justify-content: center;
-                gap: 20px;
-                padding: 40px;
-                transition: 0.4s ease;
-            }
-            .nav-links.active { right: 0; }
-            .nav-item { height: auto; width: 100%; display: block; text-align: center; }
-            .dropdown { display: none; }
-            .nav-item:hover .dropdown { display: block; position: relative; top: 0; transform: none; box-shadow: none; border: none; }
-            .version-title { font-size: 1.2rem; }
-        }
     </style>
 </head>
 <body>
@@ -574,18 +540,6 @@
         <a href="support.html" class="support-btn">Get Support</a>
     </footer>
 
-    <script>
-        const toggle = document.getElementById('mobile-toggle');
-        const links = document.getElementById('nav-links');
-        
-        toggle.addEventListener('click', () => {
-            links.classList.toggle('active');
-            const bars = toggle.querySelectorAll('div');
-            bars[0].style.transform = links.classList.contains('active') ? "rotate(45deg) translate(5px, 5px)" : "none";
-            bars[1].style.opacity = links.classList.contains('active') ? "0" : "1";
-            bars[2].style.transform = links.classList.contains('active') ? "rotate(-45deg) translate(5px, -5px)" : "none";
-        });
-    </script>
     <script src="auth-guard.js"></script>
     <script src="loader.js"></script>
 </body>
