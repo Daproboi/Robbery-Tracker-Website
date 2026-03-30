@@ -171,7 +171,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             if (menuToggle && navLinks) {
-                menuToggle.addEventListener('click', () => {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     navLinks.classList.toggle('active');
                     const icon = menuToggle.querySelector('i');
                     if (navLinks.classList.contains('active')) {
@@ -181,6 +182,71 @@ document.addEventListener("DOMContentLoaded", async function() {
                         icon.classList.remove('fa-xmark');
                         icon.classList.add('fa-bars');
                     }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                        navLinks.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-xmark');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
+                });
+
+                // Mobile dropdown handling (click to toggle) - works at 1200px breakpoint
+                const navItems = navLinks.querySelectorAll('.nav-item');
+                navItems.forEach((item) => {
+                    const link = item.querySelector('.nav-link');
+                    const dropdown = item.querySelector('.dropdown');
+                    
+                    if (dropdown && link) {
+                        link.addEventListener('click', (e) => {
+                            // Only handle click on mobile/tablet (match CSS breakpoint of 1200px)
+                            if (window.innerWidth <= 1200) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                
+                                // Close other open dropdowns
+                                navItems.forEach((otherItem) => {
+                                    if (otherItem !== item) {
+                                        otherItem.classList.remove('active');
+                                    }
+                                });
+                                
+                                // Toggle this dropdown
+                                item.classList.toggle('active');
+                            }
+                        });
+                    }
+                });
+
+                // Close menu when clicking a regular link (no dropdown)
+                const regularLinks = navLinks.querySelectorAll('.nav-item:not(:has(.dropdown)) .nav-link');
+                regularLinks.forEach((link) => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-xmark');
+                            icon.classList.add('fa-bars');
+                        }
+                    });
+                });
+
+                // Close menu when clicking a dropdown link
+                const dropLinks = navLinks.querySelectorAll('.drop-link');
+                dropLinks.forEach((link) => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-xmark');
+                            icon.classList.add('fa-bars');
+                        }
+                    });
                 });
             }
         }

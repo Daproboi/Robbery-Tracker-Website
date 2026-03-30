@@ -48,7 +48,7 @@ body.light-mode .nav-item:hover .nav-link, body.light-mode .nav-link.active-page
 body.light-mode .theme-toggle { color: #000; border-color: rgba(0,0,0,0.1); }
 body.light-mode .theme-toggle:hover { background: rgba(0,0,0,0.05); border-color: var(--accent); }
 
-.nav-logo { font-weight: 900; font-size: 1.5rem; text-decoration: none; color: #fff; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.nav-logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: #fff; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; flex-shrink: 0; white-space: nowrap; }
 .nav-logo span { color: #00f0ff; text-shadow: 0 0 15px rgba(0, 240, 255, 0.5); }
 
 .nav-links { display: flex; align-items: center; gap: 4px; margin: 0 auto; transition: all 0.3s ease; overflow: visible; }
@@ -168,9 +168,11 @@ body.light-mode .mobile-toggle { color: #000; }
         min-width: 100%; 
         display: none; 
     }
-    .nav-item.active .dropdown { display: block; }
-    .nav-item:hover .dropdown { display: none; }
-    .nav-item.active:hover .dropdown { display: block; }
+    /* Show dropdown when parent nav-item has active class (for mobile) */
+    .nav-item.active > .dropdown { display: block; }
+    /* Also support hover for desktop that falls in this range */
+    .nav-item:hover > .dropdown { display: none; }
+    .nav-item.active:hover > .dropdown { display: block; }
     
     /* User menu mobile fixes */
     #userMenu {
@@ -278,82 +280,3 @@ body.light-mode .mobile-toggle { color: #000; }
         </div>
     </nav>
 </div>
-
-<script>
-(function() {
-    // Mobile menu toggle
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navLinks.classList.toggle('active');
-            
-            // Toggle icon
-            const icon = menuToggle.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-xmark');
-            } else {
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            }
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
-                navLinks.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            }
-        });
-        
-        // Mobile dropdown handling (click to toggle)
-        const navItems = navLinks.querySelectorAll('.nav-item');
-        navItems.forEach(function(item) {
-            const link = item.querySelector('.nav-link');
-            const dropdown = item.querySelector('.dropdown');
-            
-            if (dropdown && link) {
-                link.addEventListener('click', function(e) {
-                    // Only handle click on mobile
-                    if (window.innerWidth <= 900) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        // Close other open dropdowns
-                        navItems.forEach(function(otherItem) {
-                            if (otherItem !== item) {
-                                otherItem.classList.remove('active');
-                            }
-                        });
-                        
-                        // Toggle this dropdown
-                        item.classList.toggle('active');
-                    }
-                });
-            }
-        });
-        
-        // Close menu when clicking a regular link (no dropdown)
-        const regularLinks = navLinks.querySelectorAll('.nav-link:not(:has(~ .dropdown))');
-        regularLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
-                navLinks.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            });
-        });
-        
-        // Close menu when clicking a dropdown link
-        const dropLinks = navLinks.querySelectorAll('.drop-link');
-        dropLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
-                navLinks.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            });
-        });
-    }
-})();
-</script>
