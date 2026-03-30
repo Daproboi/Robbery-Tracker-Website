@@ -193,7 +193,13 @@ body.light-mode .mobile-toggle { color: #000; }
         display: block; 
     }
     
-    /* User menu mobile fixes */
+    /* Fix nav-actions layout in mobile - burger rightmost */
+    .nav-actions {
+        flex-direction: row-reverse;
+        width: auto;
+        justify-content: flex-end;
+        margin-left: auto;
+    }
     #userMenu {
         position: fixed !important;
         top: 90px !important;
