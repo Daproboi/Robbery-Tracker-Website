@@ -107,6 +107,39 @@
         }, 500);
     }
     
+    // Setup navbar click handlers
+    function setupNavbarHandlers() {
+        const userProfile = document.getElementById('userProfile');
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const userMenu = document.getElementById('userMenu');
+        const logoutLink = document.getElementById('logoutLink');
+        
+        // Setup profile click to toggle menu
+        const clickTarget = userProfileBtn || userProfile;
+        if (clickTarget && userMenu) {
+            clickTarget.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = userMenu.style.display === 'none' || !userMenu.style.display;
+                userMenu.style.display = isHidden ? 'block' : 'none';
+            });
+            
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if (userProfile && !userProfile.contains(e.target)) {
+                    userMenu.style.display = 'none';
+                }
+            });
+        }
+        
+        // Setup logout click
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+    }
+    
     // Setup profile dropdown click handlers
     function setupProfileDropdown() {
         const userProfile = document.getElementById('userProfile');
