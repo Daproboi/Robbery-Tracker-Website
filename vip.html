@@ -110,22 +110,11 @@
 
         /* --- MOBILE RESPONSIVENESS --- */
         @media screen and (max-width: 768px) {
-            .nav-top { padding: 0 20px; }
-            .mobile-menu-btn { display: block; }
-            .nav-links {
-                position: fixed; top: 70px; left: -100%; width: 100%; height: calc(100vh - 70px);
-                background: var(--bg); flex-direction: column; padding: 40px; gap: 10px;
-                transition: 0.3s ease-in-out; overflow-y: auto; align-items: flex-start;
-                border-top: 1px solid var(--border); z-index: 4999;
-            }
-            .nav-links.active { left: 0; }
-            .nav-item { height: auto; width: 100%; flex-direction: column; align-items: flex-start; }
-            .dropdown { position: static; transform: none; opacity: 1; pointer-events: auto; box-shadow: none; border: none; background: transparent; padding: 0 0 0 20px; display: block; }
             .dev-container h1 { font-size: 1.8rem; }
         }
-    </style>  
-</head>  
-<body>  
+    </style>
+</head>
+<body>
 
     <div id="navbar-container"></div>  
 
@@ -138,21 +127,9 @@
         </div>
     </main>
 
-    <div id="footer-container"></div>  
+    <div id="footer-container"></div>
 
-      
-
-        // Mobile Menu
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-xmark');
-        });
-    </script>  
     <script src="auth-guard.js"></script>
     <script src="loader.js"></script>
-</body>  
+</body>
 </html>
