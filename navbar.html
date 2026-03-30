@@ -160,11 +160,16 @@ body.light-mode .mobile-toggle { color: #000; }
     
     /* COMPLETELY RESET DROPDOWN FOR MOBILE - NO ANIMATIONS */
     .dropdown {
-        all: unset;
+        position: static;
         display: none;
         width: 100%;
-        padding-left: 20px;
+        padding: 5px 0 5px 20px;
         box-sizing: border-box;
+        transform: none;
+        left: auto;
+        top: auto;
+        opacity: 1;
+        pointer-events: auto;
     }
     .nav-item.active > .dropdown { 
         display: block; 
