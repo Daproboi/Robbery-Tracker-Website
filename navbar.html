@@ -149,6 +149,7 @@ body.light-mode .mobile-toggle { color: #000; }
         height: auto; 
         flex-direction: column; 
         align-items: flex-start; 
+        position: relative;
     }
     .nav-link { 
         width: 100%; 
@@ -156,24 +157,27 @@ body.light-mode .mobile-toggle { color: #000; }
         text-align: left; 
         font-size: 0.9rem;
     }
+    
+    /* COMPLETELY RESET DROPDOWN FOR MOBILE - NO ANIMATIONS */
     .dropdown {
-        position: static; 
-        transform: none !important; 
-        opacity: 1; 
-        pointer-events: auto; 
-        box-shadow: none; 
-        border: none; 
-        background: transparent; 
-        padding: 5px 0 5px 15px; 
-        min-width: 100%; 
-        display: none; 
-        left: auto !important;
-        top: auto !important;
+        all: unset;
+        display: none;
+        width: 100%;
+        padding-left: 20px;
+        box-sizing: border-box;
     }
-    /* Only show dropdown via active class (click), not hover, in mobile menu */
-    .nav-item.active > .dropdown { display: block; }
-    .nav-item:hover > .dropdown { display: none !important; }
-    .nav-item.active:hover > .dropdown { display: block; }
+    .nav-item.active > .dropdown { 
+        display: block; 
+    }
+    /* Disable ALL hover effects in mobile menu */
+    .nav-item:hover > .dropdown,
+    .nav-item.active:hover > .dropdown { 
+        display: none; 
+    }
+    .nav-item.active:hover > .dropdown,
+    .nav-item.active > .dropdown { 
+        display: block; 
+    }
     
     /* User menu mobile fixes */
     #userMenu {
