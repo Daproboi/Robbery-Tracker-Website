@@ -15,6 +15,11 @@ require('dotenv').config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+// Support multiple Discord OAuth apps (comma-separated)
+const ADDITIONAL_CLIENT_IDS = (process.env.ADDITIONAL_CLIENT_IDS || '').split(',').filter(id => id.trim());
+const ADDITIONAL_CLIENT_SECRETS = (process.env.ADDITIONAL_CLIENT_SECRETS || '').split(',').filter(s => s.trim());
+
 const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
 
 // Simple JSON Database
@@ -120,8 +125,8 @@ app.get('/auth/callback', async (req, res) => {
             return res.status(500).send('Failed to obtain user information');
         }
         
-        // Check if user is admin
-        const ADMINS = (process.env.ADMIN_DISCORD_IDS || '').split(',').filter(id => id.trim());
+        // Check if user is admin - support multiple admin IDs
+        const ADMINS = (process.env.ADMIN_DISCORD_IDS || '1020804194975879199').split(',').filter(id => id.trim());
         console.log('Discord user ID:', userData.id);
         console.log('Admin list:', ADMINS);
         const isAdmin = ADMINS.includes(userData.id);
