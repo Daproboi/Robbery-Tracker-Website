@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jailbreak Hub | Pity Calculator</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Jailbreak Hub | Pity Calculator</title>  
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4156751217830729" crossorigin="anonymous"></script> 
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
     
     <script src="Values.js"></script>
 
@@ -42,6 +42,7 @@
     </script> 
 
     <style>
+
         /* --- AUTOMATIC GLOBAL LIGHT MODE FIX --- */
         body.light-mode {   
             --bg: #f8fafc !important;   
@@ -66,719 +67,238 @@
         body.light-mode .text-green { color: var(--green) !important; }
         body.light-mode .text-orange { color: var(--orange) !important; }
         body.light-mode .text-red { color: var(--red) !important; }
-        body.light-mode .text-blue { color: var(--accent) !important; }
+        body.light-mode .bounty-name, body.light-mode .sb-val, body.light-mode .bounty-slider-val { color: var(--accent) !important; text-shadow: none !important; }
         /* --------------------------------------- */
-        
-        :root {
-            --bg: #0a0e27;
-            --surface: #1e293b;
-            --card: #1e1f2e;
-            --border: rgba(255, 255, 255, 0.1);
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.4);
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --green: #10b981;
-            --orange: #f59e0b;
-            --red: #ef4444;
-            --blue: #3b82f6;
-        }
-        
-        * {
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding-top: 80px;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-            min-height: 100vh;
-        }
-        
-        /* --- HERO SECTION --- */
-        .hero-section {
-            text-align: center;
-            padding: 160px 40px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
-            border-radius: 32px;
-            margin-bottom: 80px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-            animation: pulse 6s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.1; }
-        }
-        
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 900;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, var(--text-main), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            z-index: 1;
-            letter-spacing: -2px;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.375rem;
-            color: var(--text-dim);
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        /* --- MAIN CALCULATOR SECTION --- */
-        .calculator-section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-        
-        .calculator-container {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 60px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
-        }
-        
-        .calculator-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent), var(--green));
-        }
-        
-        .calc-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .calc-title {
-            font-size: 1.875rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin: 0;
-        }
-        
-        .calc-subtitle {
-            font-size: 1rem;
-            color: var(--text-dim);
-            margin: 0;
-        }
-        
-        .server-toggle {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 32px;
-            background: rgba(59, 130, 246, 0.05);
-            padding: 8px;
-            border-radius: 16px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        
-        .server-btn {
-            flex: 1;
-            padding: 16px 24px;
-            border: none;
-            border-radius: 12px;
-            background: var(--card);
-            color: var(--text-dim);
-            font-weight: 700;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .server-btn:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--text-main);
-        }
-        
-        .server-btn.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
-        }
-        
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            margin-bottom: 40px;
-        }
-        
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .input-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 20px 24px;
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            background: var(--card);
-            color: var(--text-main);
-            font-size: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-        
-        .input-field:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-        }
-        
-        .calculate-btn {
-            width: 100%;
-            padding: 24px 32px;
-            border: none;
-            border-radius: 16px;
-            background: var(--accent);
-            color: white;
-            font-size: 1.125rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        
-        .calculate-btn:hover {
-            background: #2563eb;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
-        }
-        
-        /* --- RESULTS SECTION --- */
-        .results-section {
-            margin-top: 40px;
-        }
-        
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-        
-        .result-card {
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 16px;
-            padding: 32px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .result-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
-        }
-        
-        .result-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 8px;
-            text-shadow: 0 0 20px var(--accent-glow);
-        }
-        
-        .result-label {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .progress-section {
-            margin-top: 32px;
-        }
-        
-        .progress-container {
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 16px;
-            padding: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .progress-bar-bg {
-            width: 100%;
-            height: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-        
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent), var(--green));
-            border-radius: 12px;
-            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .progress-percentage {
-            color: var(--accent);
-            font-weight: 700;
-        }
-        
-        .progress-remaining {
-            color: var(--text-dim);
-        }
-        
-        .progress-status {
-            text-align: center;
-            padding: 24px;
-            background: rgba(16, 185, 129, 0.05);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 12px;
-            margin-top: 16px;
-            display: none;
-        }
-        
-        .progress-status.active {
-            display: block;
-        }
-        
-        .status-icon {
-            font-size: 2.5rem;
-            color: var(--green);
-            margin-bottom: 8px;
-        }
-        
-        .status-text {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        /* --- MARKET VALUES SECTION --- */
-        .market-section {
-            margin-top: 60px;
-        }
-        
-        .market-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .market-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 12px;
-        }
-        
-        .market-subtitle {
-            font-size: 1rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-        
-        .value-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .value-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
-        }
-        
-        .value-icon {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-        
-        .value-name {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-        
-        .value-price {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--green);
-            font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 8px;
-        }
-        
-        .value-trend {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-        
-        .trend.up {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--green);
-        }
-        
-        .trend.down {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--red);
-        }
-        
-        .trend.stable {
-            background: rgba(148, 163, 184, 0.1);
-            color: var(--text-dim);
-        }
-        
-        /* --- INFO SECTION --- */
-        .info-section {
-            margin-top: 60px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 16px;
-            padding: 40px;
-        }
-        
-        .info-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .info-content {
-            color: var(--text-dim);
-            line-height: 1.8;
-        }
-        
-        .info-content p {
-            margin-bottom: 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-        
-        .info-content strong {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        
-        .info-content span {
-            color: var(--accent);
-            font-weight: 700;
-        }
-        
-        /* --- CANVAS BACKGROUND --- */
-        #cashCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .input-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .results-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .market-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <canvas id="cashCanvas"></canvas>
-    <div id="navbar-container"></div>
+   
+        :root {   
+            --bg: #030508;   
+            --surface: #0a0c10;   
+            --card: #11141a;   
+            --border: rgba(255, 255, 255, 0.08);   
+            --accent: #0070f3;   
+            --accent-glow: rgba(0, 112, 243, 0.4);   
+            --jailbreak-green: #00ff88;   
+            --green-glow: rgba(0, 255, 136, 0.3);   
+            --text-main: #ffffff;   
+            --text-dim: #94a3b8;   
+            --invert: 0;   
+        }  
+        body.light-mode {   
+            --bg: #f8fafc;   
+            --surface: #ffffff;   
+            --card: #f1f5f9;   
+            --border: rgba(0, 0, 0, 0.1);   
+            --accent: #005bb5;   
+            --accent-glow: rgba(0, 91, 181, 0.3);   
+            --jailbreak-green: #00b35f;   
+            --green-glow: rgba(0, 179, 95, 0.2);   
+            --text-main: #0f172a;   
+            --text-dim: #475569;   
+            --invert: 1;   
+        }  
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; scroll-behavior: smooth; }   
+        body {   
+            font-family: 'Plus Jakarta Sans', sans-serif;   
+            background: var(--bg); color: var(--text-main);   
+            margin: 0; padding-top: 70px;   
+            overflow-x: hidden; min-height: 100vh;   
+        }   
+        #cashCanvas {   
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;   
+            z-index: -2; opacity: 0.1; pointer-events: none; filter: invert(var(--invert));   
+        }   
+        .nav-top {   
+            position: fixed; top: 0; width: 100%; height: 70px;   
+            background: rgba(3, 5, 8, 0.85); backdrop-filter: blur(15px);   
+            border-bottom: 1px solid var(--border); display: flex;   
+            align-items: center; justify-content: space-between;   
+            padding: 0 40px; z-index: 5000;   
+        }   
+        .nav-logo { font-weight: 800; font-size: 1.4rem; text-decoration: none; color: var(--text-main); letter-spacing: -1px; }   
+        .nav-logo span { color: var(--accent); text-shadow: 0 0 10px var(--accent-glow); }   
+        .nav-links { display: flex; gap: 20px; align-items: center; }   
+        .nav-link { text-decoration: none; color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }   
+        .nav-link:hover { color: var(--text-main); }   
+        .nav-item { position: relative; height: 70px; display: flex; align-items: center; }   
+        .dropdown {   
+            position: absolute; top: 70px; left: 50%; transform: translateX(-50%) translateY(10px);   
+            background: var(--surface); border: 1px solid var(--border);   
+            border-radius: 12px; min-width: 220px; padding: 10px;   
+            opacity: 0; pointer-events: none; box-shadow: 0 20px 40px rgba(0,0,0,0.5);   
+            transition: all 0.2s ease;   
+        }   
+        .nav-item:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }   
+        .drop-link {   
+            display: flex; flex-direction: column; padding: 12px;   
+            color: var(--text-dim); text-decoration: none;   
+            font-size: 0.75rem; border-radius: 8px; font-weight: 600;   
+            margin-bottom: 4px;   
+        }   
+        .drop-link:hover { background: var(--card); color: var(--text-main); }   
+        .nav-actions { display: flex; align-items: center; gap: 15px; }   
+        .theme-toggle {   
+            background: var(--card); border: 1px solid var(--border); color: var(--text-main);   
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700;   
+        }   
+        .hero { position: relative; padding: 10vh 20px 5vh; text-align: center; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }   
+        .hero h1 { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; background: linear-gradient(135deg, var(--text-main), var(--text-dim)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }   
+        
+        /* CALCULATOR STYLES */ 
+        .section { max-width: 1100px; margin: 40px auto; padding: 0 20px; z-index: 2; position: relative; } 
+        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; } 
+        
+        .input-group { margin-bottom: 20px; } 
+        label { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; letter-spacing: 1px; } 
+        select, input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; font-family: 'JetBrains Mono'; } 
+        select:focus, input:focus { border-color: var(--accent); }
 
-    <div class="hero-section">
-        <h1 class="hero-title">HyperChrome <span style="color: var(--accent);">Pity Calculator</span></h1>
-        <p class="hero-subtitle">Advanced pity tracking system with real-time calculations and intelligent probability analysis for Jailbreak HyperChrome drops</p>
-    </div>
+        .toggle-container { display: flex; gap: 10px; margin-bottom: 25px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; border: 1px solid var(--border); }
+        .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; background: transparent; color: var(--text-dim); font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; }
+        .toggle-btn.active { background: var(--accent); color: white; box-shadow: 0 0 15px var(--accent-glow); }
 
-    <div class="calculator-section">
-        <div class="calculator-container">
-            <div class="calc-header">
-                <div>
-                    <div class="calc-title">Configuration</div>
-                    <div class="calc-subtitle">Select your server environment and target level</div>
+        .display-pity { background: linear-gradient(180deg, rgba(0, 112, 243, 0.05) 0%, rgba(0,0,0,0) 100%); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid var(--border); text-align: center; } 
+        .pity-num { font-family: 'JetBrains Mono'; font-size: 5rem; font-weight: 800; color: var(--accent); line-height: 1; margin: 10px 0; text-shadow: 0 0 30px var(--accent-glow); } 
+        .progress-bar-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 20px 0; overflow: hidden; border: 1px solid var(--border); } 
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--jailbreak-green)); box-shadow: 0 0 15px var(--accent-glow); transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); } 
+        
+        /* VALUE DASHBOARD */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 40px; }
+        .val-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; position: relative; overflow: hidden; }
+        .val-card h4 { margin: 0; font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .val-card .price { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 700; margin: 8px 0; color: var(--jailbreak-green); }
+        .val-card .trend { font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .trend.up { color: #22c55e; } .trend.stable { color: #94a3b8; } .trend.down { color: #ef4444; }
+
+        .info-panel { margin-top: 30px; padding: 25px; background: rgba(0, 112, 243, 0.03); border: 1px border var(--accent); border-radius: 16px; font-size: 0.85rem; line-height: 1.6; color: var(--text-dim); }
+        .info-panel strong { color: var(--text-main); }
+
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 20px; text-align: center; margin-top: 100px; }   
+        .footer-brand { font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }   
+        .footer-brand span { color: var(--accent); }   
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }   
+        .footer-links a { color: var(--text-main); text-decoration: none; font-size: 0.85rem; font-weight: 700; }   
+        .support-btn { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 8px; font-family: 'JetBrains Mono'; text-decoration: none; display: inline-block; }   
+    </style>   
+</head>   
+<body>   
+    <canvas id="cashCanvas"></canvas>   
+    <div id="navbar-container"></div>   
+
+    <section class="hero">   
+        <h1>Pity <span style="color:var(--accent); -webkit-text-fill-color: var(--accent);">Engine</span></h1>   
+        <p style="color: var(--text-dim); max-width: 600px; margin-top: 15px;">Professional-grade tracking for Hyperchrome drops and Season completion based on official game curves.</p>   
+    </section>   
+
+    <div class="section"> 
+        <div class="calc-box"> 
+            <div class="inputs"> 
+                <label>1. Select Server Environment</label>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" id="btnPublic" onclick="setServer('public')">Public Server</button>
+                    <button class="toggle-btn" id="btnSmall" onclick="setServer('small')">Small/VIP Server</button>
                 </div>
+
+                <div class="input-group"> 
+                    <label>2. Current Target Level</label> 
+                    <select id="pityRate" onchange="runCalc('rolls')"> 
+                        <option value="0">Hyperchrome Level 1</option> 
+                        <option value="1">Hyperchrome Level 2</option> 
+                        <option value="2">Hyperchrome Level 3</option> 
+                        <option value="3">Hyperchrome Level 4</option> 
+                        <option value="4">Hyperchrome Level 5</option> 
+                    </select> 
+                </div> 
+
+                <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Option A: Rolls</label>
+                        <input type="number" id="userRolls" placeholder="e.g. 150" oninput="runCalc('rolls')">
+                    </div> 
+                    <div class="input-group">
+                        <label>Option B: Percent</label>
+                        <input type="number" id="userPercent" placeholder="e.g. 45.5" step="0.1" oninput="runCalc('percent')">
+                    </div> 
+                </div>
+
+                <div class="info-panel">
+                    <i class="fa-solid fa-circle-info" style="color: var(--accent); margin-right: 8px;"></i>
+                    <strong>System Note:</strong> 
+                    Small servers (under 12 players) require <span style="color: var(--accent);">50% fewer robberies</span> for pity, but the base drop chance remains lower. This calculator uses the official 2026 drop curves.
+                </div>
+            </div> 
+
+            <div class="display-pity"> 
+                <label>Probability Status</label> 
+                <div class="pity-num" id="pityOut">0%</div> 
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="barFill"></div></div> 
+                <div id="rollsLeft" style="font-size: 1rem; color: var(--text-main); font-weight: 800; margin-bottom: 5px;">Awaiting Data...</div> 
+                <div id="subStatus" style="font-size: 0.7rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">0 total robberies required</div>
+            </div> 
+        </div> 
+
+        <h2 style="margin-top: 60px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">Chrome <span style="color: var(--accent)">Market Values</span></h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem;">Estimated values for clean (non-duped) Hyperchromes based on current trade demand.</p>
+        
+        <div class="dashboard-grid">
+            <div class="val-card">
+                <h4>Level 5 Shift</h4>
+                <div class="price" id="valShift">Loading...</div>
+                <div class="trend" id="trendShift"></div>
             </div>
-
-            <div class="server-toggle">
-                <button class="server-btn active" id="btnPublic" onclick="setServer('public')">
-                    <i class="fas fa-users"></i>
-                    Public Server
-                </button>
-                <button class="server-btn" id="btnSmall" onclick="setServer('small')">
-                    <i class="fas fa-user-shield"></i>
-                    Small/VIP Server
-                </button>
+            <div class="val-card">
+                <h4>Level 5 Diamond</h4>
+                <div class="price" id="valDiamond">Loading...</div>
+                <div class="trend" id="trendDiamond"></div>
             </div>
-
-            <div class="input-grid">
-                <div class="input-group">
-                    <label class="input-label">Target Level</label>
-                    <select class="input-field" id="pityRate" onchange="runCalc('rolls')">
-                        <option value="0">Level 1</option>
-                        <option value="1">Level 2</option>
-                        <option value="2">Level 3</option>
-                        <option value="3">Level 4</option>
-                        <option value="4">Level 5</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Current Progress</label>
-                    <input type="number" class="input-field" id="userRolls" placeholder="Enter robberies completed..." oninput="runCalc('rolls')">
-                </div>
+            <div class="val-card">
+                <h4>Level 5 Red</h4>
+                <div class="price" id="valRed">Loading...</div>
+                <div class="trend" id="trendRed"></div>
             </div>
-
-            <div class="input-group">
-                <label class="input-label">Alternative Input</label>
-                <input type="number" class="input-field" id="userPercent" placeholder="Or enter percentage..." step="0.1" oninput="runCalc('percent')">
-            </div>
-
-            <button class="calculate-btn" onclick="runCalc('rolls')">
-                <i class="fas fa-calculator"></i>
-                Calculate Pity
-            </button>
-
-            <div class="results-section">
-                <div class="results-grid">
-                    <div class="result-card">
-                        <div class="result-value" id="currentLevel">-</div>
-                        <div class="result-label">Current Level</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-value" id="pityOut">0%</div>
-                        <div class="result-label">Pity Progress</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-value" id="rollsLeft">0</div>
-                        <div class="result-label">Robberies Remaining</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-value" id="subStatus">-</div>
-                        <div class="result-label">Target Threshold</div>
-                    </div>
-                </div>
-
-                <div class="progress-section">
-                    <div class="progress-container">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="barFill"></div>
-                        </div>
-                        <div class="progress-text">
-                            <span class="progress-percentage" id="progressPercentage">0%</span>
-                            <span class="progress-remaining">robberies to 100%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="progress-status" id="progressStatus">
-                    <div class="status-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="status-text">Guaranteed Drop Window Active</div>
-                </div>
+            <div class="val-card">
+                <h4>Level 1 (Any)</h4>
+                <div class="price" id="valLvl1">Loading...</div>
+                <div class="trend" id="trendLvl1"></div>
             </div>
         </div>
-    </div>
 
-    <div class="market-section">
-        <div class="market-header">
-            <h2 class="market-title">HyperChrome Market Values</h2>
-            <p class="market-subtitle">Live market data and trend analysis for all HyperChrome items</p>
-        </div>
-        
-        <div class="market-grid">
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <div class="value-name">Shift HyperChrome</div>
-                <div class="value-price" id="valShift">Loading...</div>
-                <div class="value-trend trend" id="trendShift">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>Loading...</span>
-                </div>
-            </div>
+        <div class="dev-container" style="margin-top: 80px; border-style: dashed;"> 
+            <div style="font-size: 2rem;">📊</div> 
+            <h2 style="font-weight: 800;">XP Curve Calculator Integrated</h2> 
+            <p style="max-width: 700px; margin: 10px auto;">Our engine now accounts for the <strong>CURVE_K (1.01)</strong> exponential factor. [cite: 34791] If you are Level 8, you need approximately 3,450 XP for Level 10. Visit the Seasons tab for the full day-by-day breakdown.</p> 
+        </div> 
+    </div> 
 
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <div class="value-name">Diamond HyperChrome</div>
-                <div class="value-price" id="valDiamond">Loading...</div>
-                <div class="value-trend trend" id="trendDiamond">
-                    <i class="fas fa-minus"></i>
-                    <span>Loading...</span>
-                </div>
-            </div>
+    <div id="footer-container"></div>   
 
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-fire"></i>
-                </div>
-                <div class="value-name">Red HyperChrome</div>
-                <div class="value-price" id="valRed">Loading...</div>
-                <div class="value-trend trend" id="trendRed">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>Loading...</span>
-                </div>
-            </div>
-
-            <div class="value-card">
-                <div class="value-icon">
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="value-name">Level 1 Any</div>
-                <div class="value-price" id="valLvl1">Loading...</div>
-                <div class="value-trend trend" id="trendLvl1">
-                    <i class="fas fa-minus"></i>
-                    <span>Loading...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-section">
-        <div class="info-title">
-            <i class="fas fa-info-circle"></i>
-            System Information
-        </div>
-        <div class="info-content">
-            <p><strong>Public Servers:</strong> Pity resets every 24 hours. Use robberies since your last HyperChrome drop.</p>
-            <p><strong>Small/VIP Servers:</strong> Pity persists across server restarts. Use total robberies completed.</p>
-            <p><strong>Important:</strong> Small servers require <span>50% fewer robberies</span> for guaranteed drops.</p>
-            <p><strong>Thresholds:</strong> Level 1: 179/90, Level 2: 378/189, Level 3: 608/304, Level 4: 696/348, Level 5: 1068/534 robberies (Public/Small).</p>
-            <p><strong>How Pity Works:</strong> Each failed robbery increases your chance. Reach 100% pity for guaranteed HyperChrome drop.</p>
-        </div>
-    </div>
-
-    <div id="footer-container"></div>
-
-    <script>
+    <script> 
         // Logic from PROJECT_CODE_DUMP.txt [cite: 30028, 30033]
         const PUBLIC_THRESHOLDS = [179, 378, 608, 696, 1068];
         const SMALL_THRESHOLDS = [90, 189, 304, 348, 534];
         
-        let currentServer = "public";
+        let currentServer = 'public';
 
         function setServer(type) {
             currentServer = type;
-            document.getElementById("btnPublic").classList.toggle("active", type === "public");
-            document.getElementById("btnSmall").classList.toggle("active", type === "small");
-            runCalc("rolls");
+            document.getElementById('btnPublic').classList.toggle('active', type === 'public');
+            document.getElementById('btnSmall').classList.toggle('active', type === 'small');
+            runCalc('rolls');
         }
 
         function runCalc(source) { 
-            const index = parseInt(document.getElementById("pityRate").value);
-            const target = currentServer === "public" ? PUBLIC_THRESHOLDS[index] : SMALL_THRESHOLDS[index];
+            const index = parseInt(document.getElementById('pityRate').value);
+            const target = currentServer === 'public' ? PUBLIC_THRESHOLDS[index] : SMALL_THRESHOLDS[index];
             
-            const rollInput = document.getElementById("userRolls"); 
-            const percentInput = document.getElementById("userPercent"); 
-            const pityOut = document.getElementById("pityOut"); 
-            const barFill = document.getElementById("barFill"); 
-            const statusBox = document.getElementById("rollsLeft"); 
-            const subStatus = document.getElementById("subStatus");
-            const progressPercentage = document.getElementById("progressPercentage");
-            const progressStatus = document.getElementById("progressStatus");
+            const rollInput = document.getElementById('userRolls'); 
+            const percentInput = document.getElementById('userPercent'); 
+            const pityOut = document.getElementById('pityOut'); 
+            const barFill = document.getElementById('barFill'); 
+            const statusBox = document.getElementById('rollsLeft'); 
+            const subStatus = document.getElementById('subStatus');
 
             let rolls = 0, displayPerc = 0; 
 
-            if (source === "rolls") { 
+            if (source === 'rolls') { 
                 rolls = parseInt(rollInput.value) || 0; 
                 displayPerc = (rolls / target) * 100; 
                 percentInput.value = displayPerc > 0 ? displayPerc.toFixed(1) : ""; 
@@ -792,46 +312,34 @@
             const clampedPerc = Math.min(displayPerc, 100); 
             pityOut.innerText = clampedPerc.toFixed(1) + "%"; 
             barFill.style.width = clampedPerc + "%"; 
-            progressPercentage.innerText = clampedPerc.toFixed(1) + "%";
             
             const remaining = target - rolls; 
-            statusBox.innerText = remaining > 0 ? remaining : "0"; 
-            subStatus.innerText = `Target: ${target}`;
-            
-            // Show guaranteed status when 100% reached
-            if (clampedPerc >= 100) {
-                progressStatus.classList.add("active");
-                statusBox.style.color = "var(--green)";
-            } else {
-                progressStatus.classList.remove("active");
-                statusBox.style.color = "var(--text-main)";
-            }
+            statusBox.innerText = remaining > 0 ? remaining + " Robberies Remaining" : "GUARENTEED DROP WINDOW"; 
+            statusBox.style.color = remaining > 0 ? "var(--text-main)" : "var(--jailbreak-green)"; 
+            subStatus.innerText = `Target Threshold: ${target} total robberies`;
         } 
 
-        // Canvas background animation
-        const canvas = document.getElementById("cashCanvas"), ctx = canvas.getContext("2d");   
+        const themeBtn = document.getElementById('themeBtn');   
+        themeBtn.addEventListener('click', () => { document.body.classList.toggle('light-mode'); });   
+        
+        const canvas = document.getElementById('cashCanvas'), ctx = canvas.getContext('2d');   
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } 
-        resize(); window.addEventListener("resize", resize); 
+        resize(); window.addEventListener('resize', resize); 
         
-        const cashChars = ["$", "💵", "💰", "💸"]; 
-        const fontSize = 16; 
-        let columns = Math.floor(canvas.width / fontSize); 
-        let drops = Array(columns).fill(1); 
-        
+        const cashChars = ['$', '💵', '💰', '💸'], fontSize = 16; 
+        let columns = Math.floor(canvas.width / fontSize), drops = Array(columns).fill(1); 
         function draw() { 
-            ctx.fillStyle = document.body.classList.contains("light-mode") ? "rgba(248, 250, 252, 0.1)" : "rgba(3, 4, 7, 0.05)"; 
+            ctx.fillStyle = document.body.classList.contains('light-mode') ? 'rgba(248, 250, 252, 0.1)' : 'rgba(3, 5, 8, 0.05)'; 
             ctx.fillRect(0, 0, canvas.width, canvas.height); 
-            ctx.font = fontSize + "px monospace"; 
+            ctx.fillStyle = '#00ff88'; ctx.font = fontSize + 'px monospace'; 
             for (let i = 0; i < drops.length; i++) { 
-                const text = cashChars[Math.floor(Math.random() * cashChars.length)]; 
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize); 
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
+                ctx.fillText(cashChars[Math.floor(Math.random() * cashChars.length)], i * fontSize, drops[i] * fontSize); 
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; 
                 drops[i]++; 
             } 
         } 
         setInterval(draw, 50); 
-    </script>
-    <script src="auth-guard.js"></script>
+    </script>   
     <script src="loader.js"></script>
-</body>
+</body>   
 </html>
