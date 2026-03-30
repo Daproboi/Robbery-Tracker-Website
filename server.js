@@ -3,7 +3,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
-const mongoose = require('mongoose');
 
 // App initialization
 const app = express();
@@ -23,96 +22,59 @@ const ADDITIONAL_CLIENT_SECRETS = (process.env.ADDITIONAL_CLIENT_SECRETS || '').
 
 const REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/callback';
 
-// Database - Use MongoDB if available, otherwise JSON file
-const USE_MONGODB = process.env.MONGODB_URI ? true : false;
+// Simple JSON Database
+const DB_FILE = './users.json';
 
-let User;
-
-if (USE_MONGODB) {
-    // MongoDB Schema
-    const userSchema = new mongoose.Schema({
-        discordId: { type: String, required: true, unique: true },
-        username: String,
-        discriminator: String,
-        avatar: String,
-        isAdmin: { type: Boolean, default: false },
-        isBanned: { type: Boolean, default: false },
-        banReason: String,
-        bannedAt: String,
-        bannedBy: String,
-        bannedIPs: [String],
-        loginTime: String,
-        lastLogin: String,
-        sessionToken: String,
-        lastIP: String
-    });
-    
-    User = mongoose.model('User', userSchema);
-    
-    // Connect to MongoDB with options
-    mongoose.connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        serverSelectionTimeoutMS: 30000,
-        socketTimeoutMS: 45000,
-    })
-        .then(() => console.log('Connected to MongoDB'))
-        .catch(err => console.error('MongoDB connection error:', err));
-} else {
-    // Simple JSON Database fallback
-    const DB_FILE = './users.json';
-    
-    async function loadUsers() {
-        try {
-            const data = await fs.readFile(DB_FILE, 'utf8');
-            return JSON.parse(data);
-        } catch {
-            return {};
-        }
+async function loadUsers() {
+    try {
+        const data = await fs.readFile(DB_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return {};
     }
-    
-    async function saveUsers(users) {
-        await fs.writeFile(DB_FILE, JSON.stringify(users, null, 2));
-    }
-    
-    // Database helpers for JSON
-    User = {
-        findOneAndUpdate: async (filter, update) => {
-            const users = await loadUsers();
-            const { discordId } = filter;
-            
-            users[discordId] = {
-                ...users[discordId],
-                ...update,
-                discordId
-            };
-            
-            await saveUsers(users);
-            return users[discordId];
-        },
-        
-        findOne: async (filter) => {
-            const users = await loadUsers();
-            if (filter.sessionToken) {
-                return Object.values(users).find(u => u.sessionToken === filter.sessionToken) || null;
-            }
-            if (filter.discordId) {
-                return users[filter.discordId] || null;
-            }
-            return null;
-        },
-        
-        find: async () => {
-            const users = await loadUsers();
-            return Object.values(users).sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
-        },
-        
-        countDocuments: async () => {
-            const users = await loadUsers();
-            return Object.keys(users).length;
-        }
-    };
 }
+
+async function saveUsers(users) {
+    await fs.writeFile(DB_FILE, JSON.stringify(users, null, 2));
+}
+
+// Database helpers
+const User = {
+    findOneAndUpdate: async (filter, update) => {
+        const users = await loadUsers();
+        const { discordId } = filter;
+        
+        users[discordId] = {
+            ...users[discordId],
+            ...update,
+            discordId
+        };
+        
+        await saveUsers(users);
+        return users[discordId];
+    },
+    
+    findOne: async (filter) => {
+        const users = await loadUsers();
+        if (filter.sessionToken) {
+            return Object.values(users).find(u => u.sessionToken === filter.sessionToken) || null;
+        }
+        if (filter.discordId) {
+            return users[filter.discordId] || null;
+        }
+        return null;
+    },
+    
+    find: async () => {
+        const users = await loadUsers();
+        return Object.values(users).sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
+    },
+    
+    countDocuments: async () => {
+        const users = await loadUsers();
+        return Object.keys(users).length;
+    }
+};
 
 // Discord OAuth Routes
 app.get('/auth/callback', async (req, res) => {
@@ -188,25 +150,13 @@ app.get('/auth/callback', async (req, res) => {
         };
         
         // Check if user or IP is banned
-        let existingUser;
-        if (USE_MONGODB) {
-            existingUser = await User.findOne({ discordId: userData.id });
-            // For IP ban check in MongoDB, we'd need to query all users
-            const allUsers = await User.find();
-            for (const user of allUsers) {
-                if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
-                    return res.status(403).send('This IP address has been banned.');
-                }
-            }
-        } else {
-            const users = await loadUsers();
-            existingUser = users[userData.id];
-            
-            // Check for IP ban
-            for (const [id, user] of Object.entries(users)) {
-                if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
-                    return res.status(403).send('This IP address has been banned.');
-                }
+        const users = await loadUsers();
+        const existingUser = users[userData.id];
+        
+        // Check for IP ban
+        for (const [id, user] of Object.entries(users)) {
+            if (user.isBanned && user.bannedIPs && user.bannedIPs.includes(clientIP)) {
+                return res.status(403).send('This IP address has been banned.');
             }
         }
         
@@ -257,18 +207,11 @@ app.get('/api/check-session', async (req, res) => {
         const now = Date.now();
         
         if (now - lastLogin > ONE_DAY) {
-            // Session expired - use MongoDB update
-            if (USE_MONGODB) {
-                await User.findOneAndUpdate(
-                    { discordId: user.discordId },
-                    { sessionToken: null }
-                );
-            } else {
-                const users = await loadUsers();
-                if (users[user.discordId]) {
-                    users[user.discordId].sessionToken = null;
-                    await saveUsers(users);
-                }
+            // Session expired
+            const users = await loadUsers();
+            if (users[user.discordId]) {
+                users[user.discordId].sessionToken = null;
+                await saveUsers(users);
             }
             return res.status(401).json({ error: 'Session expired' });
         }
@@ -358,16 +301,9 @@ app.get('/logout', async (req, res) => {
     if (token) {
         const user = await User.findOne({ sessionToken: token });
         if (user) {
-            if (USE_MONGODB) {
-                await User.findOneAndUpdate(
-                    { discordId: user.discordId },
-                    { sessionToken: null }
-                );
-            } else {
-                const users = await loadUsers();
-                users[user.discordId].sessionToken = null;
-                await saveUsers(users);
-            }
+            const users = await loadUsers();
+            users[user.discordId].sessionToken = null;
+            await saveUsers(users);
         }
     }
     
@@ -429,5 +365,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Discord Client ID: ${CLIENT_ID}`);
-    console.log(`Database: ${USE_MONGODB ? 'MongoDB Atlas' : 'JSON file (users.json)'}`);
+    console.log(`Database: JSON file (users.json)`);
 });
