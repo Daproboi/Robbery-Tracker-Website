@@ -49,8 +49,13 @@ if (USE_MONGODB) {
     
     User = mongoose.model('User', userSchema);
     
-    // Connect to MongoDB
-    mongoose.connect(process.env.MONGODB_URI)
+    // Connect to MongoDB with options
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+    })
         .then(() => console.log('Connected to MongoDB'))
         .catch(err => console.error('MongoDB connection error:', err));
 } else {
