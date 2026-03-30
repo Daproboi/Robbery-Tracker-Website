@@ -48,37 +48,7 @@
 
         .highlight { color: #fff; font-weight: 700; }
 
-        
-        /* --- MOBILE MENU ICON --- */
-        .mobile-toggle { display: none; }
-
         @media screen and (max-width: 768px) {
-            .nav-top { justify-content: space-between; padding: 0 20px; height: 60px; }
-            .nav-logo { position: static; font-size: 1.2rem; }
-            
-            .mobile-toggle { 
-                display: block; font-size: 1.4rem; color: #fff; cursor: pointer; z-index: 5001; 
-            }
-
-            .nav-links {
-                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
-                background: var(--surface); flex-direction: column; align-items: flex-start;
-                padding: 80px 20px; gap: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 1px solid var(--border);
-                overflow-y: auto;
-            }
-            .nav-links.active { right: 0; }
-
-            .nav-item { width: 100%; height: auto; padding: 15px 0; border-bottom: 1px solid var(--border); flex-direction: column; align-items: flex-start; }
-            .nav-link { font-size: 1rem; width: 100%; }
-            
-            .dropdown { 
-                position: static; opacity: 1; pointer-events: auto; transform: none; 
-                box-shadow: none; background: transparent; border: none; padding: 10px 0 0 15px; min-width: 0;
-                display: none;
-            }
-            .nav-item:hover .dropdown { display: block; }
-
             h1 { font-size: 3rem !important; }
             .legal-box { padding: 30px 20px; border-radius: 25px; }
         }
@@ -315,28 +285,6 @@
 
     <div id="footer-container"></div>
 
-    <script>
-        // --- MOBILE MENU SCRIPT ---
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-
-        menuBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const icon = menuBtn.querySelector('i');
-            if (navMenu.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-xmark');
-            } else {
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            }
-        });
-
-        document.querySelectorAll('.nav-link, .drop-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                menuBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
-            });
-        });
-    </script>
     <script src="auth-guard.js"></script>
     <script src="loader.js"></script>
 </body>
