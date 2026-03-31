@@ -506,28 +506,44 @@
     
     <div id="footer-container"></div>
     
-    <script src="api.js"></script>
-    
     <script>
         let allItems = [];
         let inventory = JSON.parse(localStorage.getItem('inventoryValue') || '[]');
         
-        // Fetch items using the working api.js function
+        // Fetch items from API
         async function fetchItems() {
             try {
-                const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
-                const rows = await fetchJbValuesJson(dataUrl);
+                // Try direct fetch first
+                let response = await fetch('https://api.jbvalues.com/v1/items');
+                let data = await response.json();
                 
-                // Convert to simple name/value format for search
-                allItems = rows.map(item => ({
+                // Convert API data to simple format
+                allItems = data.map(item => ({
                     name: item.displayName || item.name,
                     value: item.value || 0
                 })).filter(item => item.name);
                 
                 console.log('Loaded', allItems.length, 'items');
             } catch (error) {
-                console.error('Error fetching items:', error);
-                allItems = [];
+                console.error('Direct fetch failed, trying proxy:', error);
+                
+                // Try with proxy
+                try {
+                    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.jbvalues.com/v1/items');
+                    const proxyRes = await fetch(proxyUrl);
+                    const wrapped = await proxyRes.json();
+                    const data = JSON.parse(wrapped.contents);
+                    
+                    allItems = data.map(item => ({
+                        name: item.displayName || item.name,
+                        value: item.value || 0
+                    })).filter(item => item.name);
+                    
+                    console.log('Loaded via proxy:', allItems.length, 'items');
+                } catch (proxyError) {
+                    console.error('Proxy also failed:', proxyError);
+                    allItems = [];
+                }
             }
         }
         
