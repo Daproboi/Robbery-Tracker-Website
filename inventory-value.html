@@ -520,7 +520,8 @@
                 allItems = data.map(item => ({
                     name: item.displayName || item.name,
                     value: item.value || 0,
-                    dupedValue: item.dupedValue || null
+                    dupedValue: item.dupedValue || null,
+                    section: item.section || 'Other'
                 })).filter(item => item.name);
                 
                 console.log('Loaded', allItems.length, 'items');
@@ -530,7 +531,23 @@
             }
         }
         
-        // Format value for display
+        // Get item type label and icon
+        function getItemType(section) {
+            const types = {
+                'Vehicle': { label: 'Vehicle', icon: 'fa-car' },
+                'Color': { label: 'Hyperchrome', icon: 'fa-palette' },
+                'Furniture': { label: 'Furniture', icon: 'fa-couch' },
+                'Drift': { label: 'Drift', icon: 'fa-fire' },
+                'Weapon Skin': { label: 'Weapon Skin', icon: 'fa-crosshairs' },
+                'Rim': { label: 'Rim', icon: 'fa-circle' },
+                'Spoiler': { label: 'Spoiler', icon: 'fa-wind' },
+                'Texture': { label: 'Texture', icon: 'fa-layer-group' },
+                'Tire Style': { label: 'Tire Style', icon: 'fa-ring' },
+                'Tire Sticker': { label: 'Tire Sticker', icon: 'fa-sticky-note' },
+                'Horn': { label: 'Horn', icon: 'fa-bullhorn' }
+            };
+            return types[section] || { label: section, icon: 'fa-box' };
+        }
         function formatValue(value) {
             if (!value) return '0';
             const num = parseFloat(value);
@@ -567,12 +584,12 @@
                 resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-dim);">No items found</div>';
             } else {
                 resultsDiv.innerHTML = matches.map(item => `
-                    <div class="search-result-item" onclick="addItem('${item.name.replace(/'/g, "\\'")}', '${item.value}', '${item.dupedValue || ''}')">
+                    <div class="search-result-item" onclick="addItem('${item.name.replace(/'/g, "\\'")}', '${item.value}', '${item.dupedValue || ''}', '${item.section}')">
                         <div class="item-info">
-                            <div class="item-icon"><i class="fas fa-car"></i></div>
+                            <div class="item-icon"><i class="fas ${getItemType(item.section).icon}"></i></div>
                             <div class="item-details">
                                 <h4>${item.name}</h4>
-                                <span>$${formatValue(item.value)}</span>
+                                <span style="font-size: 0.8rem; color: var(--text-dim);">${getItemType(item.section).label} • $${formatValue(item.value)}</span>
                             </div>
                         </div>
                         <button class="add-btn"><i class="fas fa-plus"></i> Add</button>
@@ -584,7 +601,7 @@
         });
         
         // Add item to inventory
-        function addItem(name, value, dupedValue) {
+        function addItem(name, value, dupedValue, section) {
             const existing = inventory.find(item => item.name === name);
             
             if (existing) {
@@ -594,6 +611,7 @@
                     name: name,
                     value: value,
                     dupedValue: dupedValue || null,
+                    section: section || 'Other',
                     isDuped: false,
                     quantity: 1
                 });
@@ -669,6 +687,7 @@
                 const itemTotal = parseValue(itemValue) * item.quantity;
                 const isMultiple = item.quantity > 1;
                 const hasDupedValue = item.dupedValue && item.dupedValue !== item.value;
+                const itemType = getItemType(item.section);
                 
                 return `
                     <div class="inventory-item">
@@ -677,6 +696,9 @@
                             <div class="item-name-value">
                                 <div class="item-name">${item.name} ${item.isDuped ? '<span style="color: var(--orange); font-size: 0.8rem;">(Dupe)</span>' : ''}</div>
                                 <div class="item-value">
+                                    <span style="background: var(--surface); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: var(--text-dim); margin-right: 8px;">
+                                        <i class="fas ${itemType.icon}" style="margin-right: 4px;"></i>${itemType.label}
+                                    </span>
                                     ${hasDupedValue ? `
                                     <button class="value-toggle" onclick="toggleItemType(${index})" style="background: ${item.isDuped ? 'var(--orange)' : 'var(--green)'}; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-right: 8px;">
                                         ${item.isDuped ? 'Dupe' : 'Clean'}
