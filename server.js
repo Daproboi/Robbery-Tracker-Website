@@ -664,6 +664,18 @@ app.get('/api/value-changes', async (req, res) => {
     }
 });
 
+// Proxy endpoint for JB Values API (bypasses CORS)
+app.get('/api/jbvalues-items', async (req, res) => {
+    try {
+        const response = await fetch('https://api.jbvalues.com/v1/items');
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching JB Values:', error);
+        res.status(500).json({ error: 'Failed to fetch items' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

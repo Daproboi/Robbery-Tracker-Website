@@ -510,12 +510,11 @@
         let allItems = [];
         let inventory = JSON.parse(localStorage.getItem('inventoryValue') || '[]');
         
-        // Fetch items from API
+        // Fetch items from API via server proxy (bypasses CORS)
         async function fetchItems() {
             try {
-                // Try direct fetch first
-                let response = await fetch('https://api.jbvalues.com/v1/items');
-                let data = await response.json();
+                const response = await fetch('/api/jbvalues-items');
+                const data = await response.json();
                 
                 // Convert API data to simple format
                 allItems = data.map(item => ({
@@ -525,25 +524,8 @@
                 
                 console.log('Loaded', allItems.length, 'items');
             } catch (error) {
-                console.error('Direct fetch failed, trying proxy:', error);
-                
-                // Try with proxy
-                try {
-                    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.jbvalues.com/v1/items');
-                    const proxyRes = await fetch(proxyUrl);
-                    const wrapped = await proxyRes.json();
-                    const data = JSON.parse(wrapped.contents);
-                    
-                    allItems = data.map(item => ({
-                        name: item.displayName || item.name,
-                        value: item.value || 0
-                    })).filter(item => item.name);
-                    
-                    console.log('Loaded via proxy:', allItems.length, 'items');
-                } catch (proxyError) {
-                    console.error('Proxy also failed:', proxyError);
-                    allItems = [];
-                }
+                console.error('Error fetching items:', error);
+                allItems = [];
             }
         }
         
