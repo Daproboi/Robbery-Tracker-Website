@@ -98,9 +98,9 @@
         }
         
         .roblox-login-btn {
-            background: #000;
+            background: linear-gradient(135deg, #1a1a1a, #000);
             color: white;
-            border: 2px solid #333;
+            border: none;
             padding: 15px 30px;
             border-radius: 12px;
             font-size: 1rem;
@@ -111,17 +111,21 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 15px auto;
+            margin: 20px auto;
             text-decoration: none;
             width: 100%;
             max-width: 280px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
         .roblox-login-btn:hover {
-            background: #1a1a1a;
-            border-color: #555;
+            background: linear-gradient(135deg, #333, #1a1a1a);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .roblox-login-btn i {
+            font-size: 1.2rem;
         }
         
         .login-divider {
