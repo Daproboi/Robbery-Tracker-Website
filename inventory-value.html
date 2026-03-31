@@ -516,10 +516,11 @@
                 const response = await fetch('/api/jbvalues-items');
                 const data = await response.json();
                 
-                // Convert API data to simple format
+                // Convert API data to simple format with both clean and duped values
                 allItems = data.map(item => ({
                     name: item.displayName || item.name,
-                    value: item.value || 0
+                    value: item.value || 0,
+                    dupedValue: item.dupedValue || null
                 })).filter(item => item.name);
                 
                 console.log('Loaded', allItems.length, 'items');
@@ -566,7 +567,7 @@
                 resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-dim);">No items found</div>';
             } else {
                 resultsDiv.innerHTML = matches.map(item => `
-                    <div class="search-result-item" onclick="addItem('${item.name.replace(/'/g, "\\'")}', '${item.value}')">
+                    <div class="search-result-item" onclick="addItem('${item.name.replace(/'/g, "\\'")}', '${item.value}', '${item.dupedValue || ''}')">
                         <div class="item-info">
                             <div class="item-icon"><i class="fas fa-car"></i></div>
                             <div class="item-details">
@@ -583,7 +584,7 @@
         });
         
         // Add item to inventory
-        function addItem(name, value) {
+        function addItem(name, value, dupedValue) {
             const existing = inventory.find(item => item.name === name);
             
             if (existing) {
@@ -592,6 +593,8 @@
                 inventory.push({
                     name: name,
                     value: value,
+                    dupedValue: dupedValue || null,
+                    isDuped: false,
                     quantity: 1
                 });
             }
@@ -637,12 +640,6 @@
         function toggleItemType(index) {
             const item = inventory[index];
             item.isDuped = !item.isDuped;
-            
-            // Calculate duped value if not set (60% of clean value)
-            if (item.isDuped && !item.dupedValue) {
-                item.dupedValue = Math.round(parseValue(item.value) * 0.6);
-            }
-            
             saveInventory();
             renderInventory();
         }
@@ -668,10 +665,10 @@
             }
             
             list.innerHTML = inventory.map((item, index) => {
-                const itemValue = item.isDuped ? (item.dupedValue || item.value * 0.6) : item.value;
+                const itemValue = item.isDuped ? (item.dupedValue || item.value) : item.value;
                 const itemTotal = parseValue(itemValue) * item.quantity;
                 const isMultiple = item.quantity > 1;
-                const dupedValue = item.dupedValue || Math.round(item.value * 0.6);
+                const hasDupedValue = item.dupedValue && item.dupedValue !== item.value;
                 
                 return `
                     <div class="inventory-item">
@@ -680,9 +677,11 @@
                             <div class="item-name-value">
                                 <div class="item-name">${item.name} ${item.isDuped ? '<span style="color: var(--orange); font-size: 0.8rem;">(Dupe)</span>' : ''}</div>
                                 <div class="item-value">
+                                    ${hasDupedValue ? `
                                     <button class="value-toggle" onclick="toggleItemType(${index})" style="background: ${item.isDuped ? 'var(--orange)' : 'var(--green)'}; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-right: 8px;">
                                         ${item.isDuped ? 'Dupe' : 'Clean'}
                                     </button>
+                                    ` : ''}
                                     $${formatValue(itemValue)} each
                                 </div>
                             </div>
@@ -709,7 +708,7 @@
             const dupedItems = inventory.filter(item => item.isDuped).length;
             
             const totalValue = inventory.reduce((sum, item) => {
-                const itemValue = item.isDuped ? (item.dupedValue || parseValue(item.value) * 0.6) : item.value;
+                const itemValue = item.isDuped ? (item.dupedValue || item.value) : item.value;
                 return sum + (parseValue(itemValue) * item.quantity);
             }, 0);
             
