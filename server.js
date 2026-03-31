@@ -680,88 +680,37 @@ app.get('/api/jbvalues-items', async (req, res) => {
     }
 });
 
-// Muffin Hook Leaderboard Cache
-let muffinHookCache = {
-    data: null,
-    lastUpdated: null
-};
+// Load static leaderboard data
+const { staticLeaderboard } = require('./leaderboard-data.js');
 
-// Fetch Muffin Hook leaderboard
-async function fetchMuffinHookLeaderboard() {
-    if (!MUFFINHOOK_TOKEN) {
-        console.log('[MuffinHook] Token not configured');
-        return muffinHookCache.data; // Return cached data
-    }
-    
-    try {
-        const response = await fetch(MUFFINHOOK_API_URL, {
-            headers: {
-                'Authorization': `Bearer ${MUFFINHOOK_TOKEN}`,
-                'Accept': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-        });
-        
-        if (response.status === 401) {
-            console.log('[MuffinHook] Token expired - using cached data');
-            return muffinHookCache.data; // Return cached data on auth error
-        }
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const data = await response.json();
-        muffinHookCache = {
-            data: data,
-            lastUpdated: new Date().toISOString()
-        };
-        console.log(`[MuffinHook] Fetched ${data.count || 0} players`);
-        return data;
-    } catch (error) {
-        console.error('[MuffinHook] Error:', error.message);
-        return muffinHookCache.data; // Return cached data on any error
-    }
+// Muffin Hook Leaderboard - Use static data
+function getStaticLeaderboardData() {
+    return {
+        count: staticLeaderboard.length,
+        leaderboard: staticLeaderboard.map(player => ({
+            rank: player.rank,
+            username: player.username,
+            money: player.money,
+            UserId: null // We don't have UserIds in the static data
+        })),
+        lastUpdated: new Date().toISOString()
+    };
 }
 
-// Start periodic refresh (every 5 minutes)
-function startMuffinHookRefresh() {
-    fetchMuffinHookLeaderboard(); // Initial fetch
-    setInterval(fetchMuffinHookLeaderboard, 5 * 60 * 1000); // Every 5 minutes
-}
+// Muffin Hook functions removed - using static data now
 
-// Proxy endpoint for Muffin Hook leaderboard (bypasses CORS and auth)
+// Proxy endpoint for Muffin Hook leaderboard - serves static data
 app.get('/api/muffinhook-leaderboard', async (req, res) => {
     try {
-        // Always try to fetch fresh data first
-        const freshData = await fetchMuffinHookLeaderboard();
-        
-        // Use fresh data if available, otherwise use cached
-        const data = freshData || muffinHookCache.data;
-        
-        if (!data) {
-            // First time - no data at all
-            return res.status(503).json({ error: 'Leaderboard not loaded yet' });
-        }
-        
-        // Return data (fresh or cached)
+        const data = getStaticLeaderboardData();
         res.json({
             ...data,
-            cached: !freshData || freshData === muffinHookCache.data,
-            lastUpdated: muffinHookCache.lastUpdated
+            cached: false,
+            lastUpdated: data.lastUpdated
         });
     } catch (error) {
         console.error('[Leaderboard] Error:', error);
-        // Even on error, try to return cached data
-        if (muffinHookCache.data) {
-            res.json({
-                ...muffinHookCache.data,
-                cached: true,
-                lastUpdated: muffinHookCache.lastUpdated
-            });
-        } else {
-            res.status(500).json({ error: 'Failed to load leaderboard' });
-        }
+        res.status(500).json({ error: 'Failed to load leaderboard' });
     }
 });
 
@@ -878,6 +827,6 @@ app.listen(PORT, () => {
     console.log(`Database: JSON file (users.json)`);
     // Start value monitoring
     startValueMonitoring();
-    // Start Muffin Hook leaderboard refresh
-    startMuffinHookRefresh();
+    // Static leaderboard loaded - no API needed
+    console.log('[Leaderboard] Static data loaded with 250 players');
 });
