@@ -689,8 +689,8 @@ let muffinHookCache = {
 // Fetch Muffin Hook leaderboard
 async function fetchMuffinHookLeaderboard() {
     if (!MUFFINHOOK_TOKEN) {
-        console.log('Muffin Hook token not configured');
-        return null;
+        console.log('[MuffinHook] Token not configured');
+        return muffinHookCache.data; // Return cached data
     }
     
     try {
@@ -702,6 +702,11 @@ async function fetchMuffinHookLeaderboard() {
             }
         });
         
+        if (response.status === 401) {
+            console.log('[MuffinHook] Token expired - using cached data');
+            return muffinHookCache.data; // Return cached data on auth error
+        }
+        
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
@@ -711,11 +716,11 @@ async function fetchMuffinHookLeaderboard() {
             data: data,
             lastUpdated: new Date().toISOString()
         };
-        console.log(`Fetched Muffin Hook leaderboard: ${data.count || 0} players`);
+        console.log(`[MuffinHook] Fetched ${data.count || 0} players`);
         return data;
     } catch (error) {
-        console.error('Error fetching Muffin Hook leaderboard:', error);
-        return muffinHookCache.data; // Return cached data on error
+        console.error('[MuffinHook] Error:', error.message);
+        return muffinHookCache.data; // Return cached data on any error
     }
 }
 
@@ -728,25 +733,35 @@ function startMuffinHookRefresh() {
 // Proxy endpoint for Muffin Hook leaderboard (bypasses CORS and auth)
 app.get('/api/muffinhook-leaderboard', async (req, res) => {
     try {
-        // Return cached data if available
+        // Always try to fetch fresh data first
+        const freshData = await fetchMuffinHookLeaderboard();
+        
+        // Use fresh data if available, otherwise use cached
+        const data = freshData || muffinHookCache.data;
+        
+        if (!data) {
+            // First time - no data at all
+            return res.status(503).json({ error: 'Leaderboard not loaded yet' });
+        }
+        
+        // Return data (fresh or cached)
+        res.json({
+            ...data,
+            cached: !freshData || freshData === muffinHookCache.data,
+            lastUpdated: muffinHookCache.lastUpdated
+        });
+    } catch (error) {
+        console.error('[Leaderboard] Error:', error);
+        // Even on error, try to return cached data
         if (muffinHookCache.data) {
-            return res.json({
+            res.json({
                 ...muffinHookCache.data,
                 cached: true,
                 lastUpdated: muffinHookCache.lastUpdated
             });
-        }
-        
-        // Otherwise fetch fresh
-        const data = await fetchMuffinHookLeaderboard();
-        if (data) {
-            res.json(data);
         } else {
-            res.status(503).json({ error: 'Leaderboard unavailable' });
+            res.status(500).json({ error: 'Failed to load leaderboard' });
         }
-    } catch (error) {
-        console.error('Error serving leaderboard:', error);
-        res.status(500).json({ error: 'Failed to load leaderboard' });
     }
 });
 
