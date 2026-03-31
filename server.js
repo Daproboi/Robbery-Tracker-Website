@@ -676,6 +676,112 @@ app.get('/api/jbvalues-items', async (req, res) => {
     }
 });
 
+// Leaderboard Database
+const LEADERBOARD_FILE = './leaderboard.json';
+
+async function loadLeaderboard() {
+    try {
+        const data = await fs.readFile(LEADERBOARD_FILE, 'utf8');
+        return JSON.parse(data);
+    } catch {
+        return { entries: [], lastUpdated: null };
+    }
+}
+
+async function saveLeaderboard(data) {
+    await fs.writeFile(LEADERBOARD_FILE, JSON.stringify(data, null, 2));
+}
+
+// Get leaderboard
+app.get('/api/leaderboard', async (req, res) => {
+    try {
+        const leaderboard = await loadLeaderboard();
+        
+        // Sort by total value (descending)
+        const sortedEntries = (leaderboard.entries || []).sort((a, b) => b.totalValue - a.totalValue);
+        
+        // Calculate stats
+        const totalPlayers = sortedEntries.length;
+        const combinedValue = sortedEntries.reduce((sum, entry) => sum + (entry.totalValue || 0), 0);
+        const topValue = sortedEntries.length > 0 ? sortedEntries[0].totalValue : 0;
+        
+        res.json({
+            leaderboard: sortedEntries.slice(0, 50), // Top 50
+            totalPlayers,
+            combinedValue,
+            topValue,
+            lastUpdated: leaderboard.lastUpdated
+        });
+    } catch (error) {
+        console.error('Error loading leaderboard:', error);
+        res.status(500).json({ error: 'Failed to load leaderboard' });
+    }
+});
+
+// Submit to leaderboard
+app.post('/api/leaderboard/submit', async (req, res) => {
+    try {
+        const token = req.headers['x-session-token'];
+        
+        if (!token) {
+            return res.status(401).json({ error: 'Authentication required' });
+        }
+        
+        // Verify user
+        const user = await User.findOne({ sessionToken: token });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid session' });
+        }
+        
+        const { totalValue, itemCount, inventory } = req.body;
+        
+        if (!totalValue || totalValue < 0) {
+            return res.status(400).json({ error: 'Invalid value' });
+        }
+        
+        // Load current leaderboard
+        const leaderboard = await loadLeaderboard();
+        
+        // Find existing entry for this user
+        const existingIndex = leaderboard.entries.findIndex(e => 
+            e.discordId === user.discordId || e.robloxId === user.robloxId
+        );
+        
+        const entry = {
+            discordId: user.discordId,
+            robloxId: user.robloxId,
+            username: user.username,
+            avatar: user.avatar,
+            totalValue: Math.floor(totalValue),
+            itemCount: itemCount || 0,
+            inventory: inventory || [],
+            submittedAt: new Date().toISOString()
+        };
+        
+        if (existingIndex >= 0) {
+            // Update existing entry
+            leaderboard.entries[existingIndex] = entry;
+        } else {
+            // Add new entry
+            leaderboard.entries.push(entry);
+        }
+        
+        leaderboard.lastUpdated = new Date().toISOString();
+        
+        await saveLeaderboard(leaderboard);
+        
+        res.json({
+            success: true,
+            message: 'Inventory submitted successfully',
+            rank: leaderboard.entries.sort((a, b) => b.totalValue - a.totalValue)
+                .findIndex(e => e.discordId === user.discordId || e.robloxId === user.robloxId) + 1
+        });
+    } catch (error) {
+        console.error('Error submitting to leaderboard:', error);
+        res.status(500).json({ error: 'Failed to submit inventory' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
