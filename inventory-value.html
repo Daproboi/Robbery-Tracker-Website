@@ -506,26 +506,23 @@
     
     <div id="footer-container"></div>
     
+    <script src="api.js"></script>
+    
     <script>
         let allItems = [];
         let inventory = JSON.parse(localStorage.getItem('inventoryValue') || '[]');
         
-        // Fetch items from API
+        // Fetch items using the working api.js function
         async function fetchItems() {
             try {
-                const response = await fetch('https://api.jbvalues.com/v1/items');
-                const data = await response.json();
+                const dataUrl = 'https://api.jbvalues.com/v1/itemdata';
+                const rows = await fetchJbValuesJson(dataUrl);
                 
-                // Handle both array and object formats
-                if (Array.isArray(data)) {
-                    allItems = data;
-                } else if (typeof data === 'object' && data !== null) {
-                    // Convert object to array
-                    allItems = Object.entries(data).map(([name, value]) => ({
-                        name: name,
-                        value: typeof value === 'object' ? value.value : value
-                    }));
-                }
+                // Convert to simple name/value format for search
+                allItems = rows.map(item => ({
+                    name: item.displayName || item.name,
+                    value: item.value || 0
+                })).filter(item => item.name);
                 
                 console.log('Loaded', allItems.length, 'items');
             } catch (error) {
