@@ -633,6 +633,20 @@
             }
         }
         
+        // Toggle between clean and dupe
+        function toggleItemType(index) {
+            const item = inventory[index];
+            item.isDuped = !item.isDuped;
+            
+            // Calculate duped value if not set (60% of clean value)
+            if (item.isDuped && !item.dupedValue) {
+                item.dupedValue = Math.round(parseValue(item.value) * 0.6);
+            }
+            
+            saveInventory();
+            renderInventory();
+        }
+        
         // Save to localStorage
         function saveInventory() {
             localStorage.setItem('inventoryValue', JSON.stringify(inventory));
@@ -654,23 +668,30 @@
             }
             
             list.innerHTML = inventory.map((item, index) => {
-                const itemTotal = parseValue(item.value) * item.quantity;
+                const itemValue = item.isDuped ? (item.dupedValue || item.value * 0.6) : item.value;
+                const itemTotal = parseValue(itemValue) * item.quantity;
                 const isMultiple = item.quantity > 1;
+                const dupedValue = item.dupedValue || Math.round(item.value * 0.6);
                 
                 return `
                     <div class="inventory-item">
                         <div class="item-main">
                             <div class="item-quantity-badge ${isMultiple ? 'multiple' : ''}">${item.quantity}</div>
                             <div class="item-name-value">
-                                <div class="item-name">${item.name}</div>
-                                <div class="item-value">$${formatValue(item.value)} each</div>
+                                <div class="item-name">${item.name} ${item.isDuped ? '<span style="color: var(--orange); font-size: 0.8rem;">(Dupe)</span>' : ''}</div>
+                                <div class="item-value">
+                                    <button class="value-toggle" onclick="toggleItemType(${index})" style="background: ${item.isDuped ? 'var(--orange)' : 'var(--green)'}; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-right: 8px;">
+                                        ${item.isDuped ? 'Dupe' : 'Clean'}
+                                    </button>
+                                    $${formatValue(itemValue)} each
+                                </div>
                             </div>
                         </div>
                         <div class="item-total">$${formatValue(itemTotal)}</div>
                         <div class="item-controls">
-                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
-                            <span style="font-weight: 700; min-width: 30px; text-align: center;">${item.quantity}</span>
                             <button class="qty-btn" onclick="updateQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
+                            <span style="font-weight: 700; min-width: 30px; text-align: center;">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
                             <button class="remove-btn" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
@@ -685,14 +706,24 @@
             const totalItems = inventory.reduce((sum, item) => sum + item.quantity, 0);
             const uniqueItems = inventory.length;
             const multipleItems = inventory.filter(item => item.quantity > 1).length;
+            const dupedItems = inventory.filter(item => item.isDuped).length;
             
             const totalValue = inventory.reduce((sum, item) => {
-                return sum + (parseValue(item.value) * item.quantity);
+                const itemValue = item.isDuped ? (item.dupedValue || parseValue(item.value) * 0.6) : item.value;
+                return sum + (parseValue(itemValue) * item.quantity);
             }, 0);
             
             document.getElementById('totalItems').textContent = totalItems;
             document.getElementById('uniqueItems').textContent = uniqueItems;
             document.getElementById('multipleItems').textContent = multipleItems;
+            
+            // Update label to show if there are dupes
+            const label = document.querySelector('.stat-box:nth-child(3) .stat-box-label');
+            if (label && dupedItems > 0) {
+                label.textContent = `${dupedItems} Dupe${dupedItems > 1 ? 's' : ''}`;
+            } else if (label) {
+                label.textContent = 'Multiples (2+)';
+            }
             
             // Animate total value
             const totalValueEl = document.getElementById('totalValue');
