@@ -155,12 +155,12 @@
         
         /* Top 3 Podium */
         .podium {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 15px;
-            margin-bottom: 40px;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 20px;
+            align-items: end;
+            max-width: 700px;
+            margin: 0 auto 40px;
         }
         
         .podium-item {
@@ -179,25 +179,19 @@
         }
         
         .podium-item.first {
-            width: 200px;
             padding-top: 30px;
             border-color: var(--gold);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-            order: 2;
         }
         
         .podium-item.second {
-            width: 180px;
             border-color: var(--silver);
             box-shadow: 0 0 20px rgba(192, 192, 192, 0.15);
-            order: 1;
         }
         
         .podium-item.third {
-            width: 180px;
             border-color: var(--bronze);
             box-shadow: 0 0 20px rgba(205, 127, 50, 0.15);
-            order: 3;
         }
         
         .rank-badge {
@@ -403,8 +397,8 @@
             }
             
             .podium {
-                flex-direction: column;
-                align-items: center;
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
             
             .podium-item.first,
@@ -412,7 +406,7 @@
             .podium-item.third {
                 width: 90%;
                 max-width: 300px;
-                order: 0;
+                margin: 0 auto;
             }
             
             .podium-item.first { order: 1; }
@@ -595,17 +589,17 @@
             }
             
             const positions = ['second', 'first', 'third'];
-            const displayOrder = top3.length === 1 ? [0] : top3.length === 2 ? [1, 0] : [1, 0, 2];
+            const displayOrder = [1, 0, 2]; // First in middle (index 1), Second on left (index 0), Third on right (index 2)
             
-            podium.innerHTML = displayOrder.map((index, i) => {
-                const player = top3[index];
-                const position = positions[index];
+            podium.innerHTML = displayOrder.map((playerIndex) => {
+                const player = top3[playerIndex];
+                const position = positions[playerIndex];
                 const avatarUrl = player.userId ? 
-                    `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${player.userId}-Png` :
+                    `https://www.roblox.com/headshot-thumbnail/image?userId=${player.userId}&width=150&height=150&format=png` :
                     'https://cdn.discordapp.com/embed/avatars/0.png';
                 return `
                     <div class="podium-item ${position}">
-                        <div class="rank-badge">${index + 1}</div>
+                        <div class="rank-badge">${player.rank}</div>
                         <img src="${avatarUrl}" 
                              alt="${player.username}" class="podium-avatar"
                              onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
@@ -634,7 +628,7 @@
             list.innerHTML = rest.map((player) => {
                 const rank = player.rank;
                 const avatarUrl = player.userId ? 
-                    `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${player.userId}-Png` :
+                    `https://www.roblox.com/headshot-thumbnail/image?userId=${player.userId}&width=150&height=150&format=png` :
                     'https://cdn.discordapp.com/embed/avatars/0.png';
                 return `
                     <div class="list-row">
