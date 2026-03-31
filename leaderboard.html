@@ -530,14 +530,27 @@
             }
         }
         
-        // Fetch leaderboard data
+        // Fetch leaderboard data from Muffin Hook
         async function fetchLeaderboard() {
             try {
-                const response = await fetch('/api/leaderboard');
+                const response = await fetch('/api/muffinhook-leaderboard');
                 const data = await response.json();
                 
-                leaderboardData = data.leaderboard || [];
-                updateStats(data);
+                // Transform Muffin Hook data to our format
+                leaderboardData = (data.leaderboard || []).map(player => ({
+                    rank: player.rank,
+                    username: player.username,
+                    totalValue: player.money,
+                    userId: player.UserId,
+                    avatar: player.UserId ? `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${player.UserId}&size=150x150&format=Png` : null
+                }));
+                
+                updateStats({
+                    totalPlayers: data.count || 0,
+                    combinedValue: (data.leaderboard || []).reduce((sum, p) => sum + (p.money || 0), 0),
+                    topValue: data.leaderboard && data.leaderboard[0] ? data.leaderboard[0].money : 0,
+                    lastUpdated: data.lastUpdated
+                });
                 renderPodium();
                 renderList();
                 updateTimestamp(data.lastUpdated);
@@ -587,11 +600,15 @@
             podium.innerHTML = displayOrder.map((index, i) => {
                 const player = top3[index];
                 const position = positions[index];
+                const avatarUrl = player.userId ? 
+                    `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${player.userId}-Png` :
+                    'https://cdn.discordapp.com/embed/avatars/0.png';
                 return `
                     <div class="podium-item ${position}">
                         <div class="rank-badge">${index + 1}</div>
-                        <img src="${player.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" 
-                             alt="${player.username}" class="podium-avatar">
+                        <img src="${avatarUrl}" 
+                             alt="${player.username}" class="podium-avatar"
+                             onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                         <div class="podium-name">${player.username}</div>
                         <div class="podium-value">${formatValue(player.totalValue)}</div>
                     </div>
@@ -614,17 +631,21 @@
                 return;
             }
             
-            list.innerHTML = rest.map((player, index) => {
-                const rank = index + 4;
+            list.innerHTML = rest.map((player) => {
+                const rank = player.rank;
+                const avatarUrl = player.userId ? 
+                    `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${player.userId}-Png` :
+                    'https://cdn.discordapp.com/embed/avatars/0.png';
                 return `
                     <div class="list-row">
                         <div class="rank-number">#${rank}</div>
                         <div class="user-info">
-                            <img src="${player.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" 
-                                 alt="${player.username}" class="user-avatar">
+                            <img src="${avatarUrl}" 
+                                 alt="${player.username}" class="user-avatar"
+                                 onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                             <span class="user-name">${player.username}</span>
                         </div>
-                        <div class="items-count">${player.itemCount || 0} items</div>
+                        <div class="items-count">-</div>
                         <div class="total-value">${formatValue(player.totalValue)}</div>
                     </div>
                 `;

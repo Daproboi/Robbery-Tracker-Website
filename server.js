@@ -27,6 +27,10 @@ const ROBLOX_CLIENT_ID = process.env.ROBLOX_CLIENT_ID || '';
 const ROBLOX_CLIENT_SECRET = process.env.ROBLOX_CLIENT_SECRET || '';
 const ROBLOX_REDIRECT_URI = 'https://jailbreakhub.onrender.com/auth/roblox/callback';
 
+// Muffin Hook API Configuration
+const MUFFINHOOK_TOKEN = process.env.MUFFINHOOK_TOKEN || '';
+const MUFFINHOOK_API_URL = 'https://api.muffinhook.site/export/cashleaderboard';
+
 // Discord Server Requirements
 const REQUIRED_DISCORD_GUILD_ID = process.env.REQUIRED_DISCORD_GUILD_ID || '';
 
@@ -676,6 +680,76 @@ app.get('/api/jbvalues-items', async (req, res) => {
     }
 });
 
+// Muffin Hook Leaderboard Cache
+let muffinHookCache = {
+    data: null,
+    lastUpdated: null
+};
+
+// Fetch Muffin Hook leaderboard
+async function fetchMuffinHookLeaderboard() {
+    if (!MUFFINHOOK_TOKEN) {
+        console.log('Muffin Hook token not configured');
+        return null;
+    }
+    
+    try {
+        const response = await fetch(MUFFINHOOK_API_URL, {
+            headers: {
+                'Authorization': `Bearer ${MUFFINHOOK_TOKEN}`,
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        muffinHookCache = {
+            data: data,
+            lastUpdated: new Date().toISOString()
+        };
+        console.log(`Fetched Muffin Hook leaderboard: ${data.count || 0} players`);
+        return data;
+    } catch (error) {
+        console.error('Error fetching Muffin Hook leaderboard:', error);
+        return muffinHookCache.data; // Return cached data on error
+    }
+}
+
+// Start periodic refresh (every 5 minutes)
+function startMuffinHookRefresh() {
+    fetchMuffinHookLeaderboard(); // Initial fetch
+    setInterval(fetchMuffinHookLeaderboard, 5 * 60 * 1000); // Every 5 minutes
+}
+
+// Proxy endpoint for Muffin Hook leaderboard (bypasses CORS and auth)
+app.get('/api/muffinhook-leaderboard', async (req, res) => {
+    try {
+        // Return cached data if available
+        if (muffinHookCache.data) {
+            return res.json({
+                ...muffinHookCache.data,
+                cached: true,
+                lastUpdated: muffinHookCache.lastUpdated
+            });
+        }
+        
+        // Otherwise fetch fresh
+        const data = await fetchMuffinHookLeaderboard();
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(503).json({ error: 'Leaderboard unavailable' });
+        }
+    } catch (error) {
+        console.error('Error serving leaderboard:', error);
+        res.status(500).json({ error: 'Failed to load leaderboard' });
+    }
+});
+
 // Leaderboard Database
 const LEADERBOARD_FILE = './leaderboard.json';
 
@@ -789,4 +863,6 @@ app.listen(PORT, () => {
     console.log(`Database: JSON file (users.json)`);
     // Start value monitoring
     startValueMonitoring();
+    // Start Muffin Hook leaderboard refresh
+    startMuffinHookRefresh();
 });
