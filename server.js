@@ -948,6 +948,11 @@ function getStaticLeaderboardData() {
     };
 }
 
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
 // Muffin Hook functions removed - using static data now
 
 // Proxy endpoint for Muffin Hook leaderboard - serves static data
