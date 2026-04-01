@@ -703,6 +703,7 @@ function getStaticLeaderboardData() {
 app.get('/api/muffinhook-leaderboard', async (req, res) => {
     try {
         const data = getStaticLeaderboardData();
+        console.log(`[Leaderboard] Serving ${data.count} players from static data`);
         res.json({
             ...data,
             cached: false,
