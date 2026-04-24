@@ -173,8 +173,6 @@
             .footer-links { flex-direction: column; gap: 10px; }
         }
     </style>
-    <script src="auth-guard.js"></script>
-    <script src="loader.js"></script>
 </head>
 <body>
 <div id="navbar-container"></div>
@@ -313,5 +311,16 @@
 <div id="footer-container"></div>
 <script src="auth-guard.js"></script>
 <script src="loader.js"></script>
+<script>
+    // Ensure navbar loads for this page
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('navbar-container').innerHTML === '') {
+            fetch('navbar.html')
+                .then(r => r.text())
+                .then(html => document.getElementById('navbar-container').innerHTML = html)
+                .catch(e => console.error('Navbar load failed:', e));
+        }
+    });
+</script>
 </body>
 </html>
