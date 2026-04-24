@@ -311,24 +311,6 @@
     </div>
 
 <div id="footer-container"></div>
-
-<script>
-    // Load navbar and footer
-    async function loadComponents() {
-        try {
-            const navResponse = await fetch('navbar.html');
-            const navHtml = await navResponse.text();
-            document.body.insertAdjacentHTML('afterbegin', navHtml);
-            
-            const footResponse = await fetch('footer.html');
-            const footHtml = await footResponse.text();
-            document.getElementById('footer-container').innerHTML = footHtml;
-        } catch (error) {
-            console.error('Error loading components:', error);
-        }
-    }
-    document.addEventListener('DOMContentLoaded', loadComponents);
-</script>
 <script src="auth-guard.js"></script>
 <script src="loader.js"></script>
 </body>
